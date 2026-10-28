@@ -1,102 +1,102 @@
 /* generated from design-systems/themes, keep in sync */
 /* Quire theme: municipal / dark. Generated from the design system table. */
 :root[data-theme="municipal-dark"] {
-  --surface: #14181A;
-  --surface-raised: #1D2224;
-  --ink: #EDF0E8;
-  --ink-muted: #A7B3AF;
-  --rule: #333B38;
-  --accent: #D0614C;
-  --on-accent: #14181A;
-  --class-800: #C4575F;
-  --class-900: #6E93C4;
-  --class-100: #C7A34A;
-  --class-000: #9A9A92;
-  --on-class: #14181A;
+  --surface: #14181a;
+  --surface-raised: #1d2224;
+  --ink: #edf0e8;
+  --ink-muted: #a7b3af;
+  --rule: #333b38;
+  --accent: #d0614c;
+  --on-accent: #14181a;
+  --class-800: #c4575f;
+  --class-900: #6e93c4;
+  --class-100: #c7a34a;
+  --class-000: #9a9a92;
+  --on-class: #14181a;
   --scheme: dark;
 }
 
 /* Quire theme: municipal / light. Generated from the design system table. */
 :root[data-theme="municipal-light"] {
-  --surface: #E7E9E2;
-  --surface-raised: #EFF1EA;
-  --ink: #14181A;
-  --ink-muted: #3A4C55;
-  --rule: #B9BEB2;
-  --accent: #A03526;
-  --on-accent: #F7F8F3;
-  --class-800: #8C2F39;
-  --class-900: #2B4A6F;
-  --class-100: #8A6A1F;
-  --class-000: #4A4A45;
-  --on-class: #FFFFFF;
+  --surface: #e7e9e2;
+  --surface-raised: #eff1ea;
+  --ink: #14181a;
+  --ink-muted: #3a4c55;
+  --rule: #b9beb2;
+  --accent: #a03526;
+  --on-accent: #f7f8f3;
+  --class-800: #8c2f39;
+  --class-900: #2b4a6f;
+  --class-100: #8a6a1f;
+  --class-000: #4a4a45;
+  --on-class: #ffffff;
   --scheme: light;
 }
 
 /* Quire theme: oxford / dark. Generated from the design system table. */
 :root[data-theme="oxford-dark"] {
-  --surface: #0F1418;
-  --surface-raised: #161D22;
-  --ink: #EEF2F4;
-  --ink-muted: #A2AFB6;
-  --rule: #2C363C;
-  --accent: #7FA6D9;
-  --on-accent: #0F1418;
-  --class-800: #C4575F;
-  --class-900: #6E93C4;
-  --class-100: #C7A34A;
-  --class-000: #9A9A92;
-  --on-class: #14181A;
+  --surface: #0f1418;
+  --surface-raised: #161d22;
+  --ink: #eef2f4;
+  --ink-muted: #a2afb6;
+  --rule: #2c363c;
+  --accent: #7fa6d9;
+  --on-accent: #0f1418;
+  --class-800: #c4575f;
+  --class-900: #6e93c4;
+  --class-100: #c7a34a;
+  --class-000: #9a9a92;
+  --on-class: #14181a;
   --scheme: dark;
 }
 
 /* Quire theme: oxford / light. Generated from the design system table. */
 :root[data-theme="oxford-light"] {
-  --surface: #F6F7F5;
-  --surface-raised: #FFFFFF;
+  --surface: #f6f7f5;
+  --surface-raised: #ffffff;
   --ink: #101820;
-  --ink-muted: #505C65;
-  --rule: #D5D9D4;
-  --accent: #1F3A5F;
-  --on-accent: #F6F7F5;
-  --class-800: #8C2F39;
-  --class-900: #2B4A6F;
-  --class-100: #B0812E;
-  --class-000: #4A4A45;
-  --on-class: #FFFFFF;
+  --ink-muted: #505c65;
+  --rule: #d5d9d4;
+  --accent: #1f3a5f;
+  --on-accent: #f6f7f5;
+  --class-800: #8c2f39;
+  --class-900: #2b4a6f;
+  --class-100: #b0812e;
+  --class-000: #4a4a45;
+  --on-class: #ffffff;
   --scheme: light;
 }
 
 /* Quire theme: shelf / dark. Generated from the design system table. */
 :root[data-theme="shelf-dark"] {
   --surface: #121212;
-  --surface-raised: #1B1B1A;
-  --ink: #F2F2EE;
-  --ink-muted: #A8A8A2;
-  --rule: #33332F;
-  --accent: #D0614C;
+  --surface-raised: #1b1b1a;
+  --ink: #f2f2ee;
+  --ink-muted: #a8a8a2;
+  --rule: #33332f;
+  --accent: #d0614c;
   --on-accent: #141412;
-  --class-800: #C4575F;
-  --class-900: #6E93C4;
-  --class-100: #C7A34A;
-  --class-000: #9A9A92;
+  --class-800: #c4575f;
+  --class-900: #6e93c4;
+  --class-100: #c7a34a;
+  --class-000: #9a9a92;
   --on-class: #141412;
   --scheme: dark;
 }
 
 /* Quire theme: shelf / light. Generated from the design system table. */
 :root[data-theme="shelf-light"] {
-  --surface: #F4F4F1;
-  --surface-raised: #FCFCFA;
+  --surface: #f4f4f1;
+  --surface-raised: #fcfcfa;
   --ink: #131313;
-  --ink-muted: #52524D;
-  --rule: #CACAC3;
-  --accent: #8C2F39;
-  --on-accent: #FCFCFA;
-  --class-800: #8C2F39;
-  --class-900: #2B4A6F;
-  --class-100: #8A6A1F;
-  --class-000: #4A4A45;
-  --on-class: #FFFFFF;
+  --ink-muted: #52524d;
+  --rule: #cacac3;
+  --accent: #8c2f39;
+  --on-accent: #fcfcfa;
+  --class-800: #8c2f39;
+  --class-900: #2b4a6f;
+  --class-100: #8a6a1f;
+  --class-000: #4a4a45;
+  --on-class: #ffffff;
   --scheme: light;
 }

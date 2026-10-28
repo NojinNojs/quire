@@ -3,23 +3,38 @@
   --font-serif: "Newsreader", Georgia, serif;
   --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
-  --display-size: 44px; --display-leading: 48px;
-  --title-size: 28px; --title-leading: 32px;
-  --book-title-size: 22px; --book-title-leading: 28px;
-  --body-size: 15px; --body-leading: 22px;
-  --small-size: 13px; --small-leading: 18px;
-  --label-size: 11px; --label-leading: 16px;
-  --mono-size: 12px; --mono-leading: 16px;
+  --display-size: 44px;
+  --display-leading: 48px;
+  --title-size: 28px;
+  --title-leading: 32px;
+  --book-title-size: 22px;
+  --book-title-leading: 28px;
+  --body-size: 15px;
+  --body-leading: 22px;
+  --small-size: 13px;
+  --small-leading: 18px;
+  --label-size: 11px;
+  --label-leading: 16px;
+  --mono-size: 12px;
+  --mono-leading: 16px;
 
   /* space */
-  --space-4: 4px; --space-8: 8px; --space-12: 12px; --space-16: 16px;
-  --space-24: 24px; --space-32: 32px; --space-48: 48px;
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
   --gutter: 20px;
 
   /* shape */
-  --radius-input: 2px; --radius-card: 3px; --radius-band: 0px;
+  --radius-input: 2px;
+  --radius-card: 3px;
+  --radius-band: 0px;
   --rule-width: 1px;
-  --focus-width: 2px; --focus-offset: 2px;
+  --focus-width: 2px;
+  --focus-offset: 2px;
 
   /* motion */
   --motion: 120ms;
@@ -33,5 +48,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :root { --motion: 0ms; }
+  :root {
+    --motion: 0ms;
+  }
 }

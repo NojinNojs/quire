@@ -1,6 +1,12 @@
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html, body, #root { height: 100%; }
+html,
+body,
+#root {
+  height: 100%;
+}
 
 body {
   margin: 0;
@@ -24,7 +30,10 @@ h1 {
   margin: 0 0 var(--space-8);
 }
 
-.muted { color: var(--ink-muted); margin: 0; }
+.muted {
+  color: var(--ink-muted);
+  margin: 0;
+}
 
 :focus-visible {
   outline: var(--focus-width) solid var(--ink);

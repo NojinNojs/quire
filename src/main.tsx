@@ -6,7 +6,10 @@ import "./styles/tokens.css";
 import "./styles/themes.css";
 import "./styles/app.css";
 
-createRoot(document.getElementById("root")!).render(
+const rootElement = document.getElementById("root");
+if (!rootElement) throw new Error("root element missing");
+
+createRoot(rootElement).render(
   <StrictMode>
     <App />
   </StrictMode>,
