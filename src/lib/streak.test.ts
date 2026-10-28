@@ -47,8 +47,8 @@ describe("logReadingDay", () => {
     expect(next.restoreMonth).toBe("2026-11");
   });
 
-  it("refuses a restore already used this month", () => {
-    const start = {
+  it("refills the restore quota in a new month", () => {
+    const spent = {
       ...emptyStreak,
       current: 9,
       longest: 9,
@@ -56,7 +56,22 @@ describe("logReadingDay", () => {
       restoreLeft: 0,
       restoreMonth: "2026-10",
     };
-    const next = logReadingDay(start, "2026-11-01");
+    const next = logReadingDay(spent, "2026-11-01");
+    expect(next.current).toBe(10);
+    expect(next.restoreLeft).toBe(0);
+    expect(next.restoreMonth).toBe("2026-11");
+  });
+
+  it("refuses a second restore in the same month", () => {
+    const start = {
+      ...emptyStreak,
+      current: 9,
+      longest: 9,
+      lastDay: "2026-10-28",
+      restoreLeft: 0,
+      restoreMonth: "2026-10",
+    };
+    const next = logReadingDay(start, "2026-10-30");
     expect(next.current).toBe(1);
   });
 

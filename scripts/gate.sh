@@ -15,6 +15,9 @@ npx vitest run --passWithNoTests || exit 1
 echo "== build"
 npx vite build >/dev/null || exit 1
 
+echo "== database smoke (skipped when supabase is down)"
+bash scripts/db-smoke.sh || exit 1
+
 echo "== docs present"
 for f in docs/PRD.md docs/TRD.md docs/APP_FLOW.md docs/DESIGN_BRIEF.md docs/SCHEMA.md docs/IMPLEMENTATION_PLAN.md docs/DESIGN_SYSTEM.md; do
   [ -f "$f" ] || { echo "missing $f"; exit 1; }

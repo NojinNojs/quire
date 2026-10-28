@@ -27,36 +27,60 @@ export function monthOf(day: string): string {
 }
 
 /**
- * One page on a day is a reading day. A single missed day can be restored once per calendar month.
- * Returns the next state; the caller persists it.
+ * One page on a day is a reading day. A single missed day can be restored once per calendar month;
+ * a new month refills that quota. Returns the next state, the caller persists it.
  */
 export function logReadingDay(state: StreakState, day: string): StreakState {
+  const month = monthOf(day);
+
   if (state.lastDay === null) {
-    return { ...state, current: 1, longest: Math.max(state.longest, 1), lastDay: day };
+    return {
+      ...state,
+      current: 1,
+      longest: Math.max(state.longest, 1),
+      lastDay: day,
+      restoreLeft: 1,
+      restoreMonth: month,
+    };
   }
 
   const gap = dayNumber(day) - dayNumber(state.lastDay);
   if (gap <= 0) return state;
 
-  if (gap === 1) {
-    const current = state.current + 1;
-    return { ...state, current, longest: Math.max(state.longest, current), lastDay: day };
-  }
+  const quota = state.restoreMonth === month ? state.restoreLeft : 1;
 
-  const canRestore = gap === 2 && state.restoreLeft > 0 && state.restoreMonth !== monthOf(day);
-  if (canRestore) {
+  if (gap === 1) {
     const current = state.current + 1;
     return {
       ...state,
       current,
       longest: Math.max(state.longest, current),
       lastDay: day,
-      restoreLeft: state.restoreLeft - 1,
-      restoreMonth: monthOf(day),
+      restoreLeft: quota,
+      restoreMonth: month,
     };
   }
 
-  return { ...state, current: 1, longest: Math.max(state.longest, 1), lastDay: day };
+  if (gap === 2 && quota > 0) {
+    const current = state.current + 1;
+    return {
+      ...state,
+      current,
+      longest: Math.max(state.longest, current),
+      lastDay: day,
+      restoreLeft: 0,
+      restoreMonth: month,
+    };
+  }
+
+  return {
+    ...state,
+    current: 1,
+    longest: Math.max(state.longest, 1),
+    lastDay: day,
+    restoreLeft: quota,
+    restoreMonth: month,
+  };
 }
 
 /** A streak is broken when the last reading day is older than yesterday. */
