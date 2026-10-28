@@ -1,0 +1,102 @@
+/* generated from design-systems/themes, keep in sync */
+/* Quire theme: municipal / dark. Generated from the design system table. */
+:root[data-theme="municipal-dark"] {
+  --surface: #14181A;
+  --surface-raised: #1D2224;
+  --ink: #EDF0E8;
+  --ink-muted: #A7B3AF;
+  --rule: #333B38;
+  --accent: #D0614C;
+  --on-accent: #14181A;
+  --class-800: #C4575F;
+  --class-900: #6E93C4;
+  --class-100: #C7A34A;
+  --class-000: #9A9A92;
+  --on-class: #14181A;
+  --scheme: dark;
+}
+
+/* Quire theme: municipal / light. Generated from the design system table. */
+:root[data-theme="municipal-light"] {
+  --surface: #E7E9E2;
+  --surface-raised: #EFF1EA;
+  --ink: #14181A;
+  --ink-muted: #3A4C55;
+  --rule: #B9BEB2;
+  --accent: #A03526;
+  --on-accent: #F7F8F3;
+  --class-800: #8C2F39;
+  --class-900: #2B4A6F;
+  --class-100: #8A6A1F;
+  --class-000: #4A4A45;
+  --on-class: #FFFFFF;
+  --scheme: light;
+}
+
+/* Quire theme: oxford / dark. Generated from the design system table. */
+:root[data-theme="oxford-dark"] {
+  --surface: #0F1418;
+  --surface-raised: #161D22;
+  --ink: #EEF2F4;
+  --ink-muted: #A2AFB6;
+  --rule: #2C363C;
+  --accent: #7FA6D9;
+  --on-accent: #0F1418;
+  --class-800: #C4575F;
+  --class-900: #6E93C4;
+  --class-100: #C7A34A;
+  --class-000: #9A9A92;
+  --on-class: #14181A;
+  --scheme: dark;
+}
+
+/* Quire theme: oxford / light. Generated from the design system table. */
+:root[data-theme="oxford-light"] {
+  --surface: #F6F7F5;
+  --surface-raised: #FFFFFF;
+  --ink: #101820;
+  --ink-muted: #505C65;
+  --rule: #D5D9D4;
+  --accent: #1F3A5F;
+  --on-accent: #F6F7F5;
+  --class-800: #8C2F39;
+  --class-900: #2B4A6F;
+  --class-100: #B0812E;
+  --class-000: #4A4A45;
+  --on-class: #FFFFFF;
+  --scheme: light;
+}
+
+/* Quire theme: shelf / dark. Generated from the design system table. */
+:root[data-theme="shelf-dark"] {
+  --surface: #121212;
+  --surface-raised: #1B1B1A;
+  --ink: #F2F2EE;
+  --ink-muted: #A8A8A2;
+  --rule: #33332F;
+  --accent: #D0614C;
+  --on-accent: #141412;
+  --class-800: #C4575F;
+  --class-900: #6E93C4;
+  --class-100: #C7A34A;
+  --class-000: #9A9A92;
+  --on-class: #141412;
+  --scheme: dark;
+}
+
+/* Quire theme: shelf / light. Generated from the design system table. */
+:root[data-theme="shelf-light"] {
+  --surface: #F4F4F1;
+  --surface-raised: #FCFCFA;
+  --ink: #131313;
+  --ink-muted: #52524D;
+  --rule: #CACAC3;
+  --accent: #8C2F39;
+  --on-accent: #FCFCFA;
+  --class-800: #8C2F39;
+  --class-900: #2B4A6F;
+  --class-100: #8A6A1F;
+  --class-000: #4A4A45;
+  --on-class: #FFFFFF;
+  --scheme: light;
+}
