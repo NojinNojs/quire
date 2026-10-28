@@ -11,7 +11,9 @@
     "lint": "biome check .",
     "format": "biome format --write .",
     "test": "vitest run",
-    "gate": "bash scripts/gate.sh"
+    "gate": "bash scripts/gate.sh",
+    "ci": "bash scripts/gate.sh",
+    "release": "bash scripts/release.sh"
   },
   "dependencies": {
     "react": "^19.3.1",
