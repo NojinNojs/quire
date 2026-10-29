@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 import { type BooksClient, countBooks, listBooks, saveBook } from "./books";
 import type { Book, EditionInput } from "./types";
 
+vi.mock("../lib/coverLookup", () => ({ lookupCover: vi.fn(async () => null) }));
+
 const input: EditionInput = {
   owner: "owner-a",
   title: "An edition",
@@ -136,4 +138,25 @@ describe("books data layer", () => {
     const { client } = fake([{ error: { code: "500", message: "internal details" } }]);
     await expect(listBooks(client, input.owner)).rejects.toThrow("Check your connection");
   });
+});
+
+it("enriches a missing catalogue cover before inserting the book", async () => {
+  const { client, builder } = fake([{ data: [] }, { data: book }]);
+  const findCover = vi.fn(async () => "https://covers.test/fetched.jpg");
+  await saveBook(client, input, findCover);
+  expect(findCover).toHaveBeenCalledWith(
+    expect.objectContaining({ isbn: input.isbn, title: input.title, author: null }),
+  );
+  expect(builder.insert).toHaveBeenCalledWith(
+    expect.objectContaining({ cover_url: "https://covers.test/fetched.jpg" }),
+  );
+});
+it("keeps an existing catalogue cover without running enrichment", async () => {
+  const { client, builder } = fake([{ data: [] }, { data: book }]);
+  const findCover = vi.fn();
+  await saveBook(client, { ...input, coverUrl: "https://covers.test/catalogue.jpg" }, findCover);
+  expect(findCover).not.toHaveBeenCalled();
+  expect(builder.insert).toHaveBeenCalledWith(
+    expect.objectContaining({ cover_url: "https://covers.test/catalogue.jpg" }),
+  );
 });

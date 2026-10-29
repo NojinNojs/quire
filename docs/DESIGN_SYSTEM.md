@@ -238,3 +238,16 @@ Both must pass before a screen is called finished.
 
 `--cover-row-width` and `--cover-row-height` hold the 48 by 72 row cover box.
 `--row-title-size` holds the 17px serif italic title in a catalogue row.
+
+## Printed cover jackets
+
+Missing cover art uses the existing title hash to choose oxblood, olive, indigo, ochre, or teal
+cloth. Jacket tokens in `src/styles/tokens.css` pair each cloth with paper ink at more than 9:1
+contrast across all six themes. A darker 1px spine and two diagonal 1px rules at 6% opacity give
+these covers a printed surface without bitmap textures or gradients.
+
+Newsreader titles occupy two to four line heights in the upper third and clamp at four lines.
+Authors use 9px small caps below the title, limited to two lines; missing authors print
+"Author unknown". The DDC number sits at the foot in mono over a 2px class colour rule; missing
+classification prints "Unclassified". Today jackets measure 96px by 144px. Container based type
+also accommodates the 170px shelf jacket. Real cover images retain `object-fit: cover`.

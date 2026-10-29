@@ -1,0 +1,15 @@
+Local disposable evidence library
+
+$ node scripts/backfill-covers.mjs --dry-run
+Pride and Prejudice -> https://covers.openlibrary.org/b/id/12645114-L.jpg?default=false
+A very long title about the history of Indonesian literature and its many printed editions -> none
+Dry run: 1 found, 0 saved
+
+$ node scripts/backfill-covers.mjs
+Pride and Prejudice -> https://covers.openlibrary.org/b/id/12645114-L.jpg?default=false
+A very long title about the history of Indonesian literature and its many printed editions -> none
+Backfill: 1 found, 1 saved
+
+$ node scripts/backfill-covers.mjs
+A very long title about the history of Indonesian literature and its many printed editions -> none
+Backfill: 0 found, 0 saved

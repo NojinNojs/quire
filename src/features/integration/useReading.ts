@@ -58,6 +58,7 @@ export async function loadReading(
         .filter((value) => value !== null)
         .join(" · "),
       coverUrl: book.cover_url,
+      ddc: book.ddc,
       total: book.pages,
     },
     streak: { current: streak.data.current, longest: streak.data.longest, days },

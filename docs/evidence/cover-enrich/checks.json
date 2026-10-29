@@ -1,0 +1,414 @@
+{
+  "fetchedCover": "https://covers.openlibrary.org/b/id/12645114-L.jpg?default=false",
+  "imageBytes": 39717,
+  "checks": [
+    {
+      "theme": "shelf-light",
+      "width": 96,
+      "cloths": [
+        {
+          "cloth": "oxblood",
+          "ratio": 11.480004698936952
+        },
+        {
+          "cloth": "olive",
+          "ratio": 10.0872246479518
+        },
+        {
+          "cloth": "indigo",
+          "ratio": 11.242029555118144
+        },
+        {
+          "cloth": "ochre",
+          "ratio": 9.041173398917008
+        },
+        {
+          "cloth": "teal",
+          "ratio": 10.103801199302525
+        }
+      ],
+      "titleClamp": "4",
+      "authorClamp": "2",
+      "titleLines": 3.9978780864197527,
+      "authorSize": "9px",
+      "font": "Newsreader, Georgia, serif",
+      "noOverlap": true,
+      "clamped": true,
+      "hasUnknownAuthor": true
+    },
+    {
+      "theme": "shelf-light",
+      "width": 170,
+      "cloths": [
+        {
+          "cloth": "oxblood",
+          "ratio": 11.480004698936952
+        },
+        {
+          "cloth": "olive",
+          "ratio": 10.0872246479518
+        },
+        {
+          "cloth": "indigo",
+          "ratio": 11.242029555118144
+        },
+        {
+          "cloth": "ochre",
+          "ratio": 9.041173398917008
+        },
+        {
+          "cloth": "teal",
+          "ratio": 10.103801199302525
+        }
+      ],
+      "titleClamp": "4",
+      "authorClamp": "2",
+      "titleLines": 3.998681841563786,
+      "authorSize": "9px",
+      "font": "Newsreader, Georgia, serif",
+      "noOverlap": true,
+      "clamped": true,
+      "hasUnknownAuthor": true
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 96,
+      "cloths": [
+        {
+          "cloth": "oxblood",
+          "ratio": 11.480004698936952
+        },
+        {
+          "cloth": "olive",
+          "ratio": 10.0872246479518
+        },
+        {
+          "cloth": "indigo",
+          "ratio": 11.242029555118144
+        },
+        {
+          "cloth": "ochre",
+          "ratio": 9.041173398917008
+        },
+        {
+          "cloth": "teal",
+          "ratio": 10.103801199302525
+        }
+      ],
+      "titleClamp": "4",
+      "authorClamp": "2",
+      "titleLines": 3.9978780864197527,
+      "authorSize": "9px",
+      "font": "Newsreader, Georgia, serif",
+      "noOverlap": true,
+      "clamped": true,
+      "hasUnknownAuthor": true
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 170,
+      "cloths": [
+        {
+          "cloth": "oxblood",
+          "ratio": 11.480004698936952
+        },
+        {
+          "cloth": "olive",
+          "ratio": 10.0872246479518
+        },
+        {
+          "cloth": "indigo",
+          "ratio": 11.242029555118144
+        },
+        {
+          "cloth": "ochre",
+          "ratio": 9.041173398917008
+        },
+        {
+          "cloth": "teal",
+          "ratio": 10.103801199302525
+        }
+      ],
+      "titleClamp": "4",
+      "authorClamp": "2",
+      "titleLines": 3.998681841563786,
+      "authorSize": "9px",
+      "font": "Newsreader, Georgia, serif",
+      "noOverlap": true,
+      "clamped": true,
+      "hasUnknownAuthor": true
+    },
+    {
+      "theme": "municipal-light",
+      "width": 96,
+      "cloths": [
+        {
+          "cloth": "oxblood",
+          "ratio": 11.480004698936952
+        },
+        {
+          "cloth": "olive",
+          "ratio": 10.0872246479518
+        },
+        {
+          "cloth": "indigo",
+          "ratio": 11.242029555118144
+        },
+        {
+          "cloth": "ochre",
+          "ratio": 9.041173398917008
+        },
+        {
+          "cloth": "teal",
+          "ratio": 10.103801199302525
+        }
+      ],
+      "titleClamp": "4",
+      "authorClamp": "2",
+      "titleLines": 3.9978780864197527,
+      "authorSize": "9px",
+      "font": "Newsreader, Georgia, serif",
+      "noOverlap": true,
+      "clamped": true,
+      "hasUnknownAuthor": true
+    },
+    {
+      "theme": "municipal-light",
+      "width": 170,
+      "cloths": [
+        {
+          "cloth": "oxblood",
+          "ratio": 11.480004698936952
+        },
+        {
+          "cloth": "olive",
+          "ratio": 10.0872246479518
+        },
+        {
+          "cloth": "indigo",
+          "ratio": 11.242029555118144
+        },
+        {
+          "cloth": "ochre",
+          "ratio": 9.041173398917008
+        },
+        {
+          "cloth": "teal",
+          "ratio": 10.103801199302525
+        }
+      ],
+      "titleClamp": "4",
+      "authorClamp": "2",
+      "titleLines": 3.998681841563786,
+      "authorSize": "9px",
+      "font": "Newsreader, Georgia, serif",
+      "noOverlap": true,
+      "clamped": true,
+      "hasUnknownAuthor": true
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 96,
+      "cloths": [
+        {
+          "cloth": "oxblood",
+          "ratio": 11.480004698936952
+        },
+        {
+          "cloth": "olive",
+          "ratio": 10.0872246479518
+        },
+        {
+          "cloth": "indigo",
+          "ratio": 11.242029555118144
+        },
+        {
+          "cloth": "ochre",
+          "ratio": 9.041173398917008
+        },
+        {
+          "cloth": "teal",
+          "ratio": 10.103801199302525
+        }
+      ],
+      "titleClamp": "4",
+      "authorClamp": "2",
+      "titleLines": 3.9978780864197527,
+      "authorSize": "9px",
+      "font": "Newsreader, Georgia, serif",
+      "noOverlap": true,
+      "clamped": true,
+      "hasUnknownAuthor": true
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 170,
+      "cloths": [
+        {
+          "cloth": "oxblood",
+          "ratio": 11.480004698936952
+        },
+        {
+          "cloth": "olive",
+          "ratio": 10.0872246479518
+        },
+        {
+          "cloth": "indigo",
+          "ratio": 11.242029555118144
+        },
+        {
+          "cloth": "ochre",
+          "ratio": 9.041173398917008
+        },
+        {
+          "cloth": "teal",
+          "ratio": 10.103801199302525
+        }
+      ],
+      "titleClamp": "4",
+      "authorClamp": "2",
+      "titleLines": 3.998681841563786,
+      "authorSize": "9px",
+      "font": "Newsreader, Georgia, serif",
+      "noOverlap": true,
+      "clamped": true,
+      "hasUnknownAuthor": true
+    },
+    {
+      "theme": "oxford-light",
+      "width": 96,
+      "cloths": [
+        {
+          "cloth": "oxblood",
+          "ratio": 11.480004698936952
+        },
+        {
+          "cloth": "olive",
+          "ratio": 10.0872246479518
+        },
+        {
+          "cloth": "indigo",
+          "ratio": 11.242029555118144
+        },
+        {
+          "cloth": "ochre",
+          "ratio": 9.041173398917008
+        },
+        {
+          "cloth": "teal",
+          "ratio": 10.103801199302525
+        }
+      ],
+      "titleClamp": "4",
+      "authorClamp": "2",
+      "titleLines": 3.9978780864197527,
+      "authorSize": "9px",
+      "font": "Newsreader, Georgia, serif",
+      "noOverlap": true,
+      "clamped": true,
+      "hasUnknownAuthor": true
+    },
+    {
+      "theme": "oxford-light",
+      "width": 170,
+      "cloths": [
+        {
+          "cloth": "oxblood",
+          "ratio": 11.480004698936952
+        },
+        {
+          "cloth": "olive",
+          "ratio": 10.0872246479518
+        },
+        {
+          "cloth": "indigo",
+          "ratio": 11.242029555118144
+        },
+        {
+          "cloth": "ochre",
+          "ratio": 9.041173398917008
+        },
+        {
+          "cloth": "teal",
+          "ratio": 10.103801199302525
+        }
+      ],
+      "titleClamp": "4",
+      "authorClamp": "2",
+      "titleLines": 3.998681841563786,
+      "authorSize": "9px",
+      "font": "Newsreader, Georgia, serif",
+      "noOverlap": true,
+      "clamped": true,
+      "hasUnknownAuthor": true
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 96,
+      "cloths": [
+        {
+          "cloth": "oxblood",
+          "ratio": 11.480004698936952
+        },
+        {
+          "cloth": "olive",
+          "ratio": 10.0872246479518
+        },
+        {
+          "cloth": "indigo",
+          "ratio": 11.242029555118144
+        },
+        {
+          "cloth": "ochre",
+          "ratio": 9.041173398917008
+        },
+        {
+          "cloth": "teal",
+          "ratio": 10.103801199302525
+        }
+      ],
+      "titleClamp": "4",
+      "authorClamp": "2",
+      "titleLines": 3.9978780864197527,
+      "authorSize": "9px",
+      "font": "Newsreader, Georgia, serif",
+      "noOverlap": true,
+      "clamped": true,
+      "hasUnknownAuthor": true
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 170,
+      "cloths": [
+        {
+          "cloth": "oxblood",
+          "ratio": 11.480004698936952
+        },
+        {
+          "cloth": "olive",
+          "ratio": 10.0872246479518
+        },
+        {
+          "cloth": "indigo",
+          "ratio": 11.242029555118144
+        },
+        {
+          "cloth": "ochre",
+          "ratio": 9.041173398917008
+        },
+        {
+          "cloth": "teal",
+          "ratio": 10.103801199302525
+        }
+      ],
+      "titleClamp": "4",
+      "authorClamp": "2",
+      "titleLines": 3.998681841563786,
+      "authorSize": "9px",
+      "font": "Newsreader, Georgia, serif",
+      "noOverlap": true,
+      "clamped": true,
+      "hasUnknownAuthor": true
+    }
+  ]
+}

@@ -355,10 +355,6 @@
   aspect-ratio: 2 / 3;
   border-radius: var(--radius-input);
 }
-.shelf-row .cover-jacket {
-  background: var(--book-class);
-  color: var(--surface);
-}
 .shelf-grid .bookmark-page {
   display: none;
 }

@@ -80,3 +80,16 @@ Catatan: tema dipilih lewat `data-theme` pada `<html>` (`shelf`, `municipal`, `o
 - **Firebase** — mahal saat tumbuh, dan keluar dari SQL standar.
 - **9Router untuk pengguna umum** — itu kuota pribadi Aqsan.
 - **VPS sekarang** — butuh uang dan perawatan sebelum ada pengguna.
+
+## Cover enrichment
+
+When a new edition has no catalogue cover, `src/lib/coverLookup.ts` checks Google Books by ISBN,
+Open Library by ISBN, then Open Library by title and author. It returns the largest available HTTPS
+image URL, or null when all sources are missing or unavailable. Each request has a four second
+bound. It uses no API key and adds no dependency. An existing catalogue URL is preserved.
+Uploaded storage paths keep display priority over external URLs.
+
+`scripts/backfill-covers.mjs` applies the same lookup to existing books with null `cover_url` and
+null `cover_path`. Updates recheck both null conditions atomically so a concurrent upload wins.
+The CLI supports `--dry-run`, paginates by ID, and prints a result for each eligible book. See
+`docs/evidence/cover-enrich/README.md` for configuration and verification.

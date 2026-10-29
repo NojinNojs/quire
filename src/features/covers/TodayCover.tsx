@@ -6,11 +6,15 @@ import { CoverImage } from "./CoverImage";
 export function TodayCover({
   bookId,
   title,
+  author,
+  ddc,
   coverUrl,
   client = supabase,
 }: {
   bookId: string;
   title: string;
+  author?: string | null;
+  ddc?: string | null;
   coverUrl: string | null;
   client?: CoversClient | null;
 }) {
@@ -72,6 +76,8 @@ export function TodayCover({
         coverPath={record?.cover_path}
         coverUrl={coverUrl}
         title={title}
+        author={author}
+        ddc={ddc}
         className="reading-cover"
         client={client}
       />

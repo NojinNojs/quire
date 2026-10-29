@@ -91,3 +91,27 @@
     --bookmark-motion: 0ms;
   }
 }
+
+/* Printed jackets use stable cloth and paper inks in every theme. */
+:root {
+  --jacket-oxblood: #542633;
+  --jacket-olive: #35402b;
+  --jacket-indigo: #24364f;
+  --jacket-ochre: #55411e;
+  --jacket-teal: #21423e;
+  --jacket-ink: #fff7e6;
+  --jacket-spine-shade: #000;
+  --jacket-spine-cloth: 70%;
+  --today-jacket-width: 96px;
+  --today-jacket-height: 144px;
+  --jacket-title-size: clamp(12px, 12cqw, 22px);
+  --jacket-title-leading: 1.08;
+  --jacket-author-size: 9px;
+  --jacket-author-leading: 11px;
+  --jacket-class-size: 9px;
+  --jacket-class-bar: 2px;
+  --jacket-top: 16cqw;
+  --jacket-inset: 8cqw;
+  --jacket-grain-opacity: 0.06;
+  --jacket-grain-angle: -35deg;
+}

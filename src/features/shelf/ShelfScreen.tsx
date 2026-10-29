@@ -202,6 +202,8 @@ export function ShelfScreen({
                           coverPath={book.cover_path}
                           coverUrl={book.cover_url}
                           title={book.title}
+                          author={book.author}
+                          ddc={book.ddc}
                           className="shelf-cover"
                         />
                       </button>
