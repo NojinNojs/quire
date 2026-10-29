@@ -1,0 +1,34 @@
+.primary {
+  transition: none;
+}
+
+.shell-screen {
+  animation: screen-enter var(--motion) var(--ease);
+}
+
+.nav-indicator {
+  transition:
+    transform var(--motion) var(--ease),
+    opacity var(--motion) var(--ease);
+}
+
+@keyframes screen-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-8));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell-screen {
+    animation: none;
+  }
+
+  .nav-indicator {
+    transition: none;
+  }
+}

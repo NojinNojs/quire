@@ -1,0 +1,97 @@
+:root {
+  --shell-width: 390px;
+  --shell-header-height: 56px;
+  --nav-icon-size: 22px;
+  --nav-indicator-size: 3px;
+}
+
+.app-shell {
+  padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom));
+}
+
+.shell-header {
+  min-height: var(--shell-header-height);
+  padding-block: 0;
+}
+
+.shell-header .shell-settings {
+  justify-content: center;
+}
+
+.shell-settings svg,
+.bottom-nav svg {
+  width: var(--nav-icon-size);
+  height: var(--nav-icon-size);
+}
+
+.shell-settings:hover,
+.shell-settings:active,
+.bottom-nav a:hover,
+.bottom-nav a:active {
+  background: var(--surface);
+}
+
+.shell-placeholder-copy {
+  padding-block: var(--space-48);
+  text-align: center;
+}
+
+.shell-catalogue-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch);
+  margin-top: var(--space-16);
+  color: var(--ink);
+  text-underline-offset: var(--space-4);
+}
+
+.bottom-nav {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  width: 100%;
+  max-width: var(--shell-width);
+  height: calc(var(--nav-height) + env(safe-area-inset-bottom));
+  margin-inline: auto;
+  padding: 0 var(--space-8) env(safe-area-inset-bottom);
+  border-top: var(--rule-width) solid var(--rule);
+  background: var(--surface-raised);
+}
+
+.bottom-nav a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--touch);
+  height: var(--touch);
+  color: var(--ink-muted);
+}
+
+.bottom-nav a[aria-current="page"] {
+  color: var(--ink);
+}
+
+.nav-indicator {
+  position: absolute;
+  inset-inline-start: var(--space-8);
+  top: var(--space-8);
+  width: calc((100% - var(--space-16)) / 3);
+  height: var(--nav-indicator-size);
+  background: var(--class-800);
+  pointer-events: none;
+}
+
+.nav-indicator[data-route="shelf"] {
+  transform: translateX(100%);
+}
+
+.nav-indicator[data-route="search"] {
+  transform: translateX(200%);
+}
+
+.nav-indicator[data-route="settings"] {
+  opacity: 0;
+}

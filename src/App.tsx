@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { AuthForm } from "./features/auth/AuthForm";
 import { SearchScreen } from "./features/catalog/SearchScreen";
+import { AppShell } from "./features/nav/AppShell";
+import { PlaceholderScreen } from "./features/nav/PlaceholderScreen";
+import { parseRoute } from "./features/nav/routes";
 import { SettingsScreen } from "./features/settings/SettingsScreen";
 import { restoreTheme } from "./features/settings/settings";
 import { ErrorPanel } from "./features/states/ErrorPanel";
@@ -11,15 +14,20 @@ import { useSession } from "./lib/useSession";
 restoreTheme(document.documentElement);
 
 export default function App() {
-  const [settings, setSettings] = useState(() => window.location.hash === "#settings");
+  const [route, setRoute] = useState(() => parseRoute(window.location.hash));
   useEffect(() => {
     const navigate = () => {
-      setSettings(window.location.hash === "#settings");
+      setRoute(parseRoute(window.location.hash));
     };
     window.addEventListener("hashchange", navigate);
     return () => window.removeEventListener("hashchange", navigate);
   }, []);
   const { user, ready, client, signOut, error, retry } = useSession();
+
+  useEffect(() => {
+    // Keep the first sign-in journey on book entry, while preserving explicit deep links.
+    if (ready && !user && !window.location.hash) window.location.hash = "/search";
+  }, [ready, user]);
 
   if (!client) {
     return (
@@ -52,25 +60,16 @@ export default function App() {
   if (!user) return <AuthForm client={client} />;
 
   return (
-    <>
-      <header className="shell app-header">
-        <span className="brand">Quire</span>
-        <nav aria-label="Main navigation">
-          <a href="#catalogue" aria-current={!settings ? "page" : undefined}>
-            Catalogue
-          </a>
-          <a href="#settings" aria-current={settings ? "page" : undefined}>
-            Settings
-          </a>
-        </nav>
-      </header>
-      {settings ? (
+    <AppShell route={route}>
+      {route === "settings" ? (
         <SettingsScreen key={user.id} signOut={signOut} />
-      ) : (
+      ) : route === "search" ? (
         <div className="app-catalog" id="catalogue">
           <SearchScreen key={user.id} user={user} client={client} signOut={signOut} />
         </div>
+      ) : (
+        <PlaceholderScreen screen={route} />
       )}
-    </>
+    </AppShell>
   );
 }
