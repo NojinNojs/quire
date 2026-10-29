@@ -11,7 +11,9 @@ export type Candidate = {
   coverUrl: string | null;
   source: "Google Books" | "Open Library" | "Manual";
 };
-export type Fetcher = (url: string) => Promise<{ ok: boolean; json(): Promise<unknown> }>;
+export type Fetcher = (
+  url: string,
+) => Promise<{ ok: boolean; status?: number; json(): Promise<unknown> }>;
 type RecordData = Record<string, unknown>;
 const object = (value: unknown): RecordData =>
   value && typeof value === "object" ? (value as RecordData) : {};
@@ -35,6 +37,21 @@ function isbn(values: unknown): string | null {
   }
   return null;
 }
+const LANGUAGES: Record<string, string> = {
+  ind: "id",
+  indo: "id",
+  id: "id",
+  indonesian: "id",
+  eng: "en",
+  en: "en",
+  english: "en",
+};
+/** Catalogue sources use ISO 639-3; the app stores the two letter code used by the schema. */
+function languageOf(value: unknown): string | null {
+  const code = text(value)?.toLowerCase();
+  if (!code) return null;
+  return LANGUAGES[code] ?? code.slice(0, 2);
+}
 function cover(value: unknown): string | null {
   const url = text(value)?.replace(/^http:/, "https:");
   return url?.startsWith("https://") ? url : null;
@@ -52,7 +69,7 @@ export function normaliseGoogleBooks(data: unknown): Candidate[] {
             year: year(v.publishedDate),
             pages: positive(v.pageCount),
             isbn: isbn(array(v.industryIdentifiers).map((id) => object(id).identifier)),
-            language: text(v.language),
+            language: languageOf(v.language),
             coverUrl: cover(object(v.imageLinks).thumbnail),
             source: "Google Books" as const,
           },
@@ -72,10 +89,11 @@ export function normaliseOpenLibrary(data: unknown, author: string | null): Cand
     year: year(v.publish_date),
     pages: positive(v.number_of_pages),
     isbn: isbn([...array(v.isbn_13), ...array(v.isbn_10)]),
-    language:
+    language: languageOf(
       text(object(array(v.languages)[0]).key)
         ?.split("/")
-        .pop() ?? null,
+        .pop(),
+    ),
     coverUrl: coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : null,
     source: "Open Library",
   };
@@ -100,7 +118,10 @@ export async function searchCatalog(
   const q = encodeURIComponent(query.trim());
   async function read(url: string) {
     const response = await fetcher(url);
-    if (!response.ok) throw new Error("Catalogue request failed");
+    if (!response.ok) {
+      const status = response.status;
+      throw new Error(status === 429 ? "rate limited" : "request failed");
+    }
     return response.json();
   }
   const sources = ["Google Books", "Open Library"];
@@ -143,7 +164,11 @@ export async function searchCatalog(
       ...editionErrors,
       ...results.flatMap((result, i) =>
         result.status === "rejected"
-          ? [`${sources[i]} is unavailable. Try again or enter the book manually.`]
+          ? [
+              result.reason instanceof Error && result.reason.message === "rate limited"
+                ? `${sources[i]} is rate limiting requests. Try again in a minute, or enter the book manually.`
+                : `${sources[i]} is unavailable. Try again or enter the book manually.`,
+            ]
           : [],
       ),
     ],

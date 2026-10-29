@@ -34,7 +34,7 @@ describe("catalogue", () => {
       year: 1996,
       pages: 368,
       isbn: "9780140256352",
-      language: "eng",
+      language: "en",
       coverUrl: "https://covers.openlibrary.org/b/id/12345-M.jpg",
       source: "Open Library",
     });
@@ -128,5 +128,20 @@ describe("catalogue", () => {
         null,
       ),
     ).toMatchObject({ isbn: null, year: null, pages: null });
+  });
+});
+
+describe("language normalisation", () => {
+  it("maps ISO 639-3 catalogue codes to the two letter code the schema stores", () => {
+    const google = normaliseGoogleBooks({
+      items: [{ volumeInfo: { title: "Bumi Manusia", language: "ind" } }],
+    });
+    expect(google[0]?.language).toBe("id");
+
+    const openLibrary = normaliseOpenLibrary(
+      { title: "This Earth of Mankind", languages: [{ key: "/languages/eng" }] },
+      "Pramoedya Ananta Toer",
+    );
+    expect(openLibrary?.language).toBe("en");
   });
 });
