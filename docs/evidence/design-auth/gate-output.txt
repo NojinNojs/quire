@@ -1,0 +1,84 @@
+
+> quire@0.1.0 gate
+> bash scripts/gate.sh
+
+== biome
+src/styles/shelf.css:249:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 1, 0)
+  
+    247 │   padding-bottom: calc(var(--nav-height) + var(--space-32));
+    248 │ }
+  > 249 │ .shelf-row {
+        │ ^^^^^^^^^^
+    250 │   align-items: start;
+    251 │ }
+  
+  i This selector specificity is (0, 2, 0)
+  
+     99 │ }
+    100 │ 
+  > 101 │ .shelf-row + .shelf-row {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^
+    102 │   border-top: var(--rule-width) solid var(--rule);
+    103 │ }
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+Checked 108 files in 57ms. No fixes applied.
+Found 1 warning.
+== typecheck
+== tests
+
+> quire@0.1.0 test
+> vitest run src --passWithNoTests
+
+
+ RUN  v5.0.5 /home/nojin/works/quire/.worktrees/design-auth
+
+
+ Test Files  18 passed (18)
+      Tests  153 passed (153)
+   Start at  11:55:49
+   Duration  2.25s (environment 37%, import 32%, tests 22%, transform 8%, worker 2%)
+
+== build
+== database smoke (skipped when supabase is down)
+ok   insert a book
+ok   row level security hides another shelf
+ok   duplicate ISBN refused
+ok   only one active book allowed
+ok   streak 2026-10-26
+ok   streak 2026-10-26
+ok   streak 2026-10-27
+ok   streak 2026-10-29
+ok   streak 2026-10-31
+ok   streak 2026-11-02
+ok   two logs on one day add up
+
+all database checks passed
+== docs present
+== end to end smoke (skipped when supabase or system Chromium is unavailable)
+
+> quire@0.1.0 test:e2e
+> playwright test
+
+[WebServer] (node:520180) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:520250) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/auth.spec.ts:3:1 › sign up, open the catalogue, and sign out (1.4s)
+  ✓  2 tests/e2e/auth.spec.ts:13:3 › borrower's card faces at 390 in shelf-light (714ms)
+  ✓  3 tests/e2e/auth.spec.ts:13:3 › borrower's card faces at 390 in municipal-dark (676ms)
+  ✓  4 tests/e2e/auth.spec.ts:37:1 › inline auth errors, issuing state, and reduced motion (624ms)
+  ✓  5 tests/e2e/auth.spec.ts:58:1 › card text contrast exceeds 7:1 in all six modes (525ms)
+  ✓  6 tests/e2e/catalog.spec.ts:3:1 › search, save a candidate, and refuse a persisted duplicate (3.3s)
+  ✓  7 tests/e2e/catalog.spec.ts:60:1 › empty query shows guidance and prevents provider searches (1.5s)
+  ✓  8 tests/e2e/settings.spec.ts:3:1 › theme chosen in settings is applied and survives a reload (2.1s)
+
+  8 passed (12.4s)
+gate ok
