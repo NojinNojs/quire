@@ -407,7 +407,9 @@
   font: 10px / 12px var(--font-mono);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--ink);
+  border-left: 2px solid var(--accent);
+  padding-left: var(--space-6);
 }
 
 .borrower-card .auth-head h1 {
@@ -476,11 +478,13 @@
   background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
-/* links are ink, not browser blue-underlined */
+/* the accent lives in the rule under the word, not in the word: 7:1 must hold in every theme */
 .borrower-card .auth-forgot,
 .borrower-card .auth-switch-action {
   text-decoration: none;
-  color: var(--accent);
+  color: var(--ink);
+  border-bottom: var(--rule-width) solid var(--accent);
+  padding-bottom: 1px;
 }
 
 .borrower-card .auth-forgot:hover,
