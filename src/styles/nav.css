@@ -6,7 +6,51 @@
 }
 
 .app-shell {
+  --ink-muted: var(--shell-secondary-ink);
+  --bookmark-motion: var(--motion);
   padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom));
+}
+
+.app-shell :focus-visible:not(:disabled) {
+  outline: var(--focus-width) solid var(--shell-focus-ink);
+  outline-offset: var(--focus-offset);
+}
+
+.app-shell .reading-stamps .reading-day {
+  border: 0;
+  background: none;
+  opacity: 1;
+}
+
+.app-shell .cover-controls:has(input:focus-visible) label {
+  outline: var(--focus-width) solid var(--shell-focus-ink);
+  outline-offset: var(--focus-offset);
+}
+
+.shell-screen {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: var(--layer-skip);
+  top: var(--space-8);
+  left: var(--space-8);
+  display: flex;
+  align-items: center;
+  min-height: var(--touch);
+  max-width: calc(100% - var(--space-16));
+  padding: var(--space-8) var(--space-16);
+  border: var(--rule-width) solid var(--ink);
+  border-radius: var(--radius-input);
+  background: var(--surface-raised);
+  color: var(--ink);
+  transform: translateY(calc(-100% - var(--space-16)));
+}
+
+.skip-link:focus {
+  transform: none;
 }
 
 .shell-header {
@@ -47,6 +91,7 @@
 
 .bottom-nav {
   position: fixed;
+  z-index: var(--layer-nav);
   inset-inline: 0;
   bottom: 0;
   display: grid;
@@ -68,10 +113,15 @@
   min-width: var(--touch);
   height: var(--touch);
   color: var(--ink-muted);
+  text-decoration: none;
 }
 
 .bottom-nav a[aria-current="page"] {
   color: var(--ink);
+}
+
+.nav-label {
+  display: none;
 }
 
 .nav-indicator {
@@ -94,4 +144,132 @@
 
 .nav-indicator[data-route="settings"] {
   opacity: 0;
+}
+
+@media (min-width: 768px) {
+  .app-shell {
+    padding-bottom: 0;
+    padding-left: var(--rail-width);
+  }
+
+  .app-shell .shell,
+  .app-shell .integration-screen,
+  .app-shell .reading {
+    width: 100%;
+    max-width: none;
+  }
+
+  .shell-header {
+    position: sticky;
+    z-index: var(--layer-header);
+    top: 0;
+    background: var(--surface);
+  }
+
+  .bottom-nav {
+    inset: 0 auto 0 0;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: var(--space-8);
+    width: var(--rail-width);
+    max-width: none;
+    height: 100%;
+    margin: 0;
+    padding: var(--space-8);
+    padding-top: calc(var(--shell-header-height) + var(--space-24));
+    border-top: 0;
+    border-right: var(--rule-width) solid var(--rule);
+  }
+
+  .bottom-nav a {
+    flex-direction: column;
+    gap: var(--space-4);
+    height: var(--nav-height);
+  }
+
+  .bottom-nav a[aria-current="page"] {
+    background: var(--surface);
+    text-decoration: underline;
+    text-decoration-thickness: var(--rule-width);
+    text-underline-offset: var(--space-4);
+  }
+
+  .nav-label {
+    display: block;
+    font: var(--rail-label-size) / var(--mono-leading) var(--font-mono);
+  }
+
+  .nav-indicator {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-shell .reading:has(.reading-book) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto auto auto 1fr;
+    column-gap: var(--space-32);
+    align-items: start;
+  }
+
+  .app-shell .reading > h1 {
+    grid-column: 1 / -1;
+  }
+
+  .app-shell .reading-book {
+    grid-column: 1;
+    grid-row: 2 / 5;
+    min-width: 0;
+  }
+
+  .app-shell .reading-stepper {
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .app-shell .reading-feedback {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .app-shell .reading-streak {
+    grid-column: 2;
+    grid-row: 4;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 1280px) {
+  .app-shell {
+    padding-left: var(--rail-wide-width);
+  }
+
+  .shell-header,
+  .shell-screen {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin-inline: auto;
+  }
+
+  .app-shell .shell-header {
+    max-width: var(--content-max-width);
+  }
+
+  .bottom-nav {
+    width: var(--rail-wide-width);
+    padding-inline: var(--space-16);
+  }
+
+  .bottom-nav a {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--space-12);
+    height: var(--touch);
+    padding-inline: var(--space-16);
+  }
 }

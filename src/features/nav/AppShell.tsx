@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useRef } from "react";
 import { SearchIcon, SettingsIcon, ShelfIcon, TodayIcon } from "../../components/icons";
 import type { Route } from "./routes";
 
@@ -9,8 +9,26 @@ const destinations = [
 ] as const;
 
 export function AppShell({ route, children }: { route: Route; children: ReactNode }) {
+  const content = useRef<HTMLDivElement>(null);
+
   return (
     <div className="app-shell">
+      {/* biome-ignore lint/a11y/useValidAnchor: native skip-link semantics with focus managed to preserve the hash route. */}
+      <a
+        className="skip-link"
+        href="#main-content"
+        onClick={(event) => {
+          // The URL hash belongs to the router; move focus without changing the route.
+          event.preventDefault();
+          const main = content.current?.querySelector("main") ?? content.current;
+          if (main) {
+            main.tabIndex = -1;
+            main.focus();
+          }
+        }}
+      >
+        Skip to main content
+      </a>
       <header className="shell app-header shell-header">
         <span className="brand">Quire</span>
         <a
@@ -23,7 +41,7 @@ export function AppShell({ route, children }: { route: Route; children: ReactNod
           <SettingsIcon />
         </a>
       </header>
-      <div className="shell-screen" key={route}>
+      <div className="shell-screen" id="main-content" ref={content} key={route} tabIndex={-1}>
         {children}
       </div>
       <nav className="bottom-nav" aria-label="Main navigation">
@@ -37,6 +55,7 @@ export function AppShell({ route, children }: { route: Route; children: ReactNod
             aria-current={route === destination ? "page" : undefined}
           >
             <Icon />
+            <span className="nav-label">{label}</span>
           </a>
         ))}
       </nav>

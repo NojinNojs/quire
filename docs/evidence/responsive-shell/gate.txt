@@ -1,0 +1,178 @@
+
+> quire@0.1.0 gate
+> bash scripts/gate.sh
+
+== biome
+src/styles/auth.css:258:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 2, 0)
+  
+    256 │ }
+    257 │ 
+  > 258 │ .borrower-card .auth-reveal,
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    259 │ .borrower-card .auth-forgot {
+    260 │   min-height: 0;
+  
+  i This selector specificity is (0, 3, 0)
+  
+    246 │ }
+    247 │ 
+  > 248 │ .borrower-card .auth-field .auth-reveal {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    249 │   position: absolute;
+    250 │   right: 0;
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+src/styles/auth.css:344:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 2, 0)
+  
+    343 │ /* the reveal control is a label, not a link, so it must not draw a second rule */
+  > 344 │ .borrower-card .auth-reveal {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    345 │   text-decoration: none;
+    346 │   border-bottom: 0;
+  
+  i This selector specificity is (0, 3, 0)
+  
+    246 │ }
+    247 │ 
+  > 248 │ .borrower-card .auth-field .auth-reveal {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    249 │   position: absolute;
+    250 │   right: 0;
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+src/styles/auth.css:368:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 2, 1)
+  
+    366 │ }
+    367 │ 
+  > 368 │ .borrower-card .auth-strength-track span {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    369 │   background: repeating-linear-gradient(to right, var(--ink) 0 6px, transparent 6px 9px);
+    370 │ }
+  
+  i This selector specificity is (0, 3, 1)
+  
+    174 │ }
+    175 │ 
+  > 176 │ .borrower-card [data-strength="Fair"] .auth-strength-track > span {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    177 │   width: 66.667%;
+    178 │ }
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+src/styles/reading.css:279:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 1, 0)
+  
+    278 │ /* a file input is a browser control until you dress it */
+  > 279 │ .cover-controls {
+        │ ^^^^^^^^^^^^^^^
+    280 │   position: relative;
+    281 │   display: flex;
+  
+  i This selector specificity is (0, 2, 0)
+  
+    192 │   grid-row: 1;
+    193 │ }
+  > 194 │ .reading-jacket .cover-controls {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    195 │   grid-column: 1 / -1;
+    196 │   grid-row: 2;
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+src/styles/reading.css:393:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 1, 0)
+  
+    391 │ }
+    392 │ 
+  > 393 │ .cover-controls {
+        │ ^^^^^^^^^^^^^^^
+    394 │   width: 100%;
+    395 │ }
+  
+  i This selector specificity is (0, 2, 0)
+  
+    192 │   grid-row: 1;
+    193 │ }
+  > 194 │ .reading-jacket .cover-controls {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    195 │   grid-column: 1 / -1;
+    196 │   grid-row: 2;
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+Checked 116 files in 63ms. No fixes applied.
+Found 5 warnings.
+== typecheck
+== tests
+
+> quire@0.1.0 test
+> vitest run src --passWithNoTests
+
+
+ RUN  v5.0.5 /home/nojin/works/quire/.worktrees/resp-shell
+
+
+ Test Files  20 passed (20)
+      Tests  178 passed (178)
+   Start at  13:20:39
+   Duration  2.31s (environment 35%, import 31%, tests 26%, transform 6%, worker 2%)
+
+== build
+== database smoke (skipped when supabase is down)
+ok   insert a book
+ok   row level security hides another shelf
+ok   duplicate ISBN refused
+ok   only one active book allowed
+ok   streak 2026-10-26
+ok   streak 2026-10-26
+ok   streak 2026-10-27
+ok   streak 2026-10-29
+ok   streak 2026-10-31
+ok   streak 2026-11-02
+ok   two logs on one day add up
+
+all database checks passed
+== docs present
+== end to end smoke (skipped when supabase or system Chromium is unavailable)
+
+> quire@0.1.0 test:e2e
+> playwright test
+
+[WebServer] (node:692478) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:692519) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/auth.spec.ts:3:1 › sign up, open the catalogue, and sign out (1.7s)
+  ✓   2 tests/e2e/auth.spec.ts:13:3 › borrower's card faces at 390 in shelf-light (944ms)
+  ✓   3 tests/e2e/auth.spec.ts:13:3 › borrower's card faces at 390 in municipal-dark (1.2s)
+  ✓   4 tests/e2e/auth.spec.ts:37:1 › inline auth errors, issuing state, and reduced motion (1.1s)
+  ✓   5 tests/e2e/auth.spec.ts:58:1 › card text contrast exceeds 7:1 in all six modes (798ms)
+  ✓   6 tests/e2e/catalog.spec.ts:3:1 › search, save a candidate, and refuse a persisted duplicate (6.9s)
+  ✓   7 tests/e2e/catalog.spec.ts:60:1 › empty query shows guidance and prevents provider searches (1.8s)
+  ✓   8 tests/e2e/responsive-shell.spec.ts:107:1 › phone, compact rail, wide rail and Today panes in every theme (6.8s)
+  ✓   9 tests/e2e/responsive-shell.spec.ts:164:1 › skip link focuses the main region without changing the route; Tab reaches the rail (3.2s)
+  ✓  10 tests/e2e/responsive-shell.spec.ts:211:1 › long titles reflow across routes and the header and rail stay docked (3.5s)
+  ✓  11 tests/e2e/responsive-shell.spec.ts:249:1 › rail resizing is immediate and reduced motion removes shell transitions (2.8s)
+  ✓  12 tests/e2e/settings.spec.ts:3:1 › theme chosen in settings is applied and survives a reload (2.4s)
+
+  12 passed (34.9s)
+gate ok
