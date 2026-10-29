@@ -1,4 +1,5 @@
 import "./test-dom";
+import { readFileSync } from "node:fs";
 import { cleanup, fireEvent, render, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { shelfBook, shelfBooks } from "./fixtures";
@@ -80,11 +81,12 @@ describe("shelf", () => {
   it("does not invent a page count or denominator for an unknown length", () => {
     const view = setup({ books: [shelfBook({ pages: null })] });
     const row = view.getByRole("listitem");
-    expect(within(row).getByText("1931 · Pages unknown")).toBeTruthy();
+    expect(within(row).getByText("1931")).toBeTruthy();
+    expect(within(row).getByText("Pages unknown")).toBeTruthy();
     expect(row.textContent).not.toMatch(/\/|\b0 pages\b|\b324\b|%/);
   });
 
-  it("uses shared skeleton rows while loading and suppresses stale books and empty copy", () => {
+  it("fills a desktop shelf with six loading jackets and suppresses stale books and empty copy", () => {
     const view = setup({ loading: true });
     expect(view.getByRole("status", { name: "Loading your shelf" }).getAttribute("aria-busy")).toBe(
       "true",
@@ -92,6 +94,7 @@ describe("shelf", () => {
     expect(view.queryByRole("button", { name: "The Waves" })).toBeNull();
     expect(view.queryByText("Your shelf is waiting for its first book.")).toBeNull();
     expect(view.queryByText("5 books")).toBeNull();
+    expect(view.container.querySelectorAll(".skeleton-rows li")).toHaveLength(6);
   });
 
   it("selects the exact edition and delegates loading errors to the shared recovery panel", () => {
@@ -158,4 +161,61 @@ it("uses real progress and leaves unavailable progress absent", () => {
       ?.style.height,
   ).toBe("25%");
   expect(view.container.querySelectorAll(".bookmark")).toHaveLength(1);
+});
+
+describe("responsive shelf contract", () => {
+  const css = readFileSync(new URL("../../styles/shelf.css", import.meta.url), "utf8");
+
+  it.each([
+    [390, 2],
+    [480, 3],
+    [768, 4],
+    [1024, 5],
+    [1280, 6],
+  ])("uses %s viewport pixels for %s fixed-count columns", (width, count) => {
+    const rules = [...css.matchAll(/(?:@media \(min-width: (\d+)px\) \{\s*)?\.shelf \{([^}]+)\}/g)];
+    const applicable = rules.filter((rule) => Number(rule[1] ?? 0) <= width);
+    const last = applicable.at(-1)?.[2];
+    expect(last).toContain(`--shelf-columns: ${count};`);
+    expect(css).toContain("repeat(var(--shelf-columns), minmax(0, 1fr))");
+  });
+
+  it("preserves empty tracks for a single book and caps the jacket at 180px", () => {
+    const view = setup({ books: [shelfBook()] });
+    expect(view.getAllByRole("listitem")).toHaveLength(1);
+    expect(css).not.toMatch(/auto-fit|auto-fill|:only-child/);
+    expect(css).toContain("--shelf-cover-max-width: 180px");
+    expect(css).toContain("max-width: var(--shelf-cover-max-width)");
+  });
+
+  it("keeps caption data for real covers and switches to the printed jacket on image failure", () => {
+    const view = setup({ books: [shelfBook({ cover_url: "https://example.test/cover.jpg" })] });
+    expect(view.getByRole("img", { name: "Cover of The Waves" })).toBeTruthy();
+    const copy = view.container.querySelector(".shelf-copy");
+    expect(copy?.querySelector("h3")?.textContent).toBe("The Waves");
+    expect(copy?.querySelector(".shelf-publisher")?.textContent).toBe("Hogarth Press");
+    expect(copy?.querySelector(".shelf-year")?.textContent).toBe("1931");
+    fireEvent.error(view.getByRole("img", { name: "Cover of The Waves" }));
+    expect(view.getByRole("img", { name: "The Waves, no cover image" })).toBeTruthy();
+    expect(css).toMatch(
+      /\.shelf-grid \.shelf-row:has\(\.cover-jacket\) \.shelf-copy\s*\{\s*display: none/,
+    );
+  });
+
+  it("provides author and four metadata fields with desktop subgrid alignment", () => {
+    const view = setup();
+    fireEvent.click(view.getByRole("button", { name: "List" }));
+    const copy = view.container.querySelector(".shelf-copy");
+    expect(copy?.querySelector(".shelf-author")?.textContent).toBe("Virginia Woolf");
+    expect(
+      [...(copy?.querySelectorAll(".shelf-metadata p") ?? [])].map((field) => field.textContent),
+    ).toEqual(["Hogarth Press", "1931", "324 pages", "Reading"]);
+    const desktop = css.slice(css.indexOf("@media (min-width: 768px)"));
+    expect(desktop).toMatch(
+      /\.shelf-list \.shelf-copy\s*\{[^}]*grid-template-columns: var\(--shelf-record-columns\)/,
+    );
+    expect(desktop).toMatch(
+      /\.shelf-list \.shelf-metadata\s*\{[^}]*grid-template-columns: subgrid;[^}]*text-align: right/,
+    );
+  });
 });

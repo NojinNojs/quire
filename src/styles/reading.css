@@ -272,7 +272,22 @@
 
 /* the page must clear the navigation */
 .reading {
-  padding-bottom: calc(var(--nav-height) + var(--space-32));
+  padding-bottom: calc(var(--nav-height) + var(--space-32) + env(safe-area-inset-bottom, 0px));
+}
+
+.reading:has(.reading-empty) {
+  max-width: none;
+}
+
+.reading-empty {
+  min-height: calc(var(--shelf-jacket-height) + var(--space-48));
+  display: grid;
+  place-content: center;
+  border-block: var(--rule-width) solid var(--rule);
+}
+
+.reading-empty button {
+  width: auto;
 }
 
 /* a file input is a browser control until you dress it */
