@@ -341,8 +341,13 @@
 }
 .shelf-grid .shelf-jacket {
   width: 100%;
-  padding-top: var(--space-8);
-  background: var(--surface-raised);
+  padding-top: 0;
+  background: transparent;
+}
+
+/* when the jacket is drawn, it already prints the title, so the caption goes */
+.shelf-grid .shelf-row:has(.cover-jacket) .shelf-copy {
+  display: none;
 }
 .shelf-grid .shelf-cover {
   width: 100%;
@@ -381,4 +386,38 @@
   .bookmark-fill {
     transition: none;
   }
+}
+
+/* progress is a bookmark: a thin ribbon on the jacket edge with a visible track */
+.shelf-grid .bookmark {
+  inset: 0 0 0 auto;
+  padding: 0;
+  background: transparent;
+}
+
+.shelf-grid .bookmark-track {
+  width: 5px;
+  height: 100%;
+  background: color-mix(in srgb, var(--ink) 14%, transparent);
+}
+
+.shelf-grid .bookmark-fill {
+  background: currentColor;
+}
+
+.shelf-grid .shelf-jacket {
+  box-shadow: none;
+}
+
+/* the spine label wraps instead of clipping */
+.shelf-grid .shelf-band,
+.shelf-list .shelf-band {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.shelf-grid .shelf-copy h3,
+.shelf-grid .shelf-copy h3 button {
+  font-style: normal;
 }

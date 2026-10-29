@@ -52,8 +52,8 @@ export function CoverImage({
           onError={() => setFailed((urls) => [...urls, src])}
         />
       ) : (
-        <span className="cover-jacket" role="img" aria-label={`No cover for ${title}`}>
-          <span>No cover</span>
+        <span className="cover-jacket" role="img" aria-label={`${title}, no cover image`}>
+          <span className="cover-jacket-title">{title}</span>
           <span className="cover-jacket-rule" />
         </span>
       )}

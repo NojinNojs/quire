@@ -25,6 +25,7 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
   const [failed, setFailed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [switched, setSwitched] = useState(false);
+  const [reveal, setReveal] = useState(false);
   const mismatch = mode === "signup" && repeat.length > 0 && repeat !== password;
   const strength = passwordStrength(password);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -56,6 +57,26 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
     setRepeat("");
     setFailed(false);
     setMessage(null);
+  }
+
+  async function sendReset() {
+    if (busy) return;
+    if (!email) {
+      setFailed(true);
+      setMessage("Enter your email address first, then ask for a reset link.");
+      return;
+    }
+    setBusy(true);
+    setFailed(false);
+    setMessage(null);
+    const { error } = await client.auth.resetPasswordForEmail(email);
+    setBusy(false);
+    if (error) {
+      setFailed(true);
+      setMessage(error.message);
+      return;
+    }
+    setMessage("Reset link sent. Check your email, then sign in with the new password.");
   }
 
   async function submit(event: React.FormEvent) {
@@ -95,7 +116,10 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
   return (
     <main className="auth borrower-card" aria-labelledby="auth-title">
       <div className="auth-imprint">
-        <span className="auth-mark">QUIRE</span>
+        <span className="auth-mark">
+          QUIRE
+          <span className="auth-imprint-line">Borrower card</span>
+        </span>
         <span className="auth-punch" aria-hidden="true" />
       </div>
       <div
@@ -128,20 +152,37 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
               onChange={(event) => setEmail(event.target.value)}
             />
           </label>
-          <label>
-            <span className="label">Password</span>
+          <div className="auth-field">
+            <span className="label" aria-hidden="true">
+              Password
+            </span>
             <input
-              type="password"
+              type={reveal ? "text" : "password"}
               name="password"
               autoComplete={mode === "signin" ? "current-password" : "new-password"}
               required
               minLength={8}
               disabled={busy}
               aria-describedby={mode === "signup" ? "auth-strength" : undefined}
+              aria-label="Password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
-          </label>
+            <button
+              type="button"
+              className="auth-reveal"
+              aria-pressed={reveal}
+              aria-label={reveal ? "Hide" : "Show"}
+              onClick={() => setReveal((value) => !value)}
+            >
+              {reveal ? "Hide" : "Show"}
+            </button>
+          </div>
+          {mode === "signin" ? (
+            <button type="button" className="auth-forgot" disabled={busy} onClick={sendReset}>
+              Forgot your password?
+            </button>
+          ) : null}
           {mode === "signup" ? (
             <>
               <div id="auth-strength" className="auth-strength" data-strength={strength}>
@@ -195,8 +236,21 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
           </button>
         </form>
         <footer className="auth-footer">
-          <button type="button" className="auth-switch" disabled={busy} onClick={switchMode}>
-            {mode === "signin" ? "No account yet? Create one" : "Already have an account? Sign in"}
+          <button
+            type="button"
+            className="auth-switch"
+            aria-label={
+              mode === "signin" ? "No account yet? Create one" : "Already have an account? Sign in"
+            }
+            disabled={busy}
+            onClick={switchMode}
+          >
+            <span className="auth-switch-ask">
+              {mode === "signin" ? "No account yet?" : "Already have an account?"}
+            </span>{" "}
+            <span className="auth-switch-action">
+              {mode === "signin" ? "Create one" : "Sign in"}
+            </span>
           </button>
         </footer>
       </div>

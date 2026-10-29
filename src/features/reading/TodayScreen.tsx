@@ -128,7 +128,7 @@ export function PageStepper({
           <button
             key={step}
             type="button"
-            disabled={disabled}
+            disabled={disabled || amount + step < 1}
             aria-label={`${step < 0 ? "Subtract" : "Add"} ${Math.abs(step)} ${Math.abs(step) === 1 ? "page" : "pages"}`}
             onClick={() => setValue(String(stepPages(amount, step, current, total)))}
           >
@@ -172,7 +172,12 @@ export function StreakBlock({
                 className={`reading-day${read ? " reading-day-filled" : ""}${day === today ? " reading-day-today" : ""}${restored ? " reading-day-restored" : ""}`}
                 aria-label={`${day}: ${restored ? "restored" : read ? "read" : "no pages logged"}${day === today ? ", today" : ""}`}
                 title={`${day}: ${restored ? "restored" : read ? "read" : "no pages logged"}${day === today ? ", today" : ""}`}
-              />
+              >
+                <span className="reading-day-mark" aria-hidden="true" />
+                <span className="reading-day-letter" aria-hidden="true">
+                  {new Date(day).toLocaleDateString("en", { weekday: "narrow" })}
+                </span>
+              </li>
             );
           })}
         </ol>

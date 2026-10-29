@@ -158,8 +158,8 @@ it("falls from signed storage to the remote cover, then an honest drawn jacket",
   fireEvent.error(screen.getByRole("img"));
   expect(screen.getByRole("img").getAttribute("src")).toBe("https://remote.test/cover.jpg");
   fireEvent.error(screen.getByRole("img"));
-  expect(screen.getByRole("img", { name: "No cover for Bumi Manusia" })).toBeTruthy();
-  expect(screen.getByText("No cover")).toBeTruthy();
+  expect(screen.getByRole("img", { name: "Bumi Manusia, no cover image" })).toBeTruthy();
+  expect(screen.getByText("Bumi Manusia")).toBeTruthy();
 });
 it("uses the remote cover when signing fails and rejects inline image URLs", async () => {
   const f = fake();
@@ -175,7 +175,7 @@ it("uses the remote cover when signing fails and rejects inline image URLs", asy
   await waitFor(() => expect(f.createSignedUrl).toHaveBeenCalled());
   expect(screen.getByRole("img").getAttribute("src")).toContain("remote.test");
   view.rerender(<CoverImage client={null} coverUrl="data:image/png;base64,legacy" title="Book" />);
-  expect(screen.getByText("No cover")).toBeTruthy();
+  expect(screen.getByRole("img", { name: /no cover image/ })).toBeTruthy();
 });
 it("offers the camera input and reports a failed removal with retry still available", async () => {
   const f = fake();
