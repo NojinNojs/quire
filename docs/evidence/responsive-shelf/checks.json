@@ -1,0 +1,4764 @@
+{
+  "engine": "System Brave (Chromium), emulated viewports",
+  "layouts": [
+    {
+      "theme": "shelf-light",
+      "width": 320,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        132,
+        132,
+        132,
+        132,
+        132,
+        132,
+        132
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-light",
+      "width": 390,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        167,
+        167,
+        167,
+        167,
+        167,
+        167,
+        167
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-light",
+      "width": 479,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-light",
+      "width": 480,
+      "columns": [
+        3,
+        3
+      ],
+      "widths": [
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-light",
+      "width": 767,
+      "columns": [
+        3,
+        3
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-light",
+      "width": 768,
+      "columns": [
+        4,
+        4
+      ],
+      "widths": [
+        170,
+        170,
+        170,
+        170,
+        170,
+        170,
+        170
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-light",
+      "width": 1023,
+      "columns": [
+        4,
+        4
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-light",
+      "width": 1024,
+      "columns": [
+        5,
+        5
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-light",
+      "width": 1279,
+      "columns": [
+        5,
+        5
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-light",
+      "width": 1280,
+      "columns": [
+        6,
+        6
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-light",
+      "width": 1600,
+      "columns": [
+        6,
+        6
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-light",
+      "contrasts": {
+        "ink": 16.999577483605094,
+        "class-000": 10.751361998117536,
+        "class-100": 11.807171114607755,
+        "class-200": 10.751361998117536,
+        "class-300": 10.751361998117536,
+        "class-400": 10.751361998117536,
+        "class-500": 10.751361998117536,
+        "class-600": 10.751361998117536,
+        "class-700": 10.751361998117536,
+        "class-800": 12.261054208580825,
+        "class-900": 10.75940042135772,
+        "rgb(53, 64, 43)": 10.214899464831129,
+        "rgb(33, 66, 62)": 10.075315211780099,
+        "rgb(36, 54, 79)": 11.284493388153473,
+        "rgb(85, 65, 30)": 9.075849846939807
+      }
+    },
+    {
+      "theme": "shelf-light",
+      "width": 768,
+      "records": [
+        {
+          "firstLine": true,
+          "tops": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 440,
+          "titleBottom": 436
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            545,
+            545,
+            545,
+            545
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 545,
+          "titleBottom": 541
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            650,
+            650,
+            650,
+            650
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 650,
+          "titleBottom": 646
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            755,
+            755,
+            755,
+            755
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 755,
+          "titleBottom": 751
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            860,
+            860,
+            860,
+            860
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 860,
+          "titleBottom": 856
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            965,
+            965,
+            965,
+            965
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 965,
+          "titleBottom": 961
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            1142,
+            1142,
+            1142,
+            1142
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 1142,
+          "titleBottom": 1138
+        }
+      ]
+    },
+    {
+      "theme": "shelf-light",
+      "width": 1280,
+      "records": [
+        {
+          "firstLine": true,
+          "tops": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 440,
+          "titleBottom": 436
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            545,
+            545,
+            545,
+            545
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 545,
+          "titleBottom": 541
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            650,
+            650,
+            650,
+            650
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 650,
+          "titleBottom": 646
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            755,
+            755,
+            755,
+            755
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 755,
+          "titleBottom": 751
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            860,
+            860,
+            860,
+            860
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 860,
+          "titleBottom": 856
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            965,
+            965,
+            965,
+            965
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 965,
+          "titleBottom": 961
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            1142,
+            1142,
+            1142,
+            1142
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 1142,
+          "titleBottom": 1138
+        }
+      ]
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 320,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        132,
+        132,
+        132,
+        132,
+        132,
+        132,
+        132
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 390,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        167,
+        167,
+        167,
+        167,
+        167,
+        167,
+        167
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 479,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 480,
+      "columns": [
+        3,
+        3
+      ],
+      "widths": [
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 767,
+      "columns": [
+        3,
+        3
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 768,
+      "columns": [
+        4,
+        4
+      ],
+      "widths": [
+        170,
+        170,
+        170,
+        170,
+        170,
+        170,
+        170
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 1023,
+      "columns": [
+        4,
+        4
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 1024,
+      "columns": [
+        5,
+        5
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 1279,
+      "columns": [
+        5,
+        5
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 1280,
+      "columns": [
+        6,
+        6
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 1600,
+      "columns": [
+        6,
+        6
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "shelf-dark",
+      "contrasts": {
+        "ink": 16.694492593919556,
+        "class-000": 10.327832192846055,
+        "class-100": 13.012606600113607,
+        "class-200": 10.327832192846055,
+        "class-300": 10.327832192846055,
+        "class-400": 10.327832192846055,
+        "class-500": 10.327832192846055,
+        "class-600": 10.327832192846055,
+        "class-700": 10.327832192846055,
+        "class-800": 10.295488800395036,
+        "class-900": 10.12240549779858,
+        "rgb(53, 64, 43)": 10.214899464831129,
+        "rgb(33, 66, 62)": 10.075315211780099,
+        "rgb(36, 54, 79)": 11.284493388153473,
+        "rgb(85, 65, 30)": 9.075849846939807
+      }
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 768,
+      "records": [
+        {
+          "firstLine": true,
+          "tops": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 440,
+          "titleBottom": 436
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            545,
+            545,
+            545,
+            545
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 545,
+          "titleBottom": 541
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            650,
+            650,
+            650,
+            650
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 650,
+          "titleBottom": 646
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            755,
+            755,
+            755,
+            755
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 755,
+          "titleBottom": 751
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            860,
+            860,
+            860,
+            860
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 860,
+          "titleBottom": 856
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            965,
+            965,
+            965,
+            965
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 965,
+          "titleBottom": 961
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            1142,
+            1142,
+            1142,
+            1142
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 1142,
+          "titleBottom": 1138
+        }
+      ]
+    },
+    {
+      "theme": "shelf-dark",
+      "width": 1280,
+      "records": [
+        {
+          "firstLine": true,
+          "tops": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 440,
+          "titleBottom": 436
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            545,
+            545,
+            545,
+            545
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 545,
+          "titleBottom": 541
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            650,
+            650,
+            650,
+            650
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 650,
+          "titleBottom": 646
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            755,
+            755,
+            755,
+            755
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 755,
+          "titleBottom": 751
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            860,
+            860,
+            860,
+            860
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 860,
+          "titleBottom": 856
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            965,
+            965,
+            965,
+            965
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 965,
+          "titleBottom": 961
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            1142,
+            1142,
+            1142,
+            1142
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 1142,
+          "titleBottom": 1138
+        }
+      ]
+    },
+    {
+      "theme": "municipal-light",
+      "width": 320,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        132,
+        132,
+        132,
+        132,
+        132,
+        132,
+        132
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-light",
+      "width": 390,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        167,
+        167,
+        167,
+        167,
+        167,
+        167,
+        167
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-light",
+      "width": 479,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-light",
+      "width": 480,
+      "columns": [
+        3,
+        3
+      ],
+      "widths": [
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-light",
+      "width": 767,
+      "columns": [
+        3,
+        3
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-light",
+      "width": 768,
+      "columns": [
+        4,
+        4
+      ],
+      "widths": [
+        170,
+        170,
+        170,
+        170,
+        170,
+        170,
+        170
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-light",
+      "width": 1023,
+      "columns": [
+        4,
+        4
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-light",
+      "width": 1024,
+      "columns": [
+        5,
+        5
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-light",
+      "width": 1279,
+      "columns": [
+        5,
+        5
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-light",
+      "width": 1280,
+      "columns": [
+        6,
+        6
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-light",
+      "width": 1600,
+      "columns": [
+        6,
+        6
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-light",
+      "contrasts": {
+        "ink": 14.444752974761975,
+        "class-000": 9.288180386299992,
+        "class-100": 10.032677465099246,
+        "class-200": 9.288180386299992,
+        "class-300": 9.288180386299992,
+        "class-400": 9.288180386299992,
+        "class-500": 9.288180386299992,
+        "class-600": 9.288180386299992,
+        "class-700": 9.288180386299992,
+        "class-800": 10.760305185977172,
+        "class-900": 9.35124433445574,
+        "rgb(53, 64, 43)": 10.214899464831129,
+        "rgb(33, 66, 62)": 10.075315211780099,
+        "rgb(36, 54, 79)": 11.284493388153473,
+        "rgb(85, 65, 30)": 9.075849846939807
+      }
+    },
+    {
+      "theme": "municipal-light",
+      "width": 768,
+      "records": [
+        {
+          "firstLine": true,
+          "tops": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 440,
+          "titleBottom": 436
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            545,
+            545,
+            545,
+            545
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 545,
+          "titleBottom": 541
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            650,
+            650,
+            650,
+            650
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 650,
+          "titleBottom": 646
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            755,
+            755,
+            755,
+            755
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 755,
+          "titleBottom": 751
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            860,
+            860,
+            860,
+            860
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 860,
+          "titleBottom": 856
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            965,
+            965,
+            965,
+            965
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 965,
+          "titleBottom": 961
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            1142,
+            1142,
+            1142,
+            1142
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 1142,
+          "titleBottom": 1138
+        }
+      ]
+    },
+    {
+      "theme": "municipal-light",
+      "width": 1280,
+      "records": [
+        {
+          "firstLine": true,
+          "tops": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 440,
+          "titleBottom": 436
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            545,
+            545,
+            545,
+            545
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 545,
+          "titleBottom": 541
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            650,
+            650,
+            650,
+            650
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 650,
+          "titleBottom": 646
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            755,
+            755,
+            755,
+            755
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 755,
+          "titleBottom": 751
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            860,
+            860,
+            860,
+            860
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 860,
+          "titleBottom": 856
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            965,
+            965,
+            965,
+            965
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 965,
+          "titleBottom": 961
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            1142,
+            1142,
+            1142,
+            1142
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 1142,
+          "titleBottom": 1138
+        }
+      ]
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 320,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        132,
+        132,
+        132,
+        132,
+        132,
+        132,
+        132
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 390,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        167,
+        167,
+        167,
+        167,
+        167,
+        167,
+        167
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 479,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 480,
+      "columns": [
+        3,
+        3
+      ],
+      "widths": [
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 767,
+      "columns": [
+        3,
+        3
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 768,
+      "columns": [
+        4,
+        4
+      ],
+      "widths": [
+        170,
+        170,
+        170,
+        170,
+        170,
+        170,
+        170
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 1023,
+      "columns": [
+        4,
+        4
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 1024,
+      "columns": [
+        5,
+        5
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 1279,
+      "columns": [
+        5,
+        5
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 1280,
+      "columns": [
+        6,
+        6
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 1600,
+      "columns": [
+        6,
+        6
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "municipal-dark",
+      "contrasts": {
+        "ink": 15.373032877659279,
+        "class-000": 9.638485793127884,
+        "class-100": 11.986100014913765,
+        "class-200": 9.638485793127884,
+        "class-300": 9.638485793127884,
+        "class-400": 9.638485793127884,
+        "class-500": 9.638485793127884,
+        "class-600": 9.638485793127884,
+        "class-700": 9.638485793127884,
+        "class-800": 9.558436589984137,
+        "class-900": 9.389516039189477,
+        "rgb(53, 64, 43)": 10.214899464831129,
+        "rgb(33, 66, 62)": 10.075315211780099,
+        "rgb(36, 54, 79)": 11.284493388153473,
+        "rgb(85, 65, 30)": 9.075849846939807
+      }
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 768,
+      "records": [
+        {
+          "firstLine": true,
+          "tops": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 440,
+          "titleBottom": 436
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            545,
+            545,
+            545,
+            545
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 545,
+          "titleBottom": 541
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            650,
+            650,
+            650,
+            650
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 650,
+          "titleBottom": 646
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            755,
+            755,
+            755,
+            755
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 755,
+          "titleBottom": 751
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            860,
+            860,
+            860,
+            860
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 860,
+          "titleBottom": 856
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            965,
+            965,
+            965,
+            965
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 965,
+          "titleBottom": 961
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            1142,
+            1142,
+            1142,
+            1142
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 1142,
+          "titleBottom": 1138
+        }
+      ]
+    },
+    {
+      "theme": "municipal-dark",
+      "width": 1280,
+      "records": [
+        {
+          "firstLine": true,
+          "tops": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 440,
+          "titleBottom": 436
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            545,
+            545,
+            545,
+            545
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 545,
+          "titleBottom": 541
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            650,
+            650,
+            650,
+            650
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 650,
+          "titleBottom": 646
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            755,
+            755,
+            755,
+            755
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 755,
+          "titleBottom": 751
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            860,
+            860,
+            860,
+            860
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 860,
+          "titleBottom": 856
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            965,
+            965,
+            965,
+            965
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 965,
+          "titleBottom": 961
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            1142,
+            1142,
+            1142,
+            1142
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 1142,
+          "titleBottom": 1138
+        }
+      ]
+    },
+    {
+      "theme": "oxford-light",
+      "width": 320,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        132,
+        132,
+        132,
+        132,
+        132,
+        132,
+        132
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-light",
+      "width": 390,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        167,
+        167,
+        167,
+        167,
+        167,
+        167,
+        167
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-light",
+      "width": 479,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-light",
+      "width": 480,
+      "columns": [
+        3,
+        3
+      ],
+      "widths": [
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-light",
+      "width": 767,
+      "columns": [
+        3,
+        3
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-light",
+      "width": 768,
+      "columns": [
+        4,
+        4
+      ],
+      "widths": [
+        170,
+        170,
+        170,
+        170,
+        170,
+        170,
+        170
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-light",
+      "width": 1023,
+      "columns": [
+        4,
+        4
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-light",
+      "width": 1024,
+      "columns": [
+        5,
+        5
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-light",
+      "width": 1279,
+      "columns": [
+        5,
+        5
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-light",
+      "width": 1280,
+      "columns": [
+        6,
+        6
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-light",
+      "width": 1600,
+      "columns": [
+        6,
+        6
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-light",
+      "contrasts": {
+        "ink": 16.537611128066153,
+        "class-000": 10.560252983535873,
+        "class-100": 9.877193200187298,
+        "class-200": 10.560252983535873,
+        "class-300": 10.560252983535873,
+        "class-400": 10.560252983535873,
+        "class-500": 10.560252983535873,
+        "class-600": 10.560252983535873,
+        "class-700": 10.560252983535873,
+        "class-800": 12.270176668821133,
+        "class-900": 10.742661271010617,
+        "rgb(53, 64, 43)": 10.214899464831129,
+        "rgb(33, 66, 62)": 10.075315211780099,
+        "rgb(36, 54, 79)": 11.284493388153473,
+        "rgb(85, 65, 30)": 9.075849846939807
+      }
+    },
+    {
+      "theme": "oxford-light",
+      "width": 768,
+      "records": [
+        {
+          "firstLine": true,
+          "tops": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 440,
+          "titleBottom": 436
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            545,
+            545,
+            545,
+            545
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 545,
+          "titleBottom": 541
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            650,
+            650,
+            650,
+            650
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 650,
+          "titleBottom": 646
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            755,
+            755,
+            755,
+            755
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 755,
+          "titleBottom": 751
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            860,
+            860,
+            860,
+            860
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 860,
+          "titleBottom": 856
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            965,
+            965,
+            965,
+            965
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 965,
+          "titleBottom": 961
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            1142,
+            1142,
+            1142,
+            1142
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 1142,
+          "titleBottom": 1138
+        }
+      ]
+    },
+    {
+      "theme": "oxford-light",
+      "width": 1280,
+      "records": [
+        {
+          "firstLine": true,
+          "tops": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 440,
+          "titleBottom": 436
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            545,
+            545,
+            545,
+            545
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 545,
+          "titleBottom": 541
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            650,
+            650,
+            650,
+            650
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 650,
+          "titleBottom": 646
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            755,
+            755,
+            755,
+            755
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 755,
+          "titleBottom": 751
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            860,
+            860,
+            860,
+            860
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 860,
+          "titleBottom": 856
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            965,
+            965,
+            965,
+            965
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 965,
+          "titleBottom": 961
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            1142,
+            1142,
+            1142,
+            1142
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 1142,
+          "titleBottom": 1138
+        }
+      ]
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 320,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        132,
+        132,
+        132,
+        132,
+        132,
+        132,
+        132
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 390,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        167,
+        167,
+        167,
+        167,
+        167,
+        167,
+        167
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 479,
+      "columns": [
+        2,
+        2
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 480,
+      "columns": [
+        3,
+        3
+      ],
+      "widths": [
+        136,
+        136,
+        136,
+        136,
+        136,
+        136,
+        136
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 767,
+      "columns": [
+        3,
+        3
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "vertical-rl",
+      "labelLeft": 0,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 768,
+      "columns": [
+        4,
+        4
+      ],
+      "widths": [
+        170,
+        170,
+        170,
+        170,
+        170,
+        170,
+        170
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 1023,
+      "columns": [
+        4,
+        4
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 1024,
+      "columns": [
+        5,
+        5
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 1279,
+      "columns": [
+        5,
+        5
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 1280,
+      "columns": [
+        6,
+        6
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 1600,
+      "columns": [
+        6,
+        6
+      ],
+      "widths": [
+        180,
+        180,
+        180,
+        180,
+        180,
+        180,
+        180
+      ],
+      "overflow": false,
+      "labelMode": "horizontal-tb",
+      "labelLeft": 20,
+      "caption": "block",
+      "captionBelow": true,
+      "printedCaption": "none",
+      "groupSizes": [
+        6,
+        1
+      ],
+      "publisherFont": "ui-monospace, \"SF Mono\", Menlo, monospace",
+      "titleFont": "Newsreader, Georgia, serif",
+      "progressWidth": "4px"
+    },
+    {
+      "theme": "oxford-dark",
+      "contrasts": {
+        "ink": 16.365684263430467,
+        "class-000": 10.163986836371619,
+        "class-100": 12.808208401203169,
+        "class-200": 10.163986836371619,
+        "class-300": 10.163986836371619,
+        "class-400": 10.163986836371619,
+        "class-500": 10.163986836371619,
+        "class-600": 10.163986836371619,
+        "class-700": 10.163986836371619,
+        "class-800": 10.128630934760626,
+        "class-900": 9.914893946240602,
+        "rgb(53, 64, 43)": 10.214899464831129,
+        "rgb(33, 66, 62)": 10.075315211780099,
+        "rgb(36, 54, 79)": 11.284493388153473,
+        "rgb(85, 65, 30)": 9.075849846939807
+      }
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 768,
+      "records": [
+        {
+          "firstLine": true,
+          "tops": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 440,
+          "titleBottom": 436
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            545,
+            545,
+            545,
+            545
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 545,
+          "titleBottom": 541
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            650,
+            650,
+            650,
+            650
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 650,
+          "titleBottom": 646
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            755,
+            755,
+            755,
+            755
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 755,
+          "titleBottom": 751
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            860,
+            860,
+            860,
+            860
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 860,
+          "titleBottom": 856
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            965,
+            965,
+            965,
+            965
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 965,
+          "titleBottom": 961
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            1142,
+            1142,
+            1142,
+            1142
+          ],
+          "rights": [
+            322.53125,
+            445.8125,
+            569.078125,
+            748
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 1142,
+          "titleBottom": 1138
+        }
+      ]
+    },
+    {
+      "theme": "oxford-dark",
+      "width": 1280,
+      "records": [
+        {
+          "firstLine": true,
+          "tops": [
+            440,
+            440,
+            440,
+            440
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 440,
+          "titleBottom": 436
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            545,
+            545,
+            545,
+            545
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 545,
+          "titleBottom": 541
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            650,
+            650,
+            650,
+            650
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 650,
+          "titleBottom": 646
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            755,
+            755,
+            755,
+            755
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 755,
+          "titleBottom": 751
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            860,
+            860,
+            860,
+            860
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 860,
+          "titleBottom": 856
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            965,
+            965,
+            965,
+            965
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 965,
+          "titleBottom": 961
+        },
+        {
+          "firstLine": true,
+          "tops": [
+            1142,
+            1142,
+            1142,
+            1142
+          ],
+          "rights": [
+            508.71875,
+            725.078125,
+            941.453125,
+            1259.984375
+          ],
+          "alignments": [
+            "right",
+            "right",
+            "right",
+            "right"
+          ],
+          "fonts": [
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace",
+            "ui-monospace, \"SF Mono\", Menlo, monospace"
+          ],
+          "metadataTop": 1142,
+          "titleBottom": 1138
+        }
+      ]
+    },
+    {
+      "simulatedTabletRail": {
+        "left": 64,
+        "widths": [
+          154,
+          154,
+          154,
+          154,
+          154,
+          154,
+          154
+        ],
+        "right": 748,
+        "columns": 4,
+        "bottomPadding": "96px"
+      }
+    }
+  ],
+  "states": [
+    {
+      "state": "empty",
+      "width": 390,
+      "bounds": {
+        "x": 20,
+        "y": 412,
+        "width": 350,
+        "height": 228
+      }
+    },
+    {
+      "state": "empty",
+      "width": 768,
+      "bounds": {
+        "x": 20,
+        "y": 332,
+        "width": 728,
+        "height": 228
+      }
+    },
+    {
+      "state": "empty",
+      "width": 1280,
+      "bounds": {
+        "x": 20,
+        "y": 332,
+        "width": 1240,
+        "height": 228
+      }
+    },
+    {
+      "state": "loading",
+      "width": 390,
+      "bounds": {
+        "x": 20,
+        "y": 412,
+        "width": 350,
+        "height": 1037.5
+      }
+    },
+    {
+      "state": "loading",
+      "width": 768,
+      "bounds": {
+        "x": 20,
+        "y": 332,
+        "width": 728,
+        "height": 728
+      }
+    },
+    {
+      "state": "loading",
+      "width": 1280,
+      "bounds": {
+        "x": 20,
+        "y": 332,
+        "width": 1240,
+        "height": 420
+      }
+    },
+    {
+      "state": "error",
+      "width": 390,
+      "bounds": {
+        "x": 20,
+        "y": 412,
+        "width": 350,
+        "height": 228
+      }
+    },
+    {
+      "state": "error",
+      "width": 768,
+      "bounds": {
+        "x": 20,
+        "y": 332,
+        "width": 728,
+        "height": 228
+      }
+    },
+    {
+      "state": "error",
+      "width": 1280,
+      "bounds": {
+        "x": 20,
+        "y": 332,
+        "width": 1240,
+        "height": 228
+      }
+    },
+    {
+      "state": "error-no-retry",
+      "width": 390,
+      "bounds": {
+        "x": 20,
+        "y": 412,
+        "width": 350,
+        "height": 228
+      }
+    },
+    {
+      "state": "error-no-retry",
+      "width": 768,
+      "bounds": {
+        "x": 20,
+        "y": 332,
+        "width": 728,
+        "height": 228
+      }
+    },
+    {
+      "state": "error-no-retry",
+      "width": 1280,
+      "bounds": {
+        "x": 20,
+        "y": 332,
+        "width": 1240,
+        "height": 228
+      }
+    }
+  ],
+  "actions": [
+    "Add book: delegates to add callback",
+    "Jacket: selects exact edition",
+    "Real-cover caption: selects exact edition",
+    "Status, language and search: combine; Clear filters restores seven books",
+    "View toggle: keyboard activation, visible focus and persistence after reload",
+    "Failed real image: printed jacket replaces image and hides caption",
+    "Empty shelf: Add a book delegates to add callback",
+    "Load error: Try again delegates to retry callback",
+    "Empty Today: full-width state and Browse catalogue callback"
+  ],
+  "errors": []
+}

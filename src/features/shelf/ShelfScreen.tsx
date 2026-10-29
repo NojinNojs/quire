@@ -4,7 +4,6 @@ import { classify, groupByClass } from "../../lib/ddc";
 import { CoverImage } from "../covers/CoverImage";
 import { Bookmark } from "../reading/Bookmark";
 import { ErrorPanel } from "../states/ErrorPanel";
-import { SkeletonRows } from "../states/SkeletonRows";
 import { useShelfProgress } from "./useShelfProgress";
 import "../../styles/shelf.css";
 
@@ -149,15 +148,31 @@ export function ShelfScreen({
         {activeCount} active {activeCount === 1 ? "filter" : "filters"}
       </p>
       {loading ? (
-        <SkeletonRows label="Loading your shelf" />
+        <div className="shelf-state shelf-loading">
+          <div role="status" aria-label="Loading your shelf" aria-busy="true">
+            <ul className="catalog-results skeleton-rows" aria-hidden="true">
+              {[0, 1, 2, 3, 4, 5].map((row) => (
+                <li className="catalog-row" key={row}>
+                  <div className="catalog-cover" />
+                  <div className="catalog-copy">
+                    <div className="skeleton-title" />
+                    <div className="skeleton-line" />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       ) : error ? (
-        onRetry ? (
-          <ErrorPanel messages={[error]} retry={onRetry} />
-        ) : (
-          <p role="alert">{error}</p>
-        )
+        <div className="shelf-state shelf-error">
+          {onRetry ? (
+            <ErrorPanel messages={[error]} retry={onRetry} />
+          ) : (
+            <p role="alert">{error}</p>
+          )}
+        </div>
       ) : filtered.length === 0 ? (
-        <div className="shelf-empty">
+        <div className="shelf-state shelf-empty">
           <p>
             {books.length
               ? "No books match these filters."
@@ -173,7 +188,8 @@ export function ShelfScreen({
         </div>
       ) : (
         [...groups].map(([label, members], index) => {
-          const token = classify(members[0]?.ddc)?.token ?? "--class-000";
+          const classification = classify(members[0]?.ddc);
+          const token = classification?.token ?? "--class-000";
           return (
             <section
               className="shelf-group"
@@ -186,7 +202,14 @@ export function ShelfScreen({
               }
             >
               <h2 className="shelf-band" id={`${id}-group-${index}`}>
-                {label}
+                {classification ? (
+                  <>
+                    <span className="shelf-class-number">{classification.code}</span>{" "}
+                    <span className="shelf-class-name">{classification.label}</span>
+                  </>
+                ) : (
+                  <span className="shelf-class-name">{label}</span>
+                )}
               </h2>
               <ul className="shelf-books">
                 {members.map((book) => (
@@ -217,12 +240,15 @@ export function ShelfScreen({
                           {book.title}
                         </button>
                       </h3>
-                      <p>{book.publisher ?? "Publisher unknown"}</p>
-                      <p className="shelf-metadata">
-                        {book.year ?? "Year unknown"} ·{" "}
-                        {book.pages === null ? "Pages unknown" : `${book.pages} pages`}
-                      </p>
-                      <p className="shelf-status">{statuses[book.status]}</p>
+                      <p className="shelf-author">{book.author ?? "Author unknown"}</p>
+                      <div className="shelf-metadata">
+                        <p className="shelf-publisher">{book.publisher ?? "Publisher unknown"}</p>
+                        <p className="shelf-year">{book.year ?? "Year unknown"}</p>
+                        <p className="shelf-pages">
+                          {book.pages === null ? "Pages unknown" : `${book.pages} pages`}
+                        </p>
+                        <p className="shelf-status">{statuses[book.status]}</p>
+                      </div>
                     </div>
                   </li>
                 ))}

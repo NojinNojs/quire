@@ -1,5 +1,9 @@
 .shelf {
-  padding: var(--space-24) var(--gutter) var(--space-48);
+  --shelf-columns: 2;
+  --shelf-cover-max-width: 180px;
+  --shelf-record-columns: minmax(0, 1fr) minmax(0, 1fr);
+  padding: var(--space-24) var(--gutter)
+    calc(var(--nav-height) + var(--space-32) + env(safe-area-inset-bottom, 0px));
   color: var(--ink);
 }
 
@@ -55,7 +59,7 @@
 .shelf-filters select {
   width: 100%;
   min-width: 0;
-  height: var(--band-height);
+  height: var(--touch);
   padding: 0 var(--space-8);
   border: var(--rule-width) solid var(--ink-muted);
   border-radius: var(--radius-input);
@@ -66,23 +70,58 @@
 }
 
 .shelf-summary {
-  margin: var(--space-24) 0 var(--space-12);
-  font-family: var(--font-mono);
-  font-size: var(--mono-size);
-  line-height: var(--mono-leading);
+  margin: var(--space-24) 0 0;
+  font: var(--mono-size) / var(--mono-leading) var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
 
-.shelf-band {
+.shelf-view {
   display: flex;
-  align-items: center;
-  min-height: var(--band-height);
+  gap: var(--space-16);
+  border: 0;
+  padding: 0;
   margin: 0;
-  padding: var(--space-8) var(--space-12);
-  color: var(--on-class);
-  font-size: var(--book-title-size);
-  line-height: var(--book-title-leading);
+}
+
+.shelf-view [aria-pressed="true"] {
   font-weight: 700;
+  text-decoration-thickness: var(--focus-width);
+}
+
+.shelf-view [aria-pressed="false"] {
+  text-decoration: none;
+}
+
+.shelf-filter-count {
+  margin: 0 0 var(--space-24);
+  font: var(--label-size) / var(--label-leading) var(--font-mono);
+}
+
+.shelf-group {
+  position: relative;
+  margin-top: var(--space-32);
+  --shelf-label-ink: color-mix(in srgb, var(--book-class) 70%, var(--ink));
+}
+
+/* The phone spine occupies the page gutter, leaving both jacket columns intact. */
+.shelf-band {
+  position: absolute;
+  inset: 0 auto auto calc(-1 * var(--gutter));
+  max-height: 100%;
+  margin: 0;
+  color: var(--shelf-label-ink);
+  font: var(--label-size) / var(--label-leading) var(--font-sans);
+  writing-mode: vertical-rl;
+}
+
+.shelf-class-number {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.shelf-class-name {
+  font-family: var(--font-serif);
+  font-style: italic;
 }
 
 .shelf-books {
@@ -91,67 +130,23 @@
   margin: 0;
 }
 
-.shelf-row {
-  display: grid;
-  grid-template-columns: var(--cover-row-width) minmax(0, 1fr);
-  gap: var(--space-16);
-  padding: var(--space-16) 0;
-  align-items: start;
+.shelf-jacket {
+  position: relative;
+  min-width: 0;
 }
 
-.shelf-row + .shelf-row {
-  border-top: var(--rule-width) solid var(--rule);
+.shelf-jacket-button {
+  display: block;
+  min-width: var(--touch);
+  padding: 0;
+  border: 0;
+  background: var(--surface-raised);
+  cursor: pointer;
 }
 
 .shelf-cover {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   width: var(--cover-row-width);
   height: var(--cover-row-height);
-  padding: var(--space-4);
-  border: var(--rule-width) solid var(--ink-muted);
-  background: var(--shelf-cloth);
-  color: var(--shelf-jacket-ink);
-  overflow: hidden;
-  font-family: var(--font-serif);
-  font-size: 9px;
-  line-height: 11px;
-  font-style: italic;
-}
-
-/* At 48px wide a title is unreadable, so the jacket shows only its cloth and a publisher rule. */
-.shelf-cover .shelf-cover-mark {
-  margin-top: auto;
-  width: 60%;
-  height: 2px;
-  background: currentColor;
-  opacity: 0.55;
-}
-
-.shelf-cloth-oxblood {
-  --shelf-cloth: var(--accent);
-  --shelf-jacket-ink: var(--on-accent);
-}
-
-.shelf-cloth-olive {
-  --shelf-cloth: var(--ink-muted);
-  --shelf-jacket-ink: var(--surface);
-}
-
-.shelf-cloth-indigo {
-  --shelf-cloth: var(--ink);
-  --shelf-jacket-ink: var(--surface);
-}
-
-.shelf-cloth-ochre {
-  --shelf-cloth: var(--surface-raised);
-  --shelf-jacket-ink: var(--ink);
-}
-
-.shelf-cloth-teal {
-  --shelf-cloth: var(--surface);
-  --shelf-jacket-ink: var(--ink);
 }
 
 .shelf-copy {
@@ -172,40 +167,178 @@
   border: 0;
   background: none;
   color: var(--ink);
-  font: italic var(--row-title-size) / var(--body-leading) var(--font-serif);
+  font: var(--row-title-size) / var(--body-leading) var(--font-serif);
   text-align: start;
+  text-decoration: underline;
+  text-underline-offset: var(--space-4);
   cursor: pointer;
 }
 
-.shelf-copy > p {
+.shelf-author {
   font-size: var(--small-size);
   line-height: var(--small-leading);
 }
 
-.shelf-copy .shelf-metadata {
-  margin-top: var(--space-4);
-  font-family: var(--font-mono);
-  font-size: var(--mono-size);
-  line-height: var(--mono-leading);
+.shelf-metadata {
+  display: grid;
+  grid-template-columns: var(--shelf-record-columns);
+  gap: var(--space-4) var(--space-12);
+  margin-top: var(--space-8);
+  font: var(--mono-size) / var(--mono-leading) var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
 
-.shelf-copy .shelf-status {
-  margin-top: var(--space-8);
-  font-family: var(--font-mono);
-  font-size: var(--label-size);
-  line-height: var(--label-leading);
+.shelf-status {
   text-align: right;
-  text-transform: uppercase;
 }
 
-.shelf-empty {
-  padding: var(--space-48) 0;
+/* Shared rows keep jackets on the rule and captions below it, even with mixed covers. */
+.shelf-grid .shelf-books {
+  display: grid;
+  grid-template-columns: repeat(var(--shelf-columns), minmax(0, 1fr));
+  gap: var(--space-8) var(--space-16);
+}
+
+.shelf-grid .shelf-row {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  min-width: 0;
+}
+
+.shelf-grid .shelf-row::after {
+  content: "";
+  grid-row: 2;
+  width: calc(100% + var(--space-16));
+  border-bottom: var(--rule-width) solid var(--rule);
+}
+
+.shelf-grid .shelf-row:nth-child(2n)::after,
+.shelf-grid .shelf-row:last-child::after {
+  width: 100%;
+}
+
+.shelf-grid .shelf-jacket {
+  grid-row: 1;
+  align-self: end;
+  width: 100%;
+  max-width: var(--shelf-cover-max-width);
+}
+
+.shelf-grid .shelf-jacket-button {
+  width: 100%;
+}
+
+.shelf-grid .shelf-cover {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+}
+
+.shelf-grid .shelf-copy {
+  grid-row: 3;
+  max-width: var(--shelf-cover-max-width);
+  padding-bottom: var(--space-16);
+}
+
+.shelf-grid .shelf-copy h3 button {
+  font-size: var(--body-size);
+  line-height: var(--small-leading);
+}
+
+.shelf-grid .shelf-author,
+.shelf-grid .shelf-pages,
+.shelf-grid .shelf-status,
+.shelf-grid .shelf-row:has(.cover-jacket) .shelf-copy {
+  display: none;
+}
+
+.shelf-grid .shelf-metadata {
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: var(--space-4);
+}
+
+.shelf-grid .bookmark {
+  inset: 0 0 0 auto;
+  padding: 0;
+}
+
+.shelf-grid .bookmark-page {
+  display: none;
+}
+
+.shelf-grid .bookmark-track {
+  width: var(--bookmark-width);
+  background: var(--surface);
+}
+
+.shelf-list .shelf-row {
+  display: grid;
+  grid-template-columns: var(--cover-row-width) minmax(0, 1fr);
+  gap: var(--space-32);
+  align-items: start;
+  padding-block: var(--space-16);
+  border-bottom: var(--rule-width) solid var(--rule);
+}
+
+.shelf-list .bookmark {
+  inset: 0 calc(-1 * var(--space-16)) 0 auto;
+}
+
+.shelf-state {
+  width: 100%;
+  min-height: calc(var(--shelf-jacket-height) + var(--space-48));
+  margin-top: var(--space-32);
+  padding-block: var(--space-48);
+  border-block: var(--rule-width) solid var(--rule);
+}
+
+.shelf-empty,
+.shelf-error {
+  display: grid;
+  place-content: center;
   text-align: center;
+  overflow-wrap: anywhere;
 }
 
-.shelf-empty p {
+.shelf-state p {
   margin: 0;
+}
+
+.shelf-error .quiet {
+  color: var(--ink);
+}
+
+.shelf-loading .catalog-results {
+  display: grid;
+  grid-template-columns: repeat(var(--shelf-columns), minmax(0, 1fr));
+  gap: var(--space-16);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.shelf-loading .catalog-row {
+  display: grid;
+  gap: var(--space-12);
+  padding: 0;
+  border: 0;
+}
+
+.shelf-loading .catalog-cover {
+  width: 100%;
+  max-width: var(--shelf-cover-max-width);
+  height: auto;
+  aspect-ratio: 2 / 3;
+  background: var(--rule);
+}
+
+.shelf-loading .skeleton-title,
+.shelf-loading .skeleton-line,
+.shelf-loading .skeleton-action {
+  height: var(--space-12);
+  margin-bottom: var(--space-8);
+  background: var(--rule);
 }
 
 .shelf button:hover {
@@ -217,203 +350,106 @@
   outline-offset: var(--focus-offset);
 }
 
-.shelf .catalog-results {
-  list-style: none;
-  padding: 0;
-}
-
-.shelf .catalog-row {
-  display: grid;
-  grid-template-columns: var(--cover-row-width) minmax(0, 1fr);
-  gap: var(--space-16);
-  padding: var(--space-16) 0;
-}
-
-.shelf .catalog-cover {
-  width: var(--cover-row-width);
-  height: var(--cover-row-height);
-  background: var(--rule);
-}
-
-.shelf .skeleton-title,
-.shelf .skeleton-line,
-.shelf .skeleton-action {
-  height: var(--space-12);
-  margin-bottom: var(--space-8);
-  background: var(--rule);
-}
-
-/* keep the last row clear of the bottom navigation */
-.shelf {
-  padding-bottom: calc(var(--nav-height) + var(--space-32));
-}
-.shelf-copy .shelf-status {
-  align-self: end;
-}
-
-.shelf-summary {
-  margin-bottom: 0;
-}
-.shelf-summary > span > span {
-  display: block;
-}
-.shelf-view {
-  display: flex;
-  gap: var(--space-16);
-  border: 0;
-  padding: 0;
-  margin: 0;
-}
-.shelf-view [aria-pressed="true"] {
-  font-weight: 700;
-  text-decoration-thickness: var(--focus-width);
-}
-.shelf-view [aria-pressed="false"] {
-  text-decoration: none;
-}
-.shelf-filter-count {
-  margin: 0 0 var(--space-24);
-  font: var(--label-size) / var(--label-leading) var(--font-mono);
-}
-.shelf-group {
-  position: relative;
-  padding-left: var(--space-32);
-  margin-top: var(--space-32);
-  min-height: var(--shelf-jacket-height);
-}
-.shelf-band {
-  position: absolute;
-  inset: 0 auto 0 0;
-  display: block;
-  min-height: 0;
-  max-height: 100%;
-  padding: 0;
-  color: var(--book-class);
-  font: var(--label-size) / var(--label-leading) var(--font-sans);
-  letter-spacing: var(--spine-tracking);
-  text-transform: uppercase;
-  writing-mode: vertical-rl;
-  overflow-wrap: anywhere;
-}
-.shelf-grid .shelf-books {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-16);
-  align-items: end;
-  padding-bottom: var(--space-8);
-  border-bottom: var(--rule-width) solid var(--rule);
-}
-.shelf-jacket {
-  position: relative;
-  min-width: 0;
-  width: fit-content;
-}
-.shelf-jacket-button {
-  animation: jacket-settle var(--motion) var(--ease);
-  display: block;
-  min-width: var(--touch);
-  padding: 0;
-  border: 0;
-  background: var(--surface-raised);
-  cursor: pointer;
-}
-.shelf-grid .shelf-jacket-button {
-  width: 100%;
-}
-.shelf-grid .shelf-row {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
-  min-width: 0;
-  padding: 0;
-  border: 0;
-}
-.shelf-grid .shelf-copy {
-  order: -1;
-  width: 100%;
-}
-.shelf-grid .shelf-copy h3 button {
-  font-size: var(--body-size);
-  line-height: var(--small-leading);
-}
-.shelf-grid .shelf-copy > p {
-  display: none;
-}
-.shelf-grid .shelf-jacket {
-  width: 100%;
-  padding-top: 0;
-  background: transparent;
-}
-
-/* when the jacket is drawn, it already prints the title, so the caption goes */
-.shelf-grid .shelf-row:has(.cover-jacket) .shelf-copy {
-  display: none;
-}
-.shelf-grid .shelf-cover {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 2 / 3;
-  border-radius: var(--radius-input);
-}
-.shelf-grid .bookmark-page {
-  display: none;
-}
-.shelf-list .shelf-jacket {
-  margin-right: var(--space-16);
-}
-.shelf-list .bookmark {
-  inset: 0 calc(-1 * var(--space-16)) 0 auto;
-}
-.shelf-list .shelf-row {
-  column-gap: var(--space-32);
-}
-.shelf-list .shelf-books {
-  border-bottom: var(--rule-width) solid var(--rule);
-}
-@media (min-width: 421px) {
-  .shelf-grid .shelf-books {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+@media (min-width: 480px) {
+  .shelf {
+    --shelf-columns: 3;
   }
-}
-@media (prefers-reduced-motion: reduce) {
-  .shelf-jacket-button {
-    animation: none;
+
+  .shelf-grid .shelf-row:nth-child(n)::after {
+    width: calc(100% + var(--space-16));
   }
-  .bookmark-fill {
-    transition: none;
+
+  .shelf-grid .shelf-row:nth-child(3n)::after,
+  .shelf-grid .shelf-row:last-child::after {
+    width: 100%;
   }
 }
 
-/* progress is a bookmark: a thin ribbon on the jacket edge with a visible track */
-.shelf-grid .bookmark {
-  inset: 0 0 0 auto;
-  padding: 0;
-  background: transparent;
+@media (min-width: 768px) {
+  .shelf {
+    --shelf-columns: 4;
+    --shelf-record-columns: minmax(0, 1fr) minmax(0, 0.5fr) minmax(0, 0.5fr) minmax(0, 0.75fr);
+  }
+
+  .shelf-filters {
+    grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr));
+    gap: var(--space-16);
+  }
+
+  .shelf-search {
+    grid-column: auto;
+  }
+
+  .shelf-band {
+    position: static;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-8);
+    margin-bottom: var(--space-16);
+    writing-mode: horizontal-tb;
+    font-size: var(--body-size);
+    line-height: var(--body-leading);
+  }
+
+  .shelf-grid .shelf-row:nth-child(n)::after {
+    width: calc(100% + var(--space-16));
+  }
+
+  .shelf-grid .shelf-row:nth-child(4n)::after,
+  .shelf-grid .shelf-row:last-child::after {
+    width: 100%;
+  }
+
+  .shelf-list .shelf-copy {
+    display: grid;
+    grid-template-columns: var(--shelf-record-columns);
+    align-items: baseline;
+    gap: var(--space-4) var(--space-12);
+  }
+
+  .shelf-list .shelf-copy h3 {
+    grid-column: 1 / 3;
+  }
+
+  .shelf-list .shelf-author {
+    grid-column: 3 / -1;
+    text-align: right;
+  }
+
+  .shelf-list .shelf-metadata {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    margin-top: 0;
+    text-align: right;
+  }
 }
 
-.shelf-grid .bookmark-track {
-  width: 5px;
-  height: 100%;
-  background: color-mix(in srgb, var(--ink) 14%, transparent);
+@media (min-width: 1024px) {
+  .shelf {
+    --shelf-columns: 5;
+  }
+
+  .shelf-grid .shelf-row:nth-child(n)::after {
+    width: calc(100% + var(--space-16));
+  }
+
+  .shelf-grid .shelf-row:nth-child(5n)::after,
+  .shelf-grid .shelf-row:last-child::after {
+    width: 100%;
+  }
 }
 
-.shelf-grid .bookmark-fill {
-  background: currentColor;
-}
+@media (min-width: 1280px) {
+  .shelf {
+    --shelf-columns: 6;
+  }
 
-.shelf-grid .shelf-jacket {
-  box-shadow: none;
-}
+  .shelf-grid .shelf-row:nth-child(n)::after {
+    width: calc(100% + var(--space-16));
+  }
 
-/* the spine label wraps instead of clipping */
-.shelf-grid .shelf-band,
-.shelf-list .shelf-band {
-  overflow: visible;
-  text-overflow: clip;
-  white-space: normal;
-}
-
-.shelf-grid .shelf-copy h3,
-.shelf-grid .shelf-copy h3 button {
-  font-style: normal;
+  .shelf-grid .shelf-row:nth-child(6n)::after,
+  .shelf-grid .shelf-row:last-child::after {
+    width: 100%;
+  }
 }
