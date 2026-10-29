@@ -11,7 +11,7 @@ const themes = [
   "oxford-light",
   "oxford-dark",
 ];
-const evidence = "docs/evidence/responsive-shell";
+const evidence = "test-results/responsive-shell";
 
 async function openReading(page: Page) {
   if (!stack) throw new Error("Local Supabase is required");
