@@ -5,4 +5,8 @@ export default defineConfig({
   plugins: [react()],
   // preview tunnels (cloudflared quick tunnels) need to be allowed as hosts
   server: { allowedHosts: [".trycloudflare.com"] },
+  test: {
+    // Playwright specs live in tests/e2e and are run by their own runner
+    exclude: ["**/node_modules/**", "**/dist/**", "**/.worktrees/**", "tests/e2e/**"],
+  },
 });
