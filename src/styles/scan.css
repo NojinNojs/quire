@@ -1,0 +1,136 @@
+.scan-sheet {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-band);
+  background: var(--surface);
+  color: var(--ink);
+  font: var(--body-size) / var(--body-leading) var(--font-sans);
+  overflow: auto;
+  overscroll-behavior: contain;
+  color-scheme: var(--scheme);
+}
+.scan-sheet::backdrop {
+  background: var(--surface);
+}
+.scan-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.scan-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  padding: var(--space-12) max(var(--gutter), env(safe-area-inset-right)) var(--space-12)
+    max(var(--gutter), env(safe-area-inset-left));
+  border-bottom: var(--rule-width) solid var(--rule);
+}
+.scan-header h1 {
+  margin: 0;
+  font-size: var(--title-size);
+  line-height: var(--title-leading);
+}
+.scan-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-24);
+  padding: var(--space-24) max(var(--gutter), env(safe-area-inset-right)) var(--space-24)
+    max(var(--gutter), env(safe-area-inset-left));
+}
+.scan-camera {
+  position: relative;
+  flex: 1;
+  min-height: calc(var(--touch) * 4);
+  background: var(--surface-raised);
+}
+.scan-camera[hidden] {
+  display: none;
+}
+.scan-camera video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.scan-guide {
+  position: absolute;
+  top: 50%;
+  right: var(--space-24);
+  left: var(--space-24);
+  height: calc(var(--touch) * 2);
+  transform: translateY(-50%);
+  border: var(--focus-width) solid var(--ink);
+  outline: var(--focus-width) solid var(--surface);
+  pointer-events: none;
+}
+.scan-sheet p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.scan-torch,
+.scan-fallback {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+.scan-sheet button,
+.scan-sheet input {
+  box-sizing: border-box;
+  min-width: var(--touch);
+  min-height: var(--touch);
+  padding: var(--space-8) var(--space-12);
+  border: var(--rule-width) solid var(--ink-muted);
+  border-radius: var(--radius-input);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: inherit;
+}
+.scan-sheet input {
+  width: 100%;
+  min-width: 0;
+  caret-color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.scan-sheet input[aria-invalid="true"] {
+  border-color: var(--ink);
+  border-width: var(--focus-width);
+}
+.scan-sheet button {
+  cursor: pointer;
+}
+.scan-fallback button {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.scan-sheet button:hover:not(:disabled) {
+  text-decoration: underline;
+}
+.scan-sheet button:active:not(:disabled) {
+  text-decoration: underline double;
+}
+.scan-sheet button:disabled,
+.scan-sheet input:disabled {
+  cursor: default;
+  border-style: dashed;
+}
+.scan-sheet :focus-visible {
+  outline: var(--focus-width) solid var(--ink);
+  outline-offset: var(--focus-offset);
+}
+.scan-sheet ::selection {
+  background: var(--ink);
+  color: var(--surface);
+}
