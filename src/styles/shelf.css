@@ -253,8 +253,7 @@
 
 .shelf-grid .shelf-author,
 .shelf-grid .shelf-pages,
-.shelf-grid .shelf-status,
-.shelf-grid .shelf-row:has(.cover-jacket) .shelf-copy {
+.shelf-grid .shelf-status {
   display: none;
 }
 

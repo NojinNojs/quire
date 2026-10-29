@@ -69,14 +69,16 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
     setBusy(true);
     setFailed(false);
     setMessage(null);
-    const { error } = await client.auth.resetPasswordForEmail(email);
-    setBusy(false);
-    if (error) {
+    try {
+      const { error } = await client.auth.resetPasswordForEmail(email.trim());
+      if (error) throw error;
+      setMessage("Reset link sent. Check your email, then sign in with the new password.");
+    } catch {
       setFailed(true);
-      setMessage(error.message);
-      return;
+      setMessage("Could not send a reset link. Check your connection and try again.");
+    } finally {
+      setBusy(false);
     }
-    setMessage("Reset link sent. Check your email, then sign in with the new password.");
   }
 
   async function submit(event: React.FormEvent) {
@@ -114,151 +116,209 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
   }
 
   return (
-    <main className="auth borrower-card" aria-labelledby="auth-title">
-      <div className="auth-imprint">
-        <span className="auth-mark">
-          QUIRE
-          <span className="auth-imprint-line">Borrower card</span>
-        </span>
-        <span className="auth-punch" aria-hidden="true" />
-      </div>
-      <div
-        key={mode}
-        className="auth-face"
-        data-mode={mode}
-        data-slide={switched ? "true" : undefined}
-      >
-        <header className="auth-head">
-          <p className="auth-kicker">The lending desk</p>
-          <h1 id="auth-title" ref={heading} tabIndex={-1}>
-            {mode === "signin" ? "Sign in" : "Create an account"}
-          </h1>
-          <p className="auth-lede">Your shelf is private. One account, one library.</p>
-        </header>
-        <form
-          onSubmit={submit}
-          className="auth-form"
-          aria-busy={busy}
-          aria-describedby={message ? "auth-message" : undefined}
-        >
-          <label>
-            <span className="label">Email</span>
-            <input
-              type="email"
-              name="email"
-              autoComplete="email"
-              placeholder="name@example.com"
-              required
-              disabled={busy}
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-            />
-          </label>
-          <div className="auth-field">
-            <span className="label" aria-hidden="true">
-              Password
-            </span>
-            <input
-              type={reveal ? "text" : "password"}
-              name="password"
-              placeholder={mode === "signup" ? "At least 8 characters" : "Your password"}
-              autoComplete={mode === "signin" ? "current-password" : "new-password"}
-              required
-              minLength={8}
-              disabled={busy}
-              aria-describedby={mode === "signup" ? "auth-strength" : undefined}
-              aria-label="Password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-            <button
-              type="button"
-              className="auth-reveal"
-              aria-pressed={reveal}
-              aria-label={reveal ? "Hide" : "Show"}
-              onClick={() => setReveal((value) => !value)}
-            >
-              {reveal ? "Hide" : "Show"}
-            </button>
+    <main className="auth-page" aria-labelledby="auth-title">
+      <section className="auth-story" aria-label="A reading space of your own">
+        <div className="auth-story-brand">
+          Quire<span>A personal library</span>
+        </div>
+        <div className="auth-photograph">
+          <img
+            src="/images/library.webp"
+            alt="Warmly lit bookshelves in a quiet library"
+            fetchPriority="high"
+          />
+        </div>
+        <div className="auth-story-copy">
+          <p className="auth-story-title">
+            A home for your <em>reading life.</em>
+          </p>
+          <p>Your books, the pages you turn, and the thoughts you keep along the way.</p>
+          <div className="auth-story-bottom">
+            <span>Made for the way you read.</span>
+            <span aria-hidden="true">Q.</span>
           </div>
-          {mode === "signin" ? (
-            <button type="button" className="auth-forgot" disabled={busy} onClick={sendReset}>
-              Forgot your password?
-            </button>
-          ) : null}
-          {mode === "signup" ? (
-            <>
-              <div id="auth-strength" className="auth-strength" data-strength={strength}>
-                <span aria-live="polite">Password strength: {strength}</span>
-                <span className="auth-strength-track" aria-hidden="true">
-                  <span />
-                </span>
-              </div>
+        </div>
+      </section>
+      <a
+        href="https://unsplash.com/photos/sfL_QOnmy00"
+        target="_blank"
+        rel="noreferrer"
+        className="auth-photo-credit"
+      >
+        <span className="auth-credit-full">Photography by Janko Ferlič / Unsplash</span>
+        <span className="auth-credit-short">Photo credit</span>
+      </a>
+      <section className="auth-workspace">
+        <nav className="auth-topnav" aria-label="Getting started">
+          <span className="auth-mobile-brand">Quire</span>
+        </nav>
+        <div className="auth-form-wrap">
+          <div
+            key={mode}
+            className="auth-face"
+            data-mode={mode}
+            data-slide={switched ? "true" : undefined}
+          >
+            <header className="auth-head">
+              <h1 id="auth-title" ref={heading} tabIndex={-1}>
+                {mode === "signin" ? "Sign in" : "Create an account"}
+              </h1>
+              <p className="auth-lede">
+                {mode === "signin"
+                  ? "Pick up right where you left off."
+                  : "Start with the books you already love."}
+              </p>
+            </header>
+            <form
+              onSubmit={submit}
+              className="auth-form"
+              aria-busy={busy}
+              aria-describedby={message ? "auth-message" : undefined}
+            >
               <label>
-                <span className="label">Repeat</span>
+                <span className="label">Email</span>
                 <input
-                  type="password"
-                  name="repeat"
-                  autoComplete="new-password"
-                  placeholder="Type it again"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  placeholder="name@example.com"
+                  required
                   disabled={busy}
-                  value={repeat}
-                  aria-invalid={mismatch}
-                  aria-describedby={mismatch ? "auth-mismatch" : "auth-repeat-help"}
-                  onChange={(event) => setRepeat(event.target.value)}
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                 />
               </label>
-              {mismatch ? (
-                <p id="auth-mismatch" className="auth-field-error" role="alert">
-                  Passwords do not match.
+              <div className="auth-field">
+                <span className="label" aria-hidden="true">
+                  Password
+                </span>
+                <input
+                  type={reveal ? "text" : "password"}
+                  name="password"
+                  placeholder={mode === "signup" ? "At least 8 characters" : "Your password"}
+                  autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                  required
+                  minLength={8}
+                  disabled={busy}
+                  aria-describedby={mode === "signup" ? "auth-strength" : undefined}
+                  aria-label="Password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                />
+                <button
+                  type="button"
+                  className="auth-reveal"
+                  aria-pressed={reveal}
+                  aria-label={reveal ? "Hide" : "Show"}
+                  onClick={() => setReveal((value) => !value)}
+                >
+                  {reveal ? "Hide" : "Show"}
+                </button>
+              </div>
+              {mode === "signin" ? (
+                <button type="button" className="auth-forgot" disabled={busy} onClick={sendReset}>
+                  Forgot your password?
+                </button>
+              ) : null}
+              {mode === "signup" ? (
+                <>
+                  <div id="auth-strength" className="auth-strength" data-strength={strength}>
+                    <span aria-live="polite">Password strength: {strength}</span>
+                    <span className="auth-strength-track" aria-hidden="true">
+                      <span />
+                    </span>
+                  </div>
+                  <label>
+                    <span className="label">Repeat</span>
+                    <input
+                      type="password"
+                      name="repeat"
+                      autoComplete="new-password"
+                      placeholder="Type it again"
+                      disabled={busy}
+                      value={repeat}
+                      aria-invalid={mismatch}
+                      aria-describedby={mismatch ? "auth-mismatch" : "auth-repeat-help"}
+                      onChange={(event) => setRepeat(event.target.value)}
+                    />
+                  </label>
+                  {mismatch ? (
+                    <p id="auth-mismatch" className="auth-field-error" role="alert">
+                      Passwords do not match.
+                    </p>
+                  ) : (
+                    <p id="auth-repeat-help" className="auth-help">
+                      Optional. Repeat your password to check it.
+                    </p>
+                  )}
+                </>
+              ) : null}
+              {message ? (
+                <p
+                  id="auth-message"
+                  className={failed ? "auth-field-error" : "auth-message"}
+                  role={failed ? "alert" : "status"}
+                >
+                  {message}
                 </p>
-              ) : (
-                <p id="auth-repeat-help" className="auth-help">
-                  Optional. Repeat your password to check it.
-                </p>
-              )}
-            </>
-          ) : null}
-          {message ? (
-            <p
-              id="auth-message"
-              className={failed ? "auth-field-error" : "auth-message"}
-              role={failed ? "alert" : "status"}
-            >
-              {message}
-            </p>
-          ) : null}
-          <button type="submit" className="primary" disabled={busy || mismatch}>
-            {busy
-              ? "Issuing card"
-              : failed
-                ? "Try again"
-                : mode === "signin"
-                  ? "Sign in"
-                  : "Create account"}
-            {busy ? <span className="auth-issuing" aria-hidden="true" /> : null}
-          </button>
-        </form>
-        <footer className="auth-footer">
-          <p className="auth-issued">Quire keeps a record of what you read, and nothing else.</p>
-          <button
-            type="button"
-            className="auth-switch"
-            aria-label={
-              mode === "signin" ? "No account yet? Create one" : "Already have an account? Sign in"
-            }
-            disabled={busy}
-            onClick={switchMode}
-          >
-            <span className="auth-switch-ask">
-              {mode === "signin" ? "No account yet?" : "Already have an account?"}
-            </span>{" "}
-            <span className="auth-switch-action">
-              {mode === "signin" ? "Create one" : "Sign in"}
-            </span>
-          </button>
-        </footer>
-      </div>
+              ) : null}
+              <button type="submit" className="primary" disabled={busy || mismatch}>
+                {busy
+                  ? mode === "signin"
+                    ? "Signing in..."
+                    : "Creating account..."
+                  : failed
+                    ? "Try again"
+                    : mode === "signin"
+                      ? "Sign in"
+                      : "Create account"}
+                {busy ? <span className="auth-issuing" aria-hidden="true" /> : null}
+              </button>
+            </form>
+            <footer className="auth-footer">
+              <button
+                type="button"
+                className="auth-switch"
+                aria-label={
+                  mode === "signin"
+                    ? "No account yet? Create one"
+                    : "Already have an account? Sign in"
+                }
+                disabled={busy}
+                onClick={switchMode}
+              >
+                <span className="auth-switch-ask">
+                  {mode === "signin" ? "No account yet?" : "Already have an account?"}
+                </span>{" "}
+                <span className="auth-switch-action">
+                  {mode === "signin" ? "Create one" : "Sign in"}
+                </span>
+              </button>
+              <div className="auth-divider">
+                <span>Have a look around first</span>
+              </div>
+              <a
+                className="auth-demo-link"
+                href="?demo=1#/today"
+                aria-label="Try the interactive demo"
+              >
+                <span className="auth-demo-covers" aria-hidden="true">
+                  <img src="/covers/waves.webp" alt="" />
+                  <img src="/covers/laut.webp" alt="" />
+                  <img src="/covers/meditations.webp" alt="" />
+                </span>
+                <span>
+                  <strong className="auth-demo-title">Try the interactive demo</strong>
+                  <span className="auth-demo-description">
+                    A sample library. No account needed.
+                  </span>
+                </span>
+              </a>
+            </footer>
+          </div>
+        </div>
+        <p className="auth-footnote">A little space for your books.</p>
+      </section>
     </main>
   );
 }

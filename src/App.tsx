@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AuthForm } from "./features/auth/AuthForm";
+import { DemoApp } from "./features/demo/DemoApp";
 import { CatalogueRoute } from "./features/integration/CatalogueRoute";
 import { ShelfRoute } from "./features/integration/ShelfRoute";
 import { TodayRoute } from "./features/integration/TodayRoute";
@@ -9,6 +10,7 @@ import { SettingsScreen } from "./features/settings/SettingsScreen";
 import { restoreTheme } from "./features/settings/settings";
 import { ErrorPanel } from "./features/states/ErrorPanel";
 import { SkeletonRows } from "./features/states/SkeletonRows";
+import { isDemoMode } from "./lib/demoMode";
 import { useSession } from "./lib/useSession";
 
 import "./styles/integration.css";
@@ -17,6 +19,10 @@ import "./styles/integration.css";
 restoreTheme(document.documentElement);
 
 export default function App() {
+  return isDemoMode() ? <DemoApp /> : <AccountApp />;
+}
+
+function AccountApp() {
   const [route, setRoute] = useState(() => parseRoute(window.location.hash));
   useEffect(() => {
     const navigate = () => {
@@ -40,6 +46,9 @@ export default function App() {
           Supabase is not configured. Copy <code>.env.example</code> to <code>.env</code> and fill
           in the project URL and anon key.
         </p>
+        <a className="settings-link" href="?demo=1#/today">
+          Try the interactive demo
+        </a>
       </main>
     );
   }
@@ -63,7 +72,7 @@ export default function App() {
   if (!user) return <AuthForm client={client} />;
 
   return (
-    <AppShell route={route}>
+    <AppShell route={route} guideScope={user.id}>
       {route === "settings" ? (
         <SettingsScreen key={user.id} signOut={signOut} />
       ) : route === "search" ? (

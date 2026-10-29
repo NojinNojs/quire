@@ -38,6 +38,23 @@ The same flag matters for any Node tool that talks to the network on this machin
 No GitHub Actions and no hosted runner: CI is the gate, CD is `scripts/release.sh`. Both run on
 this machine, so there is no card on file and no CI mail in the inbox.
 
+## Interactive demo
+
+Run `npm run dev`, then open `http://localhost:5173/?demo=1#/today`.
+The sign-in screen also has a **Try the interactive demo** link. No account or Supabase
+configuration is needed. Demo books and reading activity are illustrative; changes are saved
+under a separate browser storage key and never sent to Supabase.
+
+Try logging pages and Undo, filtering the Shelf, opening a book to save notes or a rating,
+choosing another active book, and adding a sample or manual entry from Search. All six themes
+are available in Settings. **Reset demo** restores the sample library; **Leave demo** returns
+to the account app. See [the demo walkthrough](docs/DEMO.md).
+
+Use **Guide** in the app header to replay the five-step product tour, or open
+`http://localhost:5173/?demo=1&tour=1#/today` to launch it directly. Sign-in and registration
+also offer a tour link. The tour highlights real controls and supports Back, Next, Skip, and
+Escape. Reading shortcuts and keyboard-accessible star ratings operate on the demo data.
+
 ## Tests
 
 Unit tests live next to the code (`src/lib/*.test.ts`) and cover the rules the database cannot:

@@ -28,11 +28,13 @@ export function ManualForm({
   save,
   saving,
   setMessage,
+  includeCoverUrl = true,
 }: {
   manualDraft?: Partial<Candidate>;
   save: (candidate: Candidate) => Promise<boolean>;
   saving: string | null;
   setMessage: (message: string) => void;
+  includeCoverUrl?: boolean;
 }) {
   const [manual, setManual] = useState<Record<(typeof fields)[number], string>>({
     title: manualDraft.title ?? "",
@@ -73,30 +75,32 @@ export function ManualForm({
     <>
       <p className="muted manual-note">Only the title is required. Leave unknown details blank.</p>
       <form className="catalog-form" onSubmit={saveManual}>
-        {fields.map((field) => (
-          <label key={field}>
-            <span className="label">
-              {labels[field]}
-              {field === "title" ? " (required)" : ""}
-            </span>
-            <input
-              name={field}
-              required={field === "title"}
-              type={
-                field === "year" || field === "pages"
-                  ? "number"
-                  : field === "coverUrl"
-                    ? "url"
-                    : "text"
-              }
-              min={field === "year" ? 1000 : field === "pages" ? 1 : undefined}
-              max={field === "year" ? 2100 : undefined}
-              step={field === "year" || field === "pages" ? 1 : undefined}
-              value={manual[field]}
-              onChange={(event) => setManual({ ...manual, [field]: event.target.value })}
-            />
-          </label>
-        ))}
+        {fields
+          .filter((field) => includeCoverUrl || field !== "coverUrl")
+          .map((field) => (
+            <label key={field}>
+              <span className="label">
+                {labels[field]}
+                {field === "title" ? " (required)" : ""}
+              </span>
+              <input
+                name={field}
+                required={field === "title"}
+                type={
+                  field === "year" || field === "pages"
+                    ? "number"
+                    : field === "coverUrl"
+                      ? "url"
+                      : "text"
+                }
+                min={field === "year" ? 1000 : field === "pages" ? 1 : undefined}
+                max={field === "year" ? 2100 : undefined}
+                step={field === "year" || field === "pages" ? 1 : undefined}
+                value={manual[field]}
+                onChange={(event) => setManual({ ...manual, [field]: event.target.value })}
+              />
+            </label>
+          ))}
         <button className="primary" type="submit" disabled={saving !== null}>
           {saving ? "Saving" : "Save book"}
         </button>

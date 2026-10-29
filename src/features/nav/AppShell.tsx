@@ -1,5 +1,6 @@
 import { type ReactNode, useRef } from "react";
 import { SearchIcon, SettingsIcon, ShelfIcon, TodayIcon } from "../../components/icons";
+import { openProductTour, ProductTour } from "../guide/ProductTour";
 import type { Route } from "./routes";
 
 const destinations = [
@@ -8,7 +9,15 @@ const destinations = [
   { route: "search", label: "Search", Icon: SearchIcon },
 ] as const;
 
-export function AppShell({ route, children }: { route: Route; children: ReactNode }) {
+export function AppShell({
+  route,
+  children,
+  guideScope = "reader",
+}: {
+  route: Route;
+  children: ReactNode;
+  guideScope?: string;
+}) {
   const content = useRef<HTMLDivElement>(null);
 
   return (
@@ -31,16 +40,22 @@ export function AppShell({ route, children }: { route: Route; children: ReactNod
       </a>
       <header className="shell app-header shell-header">
         <span className="brand">Quire</span>
-        <a
-          className="shell-settings"
-          href="#/settings"
-          aria-label="Settings"
-          title="Settings"
-          aria-current={route === "settings" ? "page" : undefined}
-        >
-          <SettingsIcon />
-        </a>
+        <div className="shell-header-actions">
+          <button className="shell-guide" type="button" onClick={openProductTour}>
+            Guide
+          </button>
+          <a
+            className="shell-settings"
+            href="#/settings"
+            aria-label="Settings"
+            title="Settings"
+            aria-current={route === "settings" ? "page" : undefined}
+          >
+            <SettingsIcon />
+          </a>
+        </div>
       </header>
+      <ProductTour key={guideScope} scope={guideScope} />
       <div className="shell-screen" id="main-content" ref={content} key={route} tabIndex={-1}>
         {children}
       </div>

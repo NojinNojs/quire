@@ -201,7 +201,7 @@ describe("responsive shelf contract", () => {
     expect(css).toContain("max-width: var(--shelf-cover-max-width)");
   });
 
-  it("keeps caption data for real covers and switches to the printed jacket on image failure", () => {
+  it("keeps caption data for real covers and uses the shared placeholder on image failure", () => {
     const view = setup({ books: [shelfBook({ cover_url: "https://example.test/cover.jpg" })] });
     expect(view.getByRole("img", { name: "Cover of The Waves" })).toBeTruthy();
     const copy = view.container.querySelector(".shelf-copy");
@@ -210,9 +210,10 @@ describe("responsive shelf contract", () => {
     expect(copy?.querySelector(".shelf-year")?.textContent).toBe("1931");
     fireEvent.error(view.getByRole("img", { name: "Cover of The Waves" }));
     expect(view.getByRole("img", { name: "The Waves, no cover image" })).toBeTruthy();
-    expect(css).toMatch(
-      /\.shelf-grid \.shelf-row:has\(\.cover-jacket\) \.shelf-copy\s*\{\s*display: none/,
+    expect(view.getByRole("img", { name: "The Waves, no cover image" }).getAttribute("src")).toBe(
+      "/covers/placeholder.svg",
     );
+    expect(copy?.querySelector("h3")?.textContent).toBe("The Waves");
   });
 
   it("provides author and four metadata fields with desktop subgrid alignment", () => {

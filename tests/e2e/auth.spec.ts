@@ -51,7 +51,7 @@ test("inline auth errors, issuing state, and reduced motion", async ({ page }) =
   await page.screenshot({ path: "test-results/auth/error-390.png" });
   await page.route("**/auth/v1/token?grant_type=password", () => {});
   await page.getByRole("button", { name: "Try again" }).click();
-  await expect(page.getByRole("button", { name: "Issuing card" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Signing in..." })).toBeDisabled();
   expect(await page.locator(".auth-issuing").evaluate((rule) => getComputedStyle(rule).animationName)).toBe("none");
 });
 
@@ -61,20 +61,34 @@ test("card text contrast exceeds 7:1 in all six modes", async ({ page }) => {
   for (const theme of ["shelf-light", "shelf-dark", "municipal-light", "municipal-dark", "oxford-light", "oxford-dark"]) {
     const ratios = await page.evaluate((value) => {
       document.documentElement.dataset.theme = value;
-      const card = document.querySelector(".borrower-card");
+      const card = document.querySelector(".auth-form-wrap");
       if (!card) throw new Error("Card missing");
+      // color(srgb ...) channels are 0..1, rgb()/rgba() are 0..255
+      const channels = (color: string) => {
+        const scale = color.trim().startsWith("color(") ? 1 : 255;
+        return (color.match(/[\d.]+/g) ?? []).slice(0, 3).map((n) => Number(n) / scale);
+      };
       const luminance = (color: string) => {
-        const [r, g, b] = (color.match(/[\d.]+/g) ?? []).slice(0, 3).map((channel) => {
-          const n = Number(channel) / 255;
-          return n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4;
-        });
+        const [r, g, b] = channels(color).map((n) =>
+          n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4,
+        );
         return 0.2126 * r + 0.7152 * g + 0.0722 * b;
       };
-      const background = getComputedStyle(card).backgroundColor;
-      return [...card.querySelectorAll("h1, p, .label, .auth-mark, button, input")].map((element) => {
+      const effectiveBackground = (element: Element | null): string => {
+        let node: Element | null = element;
+        while (node) {
+          const color = getComputedStyle(node).backgroundColor;
+          if (color && !/rgba\(0, 0, 0, 0\)|transparent/.test(color)) return color;
+          node = node.parentElement;
+        }
+        return "rgb(255, 255, 255)";
+      };
+      return [...card.querySelectorAll("h1, p, .label, button, input")].map((element) => {
         const style = getComputedStyle(element);
         const ink = luminance(style.color);
-        const paper = luminance(element.matches(".primary") ? style.backgroundColor : background);
+        const paper = luminance(
+          element.matches(".primary") ? style.backgroundColor : effectiveBackground(element),
+        );
         return (Math.max(ink, paper) + 0.05) / (Math.min(ink, paper) + 0.05);
       });
     }, theme);

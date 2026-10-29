@@ -159,7 +159,7 @@ it("falls from signed storage to the remote cover, then an honest drawn jacket",
   expect(screen.getByRole("img").getAttribute("src")).toBe("https://remote.test/cover.jpg");
   fireEvent.error(screen.getByRole("img"));
   expect(screen.getByRole("img", { name: "Bumi Manusia, no cover image" })).toBeTruthy();
-  expect(screen.getByText("Bumi Manusia")).toBeTruthy();
+  expect(screen.getByRole("img").getAttribute("src")).toBe("/covers/placeholder.svg");
 });
 it("uses the remote cover when signing fails and rejects inline image URLs", async () => {
   const f = fake();
@@ -218,14 +218,24 @@ it("keeps an uploaded cover ahead of an enriched URL", async () => {
   expect(f.query.update).not.toHaveBeenCalled();
   expect(f.upload).not.toHaveBeenCalled();
 });
-it("preserves long jacket text and an honest unknown author for visual clamping", () => {
+it("uses the same placeholder for missing covers and keeps the book identified in alt text", () => {
   const title =
     "A very long title about the history of Indonesian literature and its many printed editions";
-  const { container } = render(
-    <CoverImage client={null} title={title} author={null} ddc="899.2213" />,
+  const view = render(<CoverImage client={null} title={title} author={null} ddc="899.2213" />);
+  expect(screen.getByRole("img", { name: `${title}, no cover image` }).getAttribute("src")).toBe(
+    "/covers/placeholder.svg",
   );
-  expect(container.querySelector(".cover-jacket-title")?.textContent).toBe(title);
-  expect(container.querySelector(".cover-jacket-author")?.textContent).toBe("Author unknown");
-  expect(container.querySelector(".cover-jacket-class")?.textContent).toBe("899.2213");
-  expect(container.querySelector("img")).toBeNull();
+  view.rerender(<CoverImage client={null} title="Another book" />);
+  expect(screen.getByRole("img").getAttribute("src")).toBe("/covers/placeholder.svg");
+  expect(view.container.querySelector(".cover-jacket")).toBeNull();
+});
+
+it("loads a bundled cover and switches to the shared placeholder when it fails", () => {
+  render(<CoverImage client={null} title="The Waves" coverUrl="/covers/waves.webp" />);
+  const cover = screen.getByRole("img", { name: "Cover of The Waves" });
+  expect(cover.getAttribute("src")).toBe("/covers/waves.webp");
+  fireEvent.error(cover);
+  expect(screen.getByRole("img", { name: "The Waves, no cover image" }).getAttribute("src")).toBe(
+    "/covers/placeholder.svg",
+  );
 });

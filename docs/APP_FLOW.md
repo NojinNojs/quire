@@ -117,4 +117,13 @@ Kalau pengguna melewati, layar Hari Ini menampilkan satu kalimat dan tombol memi
 
 ## Yang Tidak Ada di Alur Ini
 
-Onboarding berlapis, tur aplikasi, notifikasi push, mengikuti teman, berbagi ke media sosial, lencana, dan layar perayaan.
+Notifikasi push, mengikuti teman, berbagi ke media sosial, lencana, dan layar perayaan.
+
+## Tur produk, diperbarui 29 Oktober 2026
+
+Arahan terbaru pengguna menambahkan tur layar langkah demi langkah. Tur bersifat opsional,
+dapat dilewati, dan tersedia kembali lewat Guide di header. Urutannya: buku aktif di Today,
+kontrol pencatatan halaman, filter Shelf, pilihan entri Search, lalu tema di Settings.
+Kontrol tetap dapat digunakan selama tur; panel berpindah agar tidak menutupi target.
+Escape menutup tur dan mengembalikan fokus. Halaman masuk/daftar menautkan tur demo tanpa
+mengirim data akun. Penyelesaian dan pilihan melewati disimpan per demo atau akun.
