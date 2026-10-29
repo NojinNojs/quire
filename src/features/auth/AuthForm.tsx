@@ -172,7 +172,7 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
               type="button"
               className="auth-reveal"
               aria-pressed={reveal}
-              aria-label={reveal ? "Hide password" : "Show password"}
+              aria-label={reveal ? "Hide" : "Show"}
               onClick={() => setReveal((value) => !value)}
             >
               {reveal ? "Hide" : "Show"}
