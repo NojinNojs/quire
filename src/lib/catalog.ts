@@ -13,6 +13,7 @@ export type Candidate = {
 };
 export type Fetcher = (
   url: string,
+  options?: { signal: AbortSignal },
 ) => Promise<{ ok: boolean; status?: number; json(): Promise<unknown> }>;
 type RecordData = Record<string, unknown>;
 const object = (value: unknown): RecordData =>
@@ -110,67 +111,161 @@ export function rankCandidates(candidates: Candidate[]): Candidate[] {
     return true;
   });
 }
-export async function searchCatalog(
-  query: string,
-  fetcher: Fetcher,
-): Promise<{ candidates: Candidate[]; errors: string[] }> {
-  if (!query.trim()) return { candidates: [], errors: [] };
-  const q = encodeURIComponent(query.trim());
-  async function read(url: string) {
-    const response = await fetcher(url);
-    if (!response.ok) {
-      const status = response.status;
-      throw new Error(status === 429 ? "rate limited" : "request failed");
-    }
-    return response.json();
+export type CatalogProvider = "Google Books" | "Open Library" | "Open Library ISBN";
+export type CatalogFailure = {
+  provider: CatalogProvider;
+  kind: "rate-limited" | "timeout" | "offline" | "unknown";
+};
+export type CatalogResult = {
+  candidates: Candidate[];
+  errors: string[];
+  failures: CatalogFailure[];
+  fromCache?: boolean;
+};
+
+class RequestFailure extends Error {
+  constructor(public readonly kind: CatalogFailure["kind"]) {
+    super(kind);
   }
-  const sources = ["Google Books", "Open Library"];
-  const editionErrors: string[] = [];
-  const results = await Promise.allSettled([
-    read(`https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=10`).then(
-      normaliseGoogleBooks,
-    ),
-    (async () => {
-      const data = await read(
-        `https://openlibrary.org/search.json?q=${q}&limit=5&fields=title,author_name,editions,editions.key,cover_edition_key,edition_key`,
-      );
-      const editions = await Promise.allSettled(
-        array(object(data).docs).map(async (doc) => {
-          const work = object(doc);
-          const edition = object(array(object(work.editions).docs)[0]);
-          const fallback = text(work.cover_edition_key) ?? text(array(work.edition_key)[0]);
-          const key = text(edition.key) ?? (fallback ? `/books/${fallback}` : null);
-          if (!key || !/^\/books\/OL\d+M$/.test(key)) return null;
-          return normaliseOpenLibrary(
-            await read(`https://openlibrary.org${key}.json`),
-            joined(work.author_name),
+}
+
+function failure(provider: CatalogProvider, reason: unknown): CatalogFailure {
+  return { provider, kind: reason instanceof RequestFailure ? reason.kind : "unknown" };
+}
+
+function failureMessage({ provider, kind }: CatalogFailure): string {
+  const description = {
+    "rate-limited": "is rate limiting requests",
+    timeout: "did not respond within eight seconds",
+    offline: "could not be reached because of a network error",
+    unknown: "could not load catalogue data",
+  }[kind];
+  return `${provider} ${description}. Try again or enter the book manually.`;
+}
+
+async function runProvider(
+  fetcher: Fetcher,
+  load: (read: (url: string) => Promise<unknown>) => Promise<Candidate[]>,
+): Promise<Candidate[]> {
+  const controller = new AbortController();
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => {
+      reject(new RequestFailure("timeout"));
+      controller.abort();
+    }, 8000);
+  });
+  async function read(url: string): Promise<unknown> {
+    for (let attempt = 0; ; attempt++) {
+      if (controller.signal.aborted) throw new RequestFailure("timeout");
+      let response: Awaited<ReturnType<Fetcher>>;
+      try {
+        response = await fetcher(url, { signal: controller.signal });
+        if (response.ok) return await response.json();
+      } catch (reason) {
+        if (controller.signal.aborted) throw new RequestFailure("timeout");
+        if (!(reason instanceof TypeError)) throw reason;
+        if (attempt === 0) continue;
+        throw new RequestFailure("offline");
+      }
+      if (response.status === 429) throw new RequestFailure("rate-limited");
+      if (attempt === 0 && response.status && response.status >= 500 && response.status < 600)
+        continue;
+      throw new RequestFailure("unknown");
+    }
+  }
+  try {
+    return await Promise.race([load(read), timeout]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/** Each instance owns its last successful results; callers can isolate sessions and tests. */
+export function createCatalogSearch() {
+  const cache = new Map<string, Candidate[]>();
+  return async function searchCatalog(query: string, fetcher: Fetcher): Promise<CatalogResult> {
+    const key = query.trim();
+    if (!key) return { candidates: [], errors: [], failures: [] };
+    const q = encodeURIComponent(key);
+    const failures: CatalogFailure[] = [];
+    const sources: CatalogProvider[] = ["Google Books", "Open Library"];
+    const requests = [
+      runProvider(fetcher, async (read) =>
+        normaliseGoogleBooks(
+          await read(`https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=10`),
+        ),
+      ),
+      runProvider(fetcher, async (read) => {
+        const data = await read(
+          `https://openlibrary.org/search.json?q=${q}&limit=5&fields=title,author_name,editions,editions.key,cover_edition_key,edition_key`,
+        );
+        const editions = await Promise.allSettled(
+          array(object(data).docs).map(async (doc) => {
+            const work = object(doc);
+            const edition = object(array(object(work.editions).docs)[0]);
+            const fallback = text(work.cover_edition_key) ?? text(array(work.edition_key)[0]);
+            const editionKey = text(edition.key) ?? (fallback ? `/books/${fallback}` : null);
+            if (!editionKey || !/^\/books\/OL\d+M$/.test(editionKey)) return null;
+            return normaliseOpenLibrary(
+              await read(`https://openlibrary.org${editionKey}.json`),
+              joined(work.author_name),
+            );
+          }),
+        );
+        for (const result of editions) {
+          if (result.status === "rejected") failures.push(failure("Open Library", result.reason));
+        }
+        return editions.flatMap((result) =>
+          result.status === "fulfilled" && result.value ? [result.value] : [],
+        );
+      }),
+    ];
+    const queryIsbn = isbnTo13(key);
+    if (queryIsbn) {
+      sources.push("Open Library ISBN");
+      requests.push(
+        runProvider(fetcher, async (read) => {
+          const candidate = normaliseOpenLibrary(
+            await read(`https://openlibrary.org/isbn/${queryIsbn}.json`),
+            null,
           );
+          return candidate ? [{ ...candidate, isbn: candidate.isbn ?? queryIsbn }] : [];
         }),
       );
-      if (editions.some((result) => result.status === "rejected"))
-        editionErrors.push(
-          "Some Open Library editions could not be loaded. Try again or enter the book manually.",
-        );
-      return editions.flatMap((result) =>
-        result.status === "fulfilled" && result.value ? [result.value] : [],
-      );
-    })(),
-  ]);
-  return {
-    candidates: rankCandidates(
+    }
+    const results = await Promise.allSettled(requests);
+    for (const [index, result] of results.entries()) {
+      if (result.status === "rejected") {
+        const provider = sources[index];
+        if (provider) failures.push(failure(provider, result.reason));
+      }
+    }
+    const uniqueFailures = failures.filter(
+      (item, index) =>
+        failures.findIndex(
+          (other) => other.provider === item.provider && other.kind === item.kind,
+        ) === index,
+    );
+    const candidates = rankCandidates(
       results.flatMap((result) => (result.status === "fulfilled" ? result.value : [])),
-    ),
-    errors: [
-      ...editionErrors,
-      ...results.flatMap((result, i) =>
-        result.status === "rejected"
-          ? [
-              result.reason instanceof Error && result.reason.message === "rate limited"
-                ? `${sources[i]} is rate limiting requests. Try again in a minute, or enter the book manually.`
-                : `${sources[i]} is unavailable. Try again or enter the book manually.`,
-            ]
-          : [],
-      ),
-    ],
+    );
+    const errors = uniqueFailures.map(failureMessage);
+    if (candidates.length) cache.set(key, structuredClone(candidates));
+    const cached = cache.get(key);
+    if (!candidates.length && uniqueFailures.length && cached) {
+      errors.push(
+        "Showing saved results from the last successful search. Catalogue data may be out of date.",
+      );
+      return {
+        candidates: structuredClone(cached),
+        errors,
+        failures: uniqueFailures,
+        fromCache: true,
+      };
+    }
+    return { candidates, errors, failures: uniqueFailures };
   };
 }
+
+export const searchCatalog = createCatalogSearch();

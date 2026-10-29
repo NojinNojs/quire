@@ -1,13 +1,22 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import google from "./__fixtures__/google-books.json";
 import edition from "./__fixtures__/open-library-edition.json";
 import search from "./__fixtures__/open-library-search.json";
 import {
+  createCatalogSearch,
+  type Fetcher,
   normaliseGoogleBooks,
   normaliseOpenLibrary,
   rankCandidates,
-  searchCatalog,
 } from "./catalog";
+
+let searchCatalog = createCatalogSearch();
+beforeEach(() => {
+  searchCatalog = createCatalogSearch();
+});
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 const response = (data: unknown) => Promise.resolve({ ok: true, json: async () => data });
 describe("catalogue", () => {
@@ -100,9 +109,14 @@ describe("catalogue", () => {
     expect(await searchCatalog("missing", () => response({}))).toEqual({
       candidates: [],
       errors: [],
+      failures: [],
     });
     const fetcher = vi.fn();
-    expect(await searchCatalog("  ", fetcher)).toEqual({ candidates: [], errors: [] });
+    expect(await searchCatalog("  ", fetcher)).toEqual({
+      candidates: [],
+      errors: [],
+      failures: [],
+    });
     expect(fetcher).not.toHaveBeenCalled();
   });
   it("handles network and HTTP failures without throwing and preserves the other source", async () => {
@@ -143,5 +157,189 @@ describe("language normalisation", () => {
       "Pramoedya Ananta Toer",
     );
     expect(openLibrary?.language).toBe("en");
+  });
+});
+
+describe("catalogue resilience", () => {
+  it("times out each provider after 8000 ms and aborts its signal even if fetch ignores it", async () => {
+    vi.useFakeTimers();
+    const signals: AbortSignal[] = [];
+    const fetcher = vi.fn<Fetcher>((_url, options) => {
+      if (options) signals.push(options.signal);
+      return new Promise(() => {});
+    });
+    const pending = searchCatalog("slow", fetcher);
+    await vi.advanceTimersByTimeAsync(7999);
+    expect(signals.every((signal) => !signal.aborted)).toBe(true);
+    await vi.advanceTimersByTimeAsync(1);
+    expect((await pending).failures).toEqual([
+      { provider: "Google Books", kind: "timeout" },
+      { provider: "Open Library", kind: "timeout" },
+    ]);
+    expect(signals.every((signal) => signal.aborted)).toBe(true);
+    expect(fetcher).toHaveBeenCalledTimes(2);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it.each(["network", "5xx"])("retries a %s failure once and merges the recovery", async (kind) => {
+    let attempts = 0;
+    const fetcher = vi.fn((url: string) => {
+      if (!url.includes("googleapis")) return response({});
+      attempts++;
+      if (attempts === 1) {
+        return kind === "network"
+          ? Promise.reject(new TypeError("Failed to fetch"))
+          : Promise.resolve({ ok: false, status: 503, json: async () => ({}) });
+      }
+      return response(google);
+    });
+    const result = await searchCatalog("retry", fetcher);
+    expect(attempts).toBe(2);
+    expect(result.candidates).toHaveLength(1);
+    expect(result.failures).toEqual([]);
+  });
+
+  it.each(["network", "5xx"])("stops after one retry on a persistent %s failure", async (kind) => {
+    const fetcher = vi.fn(() =>
+      kind === "network"
+        ? Promise.reject(new TypeError("Failed to fetch"))
+        : Promise.resolve({ ok: false, status: 500, json: async () => ({}) }),
+    );
+    const result = await searchCatalog("unavailable", fetcher);
+    expect(fetcher).toHaveBeenCalledTimes(4);
+    expect(result.failures.map((error) => error.kind)).toEqual([
+      kind === "network" ? "offline" : "unknown",
+      kind === "network" ? "offline" : "unknown",
+    ]);
+  });
+
+  it("does not retry 429 and reports rate limits with provider names", async () => {
+    const fetcher = vi.fn(async () => ({ ok: false, status: 429, json: async () => ({}) }));
+    const result = await searchCatalog("limited", fetcher);
+    expect(fetcher).toHaveBeenCalledTimes(2);
+    expect(result.failures).toEqual([
+      { provider: "Google Books", kind: "rate-limited" },
+      { provider: "Open Library", kind: "rate-limited" },
+    ]);
+  });
+
+  it("returns a per-query cache hit with a note after both providers are rate limited", async () => {
+    const initial = await searchCatalog("cached", (url) =>
+      response(url.includes("googleapis") ? google : {}),
+    );
+    const expected = structuredClone(initial.candidates);
+    const initialCandidate = initial.candidates[0];
+    if (!initialCandidate) throw new Error("Missing cached candidate");
+    initialCandidate.title = "Changed by caller";
+    const limited = async () => ({ ok: false, status: 429, json: async () => ({}) });
+    const result = await searchCatalog(" cached ", limited);
+    expect(result.candidates).toEqual(expected);
+    expect(result.fromCache).toBe(true);
+    expect(result.errors).toContain(
+      "Showing saved results from the last successful search. Catalogue data may be out of date.",
+    );
+    expect(result.failures).toHaveLength(2);
+    expect((await searchCatalog("another query", limited)).candidates).toEqual([]);
+    expect((await createCatalogSearch()("cached", limited)).candidates).toEqual([]);
+  });
+
+  it("looks up valid ISBN-10 and ISBN-13 queries through the ISBN path and merges all three sources", async () => {
+    for (const query of ["0-14-025635-0", "9780140256352"]) {
+      const fetcher = vi.fn((url: string) =>
+        response(
+          url.includes("/isbn/")
+            ? edition
+            : url.includes("googleapis")
+              ? { items: [{ volumeInfo: { title: "Another book" } }] }
+              : search,
+        ),
+      );
+      const result = await searchCatalog(query, fetcher);
+      expect(fetcher).toHaveBeenCalledWith("https://openlibrary.org/isbn/9780140256352.json", {
+        signal: expect.any(AbortSignal),
+      });
+      expect(fetcher).toHaveBeenCalledTimes(4);
+      expect(result.candidates).toHaveLength(2);
+      expect(result.candidates[0]?.isbn).toBe("9780140256352");
+      expect(result.failures).toEqual([]);
+    }
+  });
+
+  it("skips the ISBN path for an invalid checksum", async () => {
+    const fetcher = vi.fn(() => response({}));
+    await searchCatalog("9780140256353", fetcher);
+    expect(fetcher).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not retry other HTTP errors or malformed JSON", async () => {
+    const fetcher = vi.fn((url: string) =>
+      url.includes("googleapis")
+        ? Promise.resolve({ ok: false, status: 404, json: async () => ({}) })
+        : Promise.resolve({
+            ok: true,
+            json: async () => {
+              throw new SyntaxError("Bad JSON");
+            },
+          }),
+    );
+    const result = await searchCatalog("bad data", fetcher);
+    expect(fetcher).toHaveBeenCalledTimes(2);
+    expect(result.failures.map((error) => error.kind)).toEqual(["unknown", "unknown"]);
+  });
+
+  it("keeps successful sources when the ISBN lookup is rate limited", async () => {
+    const result = await searchCatalog("9780140256352", (url) =>
+      url.includes("/isbn/")
+        ? Promise.resolve({ ok: false, status: 429, json: async () => ({}) })
+        : response(url.includes("googleapis") ? google : {}),
+    );
+    expect(result.candidates).toHaveLength(1);
+    expect(result.failures).toEqual([{ provider: "Open Library ISBN", kind: "rate-limited" }]);
+  });
+});
+
+describe("provider deadlines", () => {
+  it("includes retries in the original provider deadline and preserves a faster source", async () => {
+    vi.useFakeTimers();
+    let attempts = 0;
+    const fetcher: Fetcher = (url) => {
+      if (!url.includes("googleapis"))
+        return response(url.includes("search.json") ? search : edition);
+      attempts++;
+      if (attempts === 1)
+        return new Promise((resolve) => {
+          setTimeout(() => resolve({ ok: false, status: 503, json: async () => ({}) }), 7000);
+        });
+      return new Promise(() => {});
+    };
+    const pending = searchCatalog("slow retry", fetcher);
+    await vi.advanceTimersByTimeAsync(8000);
+    const result = await pending;
+    expect(result.failures).toEqual([{ provider: "Google Books", kind: "timeout" }]);
+    expect(result.candidates[0]?.isbn).toBe("9780140256352");
+    expect(attempts).toBe(2);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it("includes stalled response bodies and edition requests in the timeout", async () => {
+    vi.useFakeTimers();
+    const pending = searchCatalog("slow body", (url) => {
+      if (url.includes("googleapis"))
+        return Promise.resolve({ ok: true, json: () => new Promise(() => {}) });
+      if (url.includes("search.json")) return response(search);
+      return new Promise(() => {});
+    });
+    await vi.advanceTimersByTimeAsync(8000);
+    expect((await pending).failures).toEqual([
+      { provider: "Google Books", kind: "timeout" },
+      { provider: "Open Library", kind: "timeout" },
+    ]);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it("clears provider timers on success", async () => {
+    vi.useFakeTimers();
+    await searchCatalog("fast", () => response({}));
+    expect(vi.getTimerCount()).toBe(0);
   });
 });
