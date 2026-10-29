@@ -4,7 +4,10 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { shelfBook, shelfBooks } from "./fixtures";
 import { ShelfScreen } from "./ShelfScreen";
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  window.localStorage.clear();
+});
 
 function setup(overrides: Partial<Parameters<typeof ShelfScreen>[0]> = {}) {
   const onAddBook = vi.fn();
@@ -119,4 +122,40 @@ describe("shelf", () => {
     expect(view.getAllByRole("listitem")).toHaveLength(1);
     expect(view.getByRole("button", { name: "Reading notebook" })).toBeTruthy();
   });
+});
+
+it("defaults to grid and remembers the list choice across remounts", () => {
+  const first = setup();
+  expect(first.getByRole("button", { name: "Grid" }).getAttribute("aria-pressed")).toBe("true");
+  fireEvent.click(first.getByRole("button", { name: "List" }));
+  expect(window.localStorage.getItem("quire:shelf-view")).toBe("list");
+  first.unmount();
+  const second = setup();
+  expect(second.container.querySelector(".shelf-list")).toBeTruthy();
+  expect(second.getByRole("button", { name: "List" }).getAttribute("aria-pressed")).toBe("true");
+  fireEvent.click(second.getByRole("button", { name: "Grid" }));
+  expect(window.localStorage.getItem("quire:shelf-view")).toBe("grid");
+});
+
+it("keeps the view toggle usable when storage is blocked", () => {
+  const get = vi.spyOn(window.Storage.prototype, "getItem").mockImplementation(() => {
+    throw new Error("Blocked");
+  });
+  const set = vi.spyOn(window.Storage.prototype, "setItem").mockImplementation(() => {
+    throw new Error("Blocked");
+  });
+  const view = setup();
+  fireEvent.click(view.getByRole("button", { name: "List" }));
+  expect(view.container.querySelector(".shelf-list")).toBeTruthy();
+  get.mockRestore();
+  set.mockRestore();
+});
+
+it("uses real progress and leaves unavailable progress absent", () => {
+  const view = setup({ currentPages: { literature: 81 } });
+  expect(
+    view.getByRole("img", { name: "Page 81 of 324" }).querySelector<HTMLElement>(".bookmark-fill")
+      ?.style.height,
+  ).toBe("25%");
+  expect(view.container.querySelectorAll(".bookmark")).toHaveLength(1);
 });

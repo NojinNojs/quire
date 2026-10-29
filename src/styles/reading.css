@@ -1,7 +1,33 @@
+.bookmark {
+  position: absolute;
+  inset: var(--space-8) 0 0 auto;
+  display: flex;
+  gap: var(--space-4);
+  pointer-events: none;
+  color: var(--book-class, var(--shelf-class-000));
+}
+.bookmark-track {
+  position: relative;
+  width: var(--bookmark-width);
+  background: var(--surface);
+}
+.bookmark-fill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: currentColor;
+  transition: height var(--bookmark-motion) var(--ease);
+}
+.bookmark-page {
+  writing-mode: vertical-rl;
+  font: var(--mono-size) / var(--mono-leading) var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  background: var(--surface);
+}
 .reading {
   max-width: calc(var(--gutter) * 2 + var(--touch) * 8);
   margin: 0 auto;
-  padding: var(--space-32) var(--gutter);
+  padding: var(--space-32) var(--gutter) calc(var(--nav-height) + var(--space-32));
 }
 .reading h1 {
   margin: 0 0 var(--space-24);
@@ -104,7 +130,7 @@
 }
 .reading button.reading-primary:disabled {
   background: var(--surface-raised);
-  color: var(--ink-muted);
+  color: var(--ink);
   border-color: var(--rule);
 }
 .reading-feedback:has(p:empty):not(:has(button)) {
@@ -149,4 +175,101 @@
 .reading-empty button {
   width: 100%;
   margin-top: var(--space-24);
+}
+
+/* Keep upload controls below the jacket and its reading record. */
+.reading-book {
+  position: relative;
+  display: grid;
+  grid-template-columns: calc(var(--touch) * 2 + var(--space-32)) minmax(0, 1fr);
+}
+.reading-jacket,
+.reading-jacket .today-cover {
+  display: contents;
+}
+.reading-jacket .reading-cover {
+  grid-column: 1;
+  grid-row: 1;
+}
+.reading-jacket .cover-controls {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+.reading-jacket .bookmark {
+  inset: 0 auto auto calc(var(--touch) * 2 - var(--space-4));
+  height: calc(var(--touch) * 3 - var(--space-12) / 2);
+}
+.reading-jacket .bookmark-track {
+  width: var(--bookmark-today-width);
+}
+.reading-jacket .cover-jacket {
+  background: var(--book-class);
+  color: var(--surface);
+}
+.reading-book-copy {
+  grid-column: 2;
+  grid-row: 1;
+}
+.reading-stamps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  align-items: center;
+}
+.reading-stamps h2 {
+  order: 1;
+  font: italic var(--book-title-size) / var(--book-title-leading) var(--font-serif);
+}
+.reading-stamps ol {
+  margin: 0;
+}
+.reading-day {
+  position: relative;
+  border-color: var(--ink);
+}
+.reading-day-filled {
+  opacity: var(--stamp-past-opacity);
+}
+.reading-day-today {
+  opacity: 1;
+}
+.reading-day-restored {
+  background: none;
+  opacity: 1;
+}
+.reading-day-restored::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: var(--rule-width);
+  height: 100%;
+  background: var(--ink);
+  transform: rotate(45deg);
+}
+.reading button.reading-primary {
+  background: var(--ink);
+  color: var(--surface);
+  border-color: var(--ink);
+}
+.reading button:disabled {
+  color: var(--ink);
+  border-style: dashed;
+}
+
+.reading-jacket .reading-cover {
+  animation: jacket-settle var(--motion) var(--ease);
+}
+@keyframes jacket-settle {
+  from {
+    transform: translateY(calc(-1 * var(--space-4)));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reading-jacket .reading-cover {
+    animation: none;
+  }
 }

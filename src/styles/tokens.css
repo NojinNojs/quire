@@ -58,3 +58,36 @@
   --cover-row-height: 72px;
   --row-title-size: 17px;
 }
+
+/* Furniture metrics and accessible class inks on paper. */
+:root {
+  --bookmark-width: 4px;
+  --bookmark-today-width: 10px;
+  --bookmark-motion: 160ms;
+  --spine-tracking: 0.08em;
+  --shelf-jacket-width: 120px;
+  --shelf-jacket-height: 180px;
+  --stamp-past-opacity: 0.4;
+  --shelf-class-000: var(--class-000);
+  --shelf-class-100: color-mix(in srgb, var(--class-100) 50%, var(--ink));
+  --shelf-class-200: var(--shelf-class-000);
+  --shelf-class-300: var(--shelf-class-000);
+  --shelf-class-400: var(--shelf-class-000);
+  --shelf-class-500: var(--shelf-class-000);
+  --shelf-class-600: var(--shelf-class-000);
+  --shelf-class-700: var(--shelf-class-000);
+  --shelf-class-800: color-mix(in srgb, var(--class-800) 70%, var(--ink));
+  --shelf-class-900: var(--class-900);
+}
+
+:root[data-theme$="-dark"] {
+  --shelf-class-000: color-mix(in srgb, var(--class-000) 80%, var(--ink));
+  --shelf-class-900: color-mix(in srgb, var(--class-900) 75%, var(--ink));
+  --shelf-class-800: color-mix(in srgb, var(--class-800) 55%, var(--ink));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --bookmark-motion: 0ms;
+  }
+}

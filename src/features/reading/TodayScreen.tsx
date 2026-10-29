@@ -1,6 +1,10 @@
-import { useId, useState } from "react";
+import { type CSSProperties, useEffect, useId, useState } from "react";
+import { classify } from "../../lib/ddc";
 import { plural } from "../../lib/plural";
+import { supabase } from "../../lib/supabase";
 import { TodayCover } from "../covers/TodayCover";
+import { Bookmark } from "./Bookmark";
+import { useRestoredDays } from "./useRestoredDays";
 import "../../styles/reading.css";
 import type { LogSnapshot } from "./pageLogStore";
 import { pageAmount, previewPages, stepPages } from "./stepper";
@@ -12,11 +16,12 @@ export type ReadingBook = {
   editionLine: string;
   coverUrl: string | null;
   total: number | null;
+  ddc?: string | null;
 };
 export type ReadingStreak = {
   current: number;
   longest: number;
-  days: readonly { day: string; read: boolean }[];
+  days: readonly { day: string; read: boolean; restored?: boolean }[];
 };
 export type TodayScreenProps = {
   book: ReadingBook | null;
@@ -34,9 +39,41 @@ export function ActiveBookCard({
   current: number;
   pagesToday: number;
 }) {
+  const [classification, setClassification] = useState<{ id: string; ddc: string | null } | null>(
+    null,
+  );
+  useEffect(() => {
+    const client = supabase;
+    if (!client || book.ddc !== undefined) return;
+    let live = true;
+    void (async () => {
+      const { data, error } = await client.from("books").select("ddc").eq("id", book.id).single();
+      if (live && !error && data) setClassification({ id: book.id, ddc: data.ddc });
+    })().catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [book.id, book.ddc]);
+  const token =
+    classify(
+      book.ddc !== undefined
+        ? book.ddc
+        : classification?.id === book.id
+          ? classification.ddc
+          : null,
+    )?.token ?? "--class-000";
   return (
-    <article className="reading-book" aria-label="Active book">
-      <TodayCover key={book.id} bookId={book.id} title={book.title} coverUrl={book.coverUrl} />
+    <article
+      className="reading-book"
+      aria-label="Active book"
+      style={
+        { "--book-class": `var(--shelf${token.slice(1)}, var(--shelf-class-000))` } as CSSProperties
+      }
+    >
+      <div className="reading-jacket">
+        <TodayCover key={book.id} bookId={book.id} title={book.title} coverUrl={book.coverUrl} />
+        <Bookmark current={current} total={book.total} />
+      </div>
       <div className="reading-book-copy">
         <h2>{book.title}</h2>
         <p>{book.author ?? "Author unknown"}</p>
@@ -109,20 +146,37 @@ export function PageStepper({
   );
 }
 
-export function StreakBlock({ streak }: { streak: ReadingStreak }) {
+function localDay() {
+  const date = new Date();
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+export function StreakBlock({
+  streak,
+  today = localDay(),
+}: {
+  streak: ReadingStreak;
+  today?: string;
+}) {
+  const restoredDates = useRestoredDays(JSON.stringify(streak));
   return (
     <section className="reading-streak" aria-label="Reading streak">
-      <h2>{plural(streak.current, "day")} streak</h2>
-      <ol aria-label="Last seven days">
-        {streak.days.slice(-7).map(({ day, read }) => (
-          <li
-            key={day}
-            className={read ? "reading-day reading-day-filled" : "reading-day"}
-            aria-label={`${day}: ${read ? "read" : "no pages logged"}`}
-            title={`${day}: ${read ? "read" : "no pages logged"}`}
-          />
-        ))}
-      </ol>
+      <div className="reading-stamps">
+        <h2>{plural(streak.current, "day")} streak</h2>
+        <ol aria-label="Last seven days">
+          {streak.days.slice(-7).map(({ day, read, restored: recordedRestoration }) => {
+            const restored = recordedRestoration || restoredDates.has(day);
+            return (
+              <li
+                key={day}
+                className={`reading-day${read ? " reading-day-filled" : ""}${day === today ? " reading-day-today" : ""}${restored ? " reading-day-restored" : ""}`}
+                aria-label={`${day}: ${restored ? "restored" : read ? "read" : "no pages logged"}${day === today ? ", today" : ""}`}
+                title={`${day}: ${restored ? "restored" : read ? "read" : "no pages logged"}${day === today ? ", today" : ""}`}
+              />
+            );
+          })}
+        </ol>
+      </div>
       <p>Longest: {plural(streak.longest, "day")}</p>
     </section>
   );
@@ -169,6 +223,18 @@ export function TodayScreen({ book, streak, pageLog, onCatalogue }: TodayScreenP
                     ...streak,
                     current: pageLog.result.streak_current,
                     longest: pageLog.result.streak_longest,
+                    days: streak.days.map((day) => {
+                      const today = localDay();
+                      const previous = new Date(`${today}T12:00:00`);
+                      previous.setDate(previous.getDate() - 1);
+                      const yesterday = `${previous.getFullYear()}-${String(previous.getMonth() + 1).padStart(2, "0")}-${String(previous.getDate()).padStart(2, "0")}`;
+                      return {
+                        ...day,
+                        read: day.read || day.day === today,
+                        restored:
+                          day.restored || (pageLog.result?.restored && day.day === yesterday),
+                      };
+                    }),
                   }
                 : streak
             }
