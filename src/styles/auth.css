@@ -376,3 +376,12 @@
 .borrower-card .auth-switch-ask::after {
   content: " ";
 }
+
+/* the switch is two spans, so the gap is a margin, not a whitespace node */
+.borrower-card .auth-switch-action {
+  margin-left: 0.4ch;
+}
+
+.borrower-card .auth-forgot {
+  margin-top: var(--space-4);
+}
