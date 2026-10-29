@@ -1,0 +1,2 @@
+PASS: empty Today, persisted active book and streak, page log undo/save/reload, seeded Shelf, Shelf retry, four route reloads and active links, no overflow at 390, scan fallback fills and runs ISBN search, missing streak empty state.
+Captured real local database rows for temporary account a617d220-7a55-45d1-859a-4bfebd72f00a; cleaned up after capture. No book, streak or progress API responses mocked. Catalogue providers return empty results only for the scan wiring check.

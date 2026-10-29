@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { AuthForm } from "./features/auth/AuthForm";
-import { SearchScreen } from "./features/catalog/SearchScreen";
+import { CatalogueRoute } from "./features/integration/CatalogueRoute";
+import { ShelfRoute } from "./features/integration/ShelfRoute";
+import { TodayRoute } from "./features/integration/TodayRoute";
 import { AppShell } from "./features/nav/AppShell";
-import { PlaceholderScreen } from "./features/nav/PlaceholderScreen";
 import { parseRoute } from "./features/nav/routes";
 import { SettingsScreen } from "./features/settings/SettingsScreen";
 import { restoreTheme } from "./features/settings/settings";
 import { ErrorPanel } from "./features/states/ErrorPanel";
 import { SkeletonRows } from "./features/states/SkeletonRows";
 import { useSession } from "./lib/useSession";
+
+import "./styles/integration.css";
 
 // Apply the saved palette during module startup, before React mounts any content.
 restoreTheme(document.documentElement);
@@ -64,11 +67,11 @@ export default function App() {
       {route === "settings" ? (
         <SettingsScreen key={user.id} signOut={signOut} />
       ) : route === "search" ? (
-        <div className="app-catalog" id="catalogue">
-          <SearchScreen key={user.id} user={user} client={client} signOut={signOut} />
-        </div>
+        <CatalogueRoute key={user.id} user={user} client={client} signOut={signOut} />
+      ) : route === "shelf" ? (
+        <ShelfRoute key={user.id} owner={user.id} client={client} />
       ) : (
-        <PlaceholderScreen screen={route} />
+        <TodayRoute key={user.id} owner={user.id} client={client} />
       )}
     </AppShell>
   );

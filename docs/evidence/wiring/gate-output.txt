@@ -1,0 +1,56 @@
+
+> quire@0.1.0 gate
+> bash scripts/gate.sh
+
+== biome
+Checked 98 files in 24ms. No fixes applied.
+== typecheck
+== tests
+
+> quire@0.1.0 test
+> vitest run src --passWithNoTests
+
+
+ RUN  v5.0.5 /home/nojin/works/quire/.worktrees/feat-wire-screens
+
+
+ Test Files  15 passed (15)
+      Tests  127 passed (127)
+   Start at  11:04:01
+   Duration  1.35s (environment 32%, transform 23%, import 23%, tests 20%, worker 2%)
+
+== build
+== database smoke (skipped when supabase is down)
+ok   insert a book
+ok   row level security hides another shelf
+ok   duplicate ISBN refused
+ok   only one active book allowed
+ok   streak 2026-10-26
+ok   streak 2026-10-26
+ok   streak 2026-10-27
+ok   streak 2026-10-29
+ok   streak 2026-10-31
+ok   streak 2026-11-02
+ok   two logs on one day add up
+
+all database checks passed
+== docs present
+== end to end smoke (skipped when supabase or system Chromium is unavailable)
+
+> quire@0.1.0 test:e2e
+> playwright test
+
+[WebServer] (node:422155) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:422201) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/auth.spec.ts:3:1 › sign up, open the catalogue, and sign out (995ms)
+  ✓  2 tests/e2e/catalog.spec.ts:3:1 › search, save a candidate, and refuse a persisted duplicate (2.3s)
+  ✓  3 tests/e2e/catalog.spec.ts:60:1 › empty query shows guidance and prevents provider searches (746ms)
+  ✓  4 tests/e2e/settings.spec.ts:3:1 › theme chosen in settings is applied and survives a reload (1.0s)
+
+  4 passed (6.2s)
+gate ok

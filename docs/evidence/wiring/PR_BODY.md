@@ -1,0 +1,5 @@
+Wire Shelf and Today into the authenticated hash-route shell. Shelf loads through `listBooks` with loading, errors and retry; Add book opens Search. Today loads the reader's active book, persisted progress and streak row through an injected-client hook and uses the existing page-log hook for logging, undo and retry. Missing active books or streak rows show the catalogue empty state.
+
+Open ScanSheet from the catalogue and submit detected ISBNs through the existing search form after updating its controlled field. The change to `src/features/catalog/SearchScreen.tsx` is seven added lines: an optional `onScan` callback and the Scan ISBN button. Hash routes, active navigation, theme restore and the existing error boundary are preserved.
+
+Validation: `npm run gate` passes, including 127 unit tests, database smoke checks and four existing browser tests. Additional browser checks cover route reloads, Shelf retry, page-log persistence, scan-to-search and missing-data states at 390 pixels. Screenshots, reproducible capture script and full output are in `docs/evidence/wiring/NOTES.md`.
