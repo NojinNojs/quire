@@ -251,7 +251,7 @@
 }
 .reading button:disabled {
   color: var(--ink);
-  border-style: dashed;
+  border-style: solid;
 }
 
 .reading-jacket .reading-cover {

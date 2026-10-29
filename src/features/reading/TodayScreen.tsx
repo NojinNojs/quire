@@ -101,7 +101,7 @@ export function ActiveBookCard({
           ddc={book.ddc ?? (classification?.id === book.id ? classification.ddc : null)}
           coverUrl={book.coverUrl}
         />
-        <Bookmark current={current} total={book.total} />
+        {current > 0 ? <Bookmark current={current} total={book.total} /> : null}
       </div>
       <BookRecord book={book} current={current} pagesToday={pagesToday} />
     </article>
