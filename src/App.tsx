@@ -1,9 +1,11 @@
+import type { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { AuthForm } from "./features/auth/AuthForm";
+import { SearchScreen } from "./features/catalog/SearchScreen";
 import { isConfigured, supabase } from "./lib/supabase";
 
 export default function App() {
-  const [email, setEmail] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -12,11 +14,11 @@ export default function App() {
       return;
     }
     supabase.auth.getSession().then(({ data }) => {
-      setEmail(data.session?.user.email ?? null);
+      setUser(data.session?.user ?? null);
       setReady(true);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setEmail(session?.user.email ?? null);
+      setUser(session?.user ?? null);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
@@ -41,24 +43,7 @@ export default function App() {
     );
   }
 
-  if (!email) return <AuthForm />;
+  if (!user) return <AuthForm />;
 
-  return (
-    <main className="shell">
-      <header className="topbar">
-        <span className="brand">Quire</span>
-        <button
-          type="button"
-          className="quiet"
-          onClick={() => {
-            void supabase?.auth.signOut();
-          }}
-        >
-          Sign out
-        </button>
-      </header>
-      <h1>Today</h1>
-      <p className="muted">Signed in as {email}. The shelf arrives in the next milestone.</p>
-    </main>
-  );
+  return <SearchScreen key={user.id} user={user} />;
 }

@@ -52,3 +52,9 @@
     --motion: 0ms;
   }
 }
+
+:root {
+  --cover-row-width: 48px;
+  --cover-row-height: 72px;
+  --row-title-size: 17px;
+}

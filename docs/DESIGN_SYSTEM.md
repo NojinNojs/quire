@@ -233,3 +233,8 @@ Two scripts enforce this without opinion:
   `outline: none`, and the contrast of `--ink` and `--ink-muted`.
 
 Both must pass before a screen is called finished.
+
+## 17. Catalogue metrics
+
+`--cover-row-width` and `--cover-row-height` hold the 48 by 72 row cover box.
+`--row-title-size` holds the 17px serif italic title in a catalogue row.
