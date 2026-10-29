@@ -44,6 +44,16 @@ describe("shell routes", () => {
     expect(html).toContain('aria-label="Settings" title="Settings" aria-current="page"');
     expect(nav).not.toContain('aria-current="page"');
   });
+
+  it("puts the skip link before the header and provides visible rail labels", () => {
+    const html = renderToStaticMarkup(<AppShell route="today">Today</AppShell>);
+    expect(html).toContain('href="#main-content"');
+    expect(html).toContain('id="main-content"');
+    expect(html.indexOf("Skip to main content")).toBeLessThan(html.indexOf("<header"));
+    for (const label of ["Today", "Shelf", "Search"]) {
+      expect(html).toContain(`<span class="nav-label">${label}</span>`);
+    }
+  });
 });
 
 describe("icon accessibility", () => {

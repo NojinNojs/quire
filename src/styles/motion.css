@@ -6,10 +6,12 @@
   animation: screen-enter var(--motion) var(--ease);
 }
 
-.nav-indicator {
-  transition:
-    transform var(--motion) var(--ease),
-    opacity var(--motion) var(--ease);
+@media (max-width: 767px) {
+  .nav-indicator {
+    transition:
+      transform var(--motion) var(--ease),
+      opacity var(--motion) var(--ease);
+  }
 }
 
 @keyframes screen-enter {

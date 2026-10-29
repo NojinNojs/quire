@@ -45,6 +45,17 @@
   --nav-height: 64px;
   --band-height: 44px;
   --spine-width: 10px;
+
+  /* The shell grows around the existing phone composition. */
+  --rail-width: 72px;
+  --rail-wide-width: 200px;
+  --content-max-width: 1120px;
+  --rail-label-size: 10px;
+  --layer-nav: 1;
+  --layer-header: 2;
+  --layer-skip: 3;
+  --shell-secondary-ink: color-mix(in srgb, var(--ink-muted) 80%, var(--ink));
+  --shell-focus-ink: color-mix(in srgb, var(--accent) 65%, var(--ink));
 }
 
 @media (prefers-reduced-motion: reduce) {
