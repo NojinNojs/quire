@@ -1,0 +1,7 @@
+.error-fallback p {
+  margin: var(--space-16) 0 var(--space-24);
+}
+.error-fallback .primary {
+  width: 100%;
+  height: var(--touch);
+}
