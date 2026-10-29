@@ -176,3 +176,13 @@
   flex-wrap: wrap;
   gap: var(--space-16);
 }
+.catalog {
+  --ink-muted: var(--ink);
+}
+.catalog .primary {
+  background: var(--ink);
+  color: var(--surface);
+}
+.catalog .primary:disabled {
+  opacity: 1;
+}

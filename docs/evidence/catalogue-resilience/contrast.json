@@ -1,0 +1,38 @@
+[
+  {
+    "theme": "municipal-dark",
+    "ink_on_surface": 15.510896904233947,
+    "ink_on_raised": 13.953147398009772,
+    "primary_surface_on_ink": 15.510896904233947
+  },
+  {
+    "theme": "municipal-light",
+    "ink_on_surface": 14.59315796797371,
+    "ink_on_raised": 15.689731236657543,
+    "primary_surface_on_ink": 14.59315796797371
+  },
+  {
+    "theme": "oxford-dark",
+    "ink_on_surface": 16.446022670899378,
+    "ink_on_raised": 15.120217830198527,
+    "primary_surface_on_ink": 16.446022670899378
+  },
+  {
+    "theme": "oxford-light",
+    "ink_on_surface": 16.651625007532783,
+    "ink_on_raised": 17.894540394665484,
+    "primary_surface_on_ink": 16.651625007532783
+  },
+  {
+    "theme": "shelf-dark",
+    "ink_on_surface": 16.691614876190854,
+    "ink_on_raised": 15.358316603729042,
+    "primary_surface_on_ink": 16.691614876190854
+  },
+  {
+    "theme": "shelf-light",
+    "ink_on_surface": 16.861053294815896,
+    "ink_on_raised": 18.087878225701672,
+    "primary_surface_on_ink": 16.861053294815896
+  }
+]

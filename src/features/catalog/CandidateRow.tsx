@@ -5,10 +5,12 @@ export function CandidateRow({
   saved,
   saving,
   save,
+  editCandidate,
 }: {
   candidate: Candidate;
   saved: Set<string>;
   saving: string | null;
+  editCandidate?: (candidate: Candidate) => void;
   save: (candidate: Candidate) => Promise<boolean>;
 }) {
   const key = identity(candidate);
@@ -45,10 +47,20 @@ export function CandidateRow({
           className="quiet save-action"
           disabled={added || saving !== null}
           onClick={() => {
-            void save(candidate);
+            if (candidate.source === "Google Books (metadata only)" && editCandidate) {
+              editCandidate(candidate);
+            } else {
+              void save(candidate);
+            }
           }}
         >
-          {added ? "Added" : saving === key ? "Saving" : "Save"}
+          {added
+            ? "Added"
+            : saving === key
+              ? "Saving"
+              : candidate.source === "Google Books (metadata only)"
+                ? "Add details"
+                : "Save"}
         </button>
       </div>
     </li>

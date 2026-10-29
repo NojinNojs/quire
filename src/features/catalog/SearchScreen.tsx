@@ -72,7 +72,7 @@ export function SearchScreen({
         aria-labelledby="manual-tab"
         hidden={tab !== "manual"}
       >
-        <ManualForm {...flow} />
+        <ManualForm key={JSON.stringify(flow.manualDraft)} {...flow} />
       </section>
       {flow.saving ? <SkeletonRows label="Saving your book" /> : null}
       {flow.saveError ? (

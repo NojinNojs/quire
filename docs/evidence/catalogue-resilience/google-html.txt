@@ -1,0 +1,120 @@
+HTTP/2 302 
+location: https://books.google.co.id/books?vid=ISBN9786020788036&redir_esc=y
+cache-control: private
+vary: Origin
+content-type: text/html; charset=UTF-8
+p3p: CP="This is not a P3P policy! See g.co/p3phelp for more info."
+x-content-type-options: nosniff
+date: Thu, 29 Oct 2026 09:16:28 GMT
+server: OFE/0.1
+content-length: 267
+x-xss-protection: 0
+x-frame-options: SAMEORIGIN
+set-cookie: NID=CuUBCAESlwEBM9Agl5t_yDUiooaSxMkiDlXk0YxmkjEo4MGKeVp-F8XSbXCY0OJG7CgWMAF1hu-mW-1Kg6ODSZdbR6iENmQQxFNrmAdkqU_gK-mKa38rkRFKzZjvEHuIR-uiVyKWBk0RpCU94FfeEK7PBlhPQ0iYrg1HDtjG4PLi8gqiVVGVUZ5kWJKh8OEGvO-yb8As9tlGdqiu5cQ0KAEyRQFwSkLPDoCVk6OqDlrM2iFfWX6S6p8ltuKvsVqQ9sIwzwtmqDuD9g-ZvyooQrHaLt4U3MHDIQHZi-tgkEhMjdcJy9GEDg; expires=Fri, 30-Apr-2027 09:16:28 GMT; path=/; domain=.google.com; HttpOnly
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+
+HTTP/2 200 
+date: Thu, 29 Oct 2026 09:16:29 GMT
+expires: Thu, 29 Oct 2026 09:16:29 GMT
+cache-control: private, max-age=0
+x-frame-options: SAMEORIGIN
+x-xss-protection: 1; mode=block
+strict-transport-security: max-age=604800
+content-type: text/html; charset=ISO-8859-1
+p3p: CP="This is not a P3P policy! See g.co/p3phelp for more info."
+x-content-type-options: nosniff
+server: OFE/0.1
+set-cookie: NID=CuUBCAESlwEBM9Agl8aALat9knyvAioxlHHgQQZQm8nEIYEoxAzao6XSA3DLWaLa-6WP0GQdWH6_MYqsTdOKoH1HWgInkXmUjbFgCuwOHRxCUm8vUPMy-Ntpe3jW2E6WBvwP_knxf3asywl43ERikycgar_OZXv_k7Ed1ggPqAM8JoJ9vdgk0wpQhFNPUaryFFW6zVzGlgAPy5yao0KXKAEyRQFwSkLPOIzGsNkh-7QTNDmq4zfgjIbfHF_MRWSQIxfRY354X7EvkdDgxIz6Y_M2c6Q6HEGvcANbztrS90mn_7oWL7EaDg; expires=Fri, 30-Apr-2027 09:16:29 GMT; path=/; domain=.google.co.id; HttpOnly
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+accept-ranges: none
+vary: Accept-Encoding
+
+<!DOCTYPE html><html><head><title>Dari dalam kubur: sebuah novel - Soe Tjen Marching - Google Buku</title><link rel="stylesheet" href="/books/css/_1a5c425cbb9a6697049587f854b94f1f/kl_about_this_book_kennedy_full_bundle.css" type="text/css" /><link rel="stylesheet"href="https://fonts.googleapis.com/css2?family=Product+Sans:wght@400"><script src="/books/javascript/atb_1a5c425cbb9a6697049587f854b94f1f__id.js"></script><link rel="canonical" href="https://books.google.com/books/about/Dari_dalam_kubur.html?hl=id&amp;id=somRzgEACAAJ"/><meta property="og:url" content="https://books.google.com/books/about/Dari_dalam_kubur.html?hl=id&amp;id=somRzgEACAAJ"/><meta name="title" content="Dari dalam kubur"/><meta name="description" content=""/><meta property="og:title" content="Dari dalam kubur"/><meta property="og:type" content="book"/><meta property="og:site_name" content="Google Books"/><meta property="og:image" content="https://books.google.co.id/books/content?id=somRzgEACAAJ&amp;printsec=frontcover&amp;img=1&amp;zoom=1"/><link rel="image_src" href="https://books.google.co.id/books/content?id=somRzgEACAAJ&amp;printsec=frontcover&amp;img=1&amp;zoom=1"/><script></script><style>/* IMPORTANT: Changes to this template need to be tested in all OneGoogle  */
+/* enabled frontends!                                                      */
+
+/* Explanation of classes and ids...                                       */
+/* #gbar: Outer div containing the OneGoogle bar.                          */
+/* #guser: Outer div containing the GAIA bar.                              */
+/* #gbs: Iframe shim behind the more box.                                  */
+/* .gbh: Div which draws the main horizontal line.                         */
+/* .gbd: Divs which draw horizontal lines within the more box.             */
+/* .gb1: Class applied to all anchors on the top line.                     */
+/* .gb4: Class applied to all regular anchors in the Gaia bar.             */
+/* .gbi: Class applied to all internal anchors in the Gaia bar.            */
+/* .gbf: Class applied to all featured anchors in the Gaia bar.            */
+
+#gbar,#guser{
+  font-size:13px;
+  
+  padding-top:1px !important;
+}
+#gbar{
+  
+  height:22px
+}
+#guser{
+  padding-bottom:7px !important;
+  text-align:right
+}
+.gbh,.gbd{
+  border-top:1px solid #c9d7f1;
+  /* Needs to be 1px in order for the gaia bar to be clickable in Mac IE5. */
+  font-size:1px
+}
+.gbh{
+  height:0;
+  position:absolute;
+  top:24px;
+  width:100%
+}
+/* Hack to hide this CSS from IE5 Mac and 4.x browsers and earlier.        */
+@media all{
+  /* This needs to be hidden from NS 4 and IE 4, because adding a margin   */
+  /* would change the element to display:block.                            */
+  .gb1{
+    /* Setting a height on .gb1 triggers hasLayout which causes IE5 to     */
+    /* properly render the right margin.                                   */
+    height:22px;
+    margin-right:.5em;
+    vertical-align:top
+  }
+  /* Mac IE5 does not handle floats well, so we don't even try to float the */
+  /* OneGoogle and GAIA bars on the same line.                              */
+  #gbar{
+    float:left
+  }
+}
+/* Underline the top links for all frontends. The default style on some    */
+/* frontends is to not underline links or to underline only on hover,      */
+/* so we apply the underline here in order to unify the OneGoogle bar      */
+/* design across products.                                                 */
+  a.gb1,a.gb4{
+    text-decoration:underline !important
+  }
+
+/* The following selectors are used for setting the appropriate color       */
+/* to elements in the OneGoogle bar. The preconditions are as follows:      */
+/* CSS_RANK(text selector) <= CSS_RANK(link selector)                       */
+/* CSS_RANK(link selector) <= CSS_RANK(internal or featured link selector)  */
+/* CSS_RANK(internal or featured link selector) <= CSS_RANK(hover selector) */
+
+/* Link selector */
+a.gb1,a.gb4{
+  /* Marked important to override pseudo classes in IE6 strict mode. */
+  color:#00c !important
+}
+
+/* Internal and featured text and link selectors */
+/* These rules apply only to those frontends for which we want to enable */
+/* internal and featured link coloration.                                */
+.gbi .gb4{
+  /* Marked important to override pseudo classes in IE6 strict mode. */
+  color:#dd8e27 !important
+}
+.gbf .gb4{
+  /* Marked important to override pseudo classes in IE6 strict mode. */
+  color:#900 !important
+}
+
+
+#gbar { padding:.3em .6em !important;}</style></head><body  class=""><div id=gbar><nobr><a target=_blank class=gb1 href="https://www.google.co.id/search?tab=pw">Telusuri</a> <a target=_blank class=gb1 href="https://www.google.co.id/imghp?hl=id&tab=pi">Gambar</a> <a target=_blank class=gb1 href="https://maps.google.co.id/maps?hl=id&tab=pl">Maps</a> <a target=_blank class=gb1 href="https://play.google.com/?hl=id&tab=p8">Play</a> <a target=_blank class=gb1 href="https://www.youtube.com/?tab=p1">YouTube</a> <a target=_blank class=gb1 href="https://news.google.com/?tab=pn">Berita</a> <a target=_blank class=gb1 href="https://mail.google.com/mail/?tab=pm">Gmail</a> <a target=_blank class=gb1 href="https://drive.google.com/?tab=po">Drive</a> <a target=_blank class=gb1 style="text-decoration:none" href="https://www.google.co.id/intl/id/about/products?tab=ph"><u>Lainnya</u> &raquo;</a></nobr></div><div id=guser width=100%><nobr><span id=gbn class=gbi></span><span id=gbf class=gbf></span><span id=gbe></span><a target=_top id=gb_70 href="https://www.google.com/accounts/Login?service=print&continue=https://books.google.co.id/books%3Fvid%3DISBN9786020788036%26redir_esc%3Dy%26hl%3Did&hl=id&ec=GAZACg" class=gb4>Login</a></nobr></div><div class=gbh style=left:0></div><div class=gbh style=right:0></div><div role="alert" style="position: absolute; left: 0; right: 0;"><a href="https://books.google.co.id/books?vid=ISBN9786020788036&amp;redir_esc=y&amp;hl=id&amp;output=html_text" title="Pengguna pembaca layar: klik link ini untuk mode akses mudah. Mode akses mudah memiliki fitur dasar yang sama namun bekerja dengan lebih baik pada pembaca Anda."><img border="0" src="//www.google.com/images/cleardot.gif"alt="Pengguna pembaca layar: klik link ini untuk mode akses mudah. Mode akses mudah memiliki fitur dasar yang sama namun bekerja dengan lebih baik pada pembaca Anda."></a></div><div class="kd-appbar"><h2 class="kd-appname"><a href="/books?hl=id">Buku</a></h2><div class="kd-buttonbar left" id="left-toolbar-buttons"><a id="appbar-view-print-sample-link" href=""></a><a id="appbar-view-ebook-sample-link" href=""></a><a id="appbar-patents-prior-art-finder-link" href=""></a><a id="appbar-patents-discuss-this-link" href="" data-is-grant=""></a><a id="appbar-read-patent-link" href=""></a><a id="appbar-download-pdf-link" href=""></a></div><div class="kd-buttonbar right" id="right-toolbar-buttons"></div></div><div style="display: none"><ol id="ofe-gear-menu-contents" class="gbmcc"><li class="gbe gbmtc"><a class="gbmt goog-menuitem-content" id="" href="https://www.google.com/accounts/Login?service=print&amp;continue=https://books.google.co.id/books%3Fop%3Dlibrary%26hl%3Did&amp;hl=id">Koleksiku</a></li><li class="gbe gbmtc"><a class="gbmt goog-menuitem-content" id="" href="http://books.google.co.id/support/topic/4359341?hl=id-ID">Bantuan</a></li><li class="gbe gbmtc"><a class="gbmt goog-menuitem-content" id="" href="https://books.google.co.id/advanced_book_search?hl=id">Penelusuran Buku Lanjutan</a></li></ol></div><div id="volume-main"><div id="volume-left"><div id=menu_container ><div id="menu_scroll_wrapper"><div id="menu_scroll" role="navigation"><div id="gb-get-book-container"><a id="gb-get-book-content" href="https://books.google.co.id/books?id=somRzgEACAAJ&amp;sitesec=buy&amp;hl=id&amp;source=gbs_atb">Dapatkan buku cetak</a></div><p id="gb-get-book-not-available">eBuku tidak tersedia<p><h3 class=about_title><a name="buy_anchor"></a></h3><div id=buy class=about_content><div id=buy_v><ul style="list-style-type: none; padding-left: 0; margin: 0;"><li><a style="white-space:normal" href="http://www.bukukita.com/isbn/6020788032" dir=ltr onMouseOver="this.href='http://www.bukukita.com/isbn/6020788032';return false" onMouseDown="this.href='/url?client\x3dca-google-gppd\x26format\x3dgoogleprint\x26num\x3d0\x26id\x3dsomRzgEACAAJ\x26q\x3dhttp://www.bukukita.com/isbn/6020788032\x26usg\x3dAOvVaw1BPtGTu1T3aF6kMGqN9Xwo\x26source\x3dgbs_buy_r';return true"><span dir=ltr>BukuKita.com</span></a></li><li><a style="white-space:normal" href="http://www.gramediaonline.com/book/detail/9786020788036" dir=ltr onMouseOver="this.href='http://www.gramediaonline.com/book/detail/9786020788036';return false" onMouseDown="this.href='/url?client\x3dca-google-gppd\x26format\x3dgoogleprint\x26num\x3d0\x26id\x3dsomRzgEACAAJ\x26q\x3dhttp://www.gramediaonline.com/book/detail/9786020788036\x26usg\x3dAOvVaw0XPQGd89qKChX-BW7NikXk\x26source\x3dgbs_buy_r';return true"><span dir=ltr>Gramedia</span></a></li><li><hr style="margin-right: 20%; color: #666;"></li><li><a style="white-space:normal" href="https://books.google.co.id/url?id=somRzgEACAAJ&amp;q=http://worldcat.org/oclc/1259684192&amp;clientid=librarylink&amp;usg=AOvVaw2RMzptkYjuS1EKd7wRmZHS&amp;source=gbs_buy_r"><span dir=ltr>Cari di perpustakaan</span></a></li><li><a class="secondary" style="white-space:normal" href="https://books.google.co.id/books?id=somRzgEACAAJ&amp;sitesec=buy&amp;hl=id&amp;source=gbs_buy_r" id="get-all-sellers-link"><span dir=ltr>Semua penjual</span>&nbsp;&raquo;</a></li></ul></div></div><div class=menu id=menu><div class="menu_content" style="margin-bottom:6px"><div style="margin-bottom:4px"></div><div style="margin-bottom:3px"></div><div></div></div></div><div class="sidebar-hr"></div><div class="ebook-promo"><a href="https://play.google.com/store/books"><img border="0" src="/googlebooks/images/ebook_promo.png" /><h3 class="section">Belanja Buku di Google Play</h3><p class="ebook-promo-description">Jelajahi eBookstore terbesar di dunia dan baca lewat web, tablet, ponsel, atau ereader mulai hari ini.</p><p class="ebook-promo-clickme">Buka Google Play Sekarang &raquo;</p></a></div><div class="sidebar-hr"></div><div><div id="navbarContainer" class="gb-navbar"></div><script>_OC_InitNavbar({"child_node":[{"title":"Koleksiku","url":"https://books.google.co.id/books?uid=114584440181414684107\u0026hl=id\u0026source=gbs_lp_bookshelf_list","id":"my_library","collapsed":true},{"title":"Histori Saya","url":"","id":"my_history","collapsed":true}],"highlighted_node_id":""});</script></div></div></div></div></div><div id="volume-center"><div id="scroll_atb" role="main"><div class=vertical_module_list_row><div id=ge_summary class=about_content><div id=ge_summary_v><div class="hproduct"><table id="summary_content_table" cellspacing=0 cellpadding=0><tr><td id="bookinfo"><h1 class="booktitle"><span class="fn"><span dir=ltr>Dari dalam kubur</span></span>: <span class="subtitle"><span dir=ltr>sebuah novel</span></span></h1><div class="bookcover"><img src="/googlebooks/images/no_cover_thumb.gif" alt="Sampul Depan" title="Sampul Depan" width=128 border=1 id=summary-frontcover ></div><div class="bookinfo_sectionwrap"><div><a href="https://www.google.co.id/search?hl=id&amp;tbo=p&amp;tbm=bks&amp;q=inauthor:%22Soe+Tjen+Marching%22" class="secondary"><span dir=ltr>Soe Tjen Marching</span></a></div><div><span dir=ltr>Marjin Kiri</span>, 2020 - <span dir=ltr>508 halaman</span></div></div><div class="search_box_wrapper"></div></td> </tr></table><div id="summary-second-column"></div></div></div></div></div><div class=vertical_module_list_row><h3 class="about_title">Informasi bibliografi</h3><div class="about_content" id="metadata_content" style="padding-bottom:.3em"><div class="metadata_sectionwrap"><table id="metadata_content_table"><tr class="metadata_row"><td class="metadata_label">Judul</td><td class="metadata_value"><span dir=ltr>Dari dalam kubur: sebuah novel</span></td></tr><tr class="metadata_row"><td class="metadata_label"><span dir=ltr>Pengarang</span></td><td class="metadata_value"><a class="primary" href="https://www.google.co.id/search?hl=id&amp;tbo=p&amp;tbm=bks&amp;q=inauthor:%22Soe+Tjen+Marching%22&amp;source=gbs_metadata_r&amp;cad=1"><span dir=ltr>Soe Tjen Marching</span></a></td></tr><tr class="metadata_row"><td class="metadata_label"><span dir=ltr>Penerbit</span></td><td class="metadata_value"><span dir=ltr>Marjin Kiri, 2020</span></td></tr><tr class="metadata_row"><td class="metadata_label"><span dir=ltr>ISBN</span></td><td class="metadata_value"><span dir=ltr>6020788032, 9786020788036</span></td></tr><tr class="metadata_row"><td class="metadata_label"><span dir=ltr>Tebal</span></td><td class="metadata_value"><span dir=ltr>508 halaman</span></td></tr><tr class="metadata_row"><td>&nbsp</td><td>&nbsp</td></tr><tr class="metadata_row"><td class="metadata_label"><span dir=ltr>Ekspor Kutipan</span></td><td class="metadata_value"><a class="gb-button " href="https://books.google.co.id/books/download/Dari_dalam_kubur.bibtex?id=somRzgEACAAJ&amp;hl=id&amp;output=bibtex"><span dir=ltr>BiBTeX</span></a>&nbsp;<a class="gb-button " href="https://books.google.co.id/books/download/Dari_dalam_kubur.enw?id=somRzgEACAAJ&amp;hl=id&amp;output=enw"><span dir=ltr>EndNote</span></a>&nbsp;<a class="gb-button " href="https://books.google.co.id/books/download/Dari_dalam_kubur.ris?id=somRzgEACAAJ&amp;hl=id&amp;output=ris"><span dir=ltr>RefMan</span></a></td></tr></table></div><div style="clear:both"></div></div></div><script>_OC_addFlags({Host:"https://books.google.co.id/", IsBrowsingHistoryEnabled:1, IsBooksRentalEnabled:1, IsBooksUnifiedLeftNavEnabled:1, IsZipitFolderCollectionEnabled:1});_OC_Run({"is_cobrand":false,"sign_in_url":"https://www.google.com/accounts/Login?service=print\u0026continue=https://books.google.co.id/books%3Fvid%3DISBN9786020788036%26redir_esc%3Dy%26hl%3Did\u0026hl=id"}, {"volume_id":"somRzgEACAAJ","is_ebook":false,"volumeresult":{"has_flowing_text":false,"has_scanned_text":false,"can_download_pdf":false,"can_download_epub":false,"is_pdf_drm_enabled":false,"is_epub_drm_enabled":false},"sample_url":"https://play.google.com/books/reader?id=somRzgEACAAJ\u0026hl=id\u0026source=gbs_atb_hover","is_browsable":false,"is_public_domain":false}, {});</script><div id="footer_table" style="font-size:83%;text-align:center;position:relative;top:20px;height:4.5em;margin-top:2em"><div style="margin-bottom:8px"><a href="/intl/id/googlebooks/about.html"><nobr><nobr>Tentang Google Buku</nobr></nobr></a> - <a href="/intl/id/googlebooks/privacy.html"><nobr><nobr>Kebijakan Privasi</nobr></nobr></a> - <a href="/intl/id/googlebooks/tos.html"><nobr><nobr>Persyaratan&nbsp;&nbsp;Layanan</nobr></nobr></a> - <a href="http://books.google.co.id/support/partner/?hl=id-ID"><nobr><nobr>Informasi untuk Penerbit</nobr></nobr></a> - <a href="http://books.google.co.id/support/answer/180577?hl=id-ID&amp;url=https://books.google.co.id/books?vid=ISBN9786020788036&amp;redir_esc=y&amp;hl=id&amp;v=somRzgEACAAJ&amp;is=atb"><nobr><nobr>Laporkan masalah</nobr></nobr></a> - <a href="http://books.google.co.id/support/topic/4359341?hl=id-ID"><nobr><nobr>Bantuan</nobr></nobr></a> - <a href="https://www.google.co.id/search?hl=id"><nobr><nobr>Beranda&nbsp;Google</nobr></nobr></a></div></div></div></div></div><script>(function() {var href = window.location.href;if (href.indexOf('?') !== -1) {var parameters = href.split('?')[1].split('&');for (var i = 0; i < parameters.length; i++) {var param = parameters[i].split('=');if (param[0] == 'focus') {var elem = document.getElementById(param[1]);if (elem) {elem.focus();}}}}})();</script>

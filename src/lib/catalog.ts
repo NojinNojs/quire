@@ -1,3 +1,4 @@
+import { lookupCatalogueHtml } from "./catalogueHtml";
 import { isbnTo13 } from "./isbn";
 
 export type Candidate = {
@@ -9,12 +10,12 @@ export type Candidate = {
   isbn: string | null;
   language: string | null;
   coverUrl: string | null;
-  source: "Google Books" | "Open Library" | "Manual";
+  source: "Google Books" | "Google Books (metadata only)" | "Open Library" | "Manual";
 };
 export type Fetcher = (
   url: string,
   options?: { signal: AbortSignal },
-) => Promise<{ ok: boolean; status?: number; json(): Promise<unknown> }>;
+) => Promise<{ ok: boolean; status?: number; json(): Promise<unknown>; text?(): Promise<string> }>;
 type RecordData = Record<string, unknown>;
 const object = (value: unknown): RecordData =>
   value && typeof value === "object" ? (value as RecordData) : {};
@@ -111,7 +112,11 @@ export function rankCandidates(candidates: Candidate[]): Candidate[] {
     return true;
   });
 }
-export type CatalogProvider = "Google Books" | "Open Library" | "Open Library ISBN";
+export type CatalogProvider =
+  | "Google Books"
+  | "Open Library"
+  | "Open Library ISBN"
+  | "Google Books HTML";
 export type CatalogFailure = {
   provider: CatalogProvider;
   kind: "rate-limited" | "timeout" | "offline" | "unknown";
@@ -145,7 +150,7 @@ function failureMessage({ provider, kind }: CatalogFailure): string {
 
 async function runProvider(
   fetcher: Fetcher,
-  load: (read: (url: string) => Promise<unknown>) => Promise<Candidate[]>,
+  load: (read: (url: string, format?: "text") => Promise<unknown>) => Promise<Candidate[]>,
 ): Promise<Candidate[]> {
   const controller = new AbortController();
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -155,13 +160,13 @@ async function runProvider(
       controller.abort();
     }, 8000);
   });
-  async function read(url: string): Promise<unknown> {
+  async function read(url: string, format?: "text"): Promise<unknown> {
     for (let attempt = 0; ; attempt++) {
       if (controller.signal.aborted) throw new RequestFailure("timeout");
       let response: Awaited<ReturnType<Fetcher>>;
       try {
         response = await fetcher(url, { signal: controller.signal });
-        if (response.ok) return await response.json();
+        if (response.ok) return format === "text" ? await response.text?.() : await response.json();
       } catch (reason) {
         if (controller.signal.aborted) throw new RequestFailure("timeout");
         if (!(reason instanceof TypeError)) throw reason;
@@ -189,16 +194,34 @@ export function createCatalogSearch() {
     if (!key) return { candidates: [], errors: [], failures: [] };
     const q = encodeURIComponent(key);
     const failures: CatalogFailure[] = [];
-    const sources: CatalogProvider[] = ["Google Books", "Open Library"];
-    const requests = [
-      runProvider(fetcher, async (read) =>
-        normaliseGoogleBooks(
-          await read(`https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=10`),
-        ),
-      ),
-      runProvider(fetcher, async (read) => {
+    const queryIsbn = isbnTo13(key);
+    const attempts: [CatalogProvider, Parameters<typeof runProvider>[1]][] = [
+      [
+        "Google Books",
+        async (read) =>
+          normaliseGoogleBooks(
+            await read(
+              `https://www.googleapis.com/books/v1/volumes?q=${queryIsbn ? `isbn:${queryIsbn}` : q}&maxResults=10`,
+            ),
+          ),
+      ],
+    ];
+    if (queryIsbn)
+      attempts.push([
+        "Open Library ISBN",
+        async (read) => {
+          const candidate = normaliseOpenLibrary(
+            await read(`https://openlibrary.org/isbn/${queryIsbn}.json`),
+            null,
+          );
+          return candidate ? [{ ...candidate, isbn: candidate.isbn ?? queryIsbn }] : [];
+        },
+      ]);
+    attempts.push([
+      "Open Library",
+      async (read) => {
         const data = await read(
-          `https://openlibrary.org/search.json?q=${q}&limit=5&fields=title,author_name,editions,editions.key,cover_edition_key,edition_key`,
+          `https://openlibrary.org/search.json?q=${queryIsbn ? `isbn:${queryIsbn}` : q}&limit=5&fields=title,author_name,editions,editions.key,cover_edition_key,edition_key`,
         );
         const editions = await Promise.allSettled(
           array(object(data).docs).map(async (doc) => {
@@ -219,52 +242,67 @@ export function createCatalogSearch() {
         return editions.flatMap((result) =>
           result.status === "fulfilled" && result.value ? [result.value] : [],
         );
-      }),
-    ];
-    const queryIsbn = isbnTo13(key);
-    if (queryIsbn) {
-      sources.push("Open Library ISBN");
-      requests.push(
-        runProvider(fetcher, async (read) => {
-          const candidate = normaliseOpenLibrary(
-            await read(`https://openlibrary.org/isbn/${queryIsbn}.json`),
-            null,
+      },
+    ]);
+    if (queryIsbn)
+      attempts.push([
+        "Google Books HTML",
+        async (read) => {
+          const metadata = await lookupCatalogueHtml(queryIsbn, async (url) =>
+            String((await read(url, "text")) ?? ""),
           );
-          return candidate ? [{ ...candidate, isbn: candidate.isbn ?? queryIsbn }] : [];
-        }),
-      );
-    }
-    const results = await Promise.allSettled(requests);
-    for (const [index, result] of results.entries()) {
-      if (result.status === "rejected") {
-        const provider = sources[index];
-        if (provider) failures.push(failure(provider, result.reason));
+          return metadata
+            ? [
+                {
+                  ...metadata,
+                  isbn: queryIsbn,
+                  publisher: null,
+                  year: null,
+                  pages: null,
+                  language: null,
+                  coverUrl: null,
+                  source: "Google Books (metadata only)",
+                },
+              ]
+            : [];
+        },
+      ]);
+    for (const [provider, load] of attempts) {
+      try {
+        const candidates = rankCandidates(await runProvider(fetcher, load));
+        if (candidates.length) {
+          cache.set(key, structuredClone(candidates));
+          return { candidates, errors: [], failures };
+        }
+      } catch (reason) {
+        failures.push(failure(provider, reason));
       }
     }
-    const uniqueFailures = failures.filter(
-      (item, index) =>
-        failures.findIndex(
-          (other) => other.provider === item.provider && other.kind === item.kind,
-        ) === index,
-    );
-    const candidates = rankCandidates(
-      results.flatMap((result) => (result.status === "fulfilled" ? result.value : [])),
-    );
-    const errors = uniqueFailures.map(failureMessage);
-    if (candidates.length) cache.set(key, structuredClone(candidates));
     const cached = cache.get(key);
-    if (!candidates.length && uniqueFailures.length && cached) {
-      errors.push(
-        "Showing saved results from the last successful search. Catalogue data may be out of date.",
-      );
+    if (cached)
       return {
         candidates: structuredClone(cached),
-        errors,
-        failures: uniqueFailures,
+        errors: [
+          "Showing saved results from the last successful search. Catalogue data may be out of date.",
+        ],
+        failures,
         fromCache: true,
       };
-    }
-    return { candidates, errors, failures: uniqueFailures };
+    const limited = failures.find(
+      (item) => item.provider === "Google Books" && item.kind === "rate-limited",
+    );
+    const tried = queryIsbn
+      ? "Tried Google Books API, Open Library ISBN, Open Library search, and Google Books HTML."
+      : "Tried Google Books API and Open Library search.";
+    return {
+      candidates: [],
+      errors: [
+        limited
+          ? `${failureMessage(limited)} ${tried}`
+          : `No catalogue matches could be loaded. ${tried}`,
+      ],
+      failures,
+    };
   };
 }
 

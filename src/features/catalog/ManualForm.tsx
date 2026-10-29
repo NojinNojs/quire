@@ -24,23 +24,25 @@ const labels = {
 };
 
 export function ManualForm({
+  manualDraft = {},
   save,
   saving,
   setMessage,
 }: {
+  manualDraft?: Partial<Candidate>;
   save: (candidate: Candidate) => Promise<boolean>;
   saving: string | null;
   setMessage: (message: string) => void;
 }) {
   const [manual, setManual] = useState<Record<(typeof fields)[number], string>>({
-    title: "",
-    author: "",
-    publisher: "",
-    year: "",
-    pages: "",
-    isbn: "",
-    language: "",
-    coverUrl: "",
+    title: manualDraft.title ?? "",
+    author: manualDraft.author ?? "",
+    publisher: manualDraft.publisher ?? "",
+    year: manualDraft.year?.toString() ?? "",
+    pages: manualDraft.pages?.toString() ?? "",
+    isbn: manualDraft.isbn ?? "",
+    language: manualDraft.language ?? "",
+    coverUrl: manualDraft.coverUrl ?? "",
   });
   async function saveManual(event: React.FormEvent) {
     event.preventDefault();
