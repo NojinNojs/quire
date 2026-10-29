@@ -1,0 +1,50 @@
+[
+  {
+    "theme": "municipal-dark",
+    "ink/surface": 15.51,
+    "ink-muted/surface": 8.26,
+    "ink/surface-raised": 13.95,
+    "ink-muted/surface-raised": 7.43,
+    "on-accent/accent": 4.68
+  },
+  {
+    "theme": "municipal-light",
+    "ink/surface": 14.59,
+    "ink-muted/surface": 7.31,
+    "ink/surface-raised": 15.69,
+    "ink-muted/surface-raised": 7.86,
+    "on-accent/accent": 6.49
+  },
+  {
+    "theme": "oxford-dark",
+    "ink/surface": 16.45,
+    "ink-muted/surface": 8.24,
+    "ink/surface-raised": 15.12,
+    "ink-muted/surface-raised": 7.58,
+    "on-accent/accent": 7.37
+  },
+  {
+    "theme": "oxford-light",
+    "ink/surface": 16.65,
+    "ink-muted/surface": 6.39,
+    "ink/surface-raised": 17.89,
+    "ink-muted/surface-raised": 6.86,
+    "on-accent/accent": 10.69
+  },
+  {
+    "theme": "shelf-dark",
+    "ink/surface": 16.69,
+    "ink-muted/surface": 7.84,
+    "ink/surface-raised": 15.36,
+    "ink-muted/surface-raised": 7.21,
+    "on-accent/accent": 4.83
+  },
+  {
+    "theme": "shelf-light",
+    "ink/surface": 16.86,
+    "ink-muted/surface": 7.13,
+    "ink/surface-raised": 18.09,
+    "ink-muted/surface-raised": 7.65,
+    "on-accent/accent": 7.92
+  }
+]
