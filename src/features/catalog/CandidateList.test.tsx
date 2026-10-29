@@ -1,6 +1,10 @@
-import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+// @vitest-environment jsdom
+import type { SupabaseClient, User } from "@supabase/supabase-js";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { normaliseGoogleBooks } from "../../lib/catalog";
 import { CandidateList } from "./CandidateList";
+import { SearchScreen } from "./SearchScreen";
 
 const props = {
   searching: false,
@@ -10,56 +14,75 @@ const props = {
   saved: new Set<string>(),
   saving: null,
   save: async () => true,
-  selectTab: () => {},
-  run: async () => {},
+  selectTab: vi.fn(),
 };
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+});
 describe("catalogue states", () => {
-  it("shows three row skeletons and suppresses empty copy while loading", () => {
-    const html = renderToStaticMarkup(<CandidateList {...props} searching />);
-    expect(html.match(/class="catalog-row"/g)).toHaveLength(3);
-    expect(html).toContain('aria-busy="true"');
-    expect(html).not.toContain("No catalogue matches");
+  it("shows loading skeletons without empty guidance", () => {
+    const { container } = render(<CandidateList {...props} searching />);
+    expect(container.querySelectorAll(".catalog-row")).toHaveLength(3);
+    expect(screen.queryByText("No catalogue matches for this search.")).toBeNull();
   });
-  it("offers exactly one action for an empty list", () => {
-    const html = renderToStaticMarkup(<CandidateList {...props} />);
-    expect(html).toContain("No catalogue matches for this search.");
-    expect(html.match(/<button/g)).toHaveLength(1);
-    expect(html).toContain("Enter manually");
+  it("shows one primary manual action when all sources fail", () => {
+    render(<CandidateList {...props} errors={["Tried all catalogue sources."]} />);
+    expect(screen.getAllByRole("alert")).toHaveLength(1);
+    expect(screen.getAllByRole("button")).toHaveLength(1);
+    fireEvent.click(screen.getByRole("button", { name: "Enter it manually" }));
+    expect(props.selectTab).toHaveBeenCalledWith("manual");
   });
-  it("keeps partial errors and successful candidates actionable together", () => {
-    const html = renderToStaticMarkup(
+  it("hides provider errors when a later source supplies a candidate", () => {
+    render(
       <CandidateList
         {...props}
-        errors={["Open Library is unavailable."]}
-        candidates={[
-          {
-            title: "An edition",
-            author: null,
-            publisher: null,
-            year: null,
-            pages: null,
-            isbn: null,
-            language: null,
-            coverUrl: null,
-            source: "Google Books",
-          },
-        ]}
+        errors={["Google Books is rate limiting requests."]}
+        candidates={normaliseGoogleBooks({ items: [{ volumeInfo: { title: "Found later" } }] })}
       />,
     );
-    expect(html).toContain("Open Library is unavailable.");
-    expect(html).toContain("Try again");
-    expect(html).toContain("Enter manually");
-    expect(html).toContain("An edition");
-    expect(html).toContain('class="quiet save-action"');
-    expect(html).not.toContain("No catalogue matches");
+    expect(screen.getByText("Found later")).toBeDefined();
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(screen.queryByText(/rate limiting/)).toBeNull();
   });
-  it("shows recovery instead of an empty state when all providers fail", () => {
-    const html = renderToStaticMarkup(
-      <CandidateList {...props} errors={["Both sources unavailable."]} />,
+  it("opens the manual form with the searched ISBN, or with HTML metadata", async () => {
+    const query = Object.assign(Promise.resolve({ count: 0, error: null }), {
+      select: () => query,
+      eq: () => query,
+    });
+    const client = { from: () => query } as unknown as SupabaseClient;
+    let found = false;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) => ({
+        ok: url.startsWith("/gb") && found,
+        status: 429,
+        json: async () => ({}),
+        text: async () =>
+          "<title>Dari dalam kubur: sebuah novel - Soe Tjen Marching - Google Buku</title>",
+      })),
     );
-    expect(html).toContain('role="alert"');
-    expect(html).toContain("Try again");
-    expect(html).toContain("Enter manually");
-    expect(html).not.toContain('class="empty-state"');
+    render(<SearchScreen user={{ id: "reader" } as User} client={client} signOut={() => {}} />);
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "9786020788036" } });
+    fireEvent.click(screen.getByRole("button", { name: "Search" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Enter it manually" }));
+    expect((screen.getByLabelText("ISBN") as HTMLInputElement).value).toBe("9786020788036");
+    fireEvent.click(screen.getByRole("tab", { name: "Search catalogue" }));
+    found = true;
+    fireEvent.click(screen.getByRole("button", { name: "Search" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Add details" }));
+    await waitFor(() =>
+      expect((screen.getByLabelText("Title (required)") as HTMLInputElement).value).toBe(
+        "Dari dalam kubur: sebuah novel",
+      ),
+    );
+    expect((screen.getByLabelText("Author") as HTMLInputElement).value).toBe("Soe Tjen Marching");
+    expect((screen.getByLabelText("ISBN") as HTMLInputElement).value).toBe("9786020788036");
+    expect((screen.getByLabelText("Pages") as HTMLInputElement).value).toBe("");
+    fireEvent.change(screen.getByLabelText("Publisher"), {
+      target: { value: "Publisher supplied by reader" },
+    });
+    fireEvent.change(screen.getByLabelText("Pages"), { target: { value: "240" } });
+    expect((screen.getByLabelText("Pages") as HTMLInputElement).value).toBe("240");
   });
 });

@@ -1,0 +1,225 @@
+
+> quire@0.1.0 gate
+> bash scripts/gate.sh
+
+== biome
+src/styles/auth.css:258:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 2, 0)
+  
+    256 │ }
+    257 │ 
+  > 258 │ .borrower-card .auth-reveal,
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    259 │ .borrower-card .auth-forgot {
+    260 │   min-height: 0;
+  
+  i This selector specificity is (0, 3, 0)
+  
+    246 │ }
+    247 │ 
+  > 248 │ .borrower-card .auth-field .auth-reveal {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    249 │   position: absolute;
+    250 │   right: 0;
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+src/styles/auth.css:344:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 2, 0)
+  
+    343 │ /* the reveal control is a label, not a link, so it must not draw a second rule */
+  > 344 │ .borrower-card .auth-reveal {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    345 │   text-decoration: none;
+    346 │   border-bottom: 0;
+  
+  i This selector specificity is (0, 3, 0)
+  
+    246 │ }
+    247 │ 
+  > 248 │ .borrower-card .auth-field .auth-reveal {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    249 │   position: absolute;
+    250 │   right: 0;
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+src/styles/auth.css:368:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 2, 1)
+  
+    366 │ }
+    367 │ 
+  > 368 │ .borrower-card .auth-strength-track span {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    369 │   background: repeating-linear-gradient(to right, var(--ink) 0 6px, transparent 6px 9px);
+    370 │ }
+  
+  i This selector specificity is (0, 3, 1)
+  
+    174 │ }
+    175 │ 
+  > 176 │ .borrower-card [data-strength="Fair"] .auth-strength-track > span {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    177 │   width: 66.667%;
+    178 │ }
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+src/styles/reading.css:295:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 1, 0)
+  
+    294 │ /* a file input is a browser control until you dress it */
+  > 295 │ .cover-controls {
+        │ ^^^^^^^^^^^^^^^
+    296 │   position: relative;
+    297 │   display: flex;
+  
+  i This selector specificity is (0, 2, 0)
+  
+    193 │   grid-row: 1;
+    194 │ }
+  > 195 │ .reading-jacket .cover-controls {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    196 │   grid-column: 1 / -1;
+    197 │   grid-row: 2;
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+src/styles/reading.css:412:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 1, 0)
+  
+    410 │ }
+    411 │ 
+  > 412 │ .cover-controls {
+        │ ^^^^^^^^^^^^^^^
+    413 │   width: 100%;
+    414 │ }
+  
+  i This selector specificity is (0, 2, 0)
+  
+    193 │   grid-row: 1;
+    194 │ }
+  > 195 │ .reading-jacket .cover-controls {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    196 │   grid-column: 1 / -1;
+    197 │   grid-row: 2;
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+src/styles/shelf.css:288:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 2, 0)
+  
+    286 │ }
+    287 │ 
+  > 288 │ .shelf-list .shelf-copy {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^
+    289 │   grid-column: 2;
+    290 │   grid-row: 1;
+  
+  i This selector specificity is (0, 4, 0)
+  
+    255 │ .shelf-grid .shelf-pages,
+    256 │ .shelf-grid .shelf-status,
+  > 257 │ .shelf-grid .shelf-row:has(.cover-jacket) .shelf-copy {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    258 │   display: none;
+    259 │ }
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+src/styles/shelf.css:293:1 lint/style/noDescendingSpecificity ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 2, 0)
+  
+    291 │ }
+    292 │ 
+  > 293 │ .shelf-list .shelf-line {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^
+    294 │   grid-column: 1 / -1;
+    295 │   grid-row: 2;
+  
+  i This selector specificity is (0, 4, 0)
+  
+    220 │ }
+    221 │ 
+  > 222 │ .shelf-grid .shelf-row:nth-child(2n + 1) .shelf-line {
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    223 │   display: block;
+    224 │ }
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+Checked 130 files in 34ms. No fixes applied.
+Found 7 warnings.
+== typecheck
+== tests
+
+> quire@0.1.0 test
+> vitest run src --passWithNoTests
+
+
+ RUN  v5.0.5 /home/nojin/works/quire/.worktrees/resilience
+
+
+ Test Files  22 passed (22)
+      Tests  186 passed (186)
+   Start at  16:24:29
+   Duration  1.86s (environment 44%, import 30%, tests 21%, transform 5%, worker 1%)
+
+== build
+== database smoke (skipped when supabase is down)
+ok   insert a book
+ok   row level security hides another shelf
+ok   duplicate ISBN refused
+ok   only one active book allowed
+ok   streak 2026-10-26
+ok   streak 2026-10-26
+ok   streak 2026-10-27
+ok   streak 2026-10-29
+ok   streak 2026-10-31
+ok   streak 2026-11-02
+ok   two logs on one day add up
+
+all database checks passed
+== docs present
+== end to end smoke (skipped when supabase or system Chromium is unavailable)
+
+> quire@0.1.0 test:e2e
+> playwright test
+
+[WebServer] (node:119074) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 13 tests using 1 worker
+
+(node:119114) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/auth.spec.ts:3:1 › sign up, open the catalogue, and sign out (1.4s)
+  ✓   2 tests/e2e/auth.spec.ts:13:3 › borrower's card faces at 390 in shelf-light (773ms)
+  ✓   3 tests/e2e/auth.spec.ts:13:3 › borrower's card faces at 390 in municipal-dark (773ms)
+  ✓   4 tests/e2e/auth.spec.ts:37:1 › inline auth errors, issuing state, and reduced motion (566ms)
+  ✓   5 tests/e2e/auth.spec.ts:58:1 › card text contrast exceeds 7:1 in all six modes (369ms)
+  ✓   6 tests/e2e/catalog.spec.ts:3:1 › search, save a candidate, and refuse a persisted duplicate (5.2s)
+  ✓   7 tests/e2e/catalog.spec.ts:60:1 › empty query shows guidance and prevents provider searches (1.3s)
+  ✓   8 tests/e2e/catalogue-resilience.spec.ts:63:1 › HTML metadata survives earlier failures and manual recovery preserves the ISBN (2.4s)
+  ✓   9 tests/e2e/responsive-shell.spec.ts:107:1 › phone, compact rail, wide rail and Today panes in every theme (3.1s)
+  ✓  10 tests/e2e/responsive-shell.spec.ts:164:1 › skip link focuses the main region without changing the route; Tab reaches the rail (1.7s)
+  ✓  11 tests/e2e/responsive-shell.spec.ts:211:1 › long titles reflow across routes and the header and rail stay docked (1.8s)
+  ✓  12 tests/e2e/responsive-shell.spec.ts:249:1 › rail resizing is immediate and reduced motion removes shell transitions (1.5s)
+  ✓  13 tests/e2e/settings.spec.ts:3:1 › theme chosen in settings is applied and survives a reload (1.4s)
+
+  13 passed (23.4s)
+gate ok

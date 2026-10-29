@@ -1,0 +1,48 @@
+# Antislop delivery gate
+
+Scope: catalogue fallback, candidate completion and manual recovery. Existing paper editorial design, ENERGY 1 / RHYTHM 1 / MOTION 1. Evidence is in this directory and `tests/e2e/catalogue-resilience.spec.ts`.
+
+- R-01 PASS: no gradients or glows added; the existing paper surfaces remain.
+- R-02 PASS: no em dash added to interface copy; the changed TSX files were checked.
+- R-03 PASS: candidate, manual and error states have no horizontal overflow at 320, 390, 768 and 1280px.
+- R-04 PASS: no icons added; the fallback uses text and existing controls.
+- R-05 PASS: ruled book rows and the existing form remain; no template sections added.
+- R-06 PASS: existing serif titles and tabular metadata typography remain; no typefaces or tracking rules added.
+- R-07 PASS: no background patterns added.
+- R-08 PASS: no decorative arrows added.
+- R-09 PASS: source attribution is plain text identifying the actual metadata source; no badge added.
+- R-10 PASS: no glass surfaces added.
+- R-11 PASS: existing radius tokens remain 0, 2 and 3px.
+- R-12 PASS: no shadows added.
+- R-13 PASS: no glow effects added.
+- R-14 PASS: no feature cards added; each candidate is an edition row.
+- R-15 PASS: Add details and Enter it manually name the next action; both are exercised in browser tests.
+- R-16 PASS: interface copy describes providers, missing metadata and recovery without marketing claims.
+- R-17 PASS: no statistics added to the product interface.
+- R-18 PASS: no testimonials or fictional people added.
+- R-19 PASS: no animation added; existing control transitions retain MOTION 1.
+- R-20 PASS: incumbent serif book titles, ruled rows and paper tokens remain visible in html-candidate.png.
+- R-21 PASS: all six existing themes remain available; browser-checks.json covers each.
+- R-22 PASS: no illustrations added.
+- R-23 PASS: no visual assets or navigation structure added.
+- R-24 PASS: no navigation links added or changed.
+- R-25 PASS: rendered catalogue text contrast is at least 13.95:1 across all six themes; see browser-checks.json.
+- R-26 PASS: browser tests open Add details, edit publisher and pages, and activate manual recovery with Enter.
+- R-27 PASS: component tests verify loading skeletons; empty guidance remains; browser tests verify the final error panel.
+- R-28 PASS: no FAQ added.
+- R-29 PASS: only existing ink and surface tokens are used; no colors added.
+- R-30 PASS: the existing Quire interface is preserved, with no replacement visual system.
+- R-31 PASS: README.md records reasons for row hierarchy, grouped recovery, ink contrast, spacing and retained typography.
+- R-32 PASS: manual recovery is keyboard activated in the browser test; existing ink focus outlines remain.
+- R-33 PASS: behavior and styles are implemented in the committed TS, TSX and CSS source files; no runtime patch added.
+- R-34 PASS: candidate, manual and error states pass contrast checks in every existing theme.
+- R-35 PASS: npm run gate builds and tests the app, including live database smoke checks and all 13 browser tests.
+- R-36 PASS: no security, compliance, performance or customer claims added.
+- R-37 PASS: narrow refinement uses docs/DESIGN_SYSTEM.md and the existing rendered design; dials are declared above.
+- R-38 PASS: title and author come from the recorded Google HTML lookup; raw curl responses are retained.
+- Liveliness PASS: the existing book title is the result focal point, rules and whitespace separate edition details, and the active navigation accent and paper editorial typography remain. Both screenshots show the retained composition.
+- C-1 PASS: every new visual decision has a task-specific reason in README.md.
+- C-2 PASS: the added actions open editable forms with tested prefills.
+- C-3 PASS: one candidate row and one failure panel serve the lookup task; no filler sections added.
+- C-4 PASS: all three new states pass theme contrast and viewport checks; keyboard recovery preserves the ISBN.
+- C-5 PASS: no new testimonial, statistic or product claim appears in the interface.

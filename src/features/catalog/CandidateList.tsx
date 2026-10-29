@@ -1,9 +1,8 @@
 import type { Candidate } from "../../lib/catalog";
-import { ErrorPanel } from "../states/ErrorPanel";
 import { SkeletonRows } from "../states/SkeletonRows";
 import { CandidateRow } from "./CandidateRow";
 export function CandidateList({
-  run,
+  cacheNotice,
   searching,
   searched,
   errors,
@@ -12,8 +11,9 @@ export function CandidateList({
   saving,
   save,
   selectTab,
+  editCandidate,
 }: {
-  run: () => Promise<void>;
+  cacheNotice?: string;
   searching: boolean;
   searched: boolean;
   errors: string[];
@@ -21,19 +21,21 @@ export function CandidateList({
   saved: Set<string>;
   saving: string | null;
   save: (candidate: Candidate) => Promise<boolean>;
+  editCandidate?: (candidate: Candidate) => void;
   selectTab: (tab: "search" | "manual") => void;
 }) {
   return (
     <div aria-live="polite" aria-busy={searching}>
       {searching ? <SkeletonRows label="Searching Google Books and Open Library" /> : null}
-      {errors.length ? (
-        <ErrorPanel
-          messages={errors}
-          retry={() => {
-            void run();
-          }}
-          onManual={() => selectTab("manual")}
-        />
+      {!searching && errors.length && !candidates.length ? (
+        <div className="error-panel" role="alert">
+          {errors.map((error) => (
+            <p key={error}>{error}</p>
+          ))}
+          <button className="primary" type="button" onClick={() => selectTab("manual")}>
+            Enter it manually
+          </button>
+        </div>
       ) : null}
       {!searching && errors.length === 0 && candidates.length === 0 ? (
         <div className="empty-state">
@@ -49,6 +51,7 @@ export function CandidateList({
       ) : null}
       {candidates.length ? (
         <>
+          {cacheNotice ? <p role="status">{cacheNotice}</p> : null}
           <h2 className="results-heading">Catalogue candidates</h2>
           <p className="muted">Check the edition before saving.</p>
           <ul className="catalog-results">
@@ -59,6 +62,7 @@ export function CandidateList({
                 saved={saved}
                 saving={saving}
                 save={save}
+                editCandidate={editCandidate}
               />
             ))}
           </ul>

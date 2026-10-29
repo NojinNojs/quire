@@ -1,0 +1,92 @@
+[
+  {
+    "state": "HTML candidate",
+    "theme": "shelf-light",
+    "minimumTextContrast": 16.861053294815896
+  },
+  {
+    "state": "HTML candidate",
+    "theme": "shelf-dark",
+    "minimumTextContrast": 15.35831660372904
+  },
+  {
+    "state": "HTML candidate",
+    "theme": "municipal-light",
+    "minimumTextContrast": 14.593157967973712
+  },
+  {
+    "state": "HTML candidate",
+    "theme": "municipal-dark",
+    "minimumTextContrast": 13.953147398009772
+  },
+  {
+    "state": "HTML candidate",
+    "theme": "oxford-light",
+    "minimumTextContrast": 16.651625007532783
+  },
+  {
+    "state": "HTML candidate",
+    "theme": "oxford-dark",
+    "minimumTextContrast": 15.120217830198525
+  },
+  {
+    "state": "Manual details",
+    "theme": "shelf-light",
+    "minimumTextContrast": 16.861053294815896
+  },
+  {
+    "state": "Manual details",
+    "theme": "shelf-dark",
+    "minimumTextContrast": 15.35831660372904
+  },
+  {
+    "state": "Manual details",
+    "theme": "municipal-light",
+    "minimumTextContrast": 14.593157967973712
+  },
+  {
+    "state": "Manual details",
+    "theme": "municipal-dark",
+    "minimumTextContrast": 13.953147398009772
+  },
+  {
+    "state": "Manual details",
+    "theme": "oxford-light",
+    "minimumTextContrast": 16.651625007532783
+  },
+  {
+    "state": "Manual details",
+    "theme": "oxford-dark",
+    "minimumTextContrast": 15.120217830198525
+  },
+  {
+    "state": "Single error",
+    "theme": "shelf-light",
+    "minimumTextContrast": 16.861053294815896
+  },
+  {
+    "state": "Single error",
+    "theme": "shelf-dark",
+    "minimumTextContrast": 15.35831660372904
+  },
+  {
+    "state": "Single error",
+    "theme": "municipal-light",
+    "minimumTextContrast": 14.593157967973712
+  },
+  {
+    "state": "Single error",
+    "theme": "municipal-dark",
+    "minimumTextContrast": 13.953147398009772
+  },
+  {
+    "state": "Single error",
+    "theme": "oxford-light",
+    "minimumTextContrast": 16.651625007532783
+  },
+  {
+    "state": "Single error",
+    "theme": "oxford-dark",
+    "minimumTextContrast": 15.120217830198525
+  }
+]
