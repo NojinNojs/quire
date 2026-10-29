@@ -1,0 +1,9 @@
+{
+  "title": "This Earth of Mankind",
+  "publishers": ["Penguin"],
+  "publish_date": "1996",
+  "number_of_pages": 368,
+  "isbn_13": ["9780140256352"],
+  "languages": [{ "key": "/languages/eng" }],
+  "covers": [12345]
+}

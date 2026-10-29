@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "volumeInfo": {
+        "title": "This Earth of Mankind",
+        "authors": ["Pramoedya Ananta Toer"],
+        "publisher": "Penguin",
+        "publishedDate": "1996-05-01",
+        "pageCount": 368,
+        "industryIdentifiers": [{ "type": "ISBN_10", "identifier": "0140256350" }],
+        "language": "en",
+        "imageLinks": { "thumbnail": "http://books.google.com/cover.jpg" }
+      }
+    }
+  ]
+}
