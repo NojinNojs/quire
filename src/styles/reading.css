@@ -38,9 +38,9 @@
   gap: var(--space-16);
 }
 .reading-cover {
-  flex: 0 0 calc(var(--touch) * 2 - var(--space-4));
-  width: calc(var(--touch) * 2 - var(--space-4));
-  height: calc(var(--touch) * 3 - var(--space-12) / 2);
+  flex: 0 0 var(--today-jacket-width);
+  width: var(--today-jacket-width);
+  height: var(--today-jacket-height);
   display: grid;
   place-items: center;
   background: var(--surface-raised);
@@ -196,15 +196,11 @@
   grid-row: 2;
 }
 .reading-jacket .bookmark {
-  inset: 0 auto auto calc(var(--touch) * 2 - var(--space-4));
-  height: calc(var(--touch) * 3 - var(--space-12) / 2);
+  inset: 0 auto auto var(--today-jacket-width);
+  height: var(--today-jacket-height);
 }
 .reading-jacket .bookmark-track {
   width: var(--bookmark-today-width);
-}
-.reading-jacket .cover-jacket {
-  background: var(--book-class);
-  color: var(--surface);
 }
 .reading-book-copy {
   grid-column: 2;

@@ -71,7 +71,14 @@ export function ActiveBookCard({
       }
     >
       <div className="reading-jacket">
-        <TodayCover key={book.id} bookId={book.id} title={book.title} coverUrl={book.coverUrl} />
+        <TodayCover
+          key={book.id}
+          bookId={book.id}
+          title={book.title}
+          author={book.author}
+          ddc={book.ddc ?? (classification?.id === book.id ? classification.ddc : null)}
+          coverUrl={book.coverUrl}
+        />
         <Bookmark current={current} total={book.total} />
       </div>
       <div className="reading-book-copy">

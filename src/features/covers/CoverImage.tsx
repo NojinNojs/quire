@@ -8,12 +8,16 @@ export function CoverImage({
   coverPath,
   coverUrl,
   title,
+  author,
+  ddc,
   className = "",
   client = supabase,
 }: {
   coverPath?: string | null;
   coverUrl?: string | null;
   title: string;
+  author?: string | null;
+  ddc?: string | null;
   className?: string;
   client?: CoversClient | null;
 }) {
@@ -53,8 +57,14 @@ export function CoverImage({
         />
       ) : (
         <span className="cover-jacket" role="img" aria-label={`${title}, no cover image`}>
-          <span className="cover-jacket-title">{title}</span>
-          <span className="cover-jacket-rule" />
+          <span className="cover-jacket-heading">
+            <span className="cover-jacket-title">{title}</span>
+            <span className="cover-jacket-author">{author?.trim() || "Author unknown"}</span>
+          </span>
+          <span className="cover-jacket-class">
+            {ddc?.trim() || "Unclassified"}
+            <span className="cover-jacket-rule" />
+          </span>
         </span>
       )}
     </div>

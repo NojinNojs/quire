@@ -201,3 +201,31 @@ it("refreshes a mounted signed image before its one-hour lifetime ends", async (
   });
   expect(f.createSignedUrl).toHaveBeenCalledTimes(2);
 });
+
+it("keeps an uploaded cover ahead of an enriched URL", async () => {
+  const f = fake();
+  render(
+    <CoverImage
+      client={f.client}
+      coverPath={path}
+      coverUrl="https://covers.test/enriched.jpg"
+      title="Book"
+    />,
+  );
+  await waitFor(() =>
+    expect(screen.getByRole("img").getAttribute("src")).toContain("storage.test"),
+  );
+  expect(f.query.update).not.toHaveBeenCalled();
+  expect(f.upload).not.toHaveBeenCalled();
+});
+it("preserves long jacket text and an honest unknown author for visual clamping", () => {
+  const title =
+    "A very long title about the history of Indonesian literature and its many printed editions";
+  const { container } = render(
+    <CoverImage client={null} title={title} author={null} ddc="899.2213" />,
+  );
+  expect(container.querySelector(".cover-jacket-title")?.textContent).toBe(title);
+  expect(container.querySelector(".cover-jacket-author")?.textContent).toBe("Author unknown");
+  expect(container.querySelector(".cover-jacket-class")?.textContent).toBe("899.2213");
+  expect(container.querySelector("img")).toBeNull();
+});

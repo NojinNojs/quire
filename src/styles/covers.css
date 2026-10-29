@@ -1,4 +1,5 @@
 .cover-image {
+  container-type: inline-size;
   aspect-ratio: 2 / 3;
   padding: 0;
   overflow: hidden;
@@ -13,34 +14,97 @@
   height: 100%;
   object-fit: cover;
 }
+/* Cloth and ink stay paired across themes, like a printed edition. */
+.cover-cloth-oxblood {
+  --cover-cloth: var(--jacket-oxblood);
+}
+.cover-cloth-olive {
+  --cover-cloth: var(--jacket-olive);
+}
+.cover-cloth-indigo {
+  --cover-cloth: var(--jacket-indigo);
+}
+.cover-cloth-ochre {
+  --cover-cloth: var(--jacket-ochre);
+}
+.cover-cloth-teal {
+  --cover-cloth: var(--jacket-teal);
+}
+
 .cover-jacket {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
   height: 100%;
-  padding: var(--space-4);
-  background: var(--cover-cloth, var(--surface-raised));
-  color: var(--cover-ink, var(--ink));
-  font: var(--label-size) / var(--label-leading) var(--font-sans);
+  padding: var(--jacket-top) var(--jacket-inset) var(--space-8);
+  --jacket-spine: color-mix(
+    in srgb,
+    var(--cover-cloth) var(--jacket-spine-cloth),
+    var(--jacket-spine-shade)
+  );
+  border-left: var(--rule-width) solid var(--jacket-spine);
+  background: var(--cover-cloth);
+  color: var(--jacket-ink);
   text-align: center;
+  font-style: normal;
 }
-.cover-cloth-oxblood {
-  --cover-cloth: var(--accent);
-  --cover-ink: var(--on-accent);
-}
-.cover-cloth-olive {
-  --cover-cloth: var(--ink-muted);
-  --cover-ink: var(--surface);
-}
-.cover-cloth-indigo {
-  --cover-cloth: var(--ink);
-  --cover-ink: var(--surface);
-}
-.cover-jacket-rule {
-  width: 60%;
+.cover-jacket::before,
+.cover-jacket::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  margin: auto;
+  width: 160%;
   height: var(--rule-width);
   background: currentColor;
+  opacity: var(--jacket-grain-opacity);
+  transform: rotate(var(--jacket-grain-angle));
+  pointer-events: none;
+}
+.cover-jacket::after {
+  translate: 0 var(--space-24);
+}
+.cover-jacket-heading {
+  display: grid;
+  gap: var(--space-4);
+}
+.cover-jacket-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  min-height: 2lh;
+  max-height: 4lh;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  font: var(--jacket-title-size) / var(--jacket-title-leading) var(--font-serif);
+}
+.cover-jacket-author {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font: var(--jacket-author-size) / var(--jacket-author-leading) var(--font-serif);
+  font-variant-caps: small-caps;
+  text-wrap: balance;
+}
+.cover-jacket-class {
+  display: block;
+  margin-top: var(--space-4);
+  overflow-wrap: anywhere;
+  font: var(--jacket-class-size) / var(--jacket-author-leading) var(--font-mono);
+}
+.cover-jacket-rule {
+  display: block;
+  width: 60%;
+  height: var(--jacket-class-bar);
+  margin: var(--space-4) auto 0;
+  background: var(--book-class, var(--class-000));
 }
 .cover-image.shelf-cover {
   padding: 0;
@@ -97,35 +161,4 @@
 .cover-controls progress {
   width: 100%;
   accent-color: var(--accent);
-}
-
-/* a missing jacket is still a jacket: cloth, title, publisher rule */
-.cover-jacket {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--space-8);
-  padding: var(--space-10);
-  height: 100%;
-  color: var(--jacket-ink, var(--ink));
-}
-
-.cover-jacket-title {
-  font-family: var(--font-serif);
-  font-style: normal;
-  font-size: 11px;
-  line-height: 14px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  text-wrap: balance;
-}
-
-.cover-jacket-rule {
-  width: 60%;
-  height: 2px;
-  background: currentColor;
-  opacity: 0.5;
 }

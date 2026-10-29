@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { lookupCover } from "../lib/coverLookup";
 import { editionKey } from "../lib/edition";
 import { isbnTo13 } from "../lib/isbn";
 import type { Book, EditionInput } from "./types";
@@ -49,7 +50,11 @@ export async function listBooks(client: BooksClient, ownerId: string): Promise<B
   }
 }
 
-export async function saveBook(client: BooksClient, input: EditionInput): Promise<SaveResult> {
+export async function saveBook(
+  client: BooksClient,
+  input: EditionInput,
+  findCover = lookupCover,
+): Promise<SaveResult> {
   try {
     const isbn = input.isbn ? isbnTo13(input.isbn) : null;
     if (input.isbn && !isbn) {
@@ -66,6 +71,7 @@ export async function saveBook(client: BooksClient, input: EditionInput): Promis
     if (duplicate && !isbn) {
       return { ok: false, kind: "duplicate", message: "This edition is already in your library." };
     }
+    const coverUrl = input.coverUrl ?? (await findCover({ ...input, isbn }));
     const { data, error } = await client
       .from("books")
       .insert({
@@ -77,7 +83,7 @@ export async function saveBook(client: BooksClient, input: EditionInput): Promis
         pages: input.pages,
         isbn: duplicate?.isbn ?? isbn,
         language: input.language,
-        cover_url: input.coverUrl,
+        cover_url: coverUrl,
       })
       .select("*")
       .single();
