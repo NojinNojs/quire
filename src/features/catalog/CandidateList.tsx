@@ -1,6 +1,9 @@
 import type { Candidate } from "../../lib/catalog";
+import { ErrorPanel } from "../states/ErrorPanel";
+import { SkeletonRows } from "../states/SkeletonRows";
 import { CandidateRow } from "./CandidateRow";
 export function CandidateList({
+  run,
   searching,
   searched,
   errors,
@@ -10,6 +13,7 @@ export function CandidateList({
   save,
   selectTab,
 }: {
+  run: () => Promise<void>;
   searching: boolean;
   searched: boolean;
   errors: string[];
@@ -21,21 +25,21 @@ export function CandidateList({
 }) {
   return (
     <div aria-live="polite" aria-busy={searching}>
-      {searching ? (
-        <p className="empty-state muted">Searching Google Books and Open Library.</p>
+      {searching ? <SkeletonRows label="Searching Google Books and Open Library" /> : null}
+      {errors.length ? (
+        <ErrorPanel
+          messages={errors}
+          retry={() => {
+            void run();
+          }}
+          onManual={() => selectTab("manual")}
+        />
       ) : null}
-      {errors.map((error) => (
-        <p className="catalog-message" key={error}>
-          {error}
-        </p>
-      ))}
-      {!searching && candidates.length === 0 ? (
+      {!searching && errors.length === 0 && candidates.length === 0 ? (
         <div className="empty-state">
           <p>
             {searched
-              ? errors.length
-                ? "No catalogue results are available right now."
-                : "No catalogue matches for this search."
+              ? "No catalogue matches for this search."
               : "Search for the edition you own, or enter it manually."}
           </p>
           <button type="button" className="quiet" onClick={() => selectTab("manual")}>

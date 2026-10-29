@@ -146,3 +146,33 @@
 .manual-note {
   margin-bottom: var(--space-24);
 }
+.skeleton-title,
+.skeleton-line,
+.skeleton-action {
+  background: var(--rule);
+  height: var(--space-12);
+  margin-bottom: var(--space-8);
+}
+.skeleton-title {
+  height: var(--body-leading);
+}
+.skeleton-line {
+  width: 75%;
+}
+.skeleton-action {
+  height: var(--touch);
+  width: var(--touch);
+  margin: var(--space-4) 0 0 auto;
+}
+.error-panel {
+  margin-top: var(--space-24);
+  overflow-wrap: anywhere;
+}
+.error-panel p {
+  margin: 0 0 var(--space-8);
+}
+.state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+}

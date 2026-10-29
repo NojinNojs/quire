@@ -1,4 +1,6 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
+import { ErrorPanel } from "../states/ErrorPanel";
+import { SkeletonRows } from "../states/SkeletonRows";
 import { CandidateList } from "./CandidateList";
 import { EntryTabs } from "./EntryTabs";
 import { ManualForm } from "./ManualForm";
@@ -20,7 +22,11 @@ export function SearchScreen({
       <header className="topbar">
         <span className="brand">Quire</span>
         <span className="book-count" role="status">
-          {count === null ? "Loading books" : `${count} ${count === 1 ? "book" : "books"}`}
+          {count === null
+            ? flow.countLoading
+              ? "Loading books"
+              : "Book count unavailable"
+            : `${count} ${count === 1 ? "book" : "books"}`}
         </span>
         <button
           type="button"
@@ -33,6 +39,16 @@ export function SearchScreen({
         </button>
       </header>
       <h1>Add a book</h1>
+      {flow.countLoading ? <SkeletonRows label="Counting your books" /> : null}
+      {flow.countError ? (
+        <ErrorPanel
+          messages={[flow.countError]}
+          retry={() => {
+            void flow.refreshCount();
+          }}
+          onManual={() => selectTab("manual")}
+        />
+      ) : null}
       <EntryTabs tab={tab} selectTab={selectTab} />
       <section
         id="search-panel"
@@ -51,6 +67,14 @@ export function SearchScreen({
       >
         <ManualForm {...flow} />
       </section>
+      {flow.saving ? <SkeletonRows label="Saving your book" /> : null}
+      {flow.saveError ? (
+        <ErrorPanel
+          messages={[flow.saveError]}
+          retry={flow.retrySave}
+          onManual={() => selectTab("manual")}
+        />
+      ) : null}
       <p className="catalog-message" role="status">
         {message}
       </p>

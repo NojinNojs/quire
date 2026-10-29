@@ -1,8 +1,9 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { useEffect, useRef, useState } from "react";
-import { countBooks, saveBook } from "../../data/books";
+import { saveBook } from "../../data/books";
 import { type Candidate, searchCatalog } from "../../lib/catalog";
 import { identity } from "./identity";
+import { useBookCount } from "./useBookCount";
 export function useCatalogue(user: User, client: SupabaseClient) {
   const [tab, setTab] = useState<"search" | "manual">("search");
   const [query, setQuery] = useState("");
@@ -11,39 +12,46 @@ export function useCatalogue(user: User, client: SupabaseClient) {
   const [searching, setSearching] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [saved, setSaved] = useState<Set<string>>(new Set());
-  const [count, setCount] = useState<number | null>(null);
+  const bookCount = useBookCount(client, user.id);
+  const [saveError, setSaveError] = useState("");
+  const lastCandidate = useRef<Candidate | null>(null);
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState<string | null>(null);
   const saveLock = useRef(false);
   const request = useRef(0);
-  useEffect(() => {
-    let current = true;
-    countBooks(client, user.id)
-      .then((total) => {
-        if (current) setCount(total);
-      })
-      .catch((error: Error) => {
-        if (current) setMessage(error.message);
-      });
-    return () => {
-      current = false;
-    };
-  }, [client, user.id]);
+  useEffect(
+    () => () => {
+      request.current += 1;
+    },
+    [],
+  );
 
-  async function search(event: React.FormEvent) {
-    event.preventDefault();
+  async function run() {
     const current = ++request.current;
     setSearching(true);
     setErrors([]);
     setCandidates([]);
-    const result = await searchCatalog(query, (url) =>
-      fetch(url, { signal: AbortSignal.timeout(15000) }),
-    );
-    if (current !== request.current) return;
-    setCandidates(result.candidates);
-    setErrors(result.errors);
-    setSearched(true);
-    setSearching(false);
+    try {
+      const result = await searchCatalog(query, (url) =>
+        fetch(url, { signal: AbortSignal.timeout(15000) }),
+      );
+      if (current !== request.current) return;
+      setCandidates(result.candidates);
+      setErrors(result.errors);
+    } catch {
+      if (current === request.current)
+        setErrors(["Could not search the catalogue. Check your connection and try again."]);
+    } finally {
+      if (current === request.current) {
+        setSearched(true);
+        setSearching(false);
+      }
+    }
+  }
+
+  async function search(event: React.FormEvent) {
+    event.preventDefault();
+    await run();
   }
 
   async function save(candidate: Candidate): Promise<boolean> {
@@ -52,23 +60,20 @@ export function useCatalogue(user: User, client: SupabaseClient) {
     const key = identity(candidate);
     setSaving(key);
     setMessage("");
+    setSaveError("");
+    lastCandidate.current = candidate;
     try {
       const result = await saveBook(client, { ...candidate, owner: user.id });
       if (!result.ok) {
-        setMessage(result.message);
+        setSaveError(result.message);
         return false;
       }
       setSaved((previous) => new Set([...previous, key]));
-      setCount((previous) => (previous === null ? null : previous + 1));
-      try {
-        setCount(await countBooks(client, user.id));
-      } catch (error) {
-        setMessage((error as Error).message);
-      }
-      setMessage((previous) => previous || `${candidate.title} added to your library.`);
+      setMessage(`${candidate.title} added to your library.`);
+      await bookCount.refreshCount();
       return true;
     } catch (error) {
-      setMessage(
+      setSaveError(
         error instanceof Error ||
           (typeof error === "object" && error !== null && "message" in error)
           ? String(error.message)
@@ -84,6 +89,7 @@ export function useCatalogue(user: User, client: SupabaseClient) {
   function selectTab(next: "search" | "manual") {
     setTab(next);
     setMessage("");
+    setSaveError("");
   }
 
   return {
@@ -95,7 +101,12 @@ export function useCatalogue(user: User, client: SupabaseClient) {
     searching,
     errors,
     saved,
-    count,
+    ...bookCount,
+    run,
+    saveError,
+    retrySave: () => {
+      if (lastCandidate.current) void save(lastCandidate.current);
+    },
     message,
     setMessage,
     saving,

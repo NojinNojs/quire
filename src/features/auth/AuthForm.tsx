@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { useState } from "react";
+import { SkeletonRows } from "../states/SkeletonRows";
 
 type Mode = "signin" | "signup";
 
@@ -8,6 +9,7 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
   const [busy, setBusy] = useState(false);
 
   async function submit(event: React.FormEvent) {
@@ -15,21 +17,30 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
     setBusy(true);
     setMessage(null);
 
-    const result =
-      mode === "signin"
-        ? await client.auth.signInWithPassword({ email, password })
-        : await client.auth.signUp({ email, password });
+    setFailed(false);
+    try {
+      const result =
+        mode === "signin"
+          ? await client.auth.signInWithPassword({ email, password })
+          : await client.auth.signUp({ email, password });
 
-    setBusy(false);
-    if (result.error) {
-      setMessage(result.error.message);
-      return;
+      setBusy(false);
+      if (result.error) {
+        setFailed(true);
+        setMessage(result.error.message);
+        return;
+      }
+      if (mode === "signup" && !result.data.session) {
+        setMessage("Check your email to confirm the account, then sign in.");
+        return;
+      }
+      setMessage(null);
+    } catch {
+      setFailed(true);
+      setMessage("Could not reach your account. Check your connection and try again.");
+    } finally {
+      setBusy(false);
     }
-    if (mode === "signup" && !result.data.session) {
-      setMessage("Check your email to confirm the account, then sign in.");
-      return;
-    }
-    setMessage(null);
   }
 
   return (
@@ -66,16 +77,28 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
         </label>
 
         <button type="submit" className="primary" disabled={busy}>
-          {busy ? "Working" : mode === "signin" ? "Sign in" : "Create account"}
+          {busy
+            ? "Working"
+            : failed
+              ? "Try again"
+              : mode === "signin"
+                ? "Sign in"
+                : "Create account"}
         </button>
       </form>
 
-      {message ? <p className="auth-message">{message}</p> : null}
+      {busy ? <SkeletonRows label="Connecting to your account" /> : null}
+      {message ? (
+        <p className="auth-message" role={failed ? "alert" : "status"}>
+          {message}
+        </p>
+      ) : null}
 
       <button
         type="button"
         className="quiet"
         onClick={() => {
+          setFailed(false);
           setMode(mode === "signin" ? "signup" : "signin");
           setMessage(null);
         }}
