@@ -33,6 +33,7 @@
 
 .shelf-filters {
   display: grid;
+  align-items: end;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-12);
   margin-top: var(--space-16);
@@ -55,8 +56,7 @@
   grid-column: 1 / -1;
 }
 
-.shelf-filters input,
-.shelf-filters select {
+.shelf-filters input {
   width: 100%;
   min-width: 0;
   height: var(--touch);
@@ -100,7 +100,7 @@
 .shelf-group {
   position: relative;
   margin-top: var(--space-32);
-  --shelf-label-ink: color-mix(in srgb, var(--book-class) 70%, var(--ink));
+  --shelf-label-ink: color-mix(in srgb, var(--book-class) 50%, var(--ink));
 }
 
 /* The phone spine occupies the page gutter, leaving both jacket columns intact. */
@@ -125,6 +125,7 @@
 }
 
 .shelf-books {
+  container-type: inline-size;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -201,21 +202,25 @@
 
 .shelf-grid .shelf-row {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-row: span 3;
   grid-template-rows: subgrid;
   min-width: 0;
 }
 
-.shelf-grid .shelf-row::after {
-  content: "";
-  grid-row: 2;
-  width: calc(100% + var(--space-16));
+.shelf-line {
+  display: block;
   border-bottom: var(--rule-width) solid var(--rule);
 }
 
-.shelf-grid .shelf-row:nth-child(2n)::after,
-.shelf-grid .shelf-row:last-child::after {
-  width: 100%;
+.shelf-grid .shelf-line {
+  display: none;
+  grid-row: 2;
+  width: 100cqw;
+}
+
+.shelf-grid .shelf-row:nth-child(2n + 1) .shelf-line {
+  display: block;
 }
 
 .shelf-grid .shelf-jacket {
@@ -275,10 +280,19 @@
 .shelf-list .shelf-row {
   display: grid;
   grid-template-columns: var(--cover-row-width) minmax(0, 1fr);
-  gap: var(--space-32);
-  align-items: start;
-  padding-block: var(--space-16);
-  border-bottom: var(--rule-width) solid var(--rule);
+  gap: var(--space-8) var(--space-32);
+  align-items: end;
+  padding-top: var(--space-16);
+}
+
+.shelf-list .shelf-copy {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.shelf-list .shelf-line {
+  grid-column: 1 / -1;
+  grid-row: 2;
 }
 
 .shelf-list .bookmark {
@@ -355,13 +369,12 @@
     --shelf-columns: 3;
   }
 
-  .shelf-grid .shelf-row:nth-child(n)::after {
-    width: calc(100% + var(--space-16));
+  .shelf-grid .shelf-row:nth-child(n) .shelf-line {
+    display: none;
   }
 
-  .shelf-grid .shelf-row:nth-child(3n)::after,
-  .shelf-grid .shelf-row:last-child::after {
-    width: 100%;
+  .shelf-grid .shelf-row:nth-child(3n + 1) .shelf-line {
+    display: block;
   }
 }
 
@@ -391,13 +404,12 @@
     line-height: var(--body-leading);
   }
 
-  .shelf-grid .shelf-row:nth-child(n)::after {
-    width: calc(100% + var(--space-16));
+  .shelf-grid .shelf-row:nth-child(n) .shelf-line {
+    display: none;
   }
 
-  .shelf-grid .shelf-row:nth-child(4n)::after,
-  .shelf-grid .shelf-row:last-child::after {
-    width: 100%;
+  .shelf-grid .shelf-row:nth-child(4n + 1) .shelf-line {
+    display: block;
   }
 
   .shelf-list .shelf-copy {
@@ -429,13 +441,12 @@
     --shelf-columns: 5;
   }
 
-  .shelf-grid .shelf-row:nth-child(n)::after {
-    width: calc(100% + var(--space-16));
+  .shelf-grid .shelf-row:nth-child(n) .shelf-line {
+    display: none;
   }
 
-  .shelf-grid .shelf-row:nth-child(5n)::after,
-  .shelf-grid .shelf-row:last-child::after {
-    width: 100%;
+  .shelf-grid .shelf-row:nth-child(5n + 1) .shelf-line {
+    display: block;
   }
 }
 
@@ -444,12 +455,11 @@
     --shelf-columns: 6;
   }
 
-  .shelf-grid .shelf-row:nth-child(n)::after {
-    width: calc(100% + var(--space-16));
+  .shelf-grid .shelf-row:nth-child(n) .shelf-line {
+    display: none;
   }
 
-  .shelf-grid .shelf-row:nth-child(6n)::after,
-  .shelf-grid .shelf-row:last-child::after {
-    width: 100%;
+  .shelf-grid .shelf-row:nth-child(6n + 1) .shelf-line {
+    display: block;
   }
 }

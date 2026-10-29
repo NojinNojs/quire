@@ -1,0 +1,89 @@
+.quire-select {
+  position: relative;
+  min-width: 0;
+  color: var(--ink);
+  font: var(--mono-size) / var(--mono-leading) var(--font-mono);
+}
+
+.quire-select-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--spine-width);
+  grid-template-rows: repeat(2, var(--mono-leading));
+  align-content: center;
+  align-items: center;
+  column-gap: var(--space-8);
+  width: 100%;
+  height: calc(var(--touch) - var(--space-8));
+  padding: 0 var(--space-8);
+  border: var(--rule-width) solid var(--ink);
+  border-radius: var(--radius-input);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.quire-select-label {
+  grid-column: 1;
+  font-size: var(--label-size);
+  text-transform: uppercase;
+}
+
+.quire-select-value {
+  grid-column: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quire-select-chevron {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  width: var(--spine-width);
+  height: var(--spine-width);
+  background: currentColor;
+  clip-path: polygon(0 25%, 50% 75%, 100% 25%, 100% 45%, 50% 95%, 0 45%);
+}
+
+.quire-select-panel {
+  position: absolute;
+  z-index: var(--layer-header);
+  inset: calc(100% + var(--space-4)) 0 auto;
+  max-height: calc(var(--band-height) * 6);
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  border: var(--rule-width) solid var(--ink);
+  border-radius: var(--radius-input);
+  background: var(--surface-raised);
+  color: var(--ink);
+  list-style: none;
+  scrollbar-color: var(--ink) var(--surface-raised);
+}
+
+.quire-select-panel [role="option"] {
+  display: flex;
+  align-items: center;
+  min-height: var(--band-height);
+  padding: var(--space-8);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.quire-select-panel [aria-selected="true"] {
+  text-decoration: underline;
+  text-underline-offset: var(--space-4);
+}
+
+.quire-select-panel [data-active="true"],
+.quire-select-panel [role="option"]:hover {
+  background: var(--ink);
+  color: var(--surface-raised);
+}
+
+.quire-select :focus-visible {
+  outline: var(--focus-width) solid var(--ink);
+  outline-offset: var(--focus-offset);
+}

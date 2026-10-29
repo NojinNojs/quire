@@ -1,4 +1,5 @@
 import { type CSSProperties, useId, useState } from "react";
+import { Select } from "../../components/select/Select";
 import type { Book } from "../../data/types";
 import { classify, groupByClass } from "../../lib/ddc";
 import { CoverImage } from "../covers/CoverImage";
@@ -93,29 +94,27 @@ export function ShelfScreen({
           <span>Search books</span>
           <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} />
         </label>
-        <label>
-          <span>Status</span>
-          <select value={status} onChange={(event) => setStatus(event.target.value)}>
-            <option value="">All statuses</option>
-            {Object.entries(statuses).map(([value, label]) => (
-              <option value={value} key={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          <span>Language</span>
-          <select value={language} onChange={(event) => setLanguage(event.target.value)}>
-            <option value="">All languages</option>
-            {languages.map((value) => (
-              <option value={value} key={value}>
-                {value || "Unknown"}
-              </option>
-            ))}
-            {books.some((book) => !book.language) ? <option value="unknown">Unknown</option> : null}
-          </select>
-        </label>
+        <Select
+          label="Status"
+          value={status}
+          onChange={setStatus}
+          options={[
+            { value: "", label: "All statuses" },
+            ...Object.entries(statuses).map(([value, label]) => ({ value, label })),
+          ]}
+        />
+        <Select
+          label="Language"
+          value={language}
+          onChange={setLanguage}
+          options={[
+            { value: "", label: "All languages" },
+            ...languages.map((value) => ({ value, label: value })),
+            ...(books.some((book) => !book.language)
+              ? [{ value: "unknown", label: "Unknown" }]
+              : []),
+          ]}
+        />
       </search>
       <div className="shelf-summary">
         <span role="status" aria-live="polite">
@@ -234,6 +233,7 @@ export function ShelfScreen({
                         <Bookmark current={pages[book.id] ?? 0} total={book.pages} />
                       )}
                     </div>
+                    <span className="shelf-line" aria-hidden="true" />
                     <div className="shelf-copy">
                       <h3>
                         <button type="button" onClick={() => onSelectBook(book)}>

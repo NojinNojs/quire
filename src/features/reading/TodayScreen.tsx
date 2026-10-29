@@ -30,6 +30,28 @@ export type TodayScreenProps = {
   onCatalogue: () => void;
 };
 
+function BookRecord({
+  book,
+  current,
+  pagesToday,
+}: {
+  book: ReadingBook;
+  current: number;
+  pagesToday: number;
+}) {
+  return (
+    <div className="reading-book-copy">
+      <h2>{book.title}</h2>
+      <p>{book.author ?? "Author unknown"}</p>
+      <p className="reading-meta">{book.editionLine}</p>
+      <p className="reading-number">
+        {book.total === null ? current : `${current} / ${book.total}`}
+      </p>
+      <p>{plural(pagesToday, "page")} today</p>
+    </div>
+  );
+}
+
 export function ActiveBookCard({
   book,
   current,
@@ -81,15 +103,7 @@ export function ActiveBookCard({
         />
         <Bookmark current={current} total={book.total} />
       </div>
-      <div className="reading-book-copy">
-        <h2>{book.title}</h2>
-        <p>{book.author ?? "Author unknown"}</p>
-        <p className="reading-meta">{book.editionLine}</p>
-        <p className="reading-number">
-          {book.total === null ? current : `${current} / ${book.total}`}
-        </p>
-        <p>{plural(pagesToday, "page")} today</p>
-      </div>
+      <BookRecord book={book} current={current} pagesToday={pagesToday} />
     </article>
   );
 }
@@ -196,11 +210,14 @@ export function StreakBlock({
 
 export function TodayScreen({ book, streak, pageLog, onCatalogue }: TodayScreenProps) {
   return (
-    <section className="reading" aria-label="Today">
+    <section className="reading reading-today" aria-label="Today">
       <h1>Today</h1>
       {book ? (
-        <>
+        <div className="reading-two-pane">
           <ActiveBookCard book={book} current={pageLog.current} pagesToday={pageLog.pagesToday} />
+          <div className="reading-desktop-record">
+            <BookRecord book={book} current={pageLog.current} pagesToday={pageLog.pagesToday} />
+          </div>
           <PageStepper
             key={book.id}
             current={pageLog.current}
@@ -251,7 +268,7 @@ export function TodayScreen({ book, streak, pageLog, onCatalogue }: TodayScreenP
                 : streak
             }
           />
-        </>
+        </div>
       ) : (
         <div className="reading-empty">
           <p>Choose a book from the catalogue to start reading.</p>

@@ -51,10 +51,10 @@ describe("shelf", () => {
         shelfBook({ id: "other-title", title: "Orlando" }),
       ],
     });
-    fireEvent.change(view.getByRole("combobox", { name: "Status" }), {
-      target: { value: "reading" },
-    });
-    fireEvent.change(view.getByRole("combobox", { name: "Language" }), { target: { value: "en" } });
+    fireEvent.click(view.getByRole("combobox", { name: "Status" }));
+    fireEvent.click(view.getByRole("option", { name: "Reading" }));
+    fireEvent.click(view.getByRole("combobox", { name: "Language" }));
+    fireEvent.click(view.getByRole("option", { name: "en" }));
     fireEvent.change(view.getByRole("searchbox", { name: "Search books" }), {
       target: { value: "  WAVES  " },
     });
@@ -119,9 +119,8 @@ describe("shelf", () => {
 
   it("filters books with an unknown language", () => {
     const view = setup();
-    fireEvent.change(view.getByRole("combobox", { name: "Language" }), {
-      target: { value: "unknown" },
-    });
+    fireEvent.click(view.getByRole("combobox", { name: "Language" }));
+    fireEvent.click(view.getByRole("option", { name: "Unknown" }));
     expect(view.getAllByRole("listitem")).toHaveLength(1);
     expect(view.getByRole("button", { name: "Reading notebook" })).toBeTruthy();
   });
@@ -165,6 +164,20 @@ it("uses real progress and leaves unavailable progress absent", () => {
 
 describe("responsive shelf contract", () => {
   const css = readFileSync(new URL("../../styles/shelf.css", import.meta.url), "utf8");
+
+  it.each(["Grid", "List"])("keeps a shelf line in every class group in %s view", (mode) => {
+    const view = setup({
+      books: [
+        ...Array.from({ length: 6 }, (_, index) => shelfBook({ id: `edition-${index}` })),
+        shelfBook({ id: "single", ddc: "188" }),
+      ],
+    });
+    fireEvent.click(view.getByRole("button", { name: mode }));
+    for (const group of view.container.querySelectorAll(".shelf-group")) {
+      expect(group.querySelector(".shelf-line[aria-hidden='true']")).toBeTruthy();
+    }
+    expect(view.container.querySelectorAll(".shelf-group")).toHaveLength(2);
+  });
 
   it.each([
     [390, 2],
