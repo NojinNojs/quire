@@ -1,5 +1,6 @@
 import { useId, useState } from "react";
 import { plural } from "../../lib/plural";
+import { TodayCover } from "../covers/TodayCover";
 import "../../styles/reading.css";
 import type { LogSnapshot } from "./pageLogStore";
 import { pageAmount, previewPages, stepPages } from "./stepper";
@@ -33,22 +34,9 @@ export function ActiveBookCard({
   current: number;
   pagesToday: number;
 }) {
-  const [failedCover, setFailedCover] = useState<string | null>(null);
   return (
     <article className="reading-book" aria-label="Active book">
-      <div className="reading-cover">
-        {book.coverUrl && failedCover !== book.coverUrl ? (
-          <img
-            src={book.coverUrl}
-            alt=""
-            width="92"
-            height="138"
-            onError={() => setFailedCover(book.coverUrl)}
-          />
-        ) : (
-          <span>Cover unavailable</span>
-        )}
-      </div>
+      <TodayCover key={book.id} bookId={book.id} title={book.title} coverUrl={book.coverUrl} />
       <div className="reading-book-copy">
         <h2>{book.title}</h2>
         <p>{book.author ?? "Author unknown"}</p>

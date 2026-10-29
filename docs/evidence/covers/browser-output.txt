@@ -1,0 +1,14 @@
+{
+  "uploadedDimensions": {
+    "width": 600,
+    "height": 938
+  },
+  "ownerPath": "{owner}/{book_id}/cover.webp",
+  "todayReload": "passed",
+  "shelf": "passed",
+  "mobileOverflow": "none",
+  "crossOwnerReadWriteDelete": "denied",
+  "anonymousRead": "denied",
+  "publicRead": "denied",
+  "removeAndReload": "passed"
+}

@@ -1,0 +1,100 @@
+.cover-image {
+  aspect-ratio: 2 / 3;
+  padding: 0;
+  overflow: hidden;
+  border: var(--rule-width) solid var(--ink-muted);
+  border-radius: var(--radius-input);
+  background: var(--surface-raised);
+  color: var(--ink);
+}
+.cover-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cover-jacket {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: var(--space-4);
+  background: var(--cover-cloth, var(--surface-raised));
+  color: var(--cover-ink, var(--ink));
+  font: var(--label-size) / var(--label-leading) var(--font-sans);
+  text-align: center;
+}
+.cover-cloth-oxblood {
+  --cover-cloth: var(--accent);
+  --cover-ink: var(--on-accent);
+}
+.cover-cloth-olive {
+  --cover-cloth: var(--ink-muted);
+  --cover-ink: var(--surface);
+}
+.cover-cloth-indigo {
+  --cover-cloth: var(--ink);
+  --cover-ink: var(--surface);
+}
+.cover-jacket-rule {
+  width: 60%;
+  height: var(--rule-width);
+  background: currentColor;
+}
+.cover-image.shelf-cover {
+  padding: 0;
+}
+.reading-book:has(.today-cover) {
+  flex-wrap: wrap;
+}
+.reading-book:has(.today-cover) .reading-book-copy {
+  flex: 1;
+}
+.today-cover {
+  display: contents;
+}
+.cover-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  flex: 1 0 100%;
+  order: 1;
+  gap: var(--space-8);
+  overflow-wrap: anywhere;
+}
+.cover-controls label,
+.cover-controls p,
+.cover-controls progress {
+  grid-column: 1 / -1;
+}
+.cover-controls label,
+.cover-controls p {
+  font-size: var(--small-size);
+  line-height: var(--small-leading);
+}
+.cover-controls input[type="file"] {
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-4);
+  font-size: var(--small-size);
+}
+.cover-controls input::file-selector-button {
+  min-height: var(--touch);
+  margin-right: var(--space-8);
+  border: 0;
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.cover-controls input::file-selector-button:hover {
+  text-decoration: underline;
+}
+.reading .cover-controls button {
+  padding: var(--space-8);
+  font-size: var(--small-size);
+}
+.cover-controls progress {
+  width: 100%;
+  accent-color: var(--accent);
+}
