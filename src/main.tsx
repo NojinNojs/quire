@@ -20,3 +20,5 @@ createRoot(rootElement).render(
 
 import "./styles/catalog.css";
 import "./styles/error.css";
+import "./styles/nav.css";
+import "./styles/motion.css";
