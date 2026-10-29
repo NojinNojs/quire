@@ -1,13 +1,16 @@
-import { useId, useState } from "react";
+import { type CSSProperties, useId, useState } from "react";
 import type { Book } from "../../data/types";
 import { classify, groupByClass } from "../../lib/ddc";
 import { CoverImage } from "../covers/CoverImage";
+import { Bookmark } from "../reading/Bookmark";
 import { ErrorPanel } from "../states/ErrorPanel";
 import { SkeletonRows } from "../states/SkeletonRows";
+import { useShelfProgress } from "./useShelfProgress";
 import "../../styles/shelf.css";
 
 export type ShelfScreenProps = {
   books: Book[];
+  currentPages?: Record<string, number>;
   loading?: boolean;
   error?: string | null;
   onRetry?: () => void;
@@ -24,6 +27,7 @@ const statuses: Record<Book["status"], string> = {
 
 export function ShelfScreen({
   books,
+  currentPages,
   loading = false,
   error,
   onRetry,
@@ -31,6 +35,23 @@ export function ShelfScreen({
   onSelectBook,
 }: ShelfScreenProps) {
   const id = useId();
+  const loadedPages = useShelfProgress(books.map((book) => book.id));
+  const pages = currentPages ?? loadedPages;
+  const [view, setView] = useState<"grid" | "list">(() => {
+    try {
+      return window.localStorage.getItem("quire:shelf-view") === "list" ? "list" : "grid";
+    } catch {
+      return "grid";
+    }
+  });
+  function changeView(next: "grid" | "list") {
+    setView(next);
+    try {
+      window.localStorage.setItem("quire:shelf-view", next);
+    } catch {
+      /* Keep the choice for this visit when storage is unavailable. */
+    }
+  }
   const [status, setStatus] = useState("");
   const [language, setLanguage] = useState("");
   const [query, setQuery] = useState("");
@@ -61,7 +82,7 @@ export function ShelfScreen({
   }
 
   return (
-    <section className="shelf" aria-labelledby={`${id}-heading`}>
+    <section className={`shelf shelf-${view}`} aria-labelledby={`${id}-heading`}>
       <header className="shelf-heading">
         <h1 id={`${id}-heading`}>Shelf</h1>
         <button className="shelf-action" type="button" onClick={onAddBook}>
@@ -97,15 +118,35 @@ export function ShelfScreen({
           </select>
         </label>
       </search>
-      <p className="shelf-summary" role="status" aria-live="polite">
-        <span>
-          {loading
-            ? "Loading books"
-            : `${filtered.length} ${filtered.length === 1 ? "book" : "books"}`}
+      <div className="shelf-summary">
+        <span role="status" aria-live="polite">
+          <span>
+            {loading
+              ? "Loading books"
+              : `${filtered.length} ${filtered.length === 1 ? "book" : "books"}`}
+          </span>
         </span>
-        <span>
-          {activeCount} active {activeCount === 1 ? "filter" : "filters"}
-        </span>
+        <fieldset className="shelf-view" aria-label="Shelf view">
+          <button
+            type="button"
+            className="shelf-action"
+            aria-pressed={view === "grid"}
+            onClick={() => changeView("grid")}
+          >
+            Grid
+          </button>
+          <button
+            type="button"
+            className="shelf-action"
+            aria-pressed={view === "list"}
+            onClick={() => changeView("list")}
+          >
+            List
+          </button>
+        </fieldset>
+      </div>
+      <p className="shelf-filter-count">
+        {activeCount} active {activeCount === 1 ? "filter" : "filters"}
       </p>
       {loading ? (
         <SkeletonRows label="Loading your shelf" />
@@ -134,23 +175,40 @@ export function ShelfScreen({
         [...groups].map(([label, members], index) => {
           const token = classify(members[0]?.ddc)?.token ?? "--class-000";
           return (
-            <section className="shelf-group" key={label} aria-labelledby={`${id}-group-${index}`}>
-              <h2
-                className="shelf-band"
-                id={`${id}-group-${index}`}
-                style={{ backgroundColor: `var(${token}, var(--class-000))` }}
-              >
+            <section
+              className="shelf-group"
+              key={label}
+              aria-labelledby={`${id}-group-${index}`}
+              style={
+                {
+                  "--book-class": `var(--shelf${token.slice(1)}, var(--shelf-class-000))`,
+                } as CSSProperties
+              }
+            >
+              <h2 className="shelf-band" id={`${id}-group-${index}`}>
                 {label}
               </h2>
               <ul className="shelf-books">
                 {members.map((book) => (
                   <li className="shelf-row" key={book.id}>
-                    <CoverImage
-                      coverPath={book.cover_path}
-                      coverUrl={book.cover_url}
-                      title={book.title}
-                      className="shelf-cover"
-                    />
+                    <div className="shelf-jacket">
+                      <button
+                        className="shelf-jacket-button"
+                        type="button"
+                        aria-label={`Open ${book.title}`}
+                        onClick={() => onSelectBook(book)}
+                      >
+                        <CoverImage
+                          coverPath={book.cover_path}
+                          coverUrl={book.cover_url}
+                          title={book.title}
+                          className="shelf-cover"
+                        />
+                      </button>
+                      {pages[book.id] !== undefined && (
+                        <Bookmark current={pages[book.id] ?? 0} total={book.pages} />
+                      )}
+                    </div>
                     <div className="shelf-copy">
                       <h3>
                         <button type="button" onClick={() => onSelectBook(book)}>

@@ -1,9 +1,11 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { Bookmark } from "./Bookmark";
 import type { PageLogClient } from "./log";
 import { createPageLogStore } from "./pageLogStore";
+import { restoredDays } from "./restoredDays";
 import { pageAmount, previewPages, stepPages } from "./stepper";
-import { ActiveBookCard, PageStepper, TodayScreen } from "./TodayScreen";
+import { ActiveBookCard, PageStepper, StreakBlock, TodayScreen } from "./TodayScreen";
 
 const result = { data: [{ streak_current: 3, streak_longest: 8, restored: false }], error: null };
 const entry = { bookId: "book-1", current: 214, pagesToday: 4, day: "2026-10-29" };
@@ -150,4 +152,57 @@ it("never invents a total and keeps the empty state to one sentence and one acti
   );
   expect(empty.match(/<button/g)).toHaveLength(1);
   expect(empty).toContain("Browse catalogue");
+});
+
+describe("bookmark", () => {
+  it.each([
+    [0, 400, 0],
+    [100, 400, 25],
+    [214, 550, 39],
+    [500, 400, 100],
+    [-10, 400, 0],
+  ])("fills from page %s of %s at %s percent", (current, total, expected) => {
+    expect(renderToStaticMarkup(<Bookmark current={current} total={total} />)).toContain(
+      `height:${expected}%`,
+    );
+  });
+  it.each([null, 0])("does not invent a percentage for total %s", (total) => {
+    const html = renderToStaticMarkup(<Bookmark current={214} total={total} />);
+    expect(html).not.toContain("bookmark-fill");
+    expect(html).toContain("Page 214, total unknown");
+  });
+});
+
+it("prints past, today, missed and restored stamps beside the streak count", () => {
+  const html = renderToStaticMarkup(
+    <StreakBlock
+      today="2026-10-29"
+      streak={{
+        current: 3,
+        longest: 8,
+        days: [
+          { day: "2026-10-26", read: true },
+          { day: "2026-10-27", read: false },
+          { day: "2026-10-28", read: false, restored: true },
+          { day: "2026-10-29", read: true },
+        ],
+      }}
+    />,
+  );
+  expect(html).toContain('class="reading-day reading-day-filled" aria-label="2026-10-26: read"');
+  expect(html).toContain('class="reading-day" aria-label="2026-10-27: no pages logged"');
+  expect(html).toContain(
+    'class="reading-day reading-day-restored" aria-label="2026-10-28: restored"',
+  );
+  expect(html).toContain(
+    'class="reading-day reading-day-filled reading-day-today" aria-label="2026-10-29: read, today"',
+  );
+  expect(html).toContain("3 days streak");
+});
+
+it("reconstructs restored dates with one restoration per month, including after reload", () => {
+  const logs = ["2026-09-27", "2026-09-29", "2026-10-01", "2026-10-03", "2026-10-04"];
+  expect([...restoredDays(logs)]).toEqual(["2026-09-28", "2026-09-30"]);
+  expect([...restoredDays([...logs])]).toEqual(["2026-09-28", "2026-09-30"]);
+  expect([...restoredDays(["2026-10-27", "2026-10-27", "2026-10-29"])]).toEqual(["2026-10-28"]);
 });
