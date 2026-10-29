@@ -129,10 +129,11 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
         data-slide={switched ? "true" : undefined}
       >
         <header className="auth-head">
+          <p className="auth-kicker">The lending desk</p>
           <h1 id="auth-title" ref={heading} tabIndex={-1}>
             {mode === "signin" ? "Sign in" : "Create an account"}
           </h1>
-          <p>Your shelf is private. One account, one library.</p>
+          <p className="auth-lede">Your shelf is private. One account, one library.</p>
         </header>
         <form
           onSubmit={submit}
@@ -146,6 +147,7 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
               type="email"
               name="email"
               autoComplete="email"
+              placeholder="name@example.com"
               required
               disabled={busy}
               value={email}
@@ -159,6 +161,7 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
             <input
               type={reveal ? "text" : "password"}
               name="password"
+              placeholder={mode === "signup" ? "At least 8 characters" : "Your password"}
               autoComplete={mode === "signin" ? "current-password" : "new-password"}
               required
               minLength={8}
@@ -197,6 +200,7 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
                   type="password"
                   name="repeat"
                   autoComplete="new-password"
+                  placeholder="Type it again"
                   disabled={busy}
                   value={repeat}
                   aria-invalid={mismatch}
@@ -236,6 +240,7 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
           </button>
         </form>
         <footer className="auth-footer">
+          <p className="auth-issued">Quire keeps a record of what you read, and nothing else.</p>
           <button
             type="button"
             className="auth-switch"
