@@ -1,12 +1,19 @@
-import type { User } from "@supabase/supabase-js";
-import { supabase } from "../../lib/supabase";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { CandidateList } from "./CandidateList";
 import { EntryTabs } from "./EntryTabs";
 import { ManualForm } from "./ManualForm";
 import { SearchForm } from "./SearchForm";
 import { useCatalogue } from "./useCatalogue";
-export function SearchScreen({ user }: { user: User }) {
-  const flow = useCatalogue(user);
+export function SearchScreen({
+  user,
+  client,
+  signOut,
+}: {
+  user: User;
+  client: SupabaseClient;
+  signOut: () => void;
+}) {
+  const flow = useCatalogue(user, client);
   const { tab, selectTab, count, message } = flow;
   return (
     <main className="shell catalog">
@@ -19,7 +26,7 @@ export function SearchScreen({ user }: { user: User }) {
           type="button"
           className="quiet"
           onClick={() => {
-            void supabase?.auth.signOut();
+            signOut();
           }}
         >
           Sign out

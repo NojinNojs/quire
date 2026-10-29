@@ -1,29 +1,11 @@
-import type { User } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
 import { AuthForm } from "./features/auth/AuthForm";
 import { SearchScreen } from "./features/catalog/SearchScreen";
-import { isConfigured, supabase } from "./lib/supabase";
+import { useSession } from "./lib/useSession";
 
 export default function App() {
-  const [user, setUser] = useState<User | null>(null);
-  const [ready, setReady] = useState(false);
+  const { user, ready, client, signOut } = useSession();
 
-  useEffect(() => {
-    if (!supabase) {
-      setReady(true);
-      return;
-    }
-    supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user ?? null);
-      setReady(true);
-    });
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => sub.subscription.unsubscribe();
-  }, []);
-
-  if (!isConfigured) {
+  if (!client) {
     return (
       <main className="shell">
         <h1>Quire</h1>
@@ -43,7 +25,7 @@ export default function App() {
     );
   }
 
-  if (!user) return <AuthForm />;
+  if (!user) return <AuthForm client={client} />;
 
-  return <SearchScreen key={user.id} user={user} />;
+  return <SearchScreen key={user.id} user={user} client={client} signOut={signOut} />;
 }

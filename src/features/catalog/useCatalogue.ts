@@ -1,10 +1,9 @@
-import type { User } from "@supabase/supabase-js";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { useEffect, useRef, useState } from "react";
+import { countBooks, saveBook } from "../../data/books";
 import { type Candidate, searchCatalog } from "../../lib/catalog";
-import type { EditionIdentity as SavedEdition } from "../../lib/edition";
-import { supabase } from "../../lib/supabase";
 import { identity } from "./identity";
-export function useCatalogue(user: User) {
+export function useCatalogue(user: User, client: SupabaseClient) {
   const [tab, setTab] = useState<"search" | "manual">("search");
   const [query, setQuery] = useState("");
   const [candidates, setCandidates] = useState<Candidate[]>([]);
@@ -19,19 +18,17 @@ export function useCatalogue(user: User) {
   const request = useRef(0);
   useEffect(() => {
     let current = true;
-    supabase
-      ?.from("books")
-      .select("id", { count: "exact", head: true })
-      .eq("owner", user.id)
-      .then(({ count, error }) => {
-        if (!current) return;
-        if (error) setMessage(error.message);
-        else setCount(count ?? 0);
+    countBooks(client, user.id)
+      .then((total) => {
+        if (current) setCount(total);
+      })
+      .catch((error: Error) => {
+        if (current) setMessage(error.message);
       });
     return () => {
       current = false;
     };
-  }, [user.id]);
+  }, [client, user.id]);
 
   async function search(event: React.FormEvent) {
     event.preventDefault();
@@ -50,50 +47,24 @@ export function useCatalogue(user: User) {
   }
 
   async function save(candidate: Candidate): Promise<boolean> {
-    if (!supabase || saveLock.current) return false;
+    if (saveLock.current) return false;
     saveLock.current = true;
     const key = identity(candidate);
     setSaving(key);
     setMessage("");
     try {
-      // Compare canonical edition identities, then let the unique index report ISBN duplicates.
-      const existing: SavedEdition[] = [];
-      for (let offset = 0; ; offset += 1000) {
-        const page = await supabase
-          .from("books")
-          .select("title,publisher,year,isbn")
-          .eq("owner", user.id)
-          .order("id")
-          .range(offset, offset + 999);
-        if (page.error) throw page.error;
-        existing.push(...(page.data as SavedEdition[]));
-        if (page.data.length < 1000) break;
-      }
-      const duplicate = existing.find((book) => identity(book) === key);
-      if (duplicate && !candidate.isbn) {
-        setMessage("This edition is already in your library.");
+      const result = await saveBook(client, { ...candidate, owner: user.id });
+      if (!result.ok) {
+        setMessage(result.message);
         return false;
       }
-      const { error } = await supabase.from("books").insert({
-        owner: user.id,
-        title: candidate.title,
-        author: candidate.author,
-        publisher: candidate.publisher,
-        year: candidate.year,
-        pages: candidate.pages,
-        isbn: duplicate?.isbn ?? candidate.isbn,
-        language: candidate.language || "id",
-        cover_url: candidate.coverUrl,
-      });
-      if (error) throw error;
       setSaved((previous) => new Set([...previous, key]));
       setCount((previous) => (previous === null ? null : previous + 1));
-      const total = await supabase
-        .from("books")
-        .select("id", { count: "exact", head: true })
-        .eq("owner", user.id);
-      if (!total.error) setCount(total.count ?? 0);
-      else setMessage(total.error.message);
+      try {
+        setCount(await countBooks(client, user.id));
+      } catch (error) {
+        setMessage((error as Error).message);
+      }
       setMessage((previous) => previous || `${candidate.title} added to your library.`);
       return true;
     } catch (error) {

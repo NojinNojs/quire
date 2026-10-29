@@ -1,9 +1,9 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { useState } from "react";
-import { supabase } from "../../lib/supabase";
 
 type Mode = "signin" | "signup";
 
-export function AuthForm() {
+export function AuthForm({ client }: { client: SupabaseClient }) {
   const [mode, setMode] = useState<Mode>("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,14 +12,13 @@ export function AuthForm() {
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
-    if (!supabase) return;
     setBusy(true);
     setMessage(null);
 
     const result =
       mode === "signin"
-        ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({ email, password });
+        ? await client.auth.signInWithPassword({ email, password })
+        : await client.auth.signUp({ email, password });
 
     setBusy(false);
     if (result.error) {
