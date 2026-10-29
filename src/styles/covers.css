@@ -162,3 +162,23 @@
   width: 100%;
   accent-color: var(--accent);
 }
+
+/* never break a word across lines in a jacket; clamp instead */
+.cover-jacket-title {
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+  text-wrap: pretty;
+}
+
+.cover-jacket {
+  padding: var(--space-8);
+}
+
+@media (max-width: 420px) {
+  .cover-jacket-title {
+    font-size: 10px;
+    line-height: 13px;
+    -webkit-line-clamp: 4;
+  }
+}
