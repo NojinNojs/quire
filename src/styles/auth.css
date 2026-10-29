@@ -385,3 +385,144 @@
 .borrower-card .auth-forgot {
   margin-top: var(--space-4);
 }
+
+/* the card arrives, it does not pop */
+@keyframes card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.borrower-card .auth-face {
+  animation: card-rise 180ms var(--ease);
+}
+
+.borrower-card .auth-kicker {
+  margin: 0 0 var(--space-6);
+  font: 10px / 12px var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.borrower-card .auth-head h1 {
+  font-size: 30px;
+  line-height: 34px;
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--space-8);
+}
+
+.borrower-card .auth-lede {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+/* the underline is the focus state, so it grows instead of appearing */
+.borrower-card .auth-form input {
+  border-bottom-width: var(--rule-width);
+  transition: border-color var(--motion) var(--ease);
+}
+
+.borrower-card .auth-form input:focus {
+  border-bottom-color: var(--accent);
+  outline: none;
+}
+
+.borrower-card .auth-issued {
+  width: 100%;
+  margin: var(--space-24) 0 0;
+  padding-top: var(--space-12);
+  border-top: var(--rule-width) solid var(--rule);
+  font: 10px / 14px var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-align: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .borrower-card .auth-face {
+    animation: none;
+  }
+}
+
+/* the footer is one column: the privacy line sits on the rule, the switch under it */
+.borrower-card .auth-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.borrower-card .auth-issued {
+  border-top: var(--rule-width) solid var(--rule);
+  padding-top: var(--space-12);
+  margin: 0;
+}
+
+/* placeholders exist so the field reads as a field, not a printed blank */
+.borrower-card .auth-form input::placeholder {
+  color: var(--ink-muted);
+  opacity: 1;
+}
+
+.borrower-card .auth-form input:focus {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+/* links are ink, not browser blue-underlined */
+.borrower-card .auth-forgot,
+.borrower-card .auth-switch-action {
+  text-decoration: none;
+  color: var(--accent);
+}
+
+.borrower-card .auth-forgot:hover,
+.borrower-card .auth-switch-action:hover,
+.borrower-card .auth-forgot:focus-visible,
+.borrower-card .auth-switch-action:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.borrower-card .auth-switch {
+  justify-content: space-between;
+  gap: var(--space-8);
+  width: 100%;
+}
+
+.borrower-card .auth-switch-ask {
+  color: var(--ink);
+}
+
+/* the button keeps its weight but stops shouting */
+.borrower-card .auth-form .primary {
+  font-size: 15px;
+  letter-spacing: 0.01em;
+}
+
+/* micro spacing: the writer needs air above the rule, the link needs air above it */
+.borrower-card .auth-form input {
+  padding-bottom: var(--space-10);
+}
+
+.borrower-card .auth-forgot {
+  margin-top: var(--space-10);
+}
+
+/* a 44px touch target even though the word is small */
+.borrower-card .auth-field .auth-reveal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 44px;
+  min-width: 44px;
+  bottom: 0;
+  padding: 0;
+}
