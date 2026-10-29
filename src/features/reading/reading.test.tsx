@@ -18,6 +18,26 @@ const book = {
   total: 550,
 };
 const streak = { current: 3, longest: 8, days: [] };
+
+it("keeps Today in one column until the two-pane layout starts at 1024px", () => {
+  const state = createPageLogStore({ ...entry, client: { rpc: vi.fn() }, online: () => false });
+  const html = renderToStaticMarkup(
+    <TodayScreen
+      book={book}
+      streak={streak}
+      pageLog={{ ...state.getSnapshot(), ...state }}
+      onCatalogue={() => {}}
+    />,
+  );
+  expect(html).toContain('class="reading-two-pane"');
+  const css = readFileSync(new URL("../../styles/reading.css", import.meta.url), "utf8");
+  const desktop = css.slice(css.indexOf("@media (min-width: 1024px)"));
+  expect(desktop).toMatch(/\.reading-two-pane\s*\{[^}]*display: grid;[^}]*grid-template-columns:/);
+  expect(desktop).toContain("column-gap: var(--space-32)");
+  expect(css.slice(0, css.indexOf("@media (min-width: 1024px)"))).not.toContain(
+    ".reading-two-pane",
+  );
+});
 afterEach(() => {
   vi.useRealTimers();
 });
@@ -206,3 +226,5 @@ it("reconstructs restored dates with one restoration per month, including after 
   expect([...restoredDays([...logs])]).toEqual(["2026-09-28", "2026-09-30"]);
   expect([...restoredDays(["2026-10-27", "2026-10-27", "2026-10-29"])]).toEqual(["2026-10-28"]);
 });
+
+import { readFileSync } from "node:fs";
