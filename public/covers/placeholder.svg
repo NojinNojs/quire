@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600">
+  <rect width="400" height="600" fill="#e8e8e5"/>
+  <g fill="none" stroke="#51534f" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M146 217h107v142H146c-12 0-21-9-21-21V238c0-12 9-21 21-21Z"/>
+    <path d="M125 337c0-12 9-21 21-21h107M155 217v99"/>
+  </g>
+  <text x="200" y="409" fill="#343631" font-family="Arial, sans-serif" font-size="24" text-anchor="middle">No cover available</text>
+</svg>

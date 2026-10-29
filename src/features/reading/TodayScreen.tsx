@@ -6,6 +6,7 @@ import { TodayCover } from "../covers/TodayCover";
 import { Bookmark } from "./Bookmark";
 import { useRestoredDays } from "./useRestoredDays";
 import "../../styles/reading.css";
+import "../../styles/reading-presets.css";
 import type { LogSnapshot } from "./pageLogStore";
 import { pageAmount, previewPages, stepPages } from "./stepper";
 
@@ -160,6 +161,19 @@ export function PageStepper({
       <p id={`${id}-preview`} className="reading-number" aria-live="polite">
         {previewPages(current, amount)}
       </p>
+      <fieldset className="reading-presets" aria-label="Quick page amounts">
+        {[5, 10, 25].map((pages) => (
+          <button
+            key={pages}
+            type="button"
+            disabled={disabled || pageAmount(pages, current, total) !== pages}
+            aria-pressed={Number(value) === pages}
+            onClick={() => setValue(String(pages))}
+          >
+            {pages} pages
+          </button>
+        ))}
+      </fieldset>
       <button className="reading-primary" type="submit" disabled={disabled || !valid}>
         Log {plural(amount, "page")}
       </button>

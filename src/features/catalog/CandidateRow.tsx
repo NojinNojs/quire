@@ -1,4 +1,5 @@
 import type { Candidate } from "../../lib/catalog";
+import { CoverImage } from "../covers/CoverImage";
 import { identity } from "./identity";
 export function CandidateRow({
   candidate,
@@ -17,19 +18,7 @@ export function CandidateRow({
   const added = saved.has(key);
   return (
     <li className="catalog-row">
-      <div className="catalog-cover" aria-hidden="true">
-        {candidate.coverUrl ? (
-          <img
-            src={candidate.coverUrl}
-            alt=""
-            onError={(event) => {
-              event.currentTarget.hidden = true;
-            }}
-          />
-        ) : (
-          <span>No cover</span>
-        )}
-      </div>
+      <CoverImage coverUrl={candidate.coverUrl} title={candidate.title} className="catalog-cover" />
       <div className="catalog-copy">
         <h3>{candidate.title}</h3>
         {candidate.author ? <p>{candidate.author}</p> : null}

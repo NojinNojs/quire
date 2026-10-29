@@ -13,7 +13,7 @@ const descriptions = {
   oxford: "Cool paper. Deep blue ink.",
 };
 
-export function SettingsScreen({ signOut }: { signOut: () => void }) {
+export function SettingsScreen({ signOut, demo = false }: { signOut: () => void; demo?: boolean }) {
   const [preference, setPreference] = useState(() =>
     resolveTheme(document.documentElement.dataset.theme),
   );
@@ -95,7 +95,7 @@ export function SettingsScreen({ signOut }: { signOut: () => void }) {
           Back to catalogue
         </a>
         <button type="button" className="settings-link" onClick={signOut}>
-          Sign out
+          {demo ? "Leave demo" : "Sign out"}
         </button>
       </footer>
     </main>

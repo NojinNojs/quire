@@ -3,6 +3,34 @@
 Version 1.0, 28 October 2026. This document defines the tokens, themes, components and rules that
 every Quire screen must follow. It is not a UI sketch; it is the contract the UI is built against.
 
+## Approved local extension, 29 October 2026
+
+The direction in [AUTH_ONBOARDING_BRIEF.md](AUTH_ONBOARDING_BRIEF.md) permits these bounded
+exceptions to the catalogue defaults below. They supersede the general serif and radius
+prohibitions only on the named surfaces. The six theme palettes and catalogue's 2px control /
+3px container defaults remain.
+
+- Authentication uses Newsreader italic for its brand, emphasized photographic-story title,
+  and closing signature. Catalogue headings retain their existing typography.
+- Auth fields, primary action, field errors, and sample-library link use the local
+  `--auth-control-radius` (8px). Auth inputs and primary action are 52px high; field labels
+  use sentence-case 13px sans. Local `--auth-story-surface`, `--auth-story-ink`, and
+  `--auth-story-muted` color the story; `--auth-photo-credit-surface` backs the credit.
+  These are local story colors, not another reader theme.
+- Guide invitation, guide controls, header Guide control, and spotlight use 8px corners.
+  The floating tour panel uses 12px corners. The surrounding shade highlights a real
+  target; it does not establish shadow elevation or a new catalogue card style.
+- Quick page-count preset buttons and star-rating touch surfaces use 8px corners and the
+  existing 48px minimum touch target. Rating stars are inline SVG with 1.75 stroke weight.
+- Auth, guide, and demo primary actions use ink fill with surface-colored text. The base
+  primary remains theme-accent colored.
+- Authentication uses a locally bundled real library photograph by Janko Ferlič from
+  Unsplash. [Image sources](../public/images/SOURCES.md) and `public/images/library.webp.json`
+  record provenance. Published covers and the single shared missing-cover image remain binding.
+
+Root [DESIGN.md](../DESIGN.md) and [.impeccable/design.json](../.impeccable/design.json) record
+the implemented system and these local exceptions without promoting them to global defaults.
+
 ## 1. What is fixed and what is a theme
 
 Fixed for the whole product: the type scale, the spacing scale, the radii, the rule weights, the
@@ -131,19 +159,18 @@ DDC classes map to four tokens, used as a 44px band or a 10px spine strip:
 | `--class-800` | 800 | literature |
 | `--class-900` | 900 | history, geography |
 
-The colour is a filing system, not decoration. A book jacket takes its colour from the edition, never
-from the class.
+The colour is a filing system, not decoration. Published cover artwork keeps its original colors.
 
 ## 9. Covers
 
-A jacket is drawn, not photographed, unless a cover photograph exists.
+Use images of the actual published book covers. User direction on 2026-10-29 replaces the
+previous generated cloth-jacket fallback.
 
-- Cloth colour comes from the edition: hashed from the ISBN, or from `title + publisher + year` when
-  there is no ISBN. Two editions of one title must never share a colour.
-- The jacket prints: title in serif italic, author, publisher mark, and an edition line
-  (`Cet. 2 · 1980`). A non-Indonesian edition adds the language code in the corner.
-- Sizes: `48x72` in a row, `92x138` on Today, `156x234` on the detail screen.
-- When `cover_url` exists it replaces the drawn jacket, keeping the same box.
+- Prefer uploaded cover photographs, then the catalogue or bundled cover image.
+- Missing and failed covers use the same `/covers/placeholder.svg` image across the app.
+- Never invent or generate a replacement cover for an individual title.
+- Preserve the full cover with `object-fit: contain`; captions identify the title and edition.
+- Keep existing cover box dimensions and the DDC grouping outside the cover artwork.
 
 ## 10. Icons
 
@@ -239,15 +266,26 @@ Both must pass before a screen is called finished.
 `--cover-row-width` and `--cover-row-height` hold the 48 by 72 row cover box.
 `--row-title-size` holds the 17px serif italic title in a catalogue row.
 
-## Printed cover jackets
+## Bundled demo covers
 
-Missing cover art uses the existing title hash to choose oxblood, olive, indigo, ochre, or teal
-cloth. Jacket tokens in `src/styles/tokens.css` pair each cloth with paper ink at more than 9:1
-contrast across all six themes. A darker 1px spine and two diagonal 1px rules at 6% opacity give
-these covers a printed surface without bitmap textures or gradients.
+The demo bundles nine verified published covers as WebP files. See
+[cover sources](../public/covers/SOURCES.md) for provenance. The single neutral missing-cover
+SVG is shared by every book without artwork. Existing saved demo books gain the local cover
+paths without resetting notes, ratings, or reading activity.
 
-Newsreader titles occupy two to four line heights in the upper third and clamp at four lines.
-Authors use 9px small caps below the title, limited to two lines; missing authors print
-"Author unknown". The DDC number sits at the foot in mono over a 2px class colour rule; missing
-classification prints "Unclassified". Today jackets measure 96px by 144px. Container based type
-also accommodates the 170px shelf jacket. Real cover images retain `object-fit: cover`.
+## Authentication and guide exceptions
+
+The modern authentication and step-by-step guide extend the catalogue system locally.
+Their implementation is recorded in [DESIGN.md](../DESIGN.md) and the
+[surface brief](AUTH_ONBOARDING_BRIEF.md).
+
+- Authentication fields, primary actions, field errors, and the demo entry use 8px corners.
+- Guide invitation, controls, header Guide button, and spotlight use 8px corners; the tour
+  panel uses 12px corners. Quick page presets and rating touch surfaces use 8px corners.
+- Authentication uses Newsreader italic for its brand, emphasized story title, and closing
+  signature. Catalogue headings retain their existing typography.
+- The authentication story uses a local forest palette and sourced library photograph.
+  Reader themes and catalogue classification colors retain their existing roles.
+
+These exceptions take precedence over the general radius and serif restrictions above
+only on these surfaces. Catalogue inputs and containers retain their 2px and 3px corners.

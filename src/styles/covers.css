@@ -1,5 +1,4 @@
 .cover-image {
-  container-type: inline-size;
   aspect-ratio: 2 / 3;
   padding: 0;
   overflow: hidden;
@@ -8,116 +7,30 @@
   background: var(--surface-raised);
   color: var(--ink);
 }
+
 .cover-image img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-}
-/* Cloth and ink stay paired across themes, like a printed edition. */
-.cover-cloth-oxblood {
-  --cover-cloth: var(--jacket-oxblood);
-}
-.cover-cloth-olive {
-  --cover-cloth: var(--jacket-olive);
-}
-.cover-cloth-indigo {
-  --cover-cloth: var(--jacket-indigo);
-}
-.cover-cloth-ochre {
-  --cover-cloth: var(--jacket-ochre);
-}
-.cover-cloth-teal {
-  --cover-cloth: var(--jacket-teal);
+  object-fit: contain;
 }
 
-.cover-jacket {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  height: 100%;
-  padding: var(--jacket-top) var(--jacket-inset) var(--space-8);
-  --jacket-spine: color-mix(
-    in srgb,
-    var(--cover-cloth) var(--jacket-spine-cloth),
-    var(--jacket-spine-shade)
-  );
-  border-left: var(--rule-width) solid var(--jacket-spine);
-  background: var(--cover-cloth);
-  color: var(--jacket-ink);
-  text-align: center;
-  font-style: normal;
-}
-.cover-jacket::before,
-.cover-jacket::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  margin: auto;
-  width: 160%;
-  height: var(--rule-width);
-  background: currentColor;
-  opacity: var(--jacket-grain-opacity);
-  transform: rotate(var(--jacket-grain-angle));
-  pointer-events: none;
-}
-.cover-jacket::after {
-  translate: 0 var(--space-24);
-}
-.cover-jacket-heading {
-  display: grid;
-  gap: var(--space-4);
-}
-.cover-jacket-title {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  min-height: 2lh;
-  max-height: 4lh;
-  overflow: hidden;
-  overflow-wrap: anywhere;
-  text-wrap: balance;
-  font: var(--jacket-title-size) / var(--jacket-title-leading) var(--font-serif);
-}
-.cover-jacket-author {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  overflow-wrap: anywhere;
-  font: var(--jacket-author-size) / var(--jacket-author-leading) var(--font-serif);
-  font-variant-caps: small-caps;
-  text-wrap: balance;
-}
-.cover-jacket-class {
-  display: block;
-  margin-top: var(--space-4);
-  overflow-wrap: anywhere;
-  font: var(--jacket-class-size) / var(--jacket-author-leading) var(--font-mono);
-}
-.cover-jacket-rule {
-  display: block;
-  width: 60%;
-  height: var(--jacket-class-bar);
-  margin: var(--space-4) auto 0;
-  background: var(--book-class, var(--class-000));
-}
 .cover-image.shelf-cover {
   padding: 0;
 }
+
 .reading-book:has(.today-cover) {
   flex-wrap: wrap;
 }
+
 .reading-book:has(.today-cover) .reading-book-copy {
   flex: 1;
 }
+
 .today-cover {
   display: contents;
 }
+
 .cover-controls {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -126,22 +39,26 @@
   gap: var(--space-8);
   overflow-wrap: anywhere;
 }
+
 .cover-controls label,
 .cover-controls p,
 .cover-controls progress {
   grid-column: 1 / -1;
 }
+
 .cover-controls label,
 .cover-controls p {
   font-size: var(--small-size);
   line-height: var(--small-leading);
 }
+
 .cover-controls input[type="file"] {
   width: 100%;
   min-width: 0;
   padding: var(--space-4);
   font-size: var(--small-size);
 }
+
 .cover-controls input::file-selector-button {
   min-height: var(--touch);
   margin-right: var(--space-8);
@@ -151,34 +68,17 @@
   font: inherit;
   cursor: pointer;
 }
+
 .cover-controls input::file-selector-button:hover {
   text-decoration: underline;
 }
+
 .reading .cover-controls button {
   padding: var(--space-8);
   font-size: var(--small-size);
 }
+
 .cover-controls progress {
   width: 100%;
   accent-color: var(--accent);
-}
-
-/* never break a word across lines in a jacket; clamp instead */
-.cover-jacket-title {
-  word-break: normal;
-  overflow-wrap: break-word;
-  hyphens: none;
-  text-wrap: pretty;
-}
-
-.cover-jacket {
-  padding: var(--space-8);
-}
-
-@media (max-width: 420px) {
-  .cover-jacket-title {
-    font-size: 10px;
-    line-height: 13px;
-    -webkit-line-clamp: 4;
-  }
 }

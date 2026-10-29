@@ -81,38 +81,40 @@ export function TodayCover({
         className="reading-cover"
         client={client}
       />
-      <div className="cover-controls" aria-busy={stage !== null}>
-        <label htmlFor={id}>Upload cover</label>
-        <input
-          id={id}
-          type="file"
-          accept="image/*"
-          capture="environment"
-          disabled={!record || !!stage}
-          onChange={(event) => {
-            const file = event.currentTarget.files?.[0];
-            event.currentTarget.value = "";
-            if (file) void change(file);
-          }}
-        />
-        {record?.cover_path && (
-          <button type="button" disabled={!!stage} onClick={() => void change()}>
-            Remove cover
-          </button>
-        )}
-        {stage && (
-          <>
-            <progress aria-label={stage} />
-            <p role="status">{stage}...</p>
-          </>
-        )}
-        {error && <p role="alert">{error}</p>}
-        {error && !record && (
-          <button type="button" onClick={() => setAttempt((value) => value + 1)}>
-            Retry cover
-          </button>
-        )}
-      </div>
+      {client && (
+        <div className="cover-controls" aria-busy={stage !== null}>
+          <label htmlFor={id}>Upload cover</label>
+          <input
+            id={id}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            disabled={!record || !!stage}
+            onChange={(event) => {
+              const file = event.currentTarget.files?.[0];
+              event.currentTarget.value = "";
+              if (file) void change(file);
+            }}
+          />
+          {record?.cover_path && (
+            <button type="button" disabled={!!stage} onClick={() => void change()}>
+              Remove cover
+            </button>
+          )}
+          {stage && (
+            <>
+              <progress aria-label={stage} />
+              <p role="status">{stage}...</p>
+            </>
+          )}
+          {error && <p role="alert">{error}</p>}
+          {error && !record && (
+            <button type="button" onClick={() => setAttempt((value) => value + 1)}>
+              Retry cover
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

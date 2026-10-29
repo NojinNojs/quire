@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { type CoversClient, signedCoverUrl } from "../../data/covers";
-import { clothFor } from "../../lib/edition";
 import { supabase } from "../../lib/supabase";
 import "../../styles/covers.css";
 
@@ -8,8 +7,6 @@ export function CoverImage({
   coverPath,
   coverUrl,
   title,
-  author,
-  ddc,
   className = "",
   client = supabase,
 }: {
@@ -43,30 +40,23 @@ export function CoverImage({
       clearInterval(timer);
     };
   }, [client, coverPath]);
-  const remote = coverUrl && /^https?:\/\//i.test(coverUrl) ? coverUrl : null;
+  const remote =
+    coverUrl && (/^https?:\/\//i.test(coverUrl) || coverUrl.startsWith("/covers/"))
+      ? coverUrl
+      : null;
   const src = [signed && signed.path === coverPath ? signed.url : null, remote].find(
     (url) => url && !failed.includes(url),
   );
   return (
-    <div className={`cover-image cover-cloth-${clothFor(title)} ${className}`}>
-      {src ? (
-        <img
-          src={src}
-          alt={`Cover of ${title}`}
-          onError={() => setFailed((urls) => [...urls, src])}
-        />
-      ) : (
-        <span className="cover-jacket" role="img" aria-label={`${title}, no cover image`}>
-          <span className="cover-jacket-heading">
-            <span className="cover-jacket-title">{title}</span>
-            <span className="cover-jacket-author">{author?.trim() || "Author unknown"}</span>
-          </span>
-          <span className="cover-jacket-class">
-            {ddc?.trim() || "Unclassified"}
-            <span className="cover-jacket-rule" />
-          </span>
-        </span>
-      )}
+    <div className={`cover-image ${className}`}>
+      <img
+        src={src ?? "/covers/placeholder.svg"}
+        alt={src ? `Cover of ${title}` : `${title}, no cover image`}
+        className={src ? undefined : "cover-placeholder"}
+        onError={() => {
+          if (src) setFailed((urls) => [...urls, src]);
+        }}
+      />
     </div>
   );
 }

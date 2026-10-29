@@ -6,7 +6,10 @@ import { AuthForm, passwordStrength } from "./AuthForm";
 
 const signUp = vi.fn();
 const signInWithPassword = vi.fn();
-const client = { auth: { signUp, signInWithPassword } } as unknown as SupabaseClient;
+const resetPasswordForEmail = vi.fn();
+const client = {
+  auth: { signUp, signInWithPassword, resetPasswordForEmail },
+} as unknown as SupabaseClient;
 
 beforeEach(() => {
   window.history.replaceState(null, "", "/#/search");
@@ -26,7 +29,33 @@ function credentials(password = "Library-card42") {
   });
 }
 
-describe("borrower's card", () => {
+describe("authentication", () => {
+  it("keeps the password hidden until requested and offers the demo", () => {
+    render(<AuthForm client={client} />);
+    const password = screen.getByLabelText("Password", { exact: true });
+    expect(password.getAttribute("type")).toBe("password");
+    fireEvent.click(screen.getByRole("button", { name: "Show" }));
+    expect(password.getAttribute("type")).toBe("text");
+    fireEvent.click(screen.getByRole("button", { name: "Hide" }));
+    expect(password.getAttribute("type")).toBe("password");
+    expect(screen.queryByRole("link", { name: "Take a quick tour" })).toBeNull();
+    expect(screen.getByRole("link", { name: "Try the interactive demo" })).toBeTruthy();
+  });
+
+  it("recovers from a reset-link network failure and permits retry", async () => {
+    resetPasswordForEmail.mockRejectedValueOnce(new Error("offline"));
+    render(<AuthForm client={client} />);
+    credentials();
+    fireEvent.click(screen.getByRole("button", { name: "Forgot your password?" }));
+    await waitFor(() =>
+      expect(screen.getByRole("alert").textContent).toContain("Could not send a reset link"),
+    );
+    resetPasswordForEmail.mockResolvedValueOnce({ error: null });
+    fireEvent.click(screen.getByRole("button", { name: "Forgot your password?" }));
+    await waitFor(() =>
+      expect(screen.getByRole("status").textContent).toContain("Reset link sent"),
+    );
+  });
   it.each([
     ["", "Weak"],
     ["Ab1!", "Weak"],
@@ -130,7 +159,7 @@ describe("borrower's card", () => {
         password: "Library-card42",
       }),
     );
-    expect(screen.getByRole<HTMLButtonElement>("button", { name: "Issuing card" }).disabled).toBe(
+    expect(screen.getByRole<HTMLButtonElement>("button", { name: "Signing in..." }).disabled).toBe(
       true,
     );
   });

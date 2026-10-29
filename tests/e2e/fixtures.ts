@@ -30,6 +30,10 @@ export const test = base.extend<{ signedInPage: Page; prerequisites: void }>({
     expect(response.ok()).toBeTruthy();
     const { user } = await response.json();
     try {
+      // The first visit opens the product tour; a reader dismisses it too.
+      const skip = page.getByRole("button", { name: "Skip tour" });
+      if (await skip.isVisible().catch(() => false)) await skip.click();
+      await page.goto("/#/search");
       await expect(page.getByRole("heading", { name: "Add a book" })).toBeVisible();
       await expect(page.getByText("0 books", { exact: true })).toBeVisible();
       await use(page);
