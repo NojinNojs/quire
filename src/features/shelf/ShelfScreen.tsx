@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
 import type { Book } from "../../data/types";
 import { classify, groupByClass } from "../../lib/ddc";
-import { clothFor, editionKey } from "../../lib/edition";
+import { CoverImage } from "../covers/CoverImage";
 import { ErrorPanel } from "../states/ErrorPanel";
 import { SkeletonRows } from "../states/SkeletonRows";
 import "../../styles/shelf.css";
@@ -145,12 +145,12 @@ export function ShelfScreen({
               <ul className="shelf-books">
                 {members.map((book) => (
                   <li className="shelf-row" key={book.id}>
-                    <div
-                      className={`shelf-cover shelf-cloth-${clothFor(editionKey(book))}`}
-                      aria-hidden="true"
-                    >
-                      <span className="shelf-cover-mark" />
-                    </div>
+                    <CoverImage
+                      coverPath={book.cover_path}
+                      coverUrl={book.cover_url}
+                      title={book.title}
+                      className="shelf-cover"
+                    />
                     <div className="shelf-copy">
                       <h3>
                         <button type="button" onClick={() => onSelectBook(book)}>
