@@ -1,0 +1,11 @@
+{
+  "name": "@quire/shelf-tests",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/react": "16.3.0",
+    "@types/jsdom": "^21.1.7",
+    "jsdom": "^26.1.0"
+  }
+}
