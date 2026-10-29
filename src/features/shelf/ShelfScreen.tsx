@@ -149,8 +149,7 @@ export function ShelfScreen({
                       className={`shelf-cover shelf-cloth-${clothFor(editionKey(book))}`}
                       aria-hidden="true"
                     >
-                      <span>{book.title}</span>
-                      <span>{book.year}</span>
+                      <span className="shelf-cover-mark" />
                     </div>
                     <div className="shelf-copy">
                       <h3>
