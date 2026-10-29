@@ -113,20 +113,19 @@
   background: var(--shelf-cloth);
   color: var(--shelf-jacket-ink);
   overflow: hidden;
-  overflow-wrap: anywhere;
   font-family: var(--font-serif);
-  font-size: var(--label-size);
-  line-height: var(--label-leading);
+  font-size: 9px;
+  line-height: 11px;
   font-style: italic;
 }
 
-.shelf-cover span:first-child {
-  overflow: hidden;
-}
-
-.shelf-cover span:last-child {
-  flex-shrink: 0;
-  font: var(--label-size) / var(--label-leading) var(--font-mono);
+/* At 48px wide a title is unreadable, so the jacket shows only its cloth and a publisher rule. */
+.shelf-cover .shelf-cover-mark {
+  margin-top: auto;
+  width: 60%;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.55;
 }
 
 .shelf-cloth-oxblood {
@@ -241,4 +240,15 @@
   height: var(--space-12);
   margin-bottom: var(--space-8);
   background: var(--rule);
+}
+
+/* keep the last row clear of the bottom navigation */
+.shelf {
+  padding-bottom: calc(var(--nav-height) + var(--space-32));
+}
+.shelf-row {
+  align-items: start;
+}
+.shelf-copy .shelf-status {
+  align-self: end;
 }

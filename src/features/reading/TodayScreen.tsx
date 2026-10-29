@@ -1,4 +1,5 @@
 import { useId, useState } from "react";
+import { plural } from "../../lib/plural";
 import "../../styles/reading.css";
 import type { LogSnapshot } from "./pageLogStore";
 import { pageAmount, previewPages, stepPages } from "./stepper";
@@ -55,7 +56,7 @@ export function ActiveBookCard({
         <p className="reading-number">
           {book.total === null ? current : `${current} / ${book.total}`}
         </p>
-        <p>{pagesToday} pages today</p>
+        <p>{plural(pagesToday, "page")} today</p>
       </div>
     </article>
   );
@@ -114,7 +115,7 @@ export function PageStepper({
         {previewPages(current, amount)}
       </p>
       <button className="reading-primary" type="submit" disabled={disabled || !valid}>
-        Log {amount} pages
+        Log {plural(amount, "page")}
       </button>
     </form>
   );
@@ -123,7 +124,7 @@ export function PageStepper({
 export function StreakBlock({ streak }: { streak: ReadingStreak }) {
   return (
     <section className="reading-streak" aria-label="Reading streak">
-      <h2>{streak.current} day streak</h2>
+      <h2>{plural(streak.current, "day")} streak</h2>
       <ol aria-label="Last seven days">
         {streak.days.slice(-7).map(({ day, read }) => (
           <li
@@ -134,7 +135,7 @@ export function StreakBlock({ streak }: { streak: ReadingStreak }) {
           />
         ))}
       </ol>
-      <p>Longest: {streak.longest} days</p>
+      <p>Longest: {plural(streak.longest, "day")}</p>
     </section>
   );
 }
