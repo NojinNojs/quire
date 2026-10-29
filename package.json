@@ -10,10 +10,11 @@
     "check": "tsc --noEmit",
     "lint": "biome check .",
     "format": "biome format --write .",
-    "test": "vitest run",
+    "test": "vitest run src",
     "gate": "bash scripts/gate.sh",
     "ci": "bash scripts/gate.sh",
-    "release": "bash scripts/release.sh"
+    "release": "bash scripts/release.sh",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
@@ -22,6 +23,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.3",
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
