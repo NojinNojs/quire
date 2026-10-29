@@ -140,3 +140,177 @@ h1 {
   background: var(--ink);
   color: var(--surface);
 }
+
+/* Settings and account navigation */
+:root {
+  --settings-oxford-font: Georgia, "Times New Roman", serif;
+  color-scheme: var(--scheme);
+}
+
+.app-header {
+  margin: 0 auto;
+  padding: var(--space-8) var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  border-bottom: var(--rule-width) solid var(--rule);
+}
+
+.app-header nav {
+  display: flex;
+  gap: var(--space-16);
+}
+
+.app-header a,
+.settings-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch);
+  min-width: var(--touch);
+  color: var(--ink);
+  text-underline-offset: var(--space-4);
+}
+
+.app-header a[aria-current="page"] {
+  font-weight: 600;
+}
+
+.app-catalog .topbar .brand {
+  display: none;
+}
+
+.settings fieldset {
+  min-width: 0;
+  padding: 0;
+  margin: var(--space-32) 0;
+  border: 0;
+}
+
+.settings legend,
+.settings h2 {
+  padding: 0;
+  margin: 0 0 var(--space-12);
+  font: inherit;
+  font-weight: 600;
+}
+
+.settings-choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  min-height: var(--touch);
+  padding: var(--space-16) 0;
+  border-bottom: var(--rule-width) solid var(--rule);
+  cursor: pointer;
+}
+
+.settings-choice input {
+  flex-shrink: 0;
+  width: var(--space-24);
+  height: var(--space-24);
+  margin: 0;
+  accent-color: var(--ink);
+  cursor: pointer;
+}
+
+.settings-choice:hover,
+.settings-choice:focus-within {
+  background: var(--surface-raised);
+}
+
+.settings-name,
+.settings-description {
+  display: block;
+}
+
+.settings-name {
+  font-size: var(--book-title-size);
+  line-height: var(--book-title-leading);
+}
+
+.settings-name-shelf {
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+.settings-name-municipal {
+  font-family: var(--font-sans);
+}
+
+.settings-name-oxford {
+  font-family: var(--settings-oxford-font);
+}
+
+.settings-description {
+  margin-top: var(--space-4);
+  color: var(--ink-muted);
+}
+
+.settings-mode,
+.settings-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+}
+
+.settings-toggle {
+  min-height: var(--touch);
+  min-width: var(--nav-height);
+  padding: var(--space-8) var(--space-16);
+  border: var(--rule-width) solid var(--ink);
+  border-radius: var(--radius-input);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.settings-toggle[aria-checked="true"] {
+  background: var(--ink);
+  color: var(--surface);
+}
+
+.settings-toggle:hover {
+  text-decoration: underline;
+  text-underline-offset: var(--space-4);
+}
+
+.settings-contrast {
+  margin-top: var(--space-32);
+  padding-top: var(--space-24);
+  border-top: var(--rule-width) solid var(--rule);
+}
+
+.settings-sample {
+  margin: 0 0 var(--space-12);
+  font-size: var(--book-title-size);
+  line-height: var(--book-title-leading);
+}
+
+.settings-pair {
+  margin: 0 0 var(--space-8);
+  font-family: var(--font-mono);
+  font-size: var(--mono-size);
+  overflow-wrap: anywhere;
+}
+
+.settings-status {
+  margin: var(--space-24) 0;
+  color: var(--ink-muted);
+}
+
+.settings-footer {
+  padding-top: var(--space-16);
+  border-top: var(--rule-width) solid var(--rule);
+}
+
+button.settings-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
