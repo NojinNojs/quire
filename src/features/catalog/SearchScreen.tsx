@@ -10,10 +10,12 @@ export function SearchScreen({
   user,
   client,
   signOut,
+  onScan,
 }: {
   user: User;
   client: SupabaseClient;
   signOut: () => void;
+  onScan?: (catalogue: ReturnType<typeof useCatalogue>) => void;
 }) {
   const flow = useCatalogue(user, client);
   const { tab, selectTab, count, message } = flow;
@@ -50,6 +52,11 @@ export function SearchScreen({
         />
       ) : null}
       <EntryTabs tab={tab} selectTab={selectTab} />
+      {onScan && (
+        <button className="quiet" type="button" onClick={() => onScan(flow)}>
+          Scan ISBN
+        </button>
+      )}
       <section
         id="search-panel"
         role="tabpanel"

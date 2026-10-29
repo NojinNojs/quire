@@ -1,0 +1,4 @@
+.integration-screen {
+  max-width: var(--shell-width);
+  margin-inline: auto;
+}
