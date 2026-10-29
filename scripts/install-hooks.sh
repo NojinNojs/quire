@@ -11,10 +11,15 @@ npx --no-install @biomejs/biome check . || exit 1
 npx --no-install vitest run --passWithNoTests || exit 1
 HOOK
 
+cat > .git/hooks/commit-msg <<'HOOK'
+#!/usr/bin/env bash
+exec bash "$(git rev-parse --show-toplevel)/scripts/check-commit-msg.sh" "$1"
+HOOK
+
 cat > .git/hooks/pre-push <<'HOOK'
 #!/usr/bin/env bash
 exec bash "$(git rev-parse --show-toplevel)/scripts/gate.sh"
 HOOK
 
-chmod +x .git/hooks/pre-commit .git/hooks/pre-push
-echo "pre-commit (biome + tests) and pre-push (full gate) installed"
+chmod +x .git/hooks/pre-commit .git/hooks/commit-msg .git/hooks/pre-push
+echo "hooks installed: pre-commit (biome + unit), commit-msg (convention), pre-push (full gate)"
