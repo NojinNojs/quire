@@ -518,3 +518,20 @@
 .auth-page {
   overflow-x: clip;
 }
+
+/* on a phone the right page has no room: the folio leaves, the bookmark stays tucked in */
+@media (max-width: 759px) {
+  .auth-recto-folio {
+    display: none;
+  }
+
+  .auth-recto {
+    overflow: hidden;
+  }
+
+  .auth-reading-cover {
+    right: 12px;
+    width: 22px;
+    height: 46px;
+  }
+}
