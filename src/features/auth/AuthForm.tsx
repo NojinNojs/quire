@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { useEffect, useRef, useState } from "react";
+import { AuthReadingRecord } from "./AuthReadingRecord";
 import "../../styles/auth.css";
 
 type Mode = "signin" | "signup";
@@ -14,18 +15,6 @@ export function passwordStrength(password: string): "Weak" | "Fair" | "Strong" {
 
 function initialMode(): Mode {
   return new URLSearchParams(window.location.search).get("auth") === "signup" ? "signup" : "signin";
-}
-
-function Stamp({ label }: { label: "QUIRE" | "NEW CARD" }) {
-  return (
-    <svg className="auth-stamp" viewBox="0 0 80 80" aria-hidden="true">
-      <circle cx="40" cy="40" r="36" />
-      <text x="40" y="44" textAnchor="middle">
-        {label}
-      </text>
-      <path className="auth-stamp-grain" d="M12 28h56M10 53h60" />
-    </svg>
-  );
 }
 
 export function AuthForm({ client }: { client: SupabaseClient }) {
@@ -129,25 +118,17 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
 
   return (
     <main className="auth-page" aria-labelledby="auth-title" data-busy={busy}>
-      <section className="auth-card">
-        <div className="auth-workspace">
-          <header className="auth-card-head">
-            <p className="auth-card-label">
-              <span>QUIRE</span>
-              <span>BORROWER CARD</span>
-            </p>
-            <p className="auth-card-number">NO. 0001</p>
+      <div className="auth-book">
+        <section className="auth-verso" aria-label="Borrower card">
+          <header className="auth-running-head">
+            <span>QUIRE</span>
+            <span>BORROWER CARD</span>
           </header>
+          <p className="auth-intro">A home for your reading life.</p>
           <div key={mode} className="auth-face" data-mode={mode}>
-            <header className="auth-head">
-              <h1 id="auth-title" ref={heading} tabIndex={-1}>
-                {mode === "signin" ? "Sign in" : "Create an account"}
-              </h1>
-              <div className="auth-stamps">
-                {mode === "signup" ? <Stamp label="NEW CARD" /> : null}
-                <Stamp label="QUIRE" />
-              </div>
-            </header>
+            <h1 className="auth-mode-title" id="auth-title" ref={heading} tabIndex={-1}>
+              {mode === "signin" ? "Sign in" : "Create an account"}
+            </h1>
             <form
               onSubmit={submit}
               className="auth-form"
@@ -189,6 +170,7 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
                   className="auth-reveal"
                   aria-pressed={reveal}
                   aria-label={reveal ? "Hide" : "Show"}
+                  disabled={busy}
                   onClick={() => setReveal((value) => !value)}
                 >
                   {reveal ? "Hide" : "Show"}
@@ -285,17 +267,13 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
               </p>
             </footer>
           </div>
-          <p className="auth-footnote">Your shelf is private. One account, one library.</p>
-          <p className="auth-classes">
-            {["100", "500", "800", "900"].map((number) => (
-              <span key={number} data-class={number}>
-                <i aria-hidden="true" />
-                {number}
-              </span>
-            ))}
-          </p>
-        </div>
-      </section>
+          <footer className="auth-page-foot">
+            <p className="auth-folio">17</p>
+            <p className="auth-footnote">Your shelf is private. One account, one library.</p>
+          </footer>
+        </section>
+        <AuthReadingRecord />
+      </div>
     </main>
   );
 }

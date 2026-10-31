@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
 import type { Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
 import { stack } from "./stack";
@@ -12,90 +13,108 @@ const themes = [
   "oxford-dark",
 ];
 const footnote = "Your shelf is private. One account, one library.";
-const evidence = "docs/evidence/auth-card";
+const evidence = "docs/evidence/auth-book";
 
 async function checkContrast(page: Page, state: string) {
-  for (const theme of themes) {
-    const samples = await page.evaluate((value) => {
-      document.documentElement.dataset.theme = value;
-      const column = document.querySelector(".auth-card");
-      if (!column) throw new Error("Borrower card missing");
-      const canvas = document.createElement("canvas");
-      canvas.width = canvas.height = 1;
-      const context = canvas.getContext("2d");
-      if (!context) throw new Error("Color sampler unavailable");
-      const rgba = (color: string) => {
-        context.clearRect(0, 0, 1, 1);
-        context.fillStyle = color;
-        context.fillRect(0, 0, 1, 1);
-        return Array.from(context.getImageData(0, 0, 1, 1).data, (n) => n / 255);
-      };
-      const over = (front: number[], back: number[]) =>
-        back.map((n, i) => front[i] * front[3] + n * (1 - front[3]));
-      const background = (element: Element | null): number[] =>
-        element
-          ? over(rgba(getComputedStyle(element).backgroundColor), background(element.parentElement))
-          : [1, 1, 1];
-      const luminance = (color: number[]) => {
-        const [r, g, b] = color.map((n) =>
-          n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4,
-        );
-        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-      };
-      const sample = (element: Element, text: string, pseudo?: string) => {
-        const style = getComputedStyle(element, pseudo);
-        const paper = background(element);
-        const foreground = rgba(style.color);
-        let opacity = Number(style.opacity);
-        for (let parent = element.parentElement; parent; parent = parent.parentElement) {
-          opacity *= Number(getComputedStyle(parent).opacity);
-        }
-        foreground[3] *= opacity;
-        const ink = luminance(over(foreground, paper));
-        const ground = luminance(paper);
-        return {
-          text,
-          ratio: (Math.max(ink, ground) + 0.05) / (Math.min(ink, ground) + 0.05),
+  for (const width of [390, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const theme of themes) {
+      const samples = await page.evaluate((value) => {
+        document.documentElement.dataset.theme = value;
+        const column = document.querySelector(".auth-book");
+        if (!column) throw new Error("Open book missing");
+        const canvas = document.createElement("canvas");
+        canvas.width = canvas.height = 1;
+        const context = canvas.getContext("2d");
+        if (!context) throw new Error("Color sampler unavailable");
+        const rgba = (color: string) => {
+          context.clearRect(0, 0, 1, 1);
+          context.fillStyle = color;
+          context.fillRect(0, 0, 1, 1);
+          return Array.from(context.getImageData(0, 0, 1, 1).data, (n) => n / 255);
         };
-      };
-      const samples = [];
-      // Walk text nodes so nested links, strength labels and the foot line cannot be missed.
-      const walker = document.createTreeWalker(column, NodeFilter.SHOW_TEXT);
-      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-        const element = node.parentElement;
-        const text = node.textContent?.trim();
-        if (!element || !text) continue;
-        const range = document.createRange();
-        range.selectNode(node);
-        if (range.getBoundingClientRect().height === 0) continue;
-        samples.push(sample(element, text));
-      }
-      for (const input of column.querySelectorAll("input")) {
-        samples.push(sample(input, `input: ${input.name}`));
-        if (input.placeholder) samples.push(sample(input, input.placeholder, "::placeholder"));
-      }
-      return samples;
-    }, theme);
-    expect(
-      samples.some(({ text }) => text === footnote),
-      "Foot line must be sampled",
-    ).toBe(true);
-    expect(samples.some(({ text }) => text === "try the interactive demo.")).toBe(true);
-    expect(samples.some(({ text }) => text === "NO. 0001")).toBe(true);
-    expect(samples.some(({ text }) => text === "BORROWER CARD")).toBe(true);
-    for (const number of ["100", "500", "800", "900"]) {
+        const over = (front: number[], back: number[]) =>
+          back.map((n, i) => front[i] * front[3] + n * (1 - front[3]));
+        const background = (element: Element | null): number[] =>
+          element
+            ? over(
+                rgba(getComputedStyle(element).backgroundColor),
+                background(element.parentElement),
+              )
+            : [1, 1, 1];
+        const luminance = (color: number[]) => {
+          const [r, g, b] = color.map((n) =>
+            n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4,
+          );
+          return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        };
+        const sample = (element: Element, text: string, pseudo?: string) => {
+          const style = getComputedStyle(element, pseudo);
+          const paper = background(element);
+          const foreground = rgba(style.color);
+          let opacity = Number(style.opacity);
+          for (let parent = element.parentElement; parent; parent = parent.parentElement) {
+            opacity *= Number(getComputedStyle(parent).opacity);
+          }
+          foreground[3] *= opacity;
+          const ink = luminance(over(foreground, paper));
+          const ground = luminance(paper);
+          return {
+            text,
+            ratio: (Math.max(ink, ground) + 0.05) / (Math.min(ink, ground) + 0.05),
+          };
+        };
+        const samples = [];
+        // Walk text nodes so nested links, strength labels and the foot line cannot be missed.
+        const walker = document.createTreeWalker(column, NodeFilter.SHOW_TEXT);
+        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+          const element = node.parentElement;
+          const text = node.textContent?.trim();
+          if (!element || !text) continue;
+          const range = document.createRange();
+          range.selectNode(node);
+          if (range.getBoundingClientRect().height === 0) continue;
+          samples.push(sample(element, text));
+        }
+        for (const input of column.querySelectorAll("input")) {
+          samples.push(sample(input, `input: ${input.name}`));
+          if (input.placeholder) samples.push(sample(input, input.placeholder, "::placeholder"));
+        }
+        return samples;
+      }, theme);
       expect(
-        samples.some(({ text }) => text === number),
-        `Sample class ${number}`,
+        samples.some(({ text }) => text === footnote),
+        "Foot line must be sampled",
       ).toBe(true);
-    }
-    expect(samples.filter(({ text }) => text === "QUIRE")).toHaveLength(2);
-    if (await page.locator('[data-mode="signup"]').count()) {
-      expect(samples.some(({ text }) => text === "NEW CARD")).toBe(true);
-    }
-    expect(samples.length).toBeGreaterThan(12);
-    for (const { text, ratio } of samples) {
-      expect(ratio, `${theme}, ${state}: ${text}`).toBeGreaterThanOrEqual(7);
+      expect(samples.some(({ text }) => text === "try the interactive demo.")).toBe(true);
+      expect(samples.some(({ text }) => text === "17")).toBe(true);
+      expect(samples.some(({ text }) => text === "A home for your reading life.")).toBe(true);
+      expect(samples.some(({ text }) => text === "BORROWER CARD")).toBe(true);
+      expect(samples.filter(({ text }) => text === "QUIRE")).toHaveLength(1);
+      if (width >= 768) {
+        for (const text of [
+          "The Waves",
+          "Virginia Woolf",
+          "Reading streak",
+          "Pages read today",
+          "0",
+          "Your demo shelf. Sample reading activity.",
+        ]) {
+          expect(
+            samples.some((sample) => sample.text === text),
+            `Sample recto: ${text}`,
+          ).toBe(true);
+        }
+        expect(samples.filter(({ text }) => /^[MTWFS]$/.test(text))).toHaveLength(7);
+      }
+      expect(samples.length).toBeGreaterThan(12);
+      for (const { text, ratio } of samples) {
+        expect(ratio, `${theme}, ${width}, ${state}: ${text}`).toBeGreaterThanOrEqual(7);
+      }
+      appendFileSync(
+        `${evidence}/contrast.txt`,
+        `${theme} | ${width}px | ${state} | ${samples.length} samples | minimum ${Math.min(...samples.map(({ ratio }) => ratio)).toFixed(3)}:1\n`,
+      );
     }
   }
 }
@@ -176,12 +195,17 @@ for (const theme of ["shelf-light", "oxford-dark"]) {
       expect(new URL(page.url()).searchParams.get("source")).toBe("auth");
       await settleCard(page);
       await page.screenshot({ path: `${evidence}/${theme}-signup-${width}.png`, fullPage: true });
+      await page.getByRole("button", { name: "Already have an account? Sign in" }).click();
+      await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeFocused();
+      expect(new URL(page.url()).searchParams.has("auth")).toBe(false);
+      expect(new URL(page.url()).searchParams.get("source")).toBe("auth");
+      expect(new URL(page.url()).hash).toBe("#/shelf");
       expect(errors).toEqual([]);
     });
   }
 }
 
-test("the whole surface is a borrower card at every requested width", async ({ page }) => {
+test("the open book reflows to a verso and paper sliver without overflow", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeVisible();
   for (const width of [320, 390, 768, 960, 1024, 1440]) {
@@ -194,38 +218,49 @@ test("the whole surface is a borrower card at every requested width", async ({ p
       const submit = await page.locator(".primary").boundingBox();
       if (!submit) throw new Error("Submit missing");
       expect(submit.height).toBe(48);
-      expect(submit.y + submit.height).toBeLessThanOrEqual(await page.evaluate(() => innerHeight));
-
-      const card = page.locator(".auth-card");
-      await expect(card).toHaveCount(1);
-      await expect(page.locator(".auth-page img, .auth-cover-wall")).toHaveCount(0);
-
-      const box = await card.boundingBox();
-      if (!box) throw new Error("Borrower card missing");
-      // edge to edge on a phone, inset on a desk above that
-      if (width < 600) {
+      const book = page.locator(".auth-book");
+      await expect(book).toHaveCount(1);
+      await expect(page.getByRole("img", { name: "Cover of The Waves" })).toBeVisible();
+      const cover = await page.locator(".auth-reading-cover").boundingBox();
+      const verso = await page.locator(".auth-verso").boundingBox();
+      const recto = await page.locator(".auth-recto").boundingBox();
+      const box = await book.boundingBox();
+      if (!box || !verso || !recto || !cover) throw new Error("Book pages missing");
+      expect(submit.x).toBeGreaterThan(verso.x);
+      expect(submit.x + submit.width).toBeLessThan(verso.x + verso.width);
+      expect(recto.x).toBe(verso.x + verso.width);
+      expect(recto.height).toBe(verso.height);
+      if (width < 768) {
         expect(box.x).toBe(0);
         expect(box.width).toBe(width);
+        expect(recto.width).toBe(10);
+        expect(cover.width).toBeGreaterThan(recto.width);
+        await expect(page.locator(".auth-reading-record")).toBeHidden();
       } else {
         expect(box.x).toBeGreaterThan(0);
         expect(box.width).toBeLessThan(width);
-        expect(box.width).toBeLessThanOrEqual(600);
+        expect(box.width).toBeLessThanOrEqual(1040);
+        expect(verso.width).toBe(recto.width);
+        expect(cover.width / cover.height).toBeCloseTo(2 / 3, 3);
+        await expect(page.locator(".auth-reading-record")).toBeVisible();
+        await expect(page.locator(".auth-reading-streak li")).toHaveCount(7);
       }
 
-      const look = await card.evaluate((el) => {
+      const look = await book.evaluate((el) => {
         const style = getComputedStyle(el);
         return {
           radius: style.borderTopLeftRadius,
           shadow: style.boxShadow,
           rows: el.querySelectorAll(".auth-field").length,
-          signature: el.querySelector(".auth-classes")?.textContent?.trim() ?? "",
+          fold: getComputedStyle(el, "::after").backgroundImage,
+          turn: getComputedStyle(el.querySelector(".auth-recto") as Element, "::after").width,
         };
       });
-      expect(look.radius).toBe(width < 600 ? "0px" : "2px");
-      expect(look.shadow).not.toBe("none");
+      expect(look.radius).toBe("0px");
+      expect(look.shadow).toBe("none");
       expect(look.rows).toBe(mode === "signup" ? 3 : 2);
-      expect(look.signature).toContain("100");
-      expect(look.signature).toContain("900");
+      expect(look.fold).toContain("linear-gradient");
+      expect(look.turn).toBe("12px");
 
       for (const control of await page
         .locator(".auth-footer button, .auth-demo-link, .auth-reveal")
@@ -234,12 +269,18 @@ test("the whole surface is a borrower card at every requested width", async ({ p
         if (!rect) throw new Error("Card control missing");
         expect(rect.height).toBeGreaterThanOrEqual(44);
       }
+      if (width === 320 && mode === "signup") {
+        await settleCard(page);
+        await page.screenshot({ path: `${evidence}/shelf-light-signup-320.png`, fullPage: true });
+      }
     }
     await page.goto("/");
   }
 });
 
 test("keyboard path, password visibility, focus rules and demo tour", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.addInitScript(() => localStorage.setItem("quire-theme", "shelf-light"));
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeVisible();
   const order = [
@@ -256,9 +297,16 @@ test("keyboard path, password visibility, focus rules and demo tour", async ({ p
     await expect(control).toBeFocused();
     const style = await control.evaluate((el) => {
       const style = getComputedStyle(el);
-      return { outline: style.outlineWidth, rule: style.borderBottomWidth };
+      const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+      const swatch = document.createElement("span");
+      swatch.style.color = accent;
+      document.body.append(swatch);
+      const color = getComputedStyle(swatch).color;
+      swatch.remove();
+      return { outline: style.outlineWidth, color: style.outlineColor, accent: color };
     });
-    expect(style.outline === "2px" || style.rule === "2px").toBe(true);
+    expect(style.outline).toBe("2px");
+    expect(style.color).toBe(style.accent);
     if ((await control.getAttribute("name")) === "email") {
       await settleCard(page);
       await page.screenshot({ path: `${evidence}/shelf-light-focus-1280.png`, fullPage: true });
@@ -285,13 +333,11 @@ test("keyboard path, password visibility, focus rules and demo tour", async ({ p
   await expect(page.getByRole("dialog", { name: "Make every page count." })).toHaveCount(0);
 });
 
-test("issuing presses the stamps and prints an animated rule without moving the card", async ({
-  page,
-}) => {
+test("issuing prints a working rule without moving the book or its fold", async ({ page }) => {
   await page.goto("/?auth=signup");
   await page.getByLabel("Email").fill("reader@quire.local");
   await page.getByLabel("Password", { exact: true }).fill("Library-card42");
-  const card = await page.locator(".auth-card").boundingBox();
+  const book = await page.locator(".auth-book").boundingBox();
   let release: (() => void) | undefined;
   const pending = new Promise<void>((resolve) => {
     release = resolve;
@@ -309,39 +355,23 @@ test("issuing presses the stamps and prints an animated rule without moving the 
     await expect(
       page.getByRole("button", { name: "Already have an account? Sign in" }),
     ).toBeDisabled();
-    for (const stamp of await page.locator(".auth-stamp").all()) {
-      await expect
-        .poll(() => stamp.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).f))
-        .toBe(1);
-      const style = await stamp.evaluate((el) => {
-        const style = getComputedStyle(el);
-        const matrix = new DOMMatrix(style.transform);
-        return {
-          duration: style.transitionDuration,
-          rotation: (Math.atan2(matrix.b, matrix.a) * 180) / Math.PI,
-        };
-      });
-      expect(style.duration).toBe("0.12s");
-      expect(style.rotation).toBeCloseTo(-6, 3);
-      await expect(stamp.locator("circle")).toHaveCSS("stroke-width", "1px");
-      await expect(stamp.locator("circle")).toHaveCSS("vector-effect", "non-scaling-stroke");
-    }
+    await expect(page.getByRole("button", { name: "Show", exact: true })).toBeDisabled();
     await expect(page.locator(".auth-issuing")).toHaveCSS("animation-name", "auth-working");
-    expect(await page.locator(".auth-card").boundingBox()).toEqual(card);
+    expect(await page.locator(".auth-book").boundingBox()).toEqual(book);
   } finally {
     release?.();
   }
   await expect(page.getByRole("status")).toContainText("Check your email to confirm the account");
-  for (const stamp of await page.locator(".auth-stamp").all()) {
-    await expect
-      .poll(() => stamp.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).f))
-      .toBe(0);
-  }
 });
 
 test("every text element exceeds 7:1 in all six themes, including errors and pending states", async ({
   page,
 }) => {
+  mkdirSync(evidence, { recursive: true });
+  writeFileSync(
+    `${evidence}/contrast.txt`,
+    "Rendered text, inputs, and placeholders. Both pages sampled at 1280px; visible verso sampled at 390px.\n",
+  );
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
@@ -351,6 +381,13 @@ test("every text element exceeds 7:1 in all six themes, including errors and pen
   await expect(page.getByRole("alert")).toContainText("Enter your email address first");
   await expect(page.locator("form")).toHaveAttribute("aria-describedby", "auth-message");
   await checkContrast(page, "reset needs email");
+  await page.getByLabel("Email").fill("reader@quire.local");
+  await page.route("**/auth/v1/recover**", (route) =>
+    route.fulfill({ status: 503, json: { message: "Unavailable" } }),
+  );
+  await page.getByRole("button", { name: "Forgot your password?" }).click();
+  await expect(page.getByRole("alert")).toContainText("Could not send a reset link");
+  await checkContrast(page, "reset failure");
   await page.route("**/auth/v1/recover**", (route) => route.fulfill({ json: {} }));
   await page.getByLabel("Email").fill("reader@quire.local");
   await page.getByRole("button", { name: "Forgot your password?" }).click();
@@ -383,7 +420,7 @@ test("every text element exceeds 7:1 in all six themes, including errors and pen
   expect(
     await page.locator(".auth-issuing").evaluate((el) => getComputedStyle(el).animationName),
   ).toBe("none");
-  await expect(page.locator(".auth-stamp")).toHaveCSS("transition-duration", "0s");
+  await expect(page.locator(".auth-issuing")).toHaveCSS("transition-duration", "0s");
   releaseSignIn?.();
   await expect(page.getByRole("button", { name: "Try again" })).toBeEnabled();
   await page.getByRole("button", { name: "No account yet? Create one" }).click();
@@ -399,6 +436,7 @@ test("every text element exceeds 7:1 in all six themes, including errors and pen
   await checkContrast(page, "sign up weak");
   await page.getByLabel("Password", { exact: true }).fill("eightabc");
   await expect(page.getByText("Password strength: Fair")).toBeVisible();
+  await checkContrast(page, "sign up fair");
   await page.getByLabel("Password", { exact: true }).fill("Library-card42");
   await expect(page.getByText("Password strength: Strong")).toBeVisible();
   await page.getByLabel("Repeat", { exact: true }).fill("Different-card42");
@@ -425,4 +463,50 @@ test("every text element exceeds 7:1 in all six themes, including errors and pen
   releaseSignup?.();
   await expect(page.getByRole("status")).toContainText("Check your email to confirm the account");
   await checkContrast(page, "confirmation email");
+});
+
+test("the recto reads the demo's saved book and today's log", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/?demo=1#/today");
+  await page.getByRole("button", { name: "Skip tour" }).click();
+  await page.getByLabel("Pages read", { exact: true }).fill("12");
+  await page.getByRole("button", { name: "Log 12 pages", exact: true }).click();
+  await expect(
+    page.getByText("12 pages today", { exact: true }).filter({ visible: true }),
+  ).toBeVisible();
+  await page.goto("/");
+  await expect(page.locator(".auth-book-title")).toHaveText("The Waves");
+  await expect(page.locator(".auth-reading-pages dd")).toHaveText("12");
+  await expect(page.locator(".auth-reading-day-today")).toHaveClass(/auth-reading-day-filled/);
+  await page.getByRole("link", { name: "Try the interactive demo" }).click();
+  await expect(
+    page.getByText("12 pages today", { exact: true }).filter({ visible: true }),
+  ).toBeVisible();
+});
+
+test("a missing cover uses the shared placeholder and storage denial leaves auth usable", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.route("**/covers/waves.webp", (route) => route.fulfill({ status: 404, body: "" }));
+  await page.addInitScript(() => {
+    Object.defineProperty(window, "localStorage", {
+      get() {
+        throw new DOMException("Storage denied", "SecurityError");
+      },
+    });
+  });
+  await page.goto("/");
+  await expect(page.getByRole("img", { name: "The Waves, no cover image" })).toHaveAttribute(
+    "src",
+    "/covers/placeholder.svg",
+  );
+  await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeEnabled();
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page.getByLabel("Email")).toBeFocused();
+  expect(
+    await page.getByLabel("Email").evaluate((el) => (el as HTMLInputElement).validity.valueMissing),
+  ).toBe(true);
+  await page.getByRole("button", { name: "No account yet? Create one" }).click();
+  await expect(page.getByRole("heading", { name: "Create an account" })).toBeVisible();
 });
