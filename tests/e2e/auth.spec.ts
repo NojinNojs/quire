@@ -186,7 +186,7 @@ test("the form and cover wall fit all requested widths", async ({ page }) => {
       if (!workspace || !wall) throw new Error("Auth layout missing");
       await expect(page.locator(".auth-cover-wall")).toHaveAttribute("aria-hidden", "true");
       await expect(page.locator('.auth-cover-wall img:not([alt=""])')).toHaveCount(0);
-      await expect(page.locator(".auth-cover-wall img")).toHaveCount(12);
+      await expect(page.locator(".auth-cover-wall img")).toHaveCount(9);
       if (width < 960) {
         expect(wall.y).toBeGreaterThanOrEqual(workspace.y + workspace.height);
         expect(wall.x).toBe(0);
@@ -196,14 +196,14 @@ test("the form and cover wall fit all requested widths", async ({ page }) => {
           await page.locator(".auth-cover-wall").evaluate((el) => getComputedStyle(el).overflow),
         ).toBe("hidden");
       } else {
-        expect(workspace.width / width).toBeCloseTo(0.46, 2);
+        expect(workspace.width / width).toBeCloseTo(0.48, 2);
         expect(wall.x).toBeCloseTo(workspace.width);
-        await expect(page.locator(".auth-cover:visible")).toHaveCount(12);
+        await expect(page.locator(".auth-cover:visible")).toHaveCount(9);
         expect(
           await page
             .locator(".auth-shelves")
             .evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(" ").length),
-        ).toBe(4);
+        ).toBe(3);
       }
       if (width === 320 && mode === "signup") {
         await settleArtwork(page);

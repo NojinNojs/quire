@@ -8,9 +8,6 @@ const jackets = [
   ["middle-waves", "waves", "800"],
   ["middle-room", "room", "800"],
   ["lower-walden", "walden", "800"],
-  ["lower-laut", "laut", "800"],
-  ["lower-histories", "histories", "900"],
-  ["lower-bumi", "bumi", "800"],
 ] as const;
 
 export function CoverWall() {
