@@ -1,6 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { useEffect, useRef, useState } from "react";
-import { CoverWall } from "./CoverWall";
 import "../../styles/auth.css";
 
 type Mode = "signin" | "signup";
@@ -15,6 +14,18 @@ export function passwordStrength(password: string): "Weak" | "Fair" | "Strong" {
 
 function initialMode(): Mode {
   return new URLSearchParams(window.location.search).get("auth") === "signup" ? "signup" : "signin";
+}
+
+function Stamp({ label }: { label: "QUIRE" | "NEW CARD" }) {
+  return (
+    <svg className="auth-stamp" viewBox="0 0 80 80" aria-hidden="true">
+      <circle cx="40" cy="40" r="36" />
+      <text x="40" y="44" textAnchor="middle">
+        {label}
+      </text>
+      <path className="auth-stamp-grain" d="M12 28h56M10 53h60" />
+    </svg>
+  );
 }
 
 export function AuthForm({ client }: { client: SupabaseClient }) {
@@ -117,22 +128,25 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
   }
 
   return (
-    <main className="auth-page" aria-labelledby="auth-title">
-      <section className="auth-workspace">
-        <div className="auth-form-wrap">
-          <header className="auth-intro">
-            <p className="auth-serif">
-              A home for your
-              <br />
-              reading life.
+    <main className="auth-page" aria-labelledby="auth-title" data-busy={busy}>
+      <section className="auth-card">
+        <div className="auth-workspace">
+          <header className="auth-card-head">
+            <p className="auth-card-label">
+              <span>QUIRE</span>
+              <span>BORROWER CARD</span>
             </p>
-            <p className="auth-card-label">BORROWER CARD · QUIRE</p>
+            <p className="auth-card-number">NO. 0001</p>
           </header>
           <div key={mode} className="auth-face" data-mode={mode}>
             <header className="auth-head">
               <h1 id="auth-title" ref={heading} tabIndex={-1}>
                 {mode === "signin" ? "Sign in" : "Create an account"}
               </h1>
+              <div className="auth-stamps">
+                {mode === "signup" ? <Stamp label="NEW CARD" /> : null}
+                <Stamp label="QUIRE" />
+              </div>
             </header>
             <form
               onSubmit={submit}
@@ -140,7 +154,7 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
               aria-busy={busy}
               aria-describedby={message ? "auth-message" : undefined}
             >
-              <label>
+              <label className="auth-field">
                 <span className="label">Email</span>
                 <input
                   type="email"
@@ -188,7 +202,7 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
                       <span />
                     </span>
                   </div>
-                  <label>
+                  <label className="auth-field">
                     <span className="label">Repeat</span>
                     <input
                       type="password"
@@ -224,9 +238,7 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
               ) : null}
               <button type="submit" className="primary" disabled={busy || mismatch}>
                 {busy
-                  ? mode === "signin"
-                    ? "Signing in..."
-                    : "Creating account..."
+                  ? "Issuing card"
                   : failed
                     ? "Try again"
                     : mode === "signin"
@@ -273,10 +285,17 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
               </p>
             </footer>
           </div>
+          <p className="auth-footnote">Your shelf is private. One account, one library.</p>
+          <p className="auth-classes">
+            {["100", "500", "800", "900"].map((number) => (
+              <span key={number} data-class={number}>
+                <i aria-hidden="true" />
+                {number}
+              </span>
+            ))}
+          </p>
         </div>
-        <p className="auth-footnote">Your shelf is private. One account, one library.</p>
       </section>
-      <CoverWall />
     </main>
   );
 }
