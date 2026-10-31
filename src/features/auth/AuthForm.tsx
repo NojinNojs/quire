@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { useEffect, useRef, useState } from "react";
+import { CoverWall } from "./CoverWall";
 import "../../styles/auth.css";
 
 type Mode = "signin" | "signup";
@@ -117,57 +118,21 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
 
   return (
     <main className="auth-page" aria-labelledby="auth-title">
-      <section className="auth-story" aria-label="A reading space of your own">
-        <div className="auth-story-brand">
-          Quire<span>A personal library</span>
-        </div>
-        <div className="auth-photograph">
-          <img
-            src="/images/library.webp"
-            alt="Warmly lit bookshelves in a quiet library"
-            fetchPriority="high"
-          />
-        </div>
-        <div className="auth-story-copy">
-          <p className="auth-story-title">
-            A home for your <em>reading life.</em>
-          </p>
-          <p>Your books, the pages you turn, and the thoughts you keep along the way.</p>
-          <div className="auth-story-bottom">
-            <span>Made for the way you read.</span>
-            <span aria-hidden="true">Q.</span>
-          </div>
-        </div>
-      </section>
-      <a
-        href="https://unsplash.com/photos/sfL_QOnmy00"
-        target="_blank"
-        rel="noreferrer"
-        className="auth-photo-credit"
-      >
-        <span className="auth-credit-full">Photography by Janko Ferlič / Unsplash</span>
-        <span className="auth-credit-short">Photo credit</span>
-      </a>
       <section className="auth-workspace">
-        <nav className="auth-topnav" aria-label="Getting started">
-          <span className="auth-mobile-brand">Quire</span>
-        </nav>
         <div className="auth-form-wrap">
-          <div
-            key={mode}
-            className="auth-face"
-            data-mode={mode}
-            data-slide={switched ? "true" : undefined}
-          >
+          <header className="auth-intro">
+            <p className="auth-serif">
+              A home for your
+              <br />
+              reading life.
+            </p>
+            <p className="auth-card-label">BORROWER CARD · QUIRE</p>
+          </header>
+          <div key={mode} className="auth-face" data-mode={mode}>
             <header className="auth-head">
               <h1 id="auth-title" ref={heading} tabIndex={-1}>
                 {mode === "signin" ? "Sign in" : "Create an account"}
               </h1>
-              <p className="auth-lede">
-                {mode === "signin"
-                  ? "Pick up right where you left off."
-                  : "Start with the books you already love."}
-              </p>
             </header>
             <form
               onSubmit={submit}
@@ -215,11 +180,6 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
                   {reveal ? "Hide" : "Show"}
                 </button>
               </div>
-              {mode === "signin" ? (
-                <button type="button" className="auth-forgot" disabled={busy} onClick={sendReset}>
-                  Forgot your password?
-                </button>
-              ) : null}
               {mode === "signup" ? (
                 <>
                   <div id="auth-strength" className="auth-strength" data-strength={strength}>
@@ -276,49 +236,47 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
               </button>
             </form>
             <footer className="auth-footer">
-              <button
-                type="button"
-                className="auth-switch"
-                aria-label={
-                  mode === "signin"
-                    ? "No account yet? Create one"
-                    : "Already have an account? Sign in"
-                }
-                disabled={busy}
-                onClick={switchMode}
-              >
-                <span className="auth-switch-ask">
-                  {mode === "signin" ? "No account yet?" : "Already have an account?"}
-                </span>{" "}
-                <span className="auth-switch-action">
-                  {mode === "signin" ? "Create one" : "Sign in"}
-                </span>
-              </button>
-              <div className="auth-divider">
-                <span>Have a look around first</span>
-              </div>
-              <a
-                className="auth-demo-link"
-                href="?demo=1#/today"
-                aria-label="Try the interactive demo"
-              >
-                <span className="auth-demo-covers" aria-hidden="true">
-                  <img src="/covers/waves.webp" alt="" />
-                  <img src="/covers/laut.webp" alt="" />
-                  <img src="/covers/meditations.webp" alt="" />
-                </span>
-                <span>
-                  <strong className="auth-demo-title">Try the interactive demo</strong>
-                  <span className="auth-demo-description">
-                    A sample library. No account needed.
+              <div className="auth-account-links">
+                {mode === "signin" ? (
+                  <button type="button" className="auth-forgot" disabled={busy} onClick={sendReset}>
+                    Forgot your password?
+                  </button>
+                ) : null}
+                <button
+                  type="button"
+                  className="auth-switch"
+                  aria-label={
+                    mode === "signin"
+                      ? "No account yet? Create one"
+                      : "Already have an account? Sign in"
+                  }
+                  disabled={busy}
+                  onClick={switchMode}
+                >
+                  <span className="auth-switch-ask">
+                    {mode === "signin" ? "No account yet?" : "Already have an account?"}
+                  </span>{" "}
+                  <span className="auth-switch-action">
+                    {mode === "signin" ? "Create one" : "Sign in"}
                   </span>
-                </span>
-              </a>
+                </button>
+              </div>
+              <p className="auth-demo">
+                Or look around first:{" "}
+                <a
+                  className="auth-demo-link"
+                  href="?demo=1#/today"
+                  aria-label="Try the interactive demo"
+                >
+                  try the interactive demo.
+                </a>
+              </p>
             </footer>
           </div>
         </div>
-        <p className="auth-footnote">A little space for your books.</p>
+        <p className="auth-footnote">Your shelf is private. One account, one library.</p>
       </section>
+      <CoverWall />
     </main>
   );
 }
