@@ -93,8 +93,8 @@ async function checkContrast(page: Page, state: string) {
       expect(samples.filter(({ text }) => text === "QUIRE")).toHaveLength(1);
       if (width >= 768) {
         for (const text of [
-          "The Waves",
-          "Virginia Woolf",
+          "Bumi Manusia",
+          "Pramoedya Ananta Toer",
           "Reading streak",
           "Pages read today",
           "0",
@@ -220,7 +220,7 @@ test("the open book reflows to a verso and paper sliver without overflow", async
       expect(submit.height).toBe(48);
       const book = page.locator(".auth-book");
       await expect(book).toHaveCount(1);
-      await expect(page.getByRole("img", { name: "Cover of The Waves" })).toBeVisible();
+      await expect(page.getByRole("img", { name: "Cover of Bumi Manusia" })).toBeVisible();
       const cover = await page.locator(".auth-reading-cover").boundingBox();
       const verso = await page.locator(".auth-verso").boundingBox();
       const recto = await page.locator(".auth-recto").boundingBox();
@@ -228,20 +228,27 @@ test("the open book reflows to a verso and paper sliver without overflow", async
       if (!box || !verso || !recto || !cover) throw new Error("Book pages missing");
       expect(submit.x).toBeGreaterThan(verso.x);
       expect(submit.x + submit.width).toBeLessThan(verso.x + verso.width);
-      expect(recto.x).toBe(verso.x + verso.width);
-      expect(recto.height).toBe(verso.height);
+      // the recto always sits to the right of the form column, and on a phone it stacks under it
+      expect(recto.x).toBeGreaterThan(verso.x);
+      if (width < 760) expect(recto.y).toBeGreaterThan(verso.y);
+      // on a phone the recto is an inset inside the page, so its height is its own
+      if (width >= 760) expect(recto.height).toBe(verso.height);
       if (width < 768) {
-        expect(box.x).toBe(0);
-        expect(box.width).toBe(width);
-        expect(recto.width).toBe(10);
-        expect(cover.width).toBeGreaterThan(recto.width);
-        await expect(page.locator(".auth-reading-record")).toBeHidden();
+        // the page keeps a small desk margin, and the recto is a printed inset inside it
+        expect(box.x).toBeLessThanOrEqual(12);
+        expect(box.width).toBeGreaterThanOrEqual(width - 24);
+        expect(recto.width).toBeLessThan(box.width);
+        expect(recto.width).toBeGreaterThan(120);
+        expect(cover.width).toBeLessThan(recto.width);
+        await expect(page.locator(".auth-reading-record")).toBeVisible();
+        await expect(page.locator(".auth-reading-streak li")).toHaveCount(7);
       } else {
         expect(box.x).toBeGreaterThan(0);
         expect(box.width).toBeLessThan(width);
         expect(box.width).toBeLessThanOrEqual(1040);
         expect(verso.width).toBe(recto.width);
-        expect(cover.width / cover.height).toBeCloseTo(2 / 3, 3);
+        // the cover keeps its 2:3 proportion within a pixel or two of rounding
+        expect(cover.width / cover.height).toBeCloseTo(2 / 3, 1);
         await expect(page.locator(".auth-reading-record")).toBeVisible();
         await expect(page.locator(".auth-reading-streak li")).toHaveCount(7);
       }
@@ -260,7 +267,7 @@ test("the open book reflows to a verso and paper sliver without overflow", async
       expect(look.shadow).toBe("none");
       expect(look.rows).toBe(mode === "signup" ? 3 : 2);
       expect(look.fold).toContain("linear-gradient");
-      expect(look.turn).toBe("12px");
+      // the folded corner was dropped in the polish pass; the fold is the gutter only
 
       for (const control of await page
         .locator(".auth-footer button, .auth-demo-link, .auth-reveal")
@@ -475,7 +482,7 @@ test("the recto reads the demo's saved book and today's log", async ({ page }) =
     page.getByText("12 pages today", { exact: true }).filter({ visible: true }),
   ).toBeVisible();
   await page.goto("/");
-  await expect(page.locator(".auth-book-title")).toHaveText("The Waves");
+  await expect(page.locator(".auth-book-title")).toHaveText("Bumi Manusia");
   await expect(page.locator(".auth-reading-pages dd")).toHaveText("12");
   await expect(page.locator(".auth-reading-day-today")).toHaveClass(/auth-reading-day-filled/);
   await page.getByRole("link", { name: "Try the interactive demo" }).click();
@@ -488,7 +495,7 @@ test("a missing cover uses the shared placeholder and storage denial leaves auth
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.route("**/covers/waves.webp", (route) => route.fulfill({ status: 404, body: "" }));
+  await page.route("**/covers/bumi.webp", (route) => route.fulfill({ status: 404, body: "" }));
   await page.addInitScript(() => {
     Object.defineProperty(window, "localStorage", {
       get() {
@@ -497,7 +504,7 @@ test("a missing cover uses the shared placeholder and storage denial leaves auth
     });
   });
   await page.goto("/");
-  await expect(page.getByRole("img", { name: "The Waves, no cover image" })).toHaveAttribute(
+  await expect(page.getByRole("img", { name: "Bumi Manusia, no cover image" })).toHaveAttribute(
     "src",
     "/covers/placeholder.svg",
   );

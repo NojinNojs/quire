@@ -54,7 +54,6 @@ export const sampleBooks = [
     publisher: "Hogarth Press",
     year: 1931,
     pages: 324,
-    status: "reading",
   }),
   book("demo-room", "A Room of One's Own", "Virginia Woolf", "824.912", {
     publisher: "Hogarth Press",
@@ -74,8 +73,12 @@ export const sampleBooks = [
     pages: 784,
   }),
   book("demo-bumi", "Bumi Manusia", "Pramoedya Ananta Toer", "899.221", {
+    publisher: "Hasta Mitra",
+    year: 1980,
     language: "id",
-    pages: 535,
+    pages: 550,
+    status: "reading",
+    cover_url: "/covers/bumi.webp",
   }),
   book("demo-laut", "Laut Bercerita", "Leila S. Chudori", "899.221", {
     language: "id",
@@ -98,7 +101,7 @@ export function createDemoState(date = new Date()): DemoState {
       ...[3, 2, 1].map((ago) => {
         const day = new Date(date);
         day.setDate(day.getDate() - ago);
-        return { id: `sample-${ago}`, bookId: "demo-waves", day: readingDay(day), pages: 16 };
+        return { id: `sample-${ago}`, bookId: "demo-bumi", day: readingDay(day), pages: 16 };
       }),
       { id: "sample-finished", bookId: "demo-room", day: "2026-01-01", pages: 172 },
     ],

@@ -1,0 +1,22 @@
+[
+  {
+    "theme": "shelf-light",
+    "width": 320,
+    "result": "PASS: keyboard order and accent focus, hover and active on all seven controls; Show/Hide, reset guidance, mode heading focus, mismatch/recovery."
+  },
+  {
+    "theme": "shelf-light",
+    "width": 1280,
+    "result": "PASS: keyboard order and accent focus, hover and active on all seven controls; Show/Hide, reset guidance, mode heading focus, mismatch/recovery."
+  },
+  {
+    "theme": "oxford-dark",
+    "width": 320,
+    "result": "PASS: keyboard order and accent focus, hover and active on all seven controls; Show/Hide, reset guidance, mode heading focus, mismatch/recovery."
+  },
+  {
+    "theme": "oxford-dark",
+    "width": 1280,
+    "result": "PASS: keyboard order and accent focus, hover and active on all seven controls; Show/Hide, reset guidance, mode heading focus, mismatch/recovery."
+  }
+]

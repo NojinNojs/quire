@@ -40,23 +40,23 @@ describe("interactive demo", () => {
     expect(screen.getByRole("heading", { name: "Today" })).toBeTruthy();
     fireEvent.change(screen.getByLabelText("Pages read"), { target: { value: "10" } });
     fireEvent.click(screen.getByRole("button", { name: "Log 10 pages" }));
-    expect(currentPages(loadDemoState(window.localStorage), "demo-waves")).toBe(58);
+    expect(currentPages(loadDemoState(window.localStorage), "demo-bumi")).toBe(58);
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
-    expect(currentPages(loadDemoState(window.localStorage), "demo-waves")).toBe(48);
+    expect(currentPages(loadDemoState(window.localStorage), "demo-bumi")).toBe(48);
     fireEvent.click(screen.getByRole("button", { name: "Log 10 pages" }));
     navigate("#/shelf");
     act(() => vi.advanceTimersByTime(5000));
     view.unmount();
     render(<App />);
     navigate("#/today");
-    expect(screen.getAllByText("58 / 324").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("58 / 550").length).toBeGreaterThan(0);
     expect(screen.getByRole("heading", { name: "4 days streak" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Reset demo" }));
     fireEvent.click(screen.getByRole("button", { name: "Keep changes" }));
-    expect(currentPages(loadDemoState(window.localStorage), "demo-waves")).toBe(58);
+    expect(currentPages(loadDemoState(window.localStorage), "demo-bumi")).toBe(58);
     fireEvent.click(screen.getByRole("button", { name: "Reset demo" }));
     fireEvent.click(screen.getByRole("button", { name: "Reset sample library" }));
-    expect(currentPages(loadDemoState(window.localStorage), "demo-waves")).toBe(48);
+    expect(currentPages(loadDemoState(window.localStorage), "demo-bumi")).toBe(48);
     expect(window.localStorage.getItem("account-data")).toBe("keep");
   });
 
@@ -103,7 +103,7 @@ describe("interactive demo", () => {
     expect(screen.getByText(/Changes last for this visit only/)).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Skip tour" }));
     fireEvent.click(screen.getByRole("button", { name: "Log 1 page" }));
-    expect(screen.getAllByText("49 / 324").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("49 / 550").length).toBeGreaterThan(0);
   });
 
   it("commits the previous book's pending log when choosing another active book", () => {
@@ -113,7 +113,7 @@ describe("interactive demo", () => {
     fireEvent.click(screen.getByRole("button", { name: "Read this book" }));
     navigate("#/today");
     expect(screen.queryByRole("button", { name: "Undo" })).toBeNull();
-    expect(currentPages(loadDemoState(window.localStorage), "demo-waves")).toBe(49);
+    expect(currentPages(loadDemoState(window.localStorage), "demo-bumi")).toBe(49);
     expect(screen.getByRole("button", { name: "Log 1 page" }).hasAttribute("disabled")).toBe(false);
     navigate("#/book/demo-meditations");
     fireEvent.click(screen.getByRole("button", { name: "Mark as finished" }));
@@ -128,25 +128,28 @@ describe("demo persistence", () => {
       expect(loadDemoState({ getItem: () => raw }).books).toHaveLength(6);
     }
     const state = createDemoState();
-    if (state.books[0]) state.books[0].cover_url = "https://example.invalid/remote.jpg";
-    expect(loadDemoState({ getItem: () => JSON.stringify(state) }).books[0]?.cover_url).toBe(
-      "/covers/waves.webp",
+    const featured = state.books.find((entry) => entry.id === "demo-bumi");
+    if (featured) featured.cover_url = "https://example.invalid/remote.jpg";
+    const restored = loadDemoState({ getItem: () => JSON.stringify(state) });
+    expect(restored.books.find((entry) => entry.id === "demo-bumi")?.cover_url).toBe(
+      "/covers/bumi.webp",
     );
   });
 
   it("upgrades covers in a saved demo without resetting notes or reading progress", () => {
     const state = createDemoState();
-    if (state.books[0]) {
-      state.books[0].cover_url = null;
-      state.books[0].notes = "Keep my notes";
+    const featured = state.books.find((entry) => entry.id === "demo-bumi");
+    if (featured) {
+      featured.cover_url = null;
+      featured.notes = "Keep my notes";
     }
-    state.logs.push({ id: "my-log", bookId: "demo-waves", pages: 12, day: "2026-10-29" });
+    state.logs.push({ id: "my-log", bookId: "demo-bumi", pages: 12, day: "2026-10-29" });
     const restored = loadDemoState({ getItem: () => JSON.stringify(state) });
-    expect(restored.books[0]).toMatchObject({
-      cover_url: "/covers/waves.webp",
+    expect(restored.books.find((entry) => entry.id === "demo-bumi")).toMatchObject({
+      cover_url: "/covers/bumi.webp",
       notes: "Keep my notes",
     });
-    expect(currentPages(restored, "demo-waves")).toBe(60);
+    expect(currentPages(restored, "demo-bumi")).toBe(60);
   });
 
   it("expires old undo windows and reports an old streak as broken", () => {

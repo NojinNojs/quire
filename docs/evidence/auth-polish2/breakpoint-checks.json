@@ -1,0 +1,38 @@
+[
+  {
+    "width": 360,
+    "scroll": 360,
+    "record": "static",
+    "cover": 64
+  },
+  {
+    "width": 520,
+    "scroll": 520,
+    "record": "static",
+    "cover": 64
+  },
+  {
+    "width": 600,
+    "scroll": 600,
+    "record": "static",
+    "cover": 64
+  },
+  {
+    "width": 759,
+    "scroll": 759,
+    "record": "static",
+    "cover": 64
+  },
+  {
+    "width": 760,
+    "scroll": 760,
+    "record": "absolute",
+    "cover": 180
+  },
+  {
+    "width": 1024,
+    "scroll": 1024,
+    "record": "absolute",
+    "cover": 180
+  }
+]
