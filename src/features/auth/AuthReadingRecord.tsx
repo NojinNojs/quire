@@ -21,7 +21,6 @@ export function AuthReadingRecord() {
 
   return (
     <aside className="auth-recto" aria-label="Your demo reading record">
-      <p className="auth-shelf-label">FROM YOUR SHELF</p>
       <CoverImage
         className="auth-reading-cover"
         title={book.title}
@@ -29,10 +28,12 @@ export function AuthReadingRecord() {
         client={null}
       />
       <div className="auth-reading-record">
+        <p className="auth-bookplate-label">EX LIBRIS</p>
         <p className="auth-book-title">
           <cite>{book.title}</cite>
         </p>
         <p className="auth-book-author">{book.author}</p>
+        <p className="auth-bookplate-owner">THIS COPY BELONGS TO A READER</p>
         <div className="auth-reading-streak">
           <p className="auth-record-label">Reading streak</p>
           <ol aria-label="Last seven days in the demo">

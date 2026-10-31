@@ -13,6 +13,7 @@ const client = {
 
 beforeEach(() => {
   window.history.replaceState(null, "", "/#/search");
+  window.localStorage.setItem("quire:cover-seen", "true");
   vi.resetAllMocks();
 });
 afterEach(cleanup);

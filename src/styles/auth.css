@@ -22,6 +22,93 @@
   background: var(--auth-paper);
 }
 
+.auth-page[data-covered="true"] {
+  height: 100svh;
+  overflow: hidden;
+}
+
+.auth-cover-stage {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--auth-desk);
+  perspective: 1800px;
+}
+
+.auth-cover-stage[data-opening="true"] {
+  background: transparent;
+}
+
+.auth-cover {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  aspect-ratio: 2 / 3;
+  padding: 48px 24px;
+  border: 0;
+  border-radius: 0;
+  background: var(--class-800);
+  color: var(--on-class);
+  cursor: pointer;
+  transform-origin: left center;
+}
+
+.auth-cover-title {
+  padding: 0 16px 16px;
+  border-bottom: 1px solid currentColor;
+  font: 400 44px / 48px var(--font-serif);
+}
+
+:where(:root[data-theme$="-dark"]) .auth-cover {
+  color: var(--jacket-spine-shade);
+}
+
+.auth-cover-subtitle,
+.auth-cover-prompt {
+  font: 400 10px / 16px var(--font-mono);
+}
+
+.auth-cover-subtitle {
+  margin-top: 16px;
+  letter-spacing: 0.12em;
+}
+
+.auth-cover-prompt {
+  position: absolute;
+  bottom: 48px;
+}
+
+.auth-page .auth-cover:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -8px;
+}
+
+[data-opening="true"] .auth-cover {
+  animation: auth-cover-open 480ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes auth-cover-open {
+  to {
+    transform: rotateY(-105deg);
+  }
+}
+
+.auth-bookmark {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: calc(50% - 32px);
+  width: 10px;
+  height: 96px;
+  background: var(--accent);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 6px), 0 100%);
+}
+
 /* The fold stays continuous across both pages, including their margins. */
 .auth-book::after {
   content: "";
@@ -116,7 +203,7 @@
   border-radius: 0;
   background: transparent;
   color: var(--ink);
-  caret-color: var(--accent);
+  caret-color: var(--ink);
   font: 400 16px / 24px var(--font-sans);
 }
 
@@ -256,7 +343,7 @@
   display: block;
   width: 33.333%;
   height: 100%;
-  background: var(--accent);
+  background: var(--ink);
   transition: width var(--motion) var(--ease);
 }
 
@@ -309,7 +396,9 @@
 }
 
 .auth-footnote {
+  max-width: 44ch;
   margin: 0;
+  margin-inline: auto;
   color: var(--auth-secondary-ink);
   font: 400 10px / 16px var(--font-sans);
 }
@@ -323,7 +412,8 @@
   align-items: center;
 }
 
-.auth-shelf-label {
+.auth-bookplate-label,
+.auth-bookplate-owner {
   display: none;
 }
 
@@ -393,7 +483,7 @@
 }
 
 .auth-reading-day-today .auth-day-mark {
-  border: 2px solid var(--accent);
+  border: 2px solid var(--ink);
 }
 
 .auth-reading-day-restored .auth-day-mark {
@@ -449,7 +539,8 @@
 
 @media (max-width: 759px) {
   .auth-page {
-    padding: 8px;
+    padding: 0;
+    background: var(--auth-paper);
   }
 
   .auth-book {
@@ -460,15 +551,58 @@
     display: none;
   }
 
+  .auth-book::before {
+    border: 0;
+  }
+
+  .auth-cover-stage {
+    left: calc(50% - 50vw);
+    width: 100vw;
+    height: 100svh;
+  }
+
+  .auth-cover {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .auth-cover-title {
+    font-size: 34px;
+    line-height: 40px;
+  }
+
+  .auth-bookmark {
+    right: 24px;
+    left: auto;
+  }
+
   .auth-verso {
     width: 100%;
-    min-height: calc(100svh - 16px);
-    padding: 24px 16px;
+    min-height: 100svh;
+    padding: 32px 24px;
+  }
+
+  .auth-face,
+  .auth-page-foot {
+    width: 100%;
+    max-width: 44ch;
+    margin-inline: auto;
+  }
+
+  .auth-running-head {
+    padding-right: 24px;
   }
 
   .auth-intro {
-    margin: 24px 0 16px;
+    margin: 32px 0 24px;
     font-size: 32px;
+  }
+
+  .auth-account-links {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    column-gap: 8px;
   }
 
   .auth-recto {
@@ -477,18 +611,22 @@
     grid-template-columns: 64px minmax(0, 1fr);
     align-items: start;
     column-gap: 16px;
-    margin-top: 16px;
-    padding: 15px 0 0;
-    border-top: 1px solid var(--rule);
+    margin-top: 24px;
+    padding: 12px;
+    border: 1px solid var(--rule);
   }
 
-  .auth-shelf-label {
+  .auth-bookplate-label,
+  .auth-bookplate-owner {
     display: block;
-    grid-column: 1 / -1;
-    margin: 0 0 16px;
+    margin: 0 0 8px;
     color: var(--auth-secondary-ink);
-    font: 400 10px / 16px var(--font-mono);
+    font: 400 9px / 16px var(--font-mono);
     letter-spacing: 0.08em;
+  }
+
+  .auth-bookplate-owner {
+    margin: 12px 0 0;
   }
 
   .auth-page .auth-reading-cover {
@@ -560,11 +698,28 @@
     animation: none;
     transition: none;
   }
+
+  [data-opening="true"] .auth-cover {
+    animation: auth-cover-fade 120ms linear forwards;
+  }
 }
 
-/* the phone page needs room under the inset so the last line is never clipped */
-@media (max-width: 759px) {
+@keyframes auth-cover-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 359px) {
   .auth-verso {
-    padding-bottom: var(--space-32);
+    padding-inline: 16px;
+  }
+
+  .auth-bookmark {
+    right: 16px;
+  }
+
+  .auth-account-links {
+    grid-template-columns: 1fr;
   }
 }

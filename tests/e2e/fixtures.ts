@@ -18,6 +18,7 @@ export const test = base.extend<{ signedInPage: Page; prerequisites: void }>({
   signedInPage: async ({ page, request }, use) => {
     if (!stack) throw new Error("Local Supabase is required");
     await page.goto("/");
+    await page.getByRole("button", { name: "Open Quire" }).click();
     await page.getByRole("button", { name: "No account yet? Create one" }).click();
     await page.getByLabel("Email").fill(`e2e.${randomUUID()}@quire.local`);
     await page.getByLabel("Password").fill(`E2e-${randomUUID()}`);
