@@ -12,14 +12,14 @@ const themes = [
   "oxford-dark",
 ];
 const footnote = "Your shelf is private. One account, one library.";
-const evidence = "docs/evidence/auth-v2";
+const evidence = "docs/evidence/auth-card";
 
 async function checkContrast(page: Page, state: string) {
   for (const theme of themes) {
     const samples = await page.evaluate((value) => {
       document.documentElement.dataset.theme = value;
-      const column = document.querySelector(".auth-workspace");
-      if (!column) throw new Error("Form column missing");
+      const column = document.querySelector(".auth-card");
+      if (!column) throw new Error("Borrower card missing");
       const canvas = document.createElement("canvas");
       canvas.width = canvas.height = 1;
       const context = canvas.getContext("2d");
@@ -81,6 +81,18 @@ async function checkContrast(page: Page, state: string) {
       "Foot line must be sampled",
     ).toBe(true);
     expect(samples.some(({ text }) => text === "try the interactive demo.")).toBe(true);
+    expect(samples.some(({ text }) => text === "NO. 0001")).toBe(true);
+    expect(samples.some(({ text }) => text === "BORROWER CARD")).toBe(true);
+    for (const number of ["100", "500", "800", "900"]) {
+      expect(
+        samples.some(({ text }) => text === number),
+        `Sample class ${number}`,
+      ).toBe(true);
+    }
+    expect(samples.filter(({ text }) => text === "QUIRE")).toHaveLength(2);
+    if (await page.locator('[data-mode="signup"]').count()) {
+      expect(samples.some(({ text }) => text === "NEW CARD")).toBe(true);
+    }
     expect(samples.length).toBeGreaterThan(12);
     for (const { text, ratio } of samples) {
       expect(ratio, `${theme}, ${state}: ${text}`).toBeGreaterThanOrEqual(7);
@@ -88,14 +100,9 @@ async function checkContrast(page: Page, state: string) {
   }
 }
 
-async function settleArtwork(page: Page) {
+async function settleCard(page: Page) {
   await page.evaluate(async () => {
     await document.fonts.ready;
-    await Promise.all(
-      [...document.querySelectorAll<HTMLImageElement>(".auth-cover-wall img")].map((img) =>
-        img.decode(),
-      ),
-    );
   });
 }
 
@@ -148,13 +155,18 @@ test("create an account, take the first-run tour, sign out and sign back in", as
 });
 
 for (const theme of ["shelf-light", "oxford-dark"]) {
-  for (const width of [390, 1280]) {
+  for (const width of [390, 768, 1280]) {
     test(`sign in and sign up at ${width} in ${theme}`, async ({ page }) => {
+      const errors: string[] = [];
+      page.on("pageerror", (error) => errors.push(error.message));
+      page.on("console", (message) => {
+        if (message.type() === "error") errors.push(message.text());
+      });
       await page.setViewportSize({ width, height: width === 390 ? 844 : 900 });
       await page.addInitScript((value) => localStorage.setItem("quire-theme", value), theme);
       await page.goto("/?source=auth#/shelf");
       await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeVisible();
-      await settleArtwork(page);
+      await settleCard(page);
       await page.screenshot({ path: `${evidence}/${theme}-signin-${width}.png`, fullPage: true });
       await page.getByRole("button", { name: "No account yet? Create one" }).click();
       await expect(page.getByRole("heading", { name: "Create an account" })).toBeFocused();
@@ -162,55 +174,68 @@ for (const theme of ["shelf-light", "oxford-dark"]) {
       await expect(page.getByRole("heading", { name: "Create an account" })).toBeVisible();
       expect(new URL(page.url()).hash).toBe("#/shelf");
       expect(new URL(page.url()).searchParams.get("source")).toBe("auth");
-      await settleArtwork(page);
+      await settleCard(page);
       await page.screenshot({ path: `${evidence}/${theme}-signup-${width}.png`, fullPage: true });
+      expect(errors).toEqual([]);
     });
   }
 }
 
-test("the form and cover wall fit all requested widths", async ({ page }) => {
+test("the whole surface is a borrower card at every requested width", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeVisible();
   for (const width of [320, 390, 768, 960, 1024, 1440]) {
     await page.setViewportSize({ width, height: width === 320 ? 640 : 844 });
     for (const mode of ["signin", "signup"]) {
-      if (mode === "signup")
+      if (mode === "signup") {
         await page.getByRole("button", { name: "No account yet? Create one" }).click();
+      }
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
       const submit = await page.locator(".primary").boundingBox();
       if (!submit) throw new Error("Submit missing");
-      expect(submit.y + submit.height).toBeLessThanOrEqual(await page.evaluate(() => innerHeight));
       expect(submit.height).toBe(48);
-      const workspace = await page.locator(".auth-workspace").boundingBox();
-      const wall = await page.locator(".auth-cover-wall").boundingBox();
-      if (!workspace || !wall) throw new Error("Auth layout missing");
-      await expect(page.locator(".auth-cover-wall")).toHaveAttribute("aria-hidden", "true");
-      await expect(page.locator('.auth-cover-wall img:not([alt=""])')).toHaveCount(0);
-      await expect(page.locator(".auth-cover-wall img")).toHaveCount(9);
-      if (width < 960) {
-        expect(wall.y).toBeGreaterThanOrEqual(workspace.y + workspace.height);
-        expect(wall.x).toBe(0);
-        expect(wall.width).toBe(width);
-        await expect(page.locator(".auth-cover:visible")).toHaveCount(5);
-        expect(
-          await page.locator(".auth-cover-wall").evaluate((el) => getComputedStyle(el).overflow),
-        ).toBe("hidden");
+      expect(submit.y + submit.height).toBeLessThanOrEqual(await page.evaluate(() => innerHeight));
+
+      const card = page.locator(".auth-card");
+      await expect(card).toHaveCount(1);
+      await expect(page.locator(".auth-page img, .auth-cover-wall")).toHaveCount(0);
+
+      const box = await card.boundingBox();
+      if (!box) throw new Error("Borrower card missing");
+      // edge to edge on a phone, inset on a desk above that
+      if (width < 600) {
+        expect(box.x).toBe(0);
+        expect(box.width).toBe(width);
       } else {
-        expect(workspace.width / width).toBeCloseTo(0.48, 2);
-        expect(wall.x).toBeCloseTo(workspace.width);
-        await expect(page.locator(".auth-cover:visible")).toHaveCount(9);
-        expect(
-          await page
-            .locator(".auth-shelves")
-            .evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(" ").length),
-        ).toBe(3);
+        expect(box.x).toBeGreaterThan(0);
+        expect(box.width).toBeLessThan(width);
+        expect(box.width).toBeLessThanOrEqual(600);
       }
-      if (width === 320 && mode === "signup") {
-        await settleArtwork(page);
-        await page.screenshot({ path: `${evidence}/shelf-light-signup-320.png`, fullPage: true });
+
+      const look = await card.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          radius: style.borderTopLeftRadius,
+          shadow: style.boxShadow,
+          rows: el.querySelectorAll(".auth-field").length,
+          signature: el.querySelector(".auth-classes")?.textContent?.trim() ?? "",
+        };
+      });
+      expect(look.radius).toBe(width < 600 ? "0px" : "2px");
+      expect(look.shadow).not.toBe("none");
+      expect(look.rows).toBe(mode === "signup" ? 3 : 2);
+      expect(look.signature).toContain("100");
+      expect(look.signature).toContain("900");
+
+      for (const control of await page
+        .locator(".auth-footer button, .auth-demo-link, .auth-reveal")
+        .all()) {
+        const rect = await control.boundingBox();
+        if (!rect) throw new Error("Card control missing");
+        expect(rect.height).toBeGreaterThanOrEqual(44);
       }
     }
-    await page.getByRole("button", { name: "Already have an account? Sign in" }).click();
+    await page.goto("/");
   }
 });
 
@@ -234,6 +259,10 @@ test("keyboard path, password visibility, focus rules and demo tour", async ({ p
       return { outline: style.outlineWidth, rule: style.borderBottomWidth };
     });
     expect(style.outline === "2px" || style.rule === "2px").toBe(true);
+    if ((await control.getAttribute("name")) === "email") {
+      await settleCard(page);
+      await page.screenshot({ path: `${evidence}/shelf-light-focus-1280.png`, fullPage: true });
+    }
   }
   await page.getByRole("button", { name: "Show", exact: true }).focus();
   await page.keyboard.press("Enter");
@@ -256,6 +285,60 @@ test("keyboard path, password visibility, focus rules and demo tour", async ({ p
   await expect(page.getByRole("dialog", { name: "Make every page count." })).toHaveCount(0);
 });
 
+test("issuing presses the stamps and prints an animated rule without moving the card", async ({
+  page,
+}) => {
+  await page.goto("/?auth=signup");
+  await page.getByLabel("Email").fill("reader@quire.local");
+  await page.getByLabel("Password", { exact: true }).fill("Library-card42");
+  const card = await page.locator(".auth-card").boundingBox();
+  let release: (() => void) | undefined;
+  const pending = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/auth/v1/signup", async (route) => {
+    await pending;
+    await route.fulfill({ json: { user: { id: "confirmation-required" }, session: null } });
+  });
+  await page.getByRole("button", { name: "Create account", exact: true }).click();
+  try {
+    await expect(page.getByRole("button", { name: "Issuing card", exact: true })).toBeDisabled();
+    await expect(page.locator("form")).toHaveAttribute("aria-busy", "true");
+    await expect(page.getByLabel("Email")).toBeDisabled();
+    await expect(page.getByLabel("Password", { exact: true })).toBeDisabled();
+    await expect(
+      page.getByRole("button", { name: "Already have an account? Sign in" }),
+    ).toBeDisabled();
+    for (const stamp of await page.locator(".auth-stamp").all()) {
+      await expect
+        .poll(() => stamp.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).f))
+        .toBe(1);
+      const style = await stamp.evaluate((el) => {
+        const style = getComputedStyle(el);
+        const matrix = new DOMMatrix(style.transform);
+        return {
+          duration: style.transitionDuration,
+          rotation: (Math.atan2(matrix.b, matrix.a) * 180) / Math.PI,
+        };
+      });
+      expect(style.duration).toBe("0.12s");
+      expect(style.rotation).toBeCloseTo(-6, 3);
+      await expect(stamp.locator("circle")).toHaveCSS("stroke-width", "1px");
+      await expect(stamp.locator("circle")).toHaveCSS("vector-effect", "non-scaling-stroke");
+    }
+    await expect(page.locator(".auth-issuing")).toHaveCSS("animation-name", "auth-working");
+    expect(await page.locator(".auth-card").boundingBox()).toEqual(card);
+  } finally {
+    release?.();
+  }
+  await expect(page.getByRole("status")).toContainText("Check your email to confirm the account");
+  for (const stamp of await page.locator(".auth-stamp").all()) {
+    await expect
+      .poll(() => stamp.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).f))
+      .toBe(0);
+  }
+});
+
 test("every text element exceeds 7:1 in all six themes, including errors and pending states", async ({
   page,
 }) => {
@@ -266,6 +349,7 @@ test("every text element exceeds 7:1 in all six themes, including errors and pen
   await checkContrast(page, "sign in");
   await page.getByRole("button", { name: "Forgot your password?" }).click();
   await expect(page.getByRole("alert")).toContainText("Enter your email address first");
+  await expect(page.locator("form")).toHaveAttribute("aria-describedby", "auth-message");
   await checkContrast(page, "reset needs email");
   await page.route("**/auth/v1/recover**", (route) => route.fulfill({ json: {} }));
   await page.getByLabel("Email").fill("reader@quire.local");
@@ -294,11 +378,12 @@ test("every text element exceeds 7:1 in all six themes, including errors and pen
     });
   });
   await page.getByRole("button", { name: "Try again" }).click();
-  await expect(page.getByRole("button", { name: "Signing in..." })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Issuing card" })).toBeDisabled();
   await checkContrast(page, "sign in pending");
   expect(
     await page.locator(".auth-issuing").evaluate((el) => getComputedStyle(el).animationName),
   ).toBe("none");
+  await expect(page.locator(".auth-stamp")).toHaveCSS("transition-duration", "0s");
   releaseSignIn?.();
   await expect(page.getByRole("button", { name: "Try again" })).toBeEnabled();
   await page.getByRole("button", { name: "No account yet? Create one" }).click();
@@ -307,6 +392,10 @@ test("every text element exceeds 7:1 in all six themes, including errors and pen
   ).toBe("none");
   await page.getByLabel("Password", { exact: true }).fill("");
   await expect(page.getByText("Password strength: Weak")).toBeVisible();
+  await expect(page.getByLabel("Password", { exact: true })).toHaveAttribute(
+    "aria-describedby",
+    "auth-strength",
+  );
   await checkContrast(page, "sign up weak");
   await page.getByLabel("Password", { exact: true }).fill("eightabc");
   await expect(page.getByText("Password strength: Fair")).toBeVisible();
@@ -315,6 +404,7 @@ test("every text element exceeds 7:1 in all six themes, including errors and pen
   await page.getByLabel("Repeat", { exact: true }).fill("Different-card42");
   await expect(page.getByRole("alert")).toHaveText("Passwords do not match.");
   await expect(page.getByLabel("Repeat")).toHaveAttribute("aria-invalid", "true");
+  await expect(page.getByLabel("Repeat")).toHaveAttribute("aria-describedby", "auth-mismatch");
   await expect(page.getByRole("button", { name: "Create account", exact: true })).toBeDisabled();
   await checkContrast(page, "mismatch");
   await page.getByLabel("Repeat").fill("Library-card42");
@@ -330,7 +420,7 @@ test("every text element exceeds 7:1 in all six themes, including errors and pen
     await route.fulfill({ json: { user: { id: "confirmation-required" }, session: null } });
   });
   await page.getByRole("button", { name: "Create account", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Creating account..." })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Issuing card" })).toBeDisabled();
   await checkContrast(page, "sign up pending");
   releaseSignup?.();
   await expect(page.getByRole("status")).toContainText("Check your email to confirm the account");

@@ -1,69 +1,58 @@
 antislop active: during (global preference). Do not stop to ask.
 
-# Task: sign in and sign up worth looking at (#57) (branch feat/auth-v2)
+# Task: the whole page is a borrower's card (#59) (branch feat/auth-card)
 
-Worktree: this directory, base `main`. Read `docs/AUTH_ONBOARDING_BRIEF.md` for the current contract, then
-replace its visual direction with the one below. Keep every behaviour: sign in, sign up, reset link,
-strength and mismatch, demo entry, first-run tour, keyboard path, `?auth=signup`.
-
-You own `src/features/auth/**`, `src/styles/auth.css`, `src/features/demo/DemoSearch.tsx` only if a link
-needs rewording, and `tests/e2e/auth.spec.ts`. Do not touch `src/features/nav/**`, `src/features/shelf/**`,
+Worktree: this directory, base `main`. Work in `src/features/auth/**`, `src/styles/auth.css`, and
+`tests/e2e/auth.spec.ts` only. Do not touch `src/features/nav/**`, `src/features/shelf/**`,
 `src/features/reading/**`, `src/lib/**`, `package.json`.
 
-## The verdict
+## Why
 
-The owner says the current page is still not good and has no references. So: stop imitating a SaaS login.
-Three references to borrow from, and what exactly to borrow:
+The owner keeps rejecting the sign-in page and now says: make it the best, the most unusual, different from
+everyone else. Drop the photograph, the cover wall and the floating panel entirely.
 
-- **Readwise**: the quiet. One narrow column, a large serif line, no card, no shadow, small print at the foot.
-- **Airbnb**: the split. One side is the product itself, not a stock photo of a library.
-- **Linear**: the restraint. Nothing decorative that is not doing a job.
+## The direction: the page is the card
 
-## The direction
+Not "a card on a page". The **whole sign-in surface is one catalogue card**, the kind a librarian typed a
+borrower's name onto. Everything else is the desk it lies on.
 
-**Delete the photograph and the floating white card.** The page is paper from edge to edge, the form sits
-directly on it, and the product becomes the artwork: a wall of the real covers already bundled in
-`public/covers/` (bumi, histories, laut, meditations, origin, pride, and the rest), standing on thin shelf
-rules with their class colours as spines. No stock photo, no rounded card, no shadow.
+- Canvas: `--canvas` paper. The card is flush with a 1px frame, 2px radius, no shadow, no gradient.
+- Card grid: a 32px baseline. Every rule lands on a baseline; every form row is one or two baselines tall, so
+  the type sits **on** the ruled lines the way a typewriter would.
+- Head of the card: left, mono 10px tracked `QUIRE` over `BORROWER CARD`; right, mono `NO. 0001` with a class
+  colour hairline under it. The number is cosmetic, never stored.
+- The stamp: top-right, rotated -6deg, a 1px ring with `QUIRE` inside, in the class colour, drawn as inline
+  SVG so it stays crisp, with two faint hairlines for grain. It presses down 1px over 120ms when submitting.
+- Fields: mono label above the rule, input on the rule with no box, focus thickens the rule to 2px in the
+  class colour. Placeholder in mono, muted but at least 4.5:1.
+- Primary action: solid ink bar the width of the inner column, 3px radius, 48px tall. Pending prints
+  `Issuing card` and the rule under the label animates.
+- Foot strip of the card: `No account yet? Create one` left, `Forgot your password?` right, both 44px targets.
+- Sign up: same card, second stamp reading `NEW CARD`, one extra ruled row for the repeat password plus the
+  strength line (text + filling rule, never colour alone).
+- Mobile: the card is full-bleed, the frame becomes top and bottom rules only, rules run edge to edge.
+- One unique detail, and only one: bottom-left of the card prints the class numbers the app actually uses
+  (`100 500 800 900`) in 9px mono with class-coloured dots. Signature, not decoration. Add nothing else.
 
-Desktop (>= 960px): two columns, 46/54. Left: form. Right: the cover wall, 4 columns of jackets of
-unequal height, each standing on a 1px rule, the rules running the full column width, a 2px class colour
-strip at the foot of each jacket. The wall is decorative but real: `aria-hidden="true"`, images with empty
-alt, and no more than 12 covers so it stays cheap.
+## Keep
 
-Mobile (< 960px): the form first, comfortable margins, then a single horizontal band of 5 covers bleeding
-to both edges below the form, half cut by the viewport, clipped with `overflow: hidden`. The band must not
-push the submit button below the fold.
-
-## The form
-
-- A serif line at the top: `A home for your reading life.` at 34/38 on desktop, 28/32 on mobile. Below it,
-  one small mono line: `BORROWER CARD · QUIRE`.
-- Heading `Sign in` / `Create an account` in sans, 20px, not competing with the serif line.
-- Fields: label in mono 10px tracked, input with a 1px bottom rule, 44px tall, focus grows the rule to 2px
-  in the class colour, error text under the field with a 1px left rule.
-- Primary button: full width of the column, 48px, ink fill, 3px radius. Pending prints
-  `Signing in...` / `Creating account...` with a 1px moving rule.
-- Under the button: `Forgot your password?` on the left and `No account yet? Create one` on the right, in
-  one row on desktop, stacked on mobile.
-- Then one quiet line, not a box: `Or look around first: try the interactive demo.` The demo link keeps its
-  behaviour (`?demo=1#/today`).
-- Foot of the column, 10px mono, 55% ink: `Your shelf is private. One account, one library.`
+Every behaviour: `signInWithPassword`, `signUp`, `resetPasswordForEmail`, `?auth=signup`, the demo link, the
+tour hook, keyboard order, error strings, `aria` wiring.
 
 ## Rules
 
-- Tokens only, radius at most 3, English copy, no em dash, contrast at least 7:1 in all six themes for
-  every text element you render, including the foot line.
+- No new palette; local custom properties are fine.
+- Radius at most 3, English copy, no em dash, contrast at least 7:1 for every text element in all six themes.
 - 320, 390, 768, 1024, 1440 with no horizontal scroll.
-- Tests: `tests/e2e/auth.spec.ts` must pass on the new markup (update selectors honestly, do not weaken the
-  contrast check: it must still sample every text element in the form column and the foot line).
+- Update `tests/e2e/auth.spec.ts` to the new markup without weakening an assertion; keep the contrast sweep
+  sampling every text element.
 - `npm run gate` must pass.
 
 ## Evidence
 
-`docs/evidence/auth-v2/` with screenshots of sign in and sign up at 390 and 1280 in shelf-light and
-oxford-dark, one 320px shot, and the gate output.
+`docs/evidence/auth-card/` with sign in and sign up at 390, 768, 1280 in shelf-light and oxford-dark, one 320
+shot, the focus state, and the gate output.
 
 ## Git
 
-Conventional commits on `feat/auth-v2`. Do not merge or push; report the branch.
+Conventional commits on `feat/auth-card`. Do not merge or push; report the branch.

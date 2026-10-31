@@ -159,7 +159,7 @@ describe("authentication", () => {
         password: "Library-card42",
       }),
     );
-    expect(screen.getByRole<HTMLButtonElement>("button", { name: "Signing in..." }).disabled).toBe(
+    expect(screen.getByRole<HTMLButtonElement>("button", { name: "Issuing card" }).disabled).toBe(
       true,
     );
   });
