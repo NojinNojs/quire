@@ -1,0 +1,1 @@
+PASS: 16 mode/theme/viewport layouts; 20 screenshots; mobile CTA, inset, control gaps, desktop margins, folios, fold, cover and 8px rhythm.

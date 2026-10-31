@@ -21,6 +21,7 @@ export function AuthReadingRecord() {
 
   return (
     <aside className="auth-recto" aria-label="Your demo reading record">
+      <p className="auth-shelf-label">FROM YOUR SHELF</p>
       <CoverImage
         className="auth-reading-cover"
         title={book.title}
