@@ -1,70 +1,58 @@
-antislop active: during (global preference). Do not stop to ask.
-Read `docs/DESIGN.md` (already in the repo) before touching anything; it is the design direction, R-37 is satisfied.
+antislop active: during (global preference). Do not stop to ask. Read `DESIGN.md`.
 
-# Task: the sign-in is an open book (#60) (branch feat/auth-book)
+# Task: the first impression is opening a book (#63) — mobile first
 
-Worktree: this directory, base `main`. Work only in `src/features/auth/**`, `src/styles/auth.css`,
-`tests/e2e/auth.spec.ts`. Do not touch nav, shelf, reading, lib, package.json.
+Worktree: this directory, base `main`. Own `src/features/auth/**`, `src/styles/auth.css`,
+`tests/e2e/auth.spec.ts`. Do not touch demo state, nav, shelf, reading, lib, package.json.
 
-## The verdict that forced this
+The owner wants a first impression that makes someone stop, with the book theme carried by structure, not by
+decoration. Everything below is flat print language: no glow, no glass, no gradient except paper shading.
 
-The owner rejected two previous attempts. His words: "Jelek banget. Gk ada unsur bukunya sama sekali, terus
-terlalu ai slop banget." So the page must contain actual books, and it must not look generated.
+## 1. The cover, on the first visit (mobile and desktop)
 
-## References, and exactly what to take from each
+Before the page, one full-viewport **front cover**: cloth colour from the active theme's class-800 token,
+`QUIRE` in Newsreader at 44px (34px on phones), a hairline rule under it, `A personal library` in 10px tracked
+mono, and at the foot `Tap to open` in 10px mono. Tapping or pressing Enter opens it.
 
-- **grok.com (xAI)**: one column, almost no chrome, one quiet primary action, the rest is empty space.
-- **are.na**: form controls are bare ruled lines; a single small mono voice for labels; nothing decorative.
-- **letterboxd.com**: the artifact carries the colour; the interface stays out of its way.
-- **readwise.io**: bookish warmth, small print, one accent.
+The opening is a single fold: the cover rotates on its left edge (`transform-origin: left center`,
+`rotateY(-105deg)`) over 480ms `cubic-bezier(0.65, 0, 0.35, 1)`, revealing the page beneath, then unmounts.
+Under `prefers-reduced-motion: reduce` it cross-fades in 120ms instead. It appears once per browser
+(`localStorage` key `quire:cover-seen`), never for the demo route, and never blocks a returning reader: if the
+key exists, the page renders immediately.
 
-Take those devices. Do not copy any of those layouts. R-30 applies.
+## 2. The bookmark ribbon
 
-## The direction: an open book on the desk
+On the page, a 10px ribbon of the accent colour hangs from the top edge, 96px long, with a notched foot drawn
+by `clip-path`. It is the only accent object on the surface, and it marks where the page begins.
 
-The surface is a **two page spread of an open book**, not a card, not a photo, not a panel.
+## 3. FROM YOUR SHELF becomes a bookplate
 
-- **Verso (left page)**: the form. Running head at the top in 10px mono tracked: `QUIRE` left, `BORROWER CARD`
-  right, separated by a hairline. Then the serif line `A home for your reading life.` Then the fields as ruled
-  lines inside the text block: mono label above, input on the rule, 2px accent rule on focus. The primary
-  action is one solid ink block, 48px, aligned to the text measure, not full width. Foot of the page: folio
-  number `17` centred, and under it the small print.
-- **Gutter**: one fold. A single soft asymmetric shadow in the gutter, wider on the verso side, no other
-  gradient on the page. This is the only gradient allowed (R-01 purpose: it is the book's spine).
-- **Recto (right page)**: a real book. The current reading cover from `public/covers/` stands at the top of
-  the page, 2:3, with a thin shadow so it sits on the paper; under it, the reader's record in the book's own
-  voice: `The Waves` in serif italic, `Virginia Woolf` in small caps, the streak printed as seven stamped
-  marks with weekday letters, and the line `Pages read today` with the number. This is a demo of the product,
-  not a marketing panel: it must be the same components the app already uses where possible.
-- **Page edges**: the outer edges of both pages carry a 3px stack of hairlines suggesting paper, and the
-  corner of the recto is very slightly turned (one 12px fold), nothing more.
-- **Mobile**: only the verso shows, full width, and the recto becomes a 10px sliver of paper at the right
-  edge with the cover peeking as a bookmark tab at the top. No horizontal scroll at 320.
+On phones, the inset gets a printed plate treatment: a 1px frame inset 12px from the text block, the label
+`EX LIBRIS` in 9px mono above the title, and the owner line `THIS COPY BELONGS TO A READER` in 9px mono under
+the author. It must read as printed on the page, not as a card floating above it.
 
-## Hard constraints
+## 4. Mobile rhythm, the part that must feel expensive
 
-- Typography: Newsreader (serif) for the headline, book title and italic; Plus Jakarta Sans for UI; the mono
-  face already in tokens for labels and folios. No fourth family.
-- Radius 0 to 2. No pill shapes. No glow. No blurred glass. No emoji, no icons except the app's own set.
-- No em dash in any copy (R-02). English copy, no marketing words (R-16), no fake numbers (R-17).
-- Contrast: every text element at least 7:1 in all six themes; the existing e2e contrast sweep must pass
-  honestly, sampling the new markup.
-- 320, 390, 768, 1024, 1440 with no horizontal overflow.
-- Keyboard order follows the page: email, password, show, submit, reset, create, demo. Focus ring 2px accent.
-- The demo link, `?auth=signup`, sign up strength line and mismatch state, reset link and all auth calls keep
-  working exactly as now.
+- 24px page margins at 390, 16px at 320, and the text measure never exceeds 44 characters.
+- The form rows keep 44px targets and 8px minimum gaps.
+- Under the primary action, the two links sit on one line at 390 and stack at 320.
+- The whole page scrolls as one sheet: no sticky elements, no fixed bars.
+- First screen at 390x844 must show: running head, headline, email, password, and the primary action. Verify it.
 
-## Delivery Gate (must be in the PR body, PASS/FAIL per block)
+## 5. Desktop
 
-Follow the antislop Delivery Gate: Hard Gate, Purpose-Gate, Liveliness (declare the dials), Craftsmanship.
-State the Design Read line. Name the one accent, the one motif, and the single purpose of the gutter gradient.
+Keep the spread, but the cover opening applies there too, sized to the spread (max 1040px wide, 2:3 area).
+The gutter fold stays the only shading. The bookplate is desktop-only off (the recto already carries the book).
 
-## Evidence
+## Never
 
-`docs/evidence/auth-book/` with sign in and sign up at 390, 768, 1280 in shelf-light and oxford-dark, one
-320 shot, the focus state, the gate output, and a click-through list of every control you exercised in the
-running app with the result of each.
+No new colours, no icons, no badges, no arrows, no second gradient, no em dash. Do not change copy the tests
+assert. Keep every auth behaviour and the demo link.
 
-## Git
+## Verify
 
-Conventional commits on `feat/auth-book`. Do not merge or push; report the branch and the gate report.
+`npm run gate` green (222 unit, 21 e2e or more). Add one e2e test for the cover: it appears once, opens on
+click, and does not reappear after reload. Screenshots at 320, 390, 768, 1280 in shelf-light and oxford-dark,
+plus the cover itself and the open state, in `docs/evidence/auth-cover/`. Record a click-through list.
+
+Commit on `feat/auth-cover-open`, do not merge or push.
