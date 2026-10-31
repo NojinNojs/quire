@@ -1,0 +1,47 @@
+[
+  {
+    "selector": ".auth-running-head",
+    "box": {
+      "x": 24,
+      "y": 32,
+      "width": 342,
+      "height": 32
+    }
+  },
+  {
+    "selector": ".auth-intro",
+    "box": {
+      "x": 24,
+      "y": 96,
+      "width": 234.203125,
+      "height": 80
+    }
+  },
+  {
+    "selector": "input[name=\"email\"]",
+    "box": {
+      "x": 24,
+      "y": 264,
+      "width": 342,
+      "height": 48
+    }
+  },
+  {
+    "selector": "input[name=\"password\"]",
+    "box": {
+      "x": 24,
+      "y": 352,
+      "width": 342,
+      "height": 48
+    }
+  },
+  {
+    "selector": ".primary",
+    "box": {
+      "x": 24,
+      "y": 424,
+      "width": 342,
+      "height": 48
+    }
+  }
+]

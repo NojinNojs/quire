@@ -1,0 +1,145 @@
+Rendered text, inputs, and placeholders. Both pages sampled at 1280px; visible verso sampled at 390px.
+shelf-light | 390px | sign in | 34 samples | minimum 10.391:1
+shelf-dark | 390px | sign in | 34 samples | minimum 9.345:1
+municipal-light | 390px | sign in | 34 samples | minimum 9.807:1
+municipal-dark | 390px | sign in | 34 samples | minimum 9.097:1
+oxford-light | 390px | sign in | 34 samples | minimum 9.288:1
+oxford-dark | 390px | sign in | 34 samples | minimum 9.537:1
+shelf-light | 1280px | sign in | 33 samples | minimum 10.391:1
+shelf-dark | 1280px | sign in | 33 samples | minimum 9.345:1
+municipal-light | 1280px | sign in | 33 samples | minimum 9.807:1
+municipal-dark | 1280px | sign in | 33 samples | minimum 9.097:1
+oxford-light | 1280px | sign in | 33 samples | minimum 9.288:1
+oxford-dark | 1280px | sign in | 33 samples | minimum 9.537:1
+shelf-light | 390px | reset needs email | 35 samples | minimum 10.391:1
+shelf-dark | 390px | reset needs email | 35 samples | minimum 9.345:1
+municipal-light | 390px | reset needs email | 35 samples | minimum 9.807:1
+municipal-dark | 390px | reset needs email | 35 samples | minimum 9.097:1
+oxford-light | 390px | reset needs email | 35 samples | minimum 9.288:1
+oxford-dark | 390px | reset needs email | 35 samples | minimum 9.537:1
+shelf-light | 1280px | reset needs email | 34 samples | minimum 10.391:1
+shelf-dark | 1280px | reset needs email | 34 samples | minimum 9.345:1
+municipal-light | 1280px | reset needs email | 34 samples | minimum 9.807:1
+municipal-dark | 1280px | reset needs email | 34 samples | minimum 9.097:1
+oxford-light | 1280px | reset needs email | 34 samples | minimum 9.288:1
+oxford-dark | 1280px | reset needs email | 34 samples | minimum 9.537:1
+shelf-light | 390px | reset failure | 35 samples | minimum 10.391:1
+shelf-dark | 390px | reset failure | 35 samples | minimum 9.345:1
+municipal-light | 390px | reset failure | 35 samples | minimum 9.807:1
+municipal-dark | 390px | reset failure | 35 samples | minimum 9.097:1
+oxford-light | 390px | reset failure | 35 samples | minimum 9.288:1
+oxford-dark | 390px | reset failure | 35 samples | minimum 9.537:1
+shelf-light | 1280px | reset failure | 34 samples | minimum 10.391:1
+shelf-dark | 1280px | reset failure | 34 samples | minimum 9.345:1
+municipal-light | 1280px | reset failure | 34 samples | minimum 9.807:1
+municipal-dark | 1280px | reset failure | 34 samples | minimum 9.097:1
+oxford-light | 1280px | reset failure | 34 samples | minimum 9.288:1
+oxford-dark | 1280px | reset failure | 34 samples | minimum 9.537:1
+shelf-light | 390px | reset success | 35 samples | minimum 10.391:1
+shelf-dark | 390px | reset success | 35 samples | minimum 9.345:1
+municipal-light | 390px | reset success | 35 samples | minimum 9.807:1
+municipal-dark | 390px | reset success | 35 samples | minimum 9.097:1
+oxford-light | 390px | reset success | 35 samples | minimum 9.288:1
+oxford-dark | 390px | reset success | 35 samples | minimum 9.537:1
+shelf-light | 1280px | reset success | 34 samples | minimum 10.391:1
+shelf-dark | 1280px | reset success | 34 samples | minimum 9.345:1
+municipal-light | 1280px | reset success | 34 samples | minimum 9.807:1
+municipal-dark | 1280px | reset success | 34 samples | minimum 9.097:1
+oxford-light | 1280px | reset success | 34 samples | minimum 9.288:1
+oxford-dark | 1280px | reset success | 34 samples | minimum 9.537:1
+shelf-light | 390px | sign in error | 35 samples | minimum 10.391:1
+shelf-dark | 390px | sign in error | 35 samples | minimum 9.345:1
+municipal-light | 390px | sign in error | 35 samples | minimum 9.807:1
+municipal-dark | 390px | sign in error | 35 samples | minimum 9.097:1
+oxford-light | 390px | sign in error | 35 samples | minimum 9.288:1
+oxford-dark | 390px | sign in error | 35 samples | minimum 9.537:1
+shelf-light | 1280px | sign in error | 34 samples | minimum 10.391:1
+shelf-dark | 1280px | sign in error | 34 samples | minimum 9.345:1
+municipal-light | 1280px | sign in error | 34 samples | minimum 9.807:1
+municipal-dark | 1280px | sign in error | 34 samples | minimum 9.097:1
+oxford-light | 1280px | sign in error | 34 samples | minimum 9.288:1
+oxford-dark | 1280px | sign in error | 34 samples | minimum 9.537:1
+shelf-light | 390px | sign in pending | 34 samples | minimum 10.391:1
+shelf-dark | 390px | sign in pending | 34 samples | minimum 9.345:1
+municipal-light | 390px | sign in pending | 34 samples | minimum 9.807:1
+municipal-dark | 390px | sign in pending | 34 samples | minimum 9.097:1
+oxford-light | 390px | sign in pending | 34 samples | minimum 9.288:1
+oxford-dark | 390px | sign in pending | 34 samples | minimum 9.537:1
+shelf-light | 1280px | sign in pending | 33 samples | minimum 10.391:1
+shelf-dark | 1280px | sign in pending | 33 samples | minimum 9.345:1
+municipal-light | 1280px | sign in pending | 33 samples | minimum 9.807:1
+municipal-dark | 1280px | sign in pending | 33 samples | minimum 9.097:1
+oxford-light | 1280px | sign in pending | 33 samples | minimum 9.288:1
+oxford-dark | 1280px | sign in pending | 33 samples | minimum 9.537:1
+shelf-light | 390px | sign up weak | 39 samples | minimum 10.391:1
+shelf-dark | 390px | sign up weak | 39 samples | minimum 9.345:1
+municipal-light | 390px | sign up weak | 39 samples | minimum 9.807:1
+municipal-dark | 390px | sign up weak | 39 samples | minimum 9.097:1
+oxford-light | 390px | sign up weak | 39 samples | minimum 9.288:1
+oxford-dark | 390px | sign up weak | 39 samples | minimum 9.537:1
+shelf-light | 1280px | sign up weak | 38 samples | minimum 10.391:1
+shelf-dark | 1280px | sign up weak | 38 samples | minimum 9.345:1
+municipal-light | 1280px | sign up weak | 38 samples | minimum 9.807:1
+municipal-dark | 1280px | sign up weak | 38 samples | minimum 9.097:1
+oxford-light | 1280px | sign up weak | 38 samples | minimum 9.288:1
+oxford-dark | 1280px | sign up weak | 38 samples | minimum 9.537:1
+shelf-light | 390px | sign up fair | 39 samples | minimum 10.391:1
+shelf-dark | 390px | sign up fair | 39 samples | minimum 9.345:1
+municipal-light | 390px | sign up fair | 39 samples | minimum 9.807:1
+municipal-dark | 390px | sign up fair | 39 samples | minimum 9.097:1
+oxford-light | 390px | sign up fair | 39 samples | minimum 9.288:1
+oxford-dark | 390px | sign up fair | 39 samples | minimum 9.537:1
+shelf-light | 1280px | sign up fair | 38 samples | minimum 10.391:1
+shelf-dark | 1280px | sign up fair | 38 samples | minimum 9.345:1
+municipal-light | 1280px | sign up fair | 38 samples | minimum 9.807:1
+municipal-dark | 1280px | sign up fair | 38 samples | minimum 9.097:1
+oxford-light | 1280px | sign up fair | 38 samples | minimum 9.288:1
+oxford-dark | 1280px | sign up fair | 38 samples | minimum 9.537:1
+shelf-light | 390px | mismatch | 39 samples | minimum 10.391:1
+shelf-dark | 390px | mismatch | 39 samples | minimum 9.345:1
+municipal-light | 390px | mismatch | 39 samples | minimum 9.807:1
+municipal-dark | 390px | mismatch | 39 samples | minimum 9.097:1
+oxford-light | 390px | mismatch | 39 samples | minimum 9.288:1
+oxford-dark | 390px | mismatch | 39 samples | minimum 9.537:1
+shelf-light | 1280px | mismatch | 38 samples | minimum 10.391:1
+shelf-dark | 1280px | mismatch | 38 samples | minimum 9.345:1
+municipal-light | 1280px | mismatch | 38 samples | minimum 9.807:1
+municipal-dark | 1280px | mismatch | 38 samples | minimum 9.097:1
+oxford-light | 1280px | mismatch | 38 samples | minimum 9.288:1
+oxford-dark | 1280px | mismatch | 38 samples | minimum 9.537:1
+shelf-light | 390px | sign up and primary hover | 39 samples | minimum 10.391:1
+shelf-dark | 390px | sign up and primary hover | 39 samples | minimum 9.345:1
+municipal-light | 390px | sign up and primary hover | 39 samples | minimum 9.807:1
+municipal-dark | 390px | sign up and primary hover | 39 samples | minimum 9.097:1
+oxford-light | 390px | sign up and primary hover | 39 samples | minimum 9.288:1
+oxford-dark | 390px | sign up and primary hover | 39 samples | minimum 9.537:1
+shelf-light | 1280px | sign up and primary hover | 38 samples | minimum 10.391:1
+shelf-dark | 1280px | sign up and primary hover | 38 samples | minimum 9.345:1
+municipal-light | 1280px | sign up and primary hover | 38 samples | minimum 9.807:1
+municipal-dark | 1280px | sign up and primary hover | 38 samples | minimum 9.097:1
+oxford-light | 1280px | sign up and primary hover | 38 samples | minimum 9.288:1
+oxford-dark | 1280px | sign up and primary hover | 38 samples | minimum 9.537:1
+shelf-light | 390px | sign up pending | 39 samples | minimum 10.391:1
+shelf-dark | 390px | sign up pending | 39 samples | minimum 9.345:1
+municipal-light | 390px | sign up pending | 39 samples | minimum 9.807:1
+municipal-dark | 390px | sign up pending | 39 samples | minimum 9.097:1
+oxford-light | 390px | sign up pending | 39 samples | minimum 9.288:1
+oxford-dark | 390px | sign up pending | 39 samples | minimum 9.537:1
+shelf-light | 1280px | sign up pending | 38 samples | minimum 10.391:1
+shelf-dark | 1280px | sign up pending | 38 samples | minimum 9.345:1
+municipal-light | 1280px | sign up pending | 38 samples | minimum 9.807:1
+municipal-dark | 1280px | sign up pending | 38 samples | minimum 9.097:1
+oxford-light | 1280px | sign up pending | 38 samples | minimum 9.288:1
+oxford-dark | 1280px | sign up pending | 38 samples | minimum 9.537:1
+shelf-light | 390px | confirmation email | 40 samples | minimum 10.391:1
+shelf-dark | 390px | confirmation email | 40 samples | minimum 9.345:1
+municipal-light | 390px | confirmation email | 40 samples | minimum 9.807:1
+municipal-dark | 390px | confirmation email | 40 samples | minimum 9.097:1
+oxford-light | 390px | confirmation email | 40 samples | minimum 9.288:1
+oxford-dark | 390px | confirmation email | 40 samples | minimum 9.537:1
+shelf-light | 1280px | confirmation email | 39 samples | minimum 10.391:1
+shelf-dark | 1280px | confirmation email | 39 samples | minimum 9.345:1
+municipal-light | 1280px | confirmation email | 39 samples | minimum 9.807:1
+municipal-dark | 1280px | confirmation email | 39 samples | minimum 9.097:1
+oxford-light | 1280px | confirmation email | 39 samples | minimum 9.288:1
+oxford-dark | 1280px | confirmation email | 39 samples | minimum 9.537:1

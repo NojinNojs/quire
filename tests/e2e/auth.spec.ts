@@ -13,7 +13,16 @@ const themes = [
   "oxford-dark",
 ];
 const footnote = "Your shelf is private. One account, one library.";
-const evidence = "docs/evidence/auth-book";
+const evidence = "docs/evidence/auth-cover";
+
+test.beforeEach(async ({ page }, testInfo) => {
+  if (testInfo.tags.includes("@first-visit")) return;
+  await page.addInitScript(() => {
+    if (localStorage.getItem("quire:cover-seen") === null) {
+      localStorage.setItem("quire:cover-seen", "true");
+    }
+  });
+});
 
 async function checkContrast(page: Page, state: string) {
   for (const width of [390, 1280]) {
@@ -174,19 +183,47 @@ test("create an account, take the first-run tour, sign out and sign back in", as
 });
 
 for (const theme of ["shelf-light", "oxford-dark"]) {
-  for (const width of [390, 768, 1280]) {
+  for (const width of [320, 390, 768, 1280]) {
     test(`sign in and sign up at ${width} in ${theme}`, async ({ page }) => {
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
       page.on("console", (message) => {
         if (message.type() === "error") errors.push(message.text());
       });
-      await page.setViewportSize({ width, height: width === 390 ? 844 : 900 });
+      await page.setViewportSize({ width, height: width === 320 ? 640 : width === 390 ? 844 : 900 });
       await page.addInitScript((value) => localStorage.setItem("quire-theme", value), theme);
       await page.goto("/?source=auth#/shelf");
       await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeVisible();
       await settleCard(page);
       await page.screenshot({ path: `${evidence}/${theme}-signin-${width}.png`, fullPage: true });
+      if (width === 390) {
+        const firstScreen = [];
+        for (const selector of [
+          ".auth-running-head",
+          ".auth-intro",
+          'input[name="email"]',
+          'input[name="password"]',
+          ".primary",
+        ]) {
+          await expect(page.locator(selector)).toBeInViewport({ ratio: 1 });
+          firstScreen.push({ selector, box: await page.locator(selector).boundingBox() });
+        }
+        writeFileSync(`${evidence}/${theme}-first-screen.json`, JSON.stringify(firstScreen, null, 2));
+        await page.screenshot({ path: `${evidence}/${theme}-first-screen-390.png` });
+      }
+      if (width <= 390) {
+        const forgot = await page.locator(".auth-forgot").boundingBox();
+        const create = await page.locator(".auth-switch").boundingBox();
+        const field = await page.getByLabel("Email").boundingBox();
+        if (!forgot || !create || !field) throw new Error("Mobile auth controls missing");
+        expect(field.x).toBe(width === 320 ? 16 : 24);
+        if (width === 390) expect(forgot.y).toBe(create.y);
+        else expect(create.y).toBeGreaterThanOrEqual(forgot.y + forgot.height + 8);
+        await expect(page.getByText("EX LIBRIS")).toBeVisible();
+        await expect(page.getByText("THIS COPY BELONGS TO A READER")).toBeVisible();
+      } else {
+        await expect(page.getByText("EX LIBRIS")).toBeHidden();
+      }
       await page.getByRole("button", { name: "No account yet? Create one" }).click();
       await expect(page.getByRole("heading", { name: "Create an account" })).toBeFocused();
       await page.reload();
@@ -266,7 +303,7 @@ test("the open book reflows to a verso and paper sliver without overflow", async
       expect(look.radius).toBe("0px");
       expect(look.shadow).toBe("none");
       expect(look.rows).toBe(mode === "signup" ? 3 : 2);
-      expect(look.fold).toContain("linear-gradient");
+      if (width >= 760) expect(look.fold).toContain("linear-gradient");
       // the folded corner was dropped in the polish pass; the fold is the gutter only
 
       for (const control of await page
@@ -283,6 +320,114 @@ test("the open book reflows to a verso and paper sliver without overflow", async
     }
     await page.goto("/");
   }
+});
+
+test("the cover appears once, opens on click, and stays open after reload", {
+  tag: "@first-visit",
+}, async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const cover = page.getByRole("button", { name: "Open Quire" });
+  await expect(cover).toBeVisible();
+  await expect(page.getByRole("textbox", { name: "Email" })).toHaveCount(0);
+  await page.keyboard.press("Tab");
+  await expect(cover).toBeFocused();
+  const box = await cover.boundingBox();
+  expect(box).toEqual({ x: 0, y: 0, width: 390, height: 844 });
+  await settleCard(page);
+  await cover.click();
+  await expect(page.locator(".auth-cover-stage")).toHaveAttribute("data-opening", "true");
+  await expect(cover).toHaveCSS("animation-name", "auth-cover-open");
+  await expect(cover).toHaveCSS("animation-duration", "0.48s");
+  await expect(cover).toHaveCSS("animation-timing-function", "cubic-bezier(0.65, 0, 0.35, 1)");
+  await expect(cover).toHaveCount(0);
+  expect(await page.evaluate(() => localStorage.getItem("quire:cover-seen"))).toBe("true");
+  await page.reload();
+  await expect(cover).toHaveCount(0);
+  await expect(page.getByLabel("Email")).toBeVisible();
+  await page.evaluate(() => localStorage.setItem("quire:cover-seen", ""));
+  await page.reload();
+  await expect(cover).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test("the cover matches the themes and opens with Enter or a reduced-motion fade", {
+  tag: "@first-visit",
+}, async ({ page }) => {
+  await page.goto("/");
+  for (const theme of ["shelf-light", "oxford-dark"]) {
+    for (const width of [320, 390, 768, 1280]) {
+      await page.setViewportSize({ width, height: width === 320 ? 640 : width === 390 ? 844 : 900 });
+      await page.evaluate((theme) => {
+        localStorage.removeItem("quire:cover-seen");
+        localStorage.setItem("quire-theme", theme);
+      }, theme);
+      await page.reload();
+      const cover = page.getByRole("button", { name: "Open Quire" });
+      await expect(cover).toBeVisible();
+      await settleCard(page);
+      const cloth = await cover.evaluate((el) => {
+        const style = getComputedStyle(el);
+        const luminance = (color: string) => {
+          const channels = color.match(/\d+/g)?.slice(0, 3).map(Number);
+          if (!channels) throw new Error("Cover color unavailable");
+          return channels.map((channel) => {
+            const value = channel / 255;
+            return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+          }).reduce((sum, value, i) => sum + value * [0.2126, 0.7152, 0.0722][i], 0);
+        };
+        const ink = luminance(style.color);
+        const paper = luminance(style.backgroundColor);
+        const swatch = document.createElement("span");
+        swatch.style.color = "var(--class-800)";
+        el.append(swatch);
+        const token = getComputedStyle(swatch).color;
+        swatch.remove();
+        return {
+          color: style.backgroundColor,
+          token,
+          origin: style.transformOrigin,
+          width: el.getBoundingClientRect().width,
+          height: el.getBoundingClientRect().height,
+          contrast: (Math.max(ink, paper) + 0.05) / (Math.min(ink, paper) + 0.05),
+        };
+      });
+      expect(cloth.color).toBe(cloth.token);
+      expect(cloth.contrast).toBeGreaterThanOrEqual(4.5);
+      writeFileSync(`${evidence}/${theme}-cover-${width}.json`, JSON.stringify(cloth, null, 2));
+      expect(cloth.origin).toBe(`0px ${cloth.height / 2}px`);
+      if (width >= 768) expect(cloth.width / cloth.height).toBeCloseTo(2 / 3, 2);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+      await page.screenshot({ path: `${evidence}/${theme}-cover-${width}.png` });
+      await page.keyboard.press("Enter");
+      await expect(cover).toHaveCount(0);
+      await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeFocused();
+      await page.keyboard.press("Tab");
+      await expect(page.getByLabel("Email")).toBeFocused();
+      await page.getByLabel("Email").blur();
+      await page.screenshot({ path: `${evidence}/${theme}-open-${width}.png`, fullPage: true });
+    }
+  }
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.evaluate(() => localStorage.removeItem("quire:cover-seen"));
+  await page.reload();
+  const cover = page.getByRole("button", { name: "Open Quire" });
+  const fade = await cover.evaluate((el) => new Promise((resolve) => {
+    el.addEventListener("animationstart", () => {
+      const style = getComputedStyle(el);
+      resolve({ name: style.animationName, duration: style.animationDuration, transform: style.transform });
+    }, { once: true });
+    (el as HTMLButtonElement).click();
+  }));
+  expect(fade).toEqual({ name: "auth-cover-fade", duration: "0.12s", transform: "none" });
+  await expect(cover).toHaveCount(0);
+  await page.evaluate(() => localStorage.removeItem("quire:cover-seen"));
+  await page.goto("/?demo=1#/today");
+  await expect(page.getByRole("button", { name: "Skip tour" })).toBeVisible();
+  await expect(cover).toHaveCount(0);
+  expect(await page.evaluate(() => localStorage.getItem("quire:cover-seen"))).toBeNull();
 });
 
 test("keyboard path, password visibility, focus rules and demo tour", async ({ page }) => {
