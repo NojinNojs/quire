@@ -87,7 +87,7 @@ async function checkContrast(page: Page, state: string) {
         "Foot line must be sampled",
       ).toBe(true);
       expect(samples.some(({ text }) => text === "try the interactive demo.")).toBe(true);
-      expect(samples.some(({ text }) => text === "17")).toBe(true);
+      expect(samples.some(({ text }) => text === "16")).toBe(true);
       expect(samples.some(({ text }) => text === "A home for your reading life.")).toBe(true);
       expect(samples.some(({ text }) => text === "BORROWER CARD")).toBe(true);
       expect(samples.filter(({ text }) => text === "QUIRE")).toHaveLength(1);

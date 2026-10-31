@@ -268,7 +268,7 @@ export function AuthForm({ client }: { client: SupabaseClient }) {
             </footer>
           </div>
           <footer className="auth-page-foot">
-            <p className="auth-folio">17</p>
+            <p className="auth-folio">16</p>
             <p className="auth-footnote">Your shelf is private. One account, one library.</p>
           </footer>
         </section>

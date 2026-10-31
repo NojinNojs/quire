@@ -55,6 +55,7 @@ export function AuthReadingRecord() {
         </dl>
         <p className="auth-record-note">Your demo shelf. Sample reading activity.</p>
       </div>
+      <p className="auth-recto-folio">17</p>
     </aside>
   );
 }
