@@ -561,3 +561,10 @@
     transition: none;
   }
 }
+
+/* the phone page needs room under the inset so the last line is never clipped */
+@media (max-width: 759px) {
+  .auth-verso {
+    padding-bottom: var(--space-32);
+  }
+}
