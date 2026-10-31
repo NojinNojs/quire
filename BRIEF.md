@@ -1,58 +1,70 @@
 antislop active: during (global preference). Do not stop to ask.
+Read `docs/DESIGN.md` (already in the repo) before touching anything; it is the design direction, R-37 is satisfied.
 
-# Task: the whole page is a borrower's card (#59) (branch feat/auth-card)
+# Task: the sign-in is an open book (#60) (branch feat/auth-book)
 
-Worktree: this directory, base `main`. Work in `src/features/auth/**`, `src/styles/auth.css`, and
-`tests/e2e/auth.spec.ts` only. Do not touch `src/features/nav/**`, `src/features/shelf/**`,
-`src/features/reading/**`, `src/lib/**`, `package.json`.
+Worktree: this directory, base `main`. Work only in `src/features/auth/**`, `src/styles/auth.css`,
+`tests/e2e/auth.spec.ts`. Do not touch nav, shelf, reading, lib, package.json.
 
-## Why
+## The verdict that forced this
 
-The owner keeps rejecting the sign-in page and now says: make it the best, the most unusual, different from
-everyone else. Drop the photograph, the cover wall and the floating panel entirely.
+The owner rejected two previous attempts. His words: "Jelek banget. Gk ada unsur bukunya sama sekali, terus
+terlalu ai slop banget." So the page must contain actual books, and it must not look generated.
 
-## The direction: the page is the card
+## References, and exactly what to take from each
 
-Not "a card on a page". The **whole sign-in surface is one catalogue card**, the kind a librarian typed a
-borrower's name onto. Everything else is the desk it lies on.
+- **grok.com (xAI)**: one column, almost no chrome, one quiet primary action, the rest is empty space.
+- **are.na**: form controls are bare ruled lines; a single small mono voice for labels; nothing decorative.
+- **letterboxd.com**: the artifact carries the colour; the interface stays out of its way.
+- **readwise.io**: bookish warmth, small print, one accent.
 
-- Canvas: `--canvas` paper. The card is flush with a 1px frame, 2px radius, no shadow, no gradient.
-- Card grid: a 32px baseline. Every rule lands on a baseline; every form row is one or two baselines tall, so
-  the type sits **on** the ruled lines the way a typewriter would.
-- Head of the card: left, mono 10px tracked `QUIRE` over `BORROWER CARD`; right, mono `NO. 0001` with a class
-  colour hairline under it. The number is cosmetic, never stored.
-- The stamp: top-right, rotated -6deg, a 1px ring with `QUIRE` inside, in the class colour, drawn as inline
-  SVG so it stays crisp, with two faint hairlines for grain. It presses down 1px over 120ms when submitting.
-- Fields: mono label above the rule, input on the rule with no box, focus thickens the rule to 2px in the
-  class colour. Placeholder in mono, muted but at least 4.5:1.
-- Primary action: solid ink bar the width of the inner column, 3px radius, 48px tall. Pending prints
-  `Issuing card` and the rule under the label animates.
-- Foot strip of the card: `No account yet? Create one` left, `Forgot your password?` right, both 44px targets.
-- Sign up: same card, second stamp reading `NEW CARD`, one extra ruled row for the repeat password plus the
-  strength line (text + filling rule, never colour alone).
-- Mobile: the card is full-bleed, the frame becomes top and bottom rules only, rules run edge to edge.
-- One unique detail, and only one: bottom-left of the card prints the class numbers the app actually uses
-  (`100 500 800 900`) in 9px mono with class-coloured dots. Signature, not decoration. Add nothing else.
+Take those devices. Do not copy any of those layouts. R-30 applies.
 
-## Keep
+## The direction: an open book on the desk
 
-Every behaviour: `signInWithPassword`, `signUp`, `resetPasswordForEmail`, `?auth=signup`, the demo link, the
-tour hook, keyboard order, error strings, `aria` wiring.
+The surface is a **two page spread of an open book**, not a card, not a photo, not a panel.
 
-## Rules
+- **Verso (left page)**: the form. Running head at the top in 10px mono tracked: `QUIRE` left, `BORROWER CARD`
+  right, separated by a hairline. Then the serif line `A home for your reading life.` Then the fields as ruled
+  lines inside the text block: mono label above, input on the rule, 2px accent rule on focus. The primary
+  action is one solid ink block, 48px, aligned to the text measure, not full width. Foot of the page: folio
+  number `17` centred, and under it the small print.
+- **Gutter**: one fold. A single soft asymmetric shadow in the gutter, wider on the verso side, no other
+  gradient on the page. This is the only gradient allowed (R-01 purpose: it is the book's spine).
+- **Recto (right page)**: a real book. The current reading cover from `public/covers/` stands at the top of
+  the page, 2:3, with a thin shadow so it sits on the paper; under it, the reader's record in the book's own
+  voice: `The Waves` in serif italic, `Virginia Woolf` in small caps, the streak printed as seven stamped
+  marks with weekday letters, and the line `Pages read today` with the number. This is a demo of the product,
+  not a marketing panel: it must be the same components the app already uses where possible.
+- **Page edges**: the outer edges of both pages carry a 3px stack of hairlines suggesting paper, and the
+  corner of the recto is very slightly turned (one 12px fold), nothing more.
+- **Mobile**: only the verso shows, full width, and the recto becomes a 10px sliver of paper at the right
+  edge with the cover peeking as a bookmark tab at the top. No horizontal scroll at 320.
 
-- No new palette; local custom properties are fine.
-- Radius at most 3, English copy, no em dash, contrast at least 7:1 for every text element in all six themes.
-- 320, 390, 768, 1024, 1440 with no horizontal scroll.
-- Update `tests/e2e/auth.spec.ts` to the new markup without weakening an assertion; keep the contrast sweep
-  sampling every text element.
-- `npm run gate` must pass.
+## Hard constraints
+
+- Typography: Newsreader (serif) for the headline, book title and italic; Plus Jakarta Sans for UI; the mono
+  face already in tokens for labels and folios. No fourth family.
+- Radius 0 to 2. No pill shapes. No glow. No blurred glass. No emoji, no icons except the app's own set.
+- No em dash in any copy (R-02). English copy, no marketing words (R-16), no fake numbers (R-17).
+- Contrast: every text element at least 7:1 in all six themes; the existing e2e contrast sweep must pass
+  honestly, sampling the new markup.
+- 320, 390, 768, 1024, 1440 with no horizontal overflow.
+- Keyboard order follows the page: email, password, show, submit, reset, create, demo. Focus ring 2px accent.
+- The demo link, `?auth=signup`, sign up strength line and mismatch state, reset link and all auth calls keep
+  working exactly as now.
+
+## Delivery Gate (must be in the PR body, PASS/FAIL per block)
+
+Follow the antislop Delivery Gate: Hard Gate, Purpose-Gate, Liveliness (declare the dials), Craftsmanship.
+State the Design Read line. Name the one accent, the one motif, and the single purpose of the gutter gradient.
 
 ## Evidence
 
-`docs/evidence/auth-card/` with sign in and sign up at 390, 768, 1280 in shelf-light and oxford-dark, one 320
-shot, the focus state, and the gate output.
+`docs/evidence/auth-book/` with sign in and sign up at 390, 768, 1280 in shelf-light and oxford-dark, one
+320 shot, the focus state, the gate output, and a click-through list of every control you exercised in the
+running app with the result of each.
 
 ## Git
 
-Conventional commits on `feat/auth-card`. Do not merge or push; report the branch.
+Conventional commits on `feat/auth-book`. Do not merge or push; report the branch and the gate report.
