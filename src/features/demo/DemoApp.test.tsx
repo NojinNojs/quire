@@ -101,7 +101,7 @@ describe("interactive demo", () => {
     });
     render(<App />);
     expect(screen.getByText(/Changes last for this visit only/)).toBeTruthy();
-    fireEvent.click(screen.getByRole("button", { name: "Skip tour" }));
+    navigate("#/today");
     fireEvent.click(screen.getByRole("button", { name: "Log 1 page" }));
     expect(screen.getAllByText("49 / 550").length).toBeGreaterThan(0);
   });

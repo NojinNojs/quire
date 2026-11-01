@@ -15,16 +15,21 @@ Peta perjalanan. Semua yang di bawah ini ditulis sebagai niat pengguna, bukan na
 flowchart TD
   A[Buka Quire] --> B{Sudah masuk?}
   B -- belum --> L[Masuk atau daftar] --> C
-  B -- sudah --> C[Layar Hari Ini]
-  C --> D{Sudah baca hari ini?}
-  D -- belum --> E[Catat halaman]
-  D -- sudah --> F[Lihat streak dan kotak tahun]
-  E --> G[Streak bertambah, kotak tahun menyala]
-  G --> H[Tutup aplikasi]
-  F --> H
+  B -- sudah --> C[Koleksi buku]
+  C --> D{Kelola buku atau baca?}
+  D -- kelola --> E[Tambah, lihat detail, edit, atau hapus buku]
+  D -- baca --> F[Layar Hari Ini]
+  F --> G[Catat halaman dan lihat progres]
+  E --> H[Kembali ke koleksi]
+  G --> H
 ```
 
 Aturan: membuka aplikasi **tidak** dihitung sebagai hari membaca. Hanya halaman yang dicatat.
+
+Saat belum masuk, `/` tetap tanpa hash (atau `/?auth=signup` untuk daftar). Tautan
+langsung mempertahankan hash halaman selama masuk, termasuk setelah muat ulang; tanpa
+tautan langsung, pengguna masuk ke Collection. Keluar menghapus hash rute akun.
+Rute demo tetap menggunakan `?demo=1` dan hash halaman demo; keluar dari demo menghapus hash.
 
 ## Menambah Buku
 
@@ -49,6 +54,12 @@ flowchart TD
 ```
 
 **Mode sapu:** setelah satu buku tersimpan, kamera langsung siap memindai berikutnya. Jumlah buku hari ini tampil kecil di atas. Tidak ada layar perayaan.
+
+## Mengelola Koleksi
+
+Collection menjadi halaman awal setelah masuk. Tombol Add book membuka pencarian katalog atau input manual. Memilih sampul atau judul membuka `#/book/<id>`.
+
+Detail buku menyediakan Edit book dan Delete book. Edit menyimpan metadata ke koleksi; Cancel membuang perubahan yang belum disimpan. Hapus meminta konfirmasi dengan judul buku dan menjelaskan data terkait yang ikut dihapus. Setelah berhasil, pengguna kembali ke koleksi tanpa buku tersebut. Kesalahan simpan atau hapus tetap terlihat dan tidak menampilkan sukses palsu.
 
 ## Mencatat Halaman
 
@@ -123,7 +134,7 @@ Notifikasi push, mengikuti teman, berbagi ke media sosial, lencana, dan layar pe
 
 Arahan terbaru pengguna menambahkan tur layar langkah demi langkah. Tur bersifat opsional,
 dapat dilewati, dan tersedia kembali lewat Guide di header. Urutannya: buku aktif di Today,
-kontrol pencatatan halaman, filter Shelf, pilihan entri Search, lalu tema di Settings.
+kontrol pencatatan halaman, filter Shelf, pilihan entri Search, lalu akun di Settings.
 Kontrol tetap dapat digunakan selama tur; panel berpindah agar tidak menutupi target.
 Escape menutup tur dan mengembalikan fokus. Halaman masuk/daftar menautkan tur demo tanpa
 mengirim data akun. Penyelesaian dan pilihan melewati disimpan per demo atau akun.

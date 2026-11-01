@@ -52,7 +52,7 @@ UI sources. Verification used desktop Chromium with resized viewports, rather th
 ## Antislop delivery gate
 
 Scope: the responsive shell and its effects on existing screens. Direction is
-`docs/DIRECTION_BOOKSHELF.md`, ENERGY 1 / RHYTHM 2 / MOTION 1. The paper rules and printed jackets
+`docs/design/DIRECTION_BOOKSHELF.md`, ENERGY 1 / RHYTHM 2 / MOTION 1. The paper rules and printed jackets
 remain the identity; the rail provides persistent navigation, and the two panes keep the jacket
 beside the record while logging pages.
 

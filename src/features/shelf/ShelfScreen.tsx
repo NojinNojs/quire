@@ -1,10 +1,8 @@
-import { type CSSProperties, useId, useState } from "react";
+import { useId, useState } from "react";
 import { Select } from "../../components/select/Select";
 import type { Book } from "../../data/types";
-import { classify, groupByClass } from "../../lib/ddc";
-import { CoverImage } from "../covers/CoverImage";
-import { Bookmark } from "../reading/Bookmark";
 import { ErrorPanel } from "../states/ErrorPanel";
+import { ShelfGroups, statuses } from "./ShelfGroups";
 import { useShelfProgress } from "./useShelfProgress";
 import "../../styles/shelf.css";
 
@@ -16,13 +14,6 @@ export type ShelfScreenProps = {
   onRetry?: () => void;
   onAddBook: () => void;
   onSelectBook: (book: Book) => void;
-};
-
-const statuses: Record<Book["status"], string> = {
-  want: "Want to read",
-  reading: "Reading",
-  finished: "Finished",
-  wishlist: "Wishlist",
 };
 
 export function ShelfScreen({
@@ -73,7 +64,6 @@ export function ShelfScreen({
           .toLocaleLowerCase()
           .includes(search)),
   );
-  const groups = groupByClass(filtered);
 
   function clearFilters() {
     setStatus("");
@@ -84,7 +74,10 @@ export function ShelfScreen({
   return (
     <section className={`shelf shelf-${view}`} aria-labelledby={`${id}-heading`}>
       <header className="shelf-heading">
-        <h1 id={`${id}-heading`}>Shelf</h1>
+        <div>
+          <h1 id={`${id}-heading`}>Collection</h1>
+          <p>Your books, all in one place.</p>
+        </div>
         <button className="shelf-action" type="button" onClick={onAddBook}>
           Add book
         </button>
@@ -143,9 +136,11 @@ export function ShelfScreen({
           </button>
         </fieldset>
       </div>
-      <p className="shelf-filter-count">
-        {activeCount} active {activeCount === 1 ? "filter" : "filters"}
-      </p>
+      {activeCount > 0 && (
+        <p className="shelf-filter-count">
+          {activeCount} active {activeCount === 1 ? "filter" : "filters"}
+        </p>
+      )}
       {loading ? (
         <div className="shelf-state shelf-loading">
           <div role="status" aria-label="Loading your shelf" aria-busy="true">
@@ -186,76 +181,7 @@ export function ShelfScreen({
           </button>
         </div>
       ) : (
-        [...groups].map(([label, members], index) => {
-          const classification = classify(members[0]?.ddc);
-          const token = classification?.token ?? "--class-000";
-          return (
-            <section
-              className="shelf-group"
-              key={label}
-              aria-labelledby={`${id}-group-${index}`}
-              style={
-                {
-                  "--book-class": `var(--shelf${token.slice(1)}, var(--shelf-class-000))`,
-                } as CSSProperties
-              }
-            >
-              <h2 className="shelf-band" id={`${id}-group-${index}`}>
-                {classification ? (
-                  <>
-                    <span className="shelf-class-number">{classification.code}</span>{" "}
-                    <span className="shelf-class-name">{classification.label}</span>
-                  </>
-                ) : (
-                  <span className="shelf-class-name">{label}</span>
-                )}
-              </h2>
-              <ul className="shelf-books">
-                {members.map((book) => (
-                  <li className="shelf-row" key={book.id}>
-                    <div className="shelf-jacket">
-                      <button
-                        className="shelf-jacket-button"
-                        type="button"
-                        aria-label={`Open ${book.title}`}
-                        onClick={() => onSelectBook(book)}
-                      >
-                        <CoverImage
-                          coverPath={book.cover_path}
-                          coverUrl={book.cover_url}
-                          title={book.title}
-                          author={book.author}
-                          ddc={book.ddc}
-                          className="shelf-cover"
-                        />
-                      </button>
-                      {pages[book.id] !== undefined && (
-                        <Bookmark current={pages[book.id] ?? 0} total={book.pages} />
-                      )}
-                    </div>
-                    <span className="shelf-line" aria-hidden="true" />
-                    <div className="shelf-copy">
-                      <h3>
-                        <button type="button" onClick={() => onSelectBook(book)}>
-                          {book.title}
-                        </button>
-                      </h3>
-                      <p className="shelf-author">{book.author ?? "Author unknown"}</p>
-                      <div className="shelf-metadata">
-                        <p className="shelf-publisher">{book.publisher ?? "Publisher unknown"}</p>
-                        <p className="shelf-year">{book.year ?? "Year unknown"}</p>
-                        <p className="shelf-pages">
-                          {book.pages === null ? "Pages unknown" : `${book.pages} pages`}
-                        </p>
-                        <p className="shelf-status">{statuses[book.status]}</p>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          );
-        })
+        <ShelfGroups books={filtered} pages={pages} id={id} onSelectBook={onSelectBook} />
       )}
     </section>
   );

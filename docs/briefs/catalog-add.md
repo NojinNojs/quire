@@ -5,7 +5,7 @@ acceptance list is green and evidence exists. Do not start the shelf milestone.
 
 ## Read first
 
-- `docs/PRD.md`, `docs/APP_FLOW.md` (flow "Menambah Buku"), `docs/DESIGN_SYSTEM.md`, `docs/SCHEMA.md`
+- `docs/product/PRD.md`, `docs/product/APP_FLOW.md` (flow "Menambah Buku"), `docs/design/DESIGN_SYSTEM.md`, `docs/engineering/SCHEMA.md`
 - `src/lib/*.ts` (rules layer already written, tested) and `src/features/auth/AuthForm.tsx`
 - `supabase/migrations/20261028000001_init.sql` (the table you write to)
 - `app/` in `../quire-mockups` is the design reference for layout only; do not copy its markup.

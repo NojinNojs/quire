@@ -1,0 +1,198 @@
+.auth-cover-stage {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  perspective: 1800px;
+  pointer-events: none;
+}
+
+.auth-page[data-covered="true"] .auth-book {
+  background: transparent;
+  box-shadow: none;
+}
+
+.auth-page[data-covered="true"] .auth-book::before,
+.auth-page[data-covered="true"] .auth-book::after {
+  visibility: hidden;
+}
+
+.auth-page[data-covered="true"] .auth-bookmark,
+.auth-page[data-covered="true"] .auth-verso {
+  visibility: hidden;
+}
+
+.auth-page[data-covered="true"] .auth-book:has([data-opening="true"]) .auth-verso {
+  visibility: visible;
+  background: var(--auth-paper);
+  animation: auth-login-reveal 1100ms linear forwards;
+}
+
+@keyframes auth-login-reveal {
+  0%,
+  75% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.auth-page[data-covered="true"] .auth-recto {
+  background: var(--auth-paper);
+  box-shadow:
+    0 10px 0 #a99a82,
+    0 22px 35px rgb(58 43 29 / 25%);
+}
+
+.auth-cover-shade {
+  position: absolute;
+  inset: 0 0 0 50%;
+  background: linear-gradient(90deg, rgb(54 35 24 / 24%), transparent 38%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.auth-cover {
+  position: absolute;
+  inset: 0 0 0 50%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--on-class);
+  cursor: pointer;
+  pointer-events: auto;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+}
+
+.auth-cover-front,
+.auth-cover-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.auth-cover-front {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--class-800, #8c2f39);
+  background-image:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 4%) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 6%) 0 1px, transparent 1px 4px);
+  box-shadow: 3px 4px 8px rgb(58 43 29 / 25%);
+}
+
+.auth-cover-front::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 14px;
+  background: rgb(0 0 0 / 18%);
+  border-right: 1px solid rgb(255 255 255 / 14%);
+}
+
+.auth-cover-front::after {
+  content: "";
+  position: absolute;
+  inset: 20px;
+  border: 1px solid rgb(255 255 255 / 26%);
+}
+
+.auth-cover-back {
+  background: var(--auth-paper);
+  box-shadow: -3px 4px 8px rgb(58 43 29 / 20%);
+  transform: rotateY(180deg);
+}
+
+.auth-cover-title {
+  padding: 0 16px 16px;
+  border-bottom: 1px solid currentColor;
+  font: 400 44px / 48px var(--font-serif);
+}
+
+.auth-cover-subtitle {
+  margin-top: 16px;
+  font: italic 400 15px / 16px var(--font-serif);
+  letter-spacing: 0.01em;
+}
+
+.auth-cover-prompt {
+  position: absolute;
+  bottom: 48px;
+  font: italic 400 13px / 16px var(--font-serif);
+  letter-spacing: 0.02em;
+}
+
+.auth-page .auth-cover:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -8px;
+}
+
+[data-opening="true"] .auth-cover {
+  animation: auth-cover-open 1100ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  pointer-events: none;
+}
+
+[data-opening="true"] .auth-cover-back {
+  animation: auth-cover-settle 1100ms ease-in-out forwards;
+}
+
+[data-opening="true"] .auth-cover-shade {
+  animation: auth-cover-shadow 1100ms ease-in-out forwards;
+}
+
+@keyframes auth-cover-open {
+  0%,
+  16% {
+    transform: rotateY(0);
+  }
+  100% {
+    transform: rotateY(-180deg);
+  }
+}
+
+@keyframes auth-cover-settle {
+  0%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes auth-cover-shadow {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-opening="true"] .auth-cover {
+    animation: auth-cover-fade 160ms linear forwards;
+  }
+  [data-opening="true"] .auth-cover-back,
+  [data-opening="true"] .auth-cover-shade {
+    animation: none;
+  }
+  [data-opening="true"] .auth-cover-intro {
+    opacity: 0;
+  }
+  .auth-page[data-covered="true"] .auth-book:has([data-opening="true"]) .auth-verso {
+    animation: none;
+    visibility: visible;
+  }
+}
+
+@keyframes auth-cover-fade {
+  to {
+    opacity: 0;
+  }
+}

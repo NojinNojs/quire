@@ -19,7 +19,7 @@ echo "== database smoke (skipped when supabase is down)"
 bash scripts/db-smoke.sh || exit 1
 
 echo "== docs present"
-for f in docs/PRD.md docs/TRD.md docs/APP_FLOW.md docs/DESIGN_BRIEF.md docs/SCHEMA.md docs/IMPLEMENTATION_PLAN.md docs/DESIGN_SYSTEM.md; do
+for f in docs/product/PRD.md docs/engineering/TRD.md docs/product/APP_FLOW.md docs/design/DESIGN_BRIEF.md docs/engineering/SCHEMA.md docs/engineering/IMPLEMENTATION_PLAN.md docs/design/DESIGN_SYSTEM.md; do
   [ -f "$f" ] || { echo "missing $f"; exit 1; }
 done
 

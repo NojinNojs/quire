@@ -38,7 +38,7 @@ tags: [project, quire, tech]
 | Ikon | set sendiri, 24px grid, stroke 1.75, ujung siku | bukan font ikon, bukan Lucide; 10 simbol di `app.js` |
 | Gerak | CSS transition 120ms | cukup untuk 1px shift dan opacity; Motion hanya kalau nanti butuh choreography |
 
-Catatan: tema dipilih lewat `data-theme` pada `<html>` (`shelf`, `municipal`, `oxford` × `light`, `dark`), token di `design-systems/themes/*.css`.
+Catatan: aplikasi memakai satu tema terang `shelf`; token aktif berada di `src/styles/themes.css`.
 
 ## Risiko yang Diketahui
 

@@ -1,6 +1,8 @@
-export type Route = "today" | "shelf" | "search" | "settings";
+export type Route = "today" | "shelf" | "search" | "settings" | { name: "book"; id: string };
 
 export function parseRoute(hash: string): Route {
+  const book = /^#\/book\/([^/]+)$/.exec(hash);
+  if (book?.[1] !== undefined) return { name: "book", id: book[1] };
   switch (hash) {
     case "#/shelf":
       return "shelf";
@@ -10,7 +12,9 @@ export function parseRoute(hash: string): Route {
     case "#/settings":
     case "#settings":
       return "settings";
-    default:
+    case "#/today":
       return "today";
+    default:
+      return "shelf";
   }
 }

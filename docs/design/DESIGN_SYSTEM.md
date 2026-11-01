@@ -5,18 +5,16 @@ every Quire screen must follow. It is not a UI sketch; it is the contract the UI
 
 ## Approved local extension, 29 October 2026
 
-The direction in [AUTH_ONBOARDING_BRIEF.md](AUTH_ONBOARDING_BRIEF.md) permits these bounded
+The direction in [the authentication brief](../briefs/auth-onboarding.md) permits these bounded
 exceptions to the catalogue defaults below. They supersede the general serif and radius
-prohibitions only on the named surfaces. The six theme palettes and catalogue's 2px control /
+prohibitions only on the named surfaces. Shelf light is the sole runtime palette; catalogue's 2px control /
 3px container defaults remain.
 
-- Authentication uses Newsreader italic for its brand, emphasized photographic-story title,
-  and closing signature. Catalogue headings retain their existing typography.
-- Auth fields, primary action, field errors, and sample-library link use the local
-  `--auth-control-radius` (8px). Auth inputs and primary action are 52px high; field labels
-  use sentence-case 13px sans. Local `--auth-story-surface`, `--auth-story-ink`, and
-  `--auth-story-muted` color the story; `--auth-photo-credit-surface` backs the credit.
-  These are local story colors, not another reader theme.
+- Authentication uses a borrower card set in an open book, with Newsreader italic for the
+  introductory line and book titles. Catalogue headings retain their existing typography.
+- The form uses ruled inputs and an ink-filled primary action. Controls are 48px high,
+  reducing to 44px on short viewports. A facing page shows the demo reading record on wider
+  screens; on narrow screens the form takes priority.
 - Guide invitation, guide controls, header Guide control, and spotlight use 8px corners.
   The floating tour panel uses 12px corners. The surrounding shade highlights a real
   target; it does not establish shadow elevation or a new catalogue card style.
@@ -24,11 +22,8 @@ prohibitions only on the named surfaces. The six theme palettes and catalogue's 
   existing 48px minimum touch target. Rating stars are inline SVG with 1.75 stroke weight.
 - Auth, guide, and demo primary actions use ink fill with surface-colored text. The base
   primary remains theme-accent colored.
-- Authentication uses a locally bundled real library photograph by Janko Ferlič from
-  Unsplash. [Image sources](../public/images/SOURCES.md) and `public/images/library.webp.json`
-  record provenance. Published covers and the single shared missing-cover image remain binding.
 
-Root [DESIGN.md](../DESIGN.md) and [.impeccable/design.json](../.impeccable/design.json) record
+Root [DESIGN.md](../../DESIGN.md) and [.impeccable/design.json](../../.impeccable/design.json) record
 the implemented system and these local exceptions without promoting them to global defaults.
 
 ## 1. What is fixed and what is a theme
@@ -36,8 +31,7 @@ the implemented system and these local exceptions without promoting them to glob
 Fixed for the whole product: the type scale, the spacing scale, the radii, the rule weights, the
 icon grid, the component anatomy, and the accessibility gates.
 
-Switchable by the reader: colour only. Three themes, each in a light and a dark mode. A theme changes
-surface, ink, rule and accent. It never changes sizes, spacing, or layout.
+Shelf light is the only runtime theme. Its semantic roles supply surface, ink, rule and accent across screens.
 
 ## 2. Token architecture
 
@@ -58,38 +52,11 @@ Rules:
 4. Tokens never carry state in their name. `--button-pressed` is forbidden; states are composed in
    the component from `--ink`, `--surface-raised` and `--rule`.
 
-## 3. Themes
+## 3. Theme
 
-| Theme | Character | Use when |
-|---|---|---|
-| `shelf` | neutral paper, colour comes from classification | default; the reader wants the books to carry the colour |
-| `municipal` | green-grey stock, two inks, institutional | the reader wants a calmer, more archival surface |
-| `oxford` | cool white, deep ink blue, academic | the reader wants maximum reading comfort on white |
+Shelf light uses neutral paper and ink, with classification colors providing accents. Its fixed runtime tokens live on `:root` in `src/styles/themes.css`; Settings has no palette selector.
 
-Each ships two modes, selected with `data-theme` on `<html>`:
-
-```html
-<html data-theme="shelf-light">      <!-- also shelf-dark, municipal-light, -->
-                                      <!-- municipal-dark, oxford-light, oxford-dark -->
-```
-
-Token files live in `design-systems/themes/<theme>-<mode>.css`.
-
-### Measured contrast
-
-Values below are WCAG relative luminance ratios, computed from the shipped token files.
-
-| Theme | Mode | ink / surface | ink-muted / surface | on-accent / accent |
-|---|---|---|---|---|
-| shelf | light | 16.86 | 7.13 | 7.92 |
-| shelf | dark | 16.69 | 7.84 | 4.83 |
-| municipal | light | 14.59 | 7.31 | 6.49 |
-| municipal | dark | 15.51 | 8.26 | 4.68 |
-| oxford | light | 16.65 | 6.39 | 10.69 |
-| oxford | dark | 16.45 | 8.24 | 7.37 |
-
-Gate: body text at least 4.5:1, large text at least 3:1, in every shipped theme. A theme that fails
-does not ship.
+Body text must meet 4.5:1 contrast and large text 3:1. Authentication tests sample rendered text and controls, including error and pending states.
 
 ## 4. Colour roles
 
@@ -98,9 +65,9 @@ does not ship.
 | `--surface` | page background | text, icons |
 | `--surface-raised` | cards, nav bar, inputs | full page background |
 | `--ink` | body text, active icon, primary button fill | backgrounds larger than a button |
-| `--ink-muted` | secondary text, metadata, inactive icons | text below 15px in a dark mode |
+| `--ink-muted` | secondary text, metadata, inactive icons | text with insufficient contrast |
 | `--rule` | 1px separators, input borders | text, fills |
-| `--accent` | one primary action per screen (shelf and municipal differ: shelf uses the class 800 oxblood, municipal its rust, oxford its ink blue) | decoration, borders, icons repeated |
+| `--accent` | one primary action per screen, using shelf's class 800 oxblood | decoration, borders, icons repeated |
 | `--on-accent` | text on the primary action | anything else |
 | `--class-800/900/100/000` | classification bands and spine strips | book jackets |
 | `--on-class` | text on a classification band | body text |
@@ -227,22 +194,17 @@ progress width. Forbidden: bounce, scale above 1.02, parallax. Under
 
 Ship only when all of these are true, measured rather than assumed:
 
-1. Contrast passes in all six theme modes (table in section 3).
+1. Contrast passes in the shipped light theme, including error and pending states.
 2. Every interactive element is reachable by Tab, and focus is visible at 2px.
 3. Touch targets are at least 48x48.
 4. Icon-only controls carry an accessible name.
 5. Every list has an empty state; every async screen has loading and error states.
 6. Text reflows without horizontal scroll at 390px.
 
-## 14. Adding a theme
+## 14. Changing the palette
 
-1. Copy a theme file in `design-systems/themes/`, rename it `<name>-<mode>.css`.
-2. Set the tokens listed in section 3. Change no other token.
-3. Run the contrast script. If any ratio is under the gate, fix the palette, not the gate.
-4. Add the theme to the table in this document with its measured ratios.
-5. Render one screen in the new theme and check the six states of every interactive element.
+The current palette is fixed in `src/styles/themes.css`. Replacing it requires measured contrast, responsive checks, and a documented design decision; Settings does not expose a theme switcher.
 
-A theme that needs a component changed is not a theme. It is a redesign and needs its own document.
 
 ## 15. Forbidden
 
@@ -269,23 +231,20 @@ Both must pass before a screen is called finished.
 ## Bundled demo covers
 
 The demo bundles nine verified published covers as WebP files. See
-[cover sources](../public/covers/SOURCES.md) for provenance. The single neutral missing-cover
+[cover sources](../../public/covers/SOURCES.md) for provenance. The single neutral missing-cover
 SVG is shared by every book without artwork. Existing saved demo books gain the local cover
 paths without resetting notes, ratings, or reading activity.
 
 ## Authentication and guide exceptions
 
 The modern authentication and step-by-step guide extend the catalogue system locally.
-Their implementation is recorded in [DESIGN.md](../DESIGN.md) and the
-[surface brief](AUTH_ONBOARDING_BRIEF.md).
+Their implementation is recorded in [DESIGN.md](../../DESIGN.md) and the
+[surface brief](../briefs/auth-onboarding.md).
 
-- Authentication fields, primary actions, field errors, and the demo entry use 8px corners.
+- Authentication uses ruled fields, an ink-filled action, and a facing demo reading record.
+  Its compact layout keeps the form prominent on phones and short screens.
 - Guide invitation, controls, header Guide button, and spotlight use 8px corners; the tour
   panel uses 12px corners. Quick page presets and rating touch surfaces use 8px corners.
-- Authentication uses Newsreader italic for its brand, emphasized story title, and closing
-  signature. Catalogue headings retain their existing typography.
-- The authentication story uses a local forest palette and sourced library photograph.
-  Reader themes and catalogue classification colors retain their existing roles.
 
 These exceptions take precedence over the general radius and serif restrictions above
 only on these surfaces. Catalogue inputs and containers retain their 2px and 3px corners.

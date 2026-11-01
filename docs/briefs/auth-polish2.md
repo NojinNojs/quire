@@ -2,7 +2,7 @@ antislop active: during (global preference). Do not stop to ask. Read `DESIGN.md
 
 # Task: finish the open-book sign-in, desktop and phone (#62)
 
-Worktree: this directory, base `main` (which already shows Bumi Manusia on the recto; the demo state and its
+Worktree: the repository root, base `main` (which already shows Bumi Manusia on the recto; the demo state and its
 tests are green, do not touch `src/features/demo/**` or `tests/e2e/**`).
 
 Own: `src/features/auth/**` and `src/styles/auth.css`.

@@ -77,8 +77,16 @@ It invokes visible alert callbacks so its book and add controls can be checked w
 - Checked the screenshot against the existing design system: serif italic book titles, edition
   jackets, classification colour bands, hairlines, English copy, no em dashes or elevated cards.
 - Impeccable's mechanical detector returned no findings for the component and stylesheet.
-- The consistency/verify Python scripts referenced by `docs/DESIGN_SYSTEM.md` are not present in
+- The consistency/verify Python scripts referenced by `docs/design/DESIGN_SYSTEM.md` are not present in
   this checkout. The required repository gate ran successfully instead.
 
 The repository's four browser smoke tests cover existing routes. Shelf interaction coverage comes
 from the seven new Testing Library tests and the isolated browser preview, pending route wiring.
+
+## Collection and book management verification, 2026-11-01
+
+- Full `bun run gate`: 234 unit tests, 25 browser tests, typecheck, build, database smoke and required docs passed (`gate ok`).
+- Known warnings: two existing descending-specificity warnings in `reading.css` and a build chunk above 500 kB.
+- Browser smoke with a temporary local account: add a manual book, open its detail, choose Read this book, see it in Today before its first log, then log one page. Temporary account removed afterward.
+- Account browser regression covers metadata persistence, activation, cancelled edits/deletion and confirmed deletion; demo regression covers reload persistence and clearing the active book.
+- Focused regressions cover duplicate edition edits, progress failure/retry and an active book without a streak row. SQL delete-streak regression completed with `BEGIN`, `DO`, `ROLLBACK`.

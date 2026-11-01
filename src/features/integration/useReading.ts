@@ -26,7 +26,7 @@ export async function loadReading(
     client.from("streaks").select("current,longest").eq("owner", owner).maybeSingle(),
   ]);
   if (active.error || streak.error) throw new Error("Could not load your reading. Try again.");
-  if (!active.data || !streak.data) return null;
+  if (!active.data) return null;
   const book = active.data as Book;
   const progress: { book_id: string; day: string; pages: number }[] = [];
   for (let offset = 0; ; offset += 1000) {
@@ -61,7 +61,7 @@ export async function loadReading(
       ddc: book.ddc,
       total: book.pages,
     },
-    streak: { current: streak.data.current, longest: streak.data.longest, days },
+    streak: { current: streak.data?.current ?? 0, longest: streak.data?.longest ?? 0, days },
     current: logs.reduce((sum, log) => sum + log.pages, 0),
     pagesToday: logs.filter((log) => log.day === day).reduce((sum, log) => sum + log.pages, 0),
   };

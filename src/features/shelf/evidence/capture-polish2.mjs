@@ -118,156 +118,147 @@ async function contrast(surface, theme, width) {
 }
 
 try {
-  for (const theme of [
-    "shelf-light",
-    "shelf-dark",
-    "municipal-light",
-    "municipal-dark",
-    "oxford-light",
-    "oxford-dark",
-  ]) {
-    for (const width of [390, 768, 1280]) {
-      await page.setViewportSize({ width, height: 844 });
-      await open();
-      await page.evaluate((theme) => {
-        document.documentElement.dataset.theme = theme;
-      }, theme);
-      for (const mode of ["Grid", "List"]) {
-        await page.getByRole("button", { name: mode, exact: true }).click();
-        const layout = await page.locator(".shelf-group").evaluateAll((groups) =>
-          groups.map((group) => {
-            const books = group.querySelector(".shelf-books").getBoundingClientRect();
-            const lines = [...group.querySelectorAll(".shelf-line")].filter(
-              (line) => getComputedStyle(line).display !== "none",
-            );
-            return {
-              books: group.querySelectorAll(".shelf-row").length,
-              width: books.width,
-              lines: lines.map((line) => {
-                const rect = line.getBoundingClientRect();
-                return { left: rect.left - books.left, width: rect.width };
-              }),
-              jacketWidths: [...group.querySelectorAll(".shelf-jacket")].map(
-                (jacket) => jacket.getBoundingClientRect().width,
-              ),
-              gaps: lines.map(
-                (line) =>
-                  line.getBoundingClientRect().top -
-                  line.closest(".shelf-row").querySelector(".shelf-jacket").getBoundingClientRect()
-                    .bottom,
-              ),
-            };
-          }),
-        );
-        assert.deepEqual(
-          layout.map((group) => group.books),
-          [6, 1],
-        );
-        for (const group of layout) {
-          assert.equal(
-            group.lines.length,
-            mode === "List"
-              ? group.books
-              : Math.ceil(group.books / (width >= 1280 ? 6 : width >= 768 ? 4 : 2)),
+  const theme = "shelf-light";
+  for (const width of [390, 768, 1280]) {
+    await page.setViewportSize({ width, height: 844 });
+    await open();
+    await page.evaluate((theme) => {
+      document.documentElement.dataset.theme = theme;
+    }, theme);
+    for (const mode of ["Grid", "List"]) {
+      await page.getByRole("button", { name: mode, exact: true }).click();
+      const layout = await page.locator(".shelf-group").evaluateAll((groups) =>
+        groups.map((group) => {
+          const books = group.querySelector(".shelf-books").getBoundingClientRect();
+          const lines = [...group.querySelectorAll(".shelf-line")].filter(
+            (line) => getComputedStyle(line).display !== "none",
           );
-          for (const line of group.lines) {
-            assert.ok(Math.abs(line.width - group.width) < 1, "line spans the full group width");
-            assert.ok(Math.abs(line.left) < 1, "line starts at the group edge");
-          }
-          assert.ok(
-            group.gaps.every((gap) => Math.abs(gap - 8) < 1),
-            "jacket stands 8px above the rule",
-          );
+          return {
+            books: group.querySelectorAll(".shelf-row").length,
+            width: books.width,
+            lines: lines.map((line) => {
+              const rect = line.getBoundingClientRect();
+              return { left: rect.left - books.left, width: rect.width };
+            }),
+            jacketWidths: [...group.querySelectorAll(".shelf-jacket")].map(
+              (jacket) => jacket.getBoundingClientRect().width,
+            ),
+            gaps: lines.map(
+              (line) =>
+                line.getBoundingClientRect().top -
+                line.closest(".shelf-row").querySelector(".shelf-jacket").getBoundingClientRect()
+                  .bottom,
+            ),
+          };
+        }),
+      );
+      assert.deepEqual(
+        layout.map((group) => group.books),
+        [6, 1],
+      );
+      for (const group of layout) {
+        assert.equal(
+          group.lines.length,
+          mode === "List"
+            ? group.books
+            : Math.ceil(group.books / (width >= 1280 ? 6 : width >= 768 ? 4 : 2)),
+        );
+        for (const line of group.lines) {
+          assert.ok(Math.abs(line.width - group.width) < 1, "line spans the full group width");
+          assert.ok(Math.abs(line.left) < 1, "line starts at the group edge");
         }
         assert.ok(
-          Math.abs(layout[0].jacketWidths[0] - layout[1].jacketWidths[0]) < 1,
-          "single jacket retains the normal track size",
+          group.gaps.every((gap) => Math.abs(gap - 8) < 1),
+          "jacket stands 8px above the rule",
         );
-        assert.equal(
-          await page.evaluate(() => document.documentElement.scrollWidth > innerWidth),
-          false,
-        );
-        await contrast(".shelf", theme, width);
-        report.layouts.push({ screen: "Shelf", theme, width, mode, groups: layout });
-        if (theme === "shelf-light" && width !== 768) {
-          await screenshot(`shelf-${mode.toLowerCase()}-${width}`);
-          if (mode === "Grid") {
-            const height = await page.evaluate(() => document.documentElement.scrollHeight);
-            await page.setViewportSize({ width, height });
-            await page
-              .locator(".shelf-group")
-              .first()
-              .screenshot({ path: `${out}/six-books-${width}.png` });
-            await page
-              .locator(".shelf-group")
-              .last()
-              .screenshot({ path: `${out}/one-book-${width}.png` });
-            await page.setViewportSize({ width, height: 844 });
-          }
-        }
       }
-      const status = page.getByRole("combobox", { name: "Status" });
-      await status.click();
-      assert.equal(await status.evaluate((node) => node.getBoundingClientRect().height), 40);
-      assert.equal(
-        await page
-          .locator(".quire-select-chevron")
-          .first()
-          .evaluate((node) => node.getBoundingClientRect().width),
-        10,
-      );
       assert.ok(
-        (
-          await page
-            .getByRole("option")
-            .evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().height))
-        ).every((height) => height === 44),
+        Math.abs(layout[0].jacketWidths[0] - layout[1].jacketWidths[0]) < 1,
+        "single jacket retains the normal track size",
+      );
+      assert.equal(
+        await page.evaluate(() => document.documentElement.scrollWidth > innerWidth),
+        false,
       );
       await contrast(".shelf", theme, width);
-      if (theme === "shelf-light" && width === 390) await screenshot("dropdown-open-390");
-      await status.press("End");
-      await status.press("Escape");
-      assert.equal(await page.getByRole("listbox").count(), 0);
-      assert.match(await status.textContent(), /All statuses/);
-      await status.press("Home");
-      await status.press("ArrowDown");
-      await status.press("ArrowDown");
-      await status.press("Enter");
-      assert.equal(await page.locator(".shelf-row").count(), 1);
-      assert.match(await status.textContent(), /Reading/);
-      report.actions.push(
-        `${theme} ${width}: open Status, End, Escape cancels, Home/ArrowDown/Enter filters to the reading edition`,
-      );
-
-      await open("?screen=today");
-      await page.evaluate((theme) => {
-        document.documentElement.dataset.theme = theme;
-      }, theme);
-      const panes = await page.evaluate(() => {
-        const layout = document.querySelector(".reading-two-pane");
-        const jacket = document.querySelector(".reading-cover").getBoundingClientRect();
-        const left = document.querySelector(".reading-jacket").getBoundingClientRect();
-        const stepper = document.querySelector(".reading-stepper").getBoundingClientRect();
-        return {
-          display: getComputedStyle(layout).display,
-          topDifference: stepper.top - jacket.top,
-          gutter: stepper.left - left.right,
-          bookmark: document.querySelector(".bookmark-track").getBoundingClientRect().width,
-          overflow: document.documentElement.scrollWidth > innerWidth,
-        };
-      });
-      assert.equal(panes.display, width >= 1024 ? "grid" : "block");
-      if (width >= 1024) {
-        assert.ok(Math.abs(panes.topDifference) < 1);
-        assert.equal(panes.gutter, 32);
+      report.layouts.push({ screen: "Shelf", theme, width, mode, groups: layout });
+      if (width !== 768) {
+        await screenshot(`shelf-${mode.toLowerCase()}-${width}`);
+        if (mode === "Grid") {
+          const height = await page.evaluate(() => document.documentElement.scrollHeight);
+          await page.setViewportSize({ width, height });
+          await page
+            .locator(".shelf-group")
+            .first()
+            .screenshot({ path: `${out}/six-books-${width}.png` });
+          await page
+            .locator(".shelf-group")
+            .last()
+            .screenshot({ path: `${out}/one-book-${width}.png` });
+          await page.setViewportSize({ width, height: 844 });
+        }
       }
-      assert.equal(panes.bookmark, 10);
-      assert.equal(panes.overflow, false);
-      await contrast(".reading", theme, width);
-      assert.equal(await page.locator(".reading-book-copy:visible").count(), 1);
-      report.layouts.push({ screen: "Today", theme, width, ...panes });
-      if (theme === "shelf-light") await screenshot(`today-${width}`);
     }
+    const status = page.getByRole("combobox", { name: "Status" });
+    await status.click();
+    assert.equal(await status.evaluate((node) => node.getBoundingClientRect().height), 40);
+    assert.equal(
+      await page
+        .locator(".quire-select-chevron")
+        .first()
+        .evaluate((node) => node.getBoundingClientRect().width),
+      10,
+    );
+    assert.ok(
+      (
+        await page
+          .getByRole("option")
+          .evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().height))
+      ).every((height) => height === 44),
+    );
+    if (width === 390) await screenshot("dropdown-open-390");
+    await status.press("End");
+    await status.press("Escape");
+    assert.equal(await page.getByRole("listbox").count(), 0);
+    assert.match(await status.textContent(), /All statuses/);
+    await status.press("Home");
+    await status.press("ArrowDown");
+    await status.press("ArrowDown");
+    await status.press("Enter");
+    assert.equal(await page.locator(".shelf-row").count(), 1);
+    assert.match(await status.textContent(), /Reading/);
+    report.actions.push(
+      `${width}: open Status, End, Escape cancels, Home/ArrowDown/Enter filters to the reading edition`,
+    );
+
+    await open("?screen=today");
+    await page.evaluate((theme) => {
+      document.documentElement.dataset.theme = theme;
+    }, theme);
+    const panes = await page.evaluate(() => {
+      const layout = document.querySelector(".reading-two-pane");
+      const jacket = document.querySelector(".reading-cover").getBoundingClientRect();
+      const left = document.querySelector(".reading-jacket").getBoundingClientRect();
+      const stepper = document.querySelector(".reading-stepper").getBoundingClientRect();
+      return {
+        display: getComputedStyle(layout).display,
+        topDifference: stepper.top - jacket.top,
+        gutter: stepper.left - left.right,
+        bookmark: document.querySelector(".bookmark-track").getBoundingClientRect().width,
+        overflow: document.documentElement.scrollWidth > innerWidth,
+      };
+    });
+    assert.equal(panes.display, width >= 1024 ? "grid" : "block");
+    if (width >= 1024) {
+      assert.ok(Math.abs(panes.topDifference) < 1);
+      assert.equal(panes.gutter, 32);
+    }
+    assert.equal(panes.bookmark, 10);
+    assert.equal(panes.overflow, false);
+    await contrast(".reading", theme, width);
+    assert.equal(await page.locator(".reading-book-copy:visible").count(), 1);
+    report.layouts.push({ screen: "Today", theme, width, ...panes });
+    await screenshot(`today-${width}`);
   }
   for (const width of [479, 480, 767, 1023, 1024, 1279, 1600]) {
     await page.setViewportSize({ width, height: 844 });

@@ -2,7 +2,7 @@ antislop active: during (global preference). Do not stop to ask. Read `DESIGN.md
 
 # Task: the first impression is opening a book (#63) — mobile first
 
-Worktree: this directory, base `main`. Own `src/features/auth/**`, `src/styles/auth.css`,
+Worktree: the repository root, base `main`. Own `src/features/auth/**`, `src/styles/auth.css`,
 `tests/e2e/auth.spec.ts`. Do not touch demo state, nav, shelf, reading, lib, package.json.
 
 The owner wants a first impression that makes someone stop, with the book theme carried by structure, not by

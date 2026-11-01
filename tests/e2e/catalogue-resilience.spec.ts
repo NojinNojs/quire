@@ -8,16 +8,9 @@ const html = recordedHtml.slice(recordedHtml.indexOf("<!DOCTYPE"));
 
 async function checkCatalogue(page: Page, state: string) {
   const checks = [];
-  for (const theme of [
-    "shelf-light",
-    "shelf-dark",
-    "municipal-light",
-    "municipal-dark",
-    "oxford-light",
-    "oxford-dark",
-  ]) {
-    const ratios = await page.evaluate((value) => {
-      document.documentElement.dataset.theme = value;
+  {
+    const theme = "shelf-light";
+    const ratios = await page.evaluate(() => {
       const luminance = (color: string) => {
         const [r = 0, g = 0, b = 0] = (color.match(/[\d.]+/g) ?? []).slice(0, 3).map((channel) => {
           const n = Number(channel) / 255;
@@ -42,13 +35,10 @@ async function checkCatalogue(page: Page, state: string) {
           const paper = luminance(background);
           return (Math.max(ink, paper) + 0.05) / (Math.min(ink, paper) + 0.05);
         });
-    }, theme);
+    });
     for (const ratio of ratios) expect(ratio, `${state} ${theme}`).toBeGreaterThanOrEqual(7);
     checks.push({ state, theme, minimumTextContrast: Math.min(...ratios) });
   }
-  await page.evaluate(() => {
-    document.documentElement.dataset.theme = "shelf-light";
-  });
   for (const width of [320, 390, 768, 1280]) {
     await page.setViewportSize({ width, height: 844 });
     expect(

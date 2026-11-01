@@ -35,34 +35,26 @@ await page.evaluate(() => {
 });
 await page.getByText("Pages logged.", { exact: true }).waitFor();
 await page.getByText("224 / 550", { exact: true }).waitFor();
+await page.evaluate(() => {
+  document.documentElement.dataset.theme = "shelf-light";
+});
 for (const width of [320, 390, 768, 1280]) {
   await page.setViewportSize({ width, height: 844 });
-  for (const theme of [
-    "shelf-light",
-    "shelf-dark",
-    "municipal-light",
-    "municipal-dark",
-    "oxford-light",
-    "oxford-dark",
-  ]) {
-    await page.evaluate((theme) => {
-      document.documentElement.dataset.theme = theme;
-    }, theme);
-    const metrics = await page.evaluate(() => ({
-      overflow: document.documentElement.scrollWidth > innerWidth,
-      cover: [
-        document.querySelector(".reading-cover").getBoundingClientRect().width,
-        document.querySelector(".reading-cover").getBoundingClientRect().height,
-      ],
-      targets: [...document.querySelectorAll("button,input")].every(
-        (el) => el.getBoundingClientRect().height >= 48 && el.getBoundingClientRect().width >= 48,
-      ),
-    }));
-    assert.equal(metrics.overflow, false);
-    assert.deepEqual(metrics.cover, [92, 138]);
-    assert.equal(metrics.targets, true);
-  }
+  const metrics = await page.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth > innerWidth,
+    cover: [
+      document.querySelector(".reading-cover").getBoundingClientRect().width,
+      document.querySelector(".reading-cover").getBoundingClientRect().height,
+    ],
+    targets: [...document.querySelectorAll("button,input")].every(
+      (el) => el.getBoundingClientRect().height >= 48 && el.getBoundingClientRect().width >= 48,
+    ),
+  }));
+  assert.equal(metrics.overflow, false);
+  assert.deepEqual(metrics.cover, [92, 138]);
+  assert.equal(metrics.targets, true);
 }
+await page.setViewportSize({ width: 390, height: 844 });
 await page.getByLabel("Pages read", { exact: true }).focus();
 assert.equal(
   await page
@@ -71,6 +63,6 @@ assert.equal(
   "2px",
 );
 console.log(
-  "Passed: undo, persisted offline queue, reconnect retry, all six themes at 320/390/768/1280, 92x138 cover, 48px targets, 2px focus.",
+  "Passed: undo, persisted offline queue, reconnect retry, shelf-light at 320/390/768/1280, 92x138 cover, 48px targets, 2px focus.",
 );
 await browser.close();

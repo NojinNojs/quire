@@ -15,6 +15,14 @@ function message(error: unknown): string {
     ? "Your account does not have permission to access these books. Sign in again and try again."
     : "Could not access your books. Check your connection and try again.";
 }
+export function bookEditionKey(book: {
+  title: string;
+  publisher: string | null;
+  year: number | null;
+  isbn: string | null;
+}): string {
+  return editionKey({ ...book, isbn: book.isbn ? isbnTo13(book.isbn) : null });
+}
 
 export async function countBooks(client: BooksClient, ownerId: string): Promise<number> {
   try {
@@ -60,14 +68,10 @@ export async function saveBook(
     if (input.isbn && !isbn) {
       return { ok: false, kind: "unknown", message: "Enter a valid ISBN or leave ISBN blank." };
     }
-    const identity = (book: {
-      title: string;
-      publisher: string | null;
-      year: number | null;
-      isbn: string | null;
-    }) => editionKey({ ...book, isbn: book.isbn ? isbnTo13(book.isbn) : null });
     const existing = await listBooks(client, input.owner);
-    const duplicate = existing.find((book) => identity(book) === identity({ ...input, isbn }));
+    const duplicate = existing.find(
+      (book) => bookEditionKey(book) === bookEditionKey({ ...input, isbn }),
+    );
     if (duplicate && !isbn) {
       return { ok: false, kind: "duplicate", message: "This edition is already in your library." };
     }

@@ -22,13 +22,14 @@ const progress = [
 function injected(
   active: typeof book | null = book,
   streak: { current: number; longest: number } | null = { current: 3, longest: 7 },
+  logs = progress,
 ) {
   const queries: { table: string; eq: ReturnType<typeof vi.fn> }[] = [];
   let fail = false;
   const from = vi.fn((table: string) => {
     const response = () =>
       Promise.resolve({
-        data: table === "books" ? active : table === "streaks" ? streak : progress,
+        data: table === "books" ? active : table === "streaks" ? streak : logs,
         error: fail ? { message: "offline" } : null,
       });
     const query = {
@@ -82,11 +83,17 @@ describe("useReading with an injected client", () => {
     expect(fake.queries[0]?.eq).toHaveBeenCalledWith("status", "reading");
   });
 
-  it("returns an empty state when the streak row is missing", async () => {
-    const fake = injected(book, null);
+  it("shows the active book before its first reading log", async () => {
+    const fake = injected(book, null, []);
     const { result } = renderHook(() => useReading(fake.client, "reader", "2026-10-29"));
     await waitFor(() => expect(result.current.loading).toBe(false));
-    expect(result.current.data).toBeNull();
+    expect(result.current.data).toMatchObject({
+      book: { id: "active" },
+      streak: { current: 0, longest: 0 },
+      current: 0,
+      pagesToday: 0,
+    });
+    expect(result.current.data?.streak.days.every((day) => !day.read)).toBe(true);
     expect(result.current.error).toBeNull();
   });
 

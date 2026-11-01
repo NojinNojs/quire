@@ -47,6 +47,12 @@ export function useSession() {
     try {
       const result = await supabase?.auth.signOut();
       if (result?.error) throw result.error;
+      if (window.location.hash) {
+        const url = new URL(window.location.href);
+        url.hash = "";
+        window.history.replaceState(null, "", url);
+        window.dispatchEvent(new window.Event("hashchange"));
+      }
     } catch {
       setError("Could not sign out. Check your connection and try again.");
     } finally {

@@ -1,464 +1,225 @@
 .shelf {
-  --shelf-columns: 2;
-  --shelf-cover-max-width: 180px;
-  --shelf-record-columns: minmax(0, 1fr) minmax(0, 1fr);
-  padding: var(--space-24) var(--gutter)
-    calc(var(--nav-height) + var(--space-32) + env(safe-area-inset-bottom, 0px));
-  color: var(--ink);
+  max-width: 1200px;
+  margin: auto;
+  padding: 32px 24px 64px;
 }
-
 .shelf-heading,
 .shelf-summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-16);
+  gap: 16px;
 }
-
+.shelf-heading {
+  margin-bottom: 32px;
+}
 .shelf-heading h1 {
   margin: 0;
+  font: 500 clamp(32px, 3vw, 44px) / 1.1 var(--font-serif);
 }
-
+.shelf-heading p {
+  margin: 8px 0 0;
+  color: var(--ink-muted);
+}
 .shelf-action {
-  min-height: var(--touch);
-  padding: var(--space-8) 0;
-  border: 0;
-  background: none;
+  min-height: 48px;
+  padding: 8px 16px;
+  border: 1px solid #7a6a5d;
+  border-radius: 6px;
+  background: #fffaf1;
   color: var(--ink);
   font: inherit;
-  text-decoration: underline;
-  text-underline-offset: var(--space-4);
   cursor: pointer;
 }
-
+.shelf-heading > .shelf-action {
+  border-color: #702c3b;
+  background: #702c3b;
+  color: #fffaf1;
+  font-weight: 700;
+  white-space: nowrap;
+}
 .shelf-filters {
   display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(140px, 200px) minmax(140px, 200px);
+  gap: 16px;
   align-items: end;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-12);
-  margin-top: var(--space-16);
 }
-
 .shelf-filters label {
   display: flex;
-  min-width: 0;
   flex-direction: column;
-  gap: var(--space-4);
-}
-
-.shelf-filters label > span {
-  font-size: var(--label-size);
-  line-height: var(--label-leading);
-  text-transform: uppercase;
-}
-
-.shelf-search {
-  grid-column: 1 / -1;
-}
-
-.shelf-filters input {
-  width: 100%;
+  gap: 8px;
   min-width: 0;
-  height: var(--touch);
-  padding: 0 var(--space-8);
-  border: var(--rule-width) solid var(--ink-muted);
-  border-radius: var(--radius-input);
-  background: var(--surface-raised);
+  font-size: 13px;
+  font-weight: 700;
+}
+.shelf-filters input {
+  min-width: 0;
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid #8b7b6b;
+  border-radius: 6px;
+  background: #fffaf1;
   color: var(--ink);
   font: inherit;
-  caret-color: var(--ink);
+  font-weight: 400;
 }
-
 .shelf-summary {
-  margin: var(--space-24) 0 0;
-  font: var(--mono-size) / var(--mono-leading) var(--font-mono);
-  font-variant-numeric: tabular-nums;
+  margin-top: 24px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 16px;
+  font-weight: 700;
 }
-
 .shelf-view {
   display: flex;
-  gap: var(--space-16);
-  border: 0;
+  gap: 8px;
   padding: 0;
+  border: 0;
   margin: 0;
 }
-
 .shelf-view [aria-pressed="true"] {
-  font-weight: 700;
-  text-decoration-thickness: var(--focus-width);
+  background: #362b29;
+  color: #fffaf1;
+  border-color: #362b29;
 }
-
-.shelf-view [aria-pressed="false"] {
-  text-decoration: none;
-}
-
 .shelf-filter-count {
-  margin: 0 0 var(--space-24);
-  font: var(--label-size) / var(--label-leading) var(--font-mono);
+  color: var(--ink-muted);
+  font-size: 13px;
+  margin: 8px 0 0;
 }
-
 .shelf-group {
-  position: relative;
-  margin-top: var(--space-32);
-  --shelf-label-ink: color-mix(in srgb, var(--book-class) 50%, var(--ink));
+  margin-top: 32px;
 }
-
-/* The phone spine occupies the page gutter, leaving both jacket columns intact. */
 .shelf-band {
-  position: absolute;
-  inset: 0 auto auto calc(-1 * var(--gutter));
-  max-height: 100%;
-  margin: 0;
-  color: var(--shelf-label-ink);
-  font: var(--label-size) / var(--label-leading) var(--font-sans);
-  writing-mode: vertical-rl;
+  margin: 0 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+  font: 600 18px / 1.3 var(--font-serif);
 }
-
 .shelf-class-number {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
+  color: #702c3b;
+  margin-right: 8px;
 }
-
-.shelf-class-name {
-  font-family: var(--font-serif);
-  font-style: italic;
-}
-
 .shelf-books {
-  container-type: inline-size;
+  display: grid;
   list-style: none;
   padding: 0;
   margin: 0;
+  gap: 24px;
 }
-
+.shelf-grid .shelf-books {
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+.shelf-row {
+  min-width: 0;
+}
 .shelf-jacket {
   position: relative;
-  min-width: 0;
+  width: 100%;
+  max-width: 180px;
+  /* the page rail is furniture beside the artwork, never over it */
+  padding-right: calc(var(--bookmark-width) + var(--mono-size) + var(--space-4));
 }
-
 .shelf-jacket-button {
   display: block;
-  min-width: var(--touch);
+  width: 100%;
   padding: 0;
   border: 0;
-  background: var(--surface-raised);
+  background: none;
   cursor: pointer;
 }
-
 .shelf-cover {
-  width: var(--cover-row-width);
-  height: var(--cover-row-height);
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
 }
-
 .shelf-copy {
   min-width: 0;
+  margin-top: 12px;
   overflow-wrap: anywhere;
 }
-
 .shelf-copy h3,
 .shelf-copy p {
   margin: 0;
 }
-
 .shelf-copy h3 button {
-  display: block;
-  min-height: var(--touch);
-  width: 100%;
   padding: 0;
   border: 0;
   background: none;
   color: var(--ink);
-  font: var(--row-title-size) / var(--body-leading) var(--font-serif);
-  text-align: start;
-  text-decoration: underline;
-  text-underline-offset: var(--space-4);
+  font: 600 18px / 1.2 var(--font-serif);
+  text-align: left;
   cursor: pointer;
 }
-
-.shelf-author {
-  font-size: var(--small-size);
-  line-height: var(--small-leading);
-}
-
-.shelf-metadata {
-  display: grid;
-  grid-template-columns: var(--shelf-record-columns);
-  gap: var(--space-4) var(--space-12);
-  margin-top: var(--space-8);
-  font: var(--mono-size) / var(--mono-leading) var(--font-mono);
-  font-variant-numeric: tabular-nums;
-}
-
-.shelf-status {
-  text-align: right;
-}
-
-/* Shared rows keep jackets on the rule and captions below it, even with mixed covers. */
-.shelf-grid .shelf-books {
-  display: grid;
-  grid-template-columns: repeat(var(--shelf-columns), minmax(0, 1fr));
-  gap: var(--space-8) var(--space-16);
-}
-
-.shelf-grid .shelf-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-row: span 3;
-  grid-template-rows: subgrid;
-  min-width: 0;
-}
-
-.shelf-line {
-  display: block;
-  border-bottom: var(--rule-width) solid var(--rule);
-}
-
-.shelf-grid .shelf-line {
-  display: none;
-  grid-row: 2;
-  width: 100cqw;
-}
-
-.shelf-grid .shelf-row:nth-child(2n + 1) .shelf-line {
-  display: block;
-}
-
-.shelf-grid .shelf-jacket {
-  grid-row: 1;
-  align-self: end;
-  width: 100%;
-  max-width: var(--shelf-cover-max-width);
-}
-
-.shelf-grid .shelf-jacket-button {
-  width: 100%;
-}
-
-.shelf-grid .shelf-cover {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 2 / 3;
-}
-
-.shelf-grid .shelf-copy {
-  grid-row: 3;
-  max-width: var(--shelf-cover-max-width);
-  padding-bottom: var(--space-16);
-}
-
-.shelf-grid .shelf-copy h3 button {
-  font-size: var(--body-size);
-  line-height: var(--small-leading);
-}
-
-.shelf-grid .shelf-author,
-.shelf-grid .shelf-pages,
-.shelf-grid .shelf-status {
-  display: none;
-}
-
-.shelf-grid .shelf-metadata {
-  grid-template-columns: minmax(0, 1fr);
-  margin-top: var(--space-4);
-}
-
-.shelf-grid .bookmark {
-  inset: 0 0 0 auto;
-  padding: 0;
-}
-
-.shelf-grid .bookmark-page {
-  display: none;
-}
-
-.shelf-grid .bookmark-track {
-  width: var(--bookmark-width);
-  background: var(--surface);
-}
-
-.shelf-list .shelf-row {
-  display: grid;
-  grid-template-columns: var(--cover-row-width) minmax(0, 1fr);
-  gap: var(--space-8) var(--space-32);
-  align-items: end;
-  padding-top: var(--space-16);
-}
-
-.shelf-list .shelf-copy {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-.shelf-list .shelf-line {
-  grid-column: 1 / -1;
-  grid-row: 2;
-}
-
-.shelf-list .bookmark {
-  inset: 0 calc(-1 * var(--space-16)) 0 auto;
-}
-
-.shelf-state {
-  width: 100%;
-  min-height: calc(var(--shelf-jacket-height) + var(--space-48));
-  margin-top: var(--space-32);
-  padding-block: var(--space-48);
-  border-block: var(--rule-width) solid var(--rule);
-}
-
-.shelf-empty,
-.shelf-error {
-  display: grid;
-  place-content: center;
-  text-align: center;
-  overflow-wrap: anywhere;
-}
-
-.shelf-state p {
-  margin: 0;
-}
-
-.shelf-error .quiet {
-  color: var(--ink);
-}
-
-.shelf-loading .catalog-results {
-  display: grid;
-  grid-template-columns: repeat(var(--shelf-columns), minmax(0, 1fr));
-  gap: var(--space-16);
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.shelf-loading .catalog-row {
-  display: grid;
-  gap: var(--space-12);
-  padding: 0;
-  border: 0;
-}
-
-.shelf-loading .catalog-cover {
-  width: 100%;
-  max-width: var(--shelf-cover-max-width);
-  height: auto;
-  aspect-ratio: 2 / 3;
-  background: var(--rule);
-}
-
-.shelf-loading .skeleton-title,
-.shelf-loading .skeleton-line,
-.shelf-loading .skeleton-action {
-  height: var(--space-12);
-  margin-bottom: var(--space-8);
-  background: var(--rule);
-}
-
-.shelf button:hover {
+.shelf-copy h3 button:hover {
   text-decoration: underline;
 }
-
-.shelf :focus-visible {
-  outline: var(--focus-width) solid var(--ink);
-  outline-offset: var(--focus-offset);
+.shelf-copy .shelf-author {
+  margin-top: 4px;
+  color: var(--ink-muted);
+  font-size: 13px;
 }
-
-@media (min-width: 480px) {
-  .shelf {
-    --shelf-columns: 3;
-  }
-
-  .shelf-grid .shelf-row:nth-child(n) .shelf-line {
-    display: none;
-  }
-
-  .shelf-grid .shelf-row:nth-child(3n + 1) .shelf-line {
-    display: block;
-  }
+.shelf-copy .shelf-metadata {
+  margin-top: 8px;
+  color: var(--ink-muted);
+  font-size: 13px;
 }
-
-@media (min-width: 768px) {
+.shelf-status {
+  color: #702c3b;
+  font-weight: 700;
+}
+.shelf-grid .shelf-publisher,
+.shelf-grid .shelf-year,
+.shelf-grid .shelf-pages {
+  display: none;
+}
+.shelf-list .shelf-books {
+  gap: 0;
+}
+.shelf-list .shelf-row {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.shelf-list .shelf-copy {
+  margin: 0;
+}
+.shelf-list .shelf-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.shelf-state {
+  margin-top: 24px;
+  padding: 32px 24px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: #fffaf1;
+}
+.shelf-empty p {
+  margin: 0 0 16px;
+}
+.shelf-loading .catalog-results {
+  margin: 0;
+}
+@media (max-width: 700px) {
   .shelf {
-    --shelf-columns: 4;
-    --shelf-record-columns: minmax(0, 1fr) minmax(0, 0.5fr) minmax(0, 0.5fr) minmax(0, 0.75fr);
+    padding: 24px 16px 48px;
   }
-
+  .shelf-heading {
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
   .shelf-filters {
-    grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr));
-    gap: var(--space-16);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
   .shelf-search {
-    grid-column: auto;
-  }
-
-  .shelf-band {
-    position: static;
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-8);
-    margin-bottom: var(--space-16);
-    writing-mode: horizontal-tb;
-    font-size: var(--body-size);
-    line-height: var(--body-leading);
-  }
-
-  .shelf-grid .shelf-row:nth-child(n) .shelf-line {
-    display: none;
-  }
-
-  .shelf-grid .shelf-row:nth-child(4n + 1) .shelf-line {
-    display: block;
-  }
-
-  .shelf-list .shelf-copy {
-    display: grid;
-    grid-template-columns: var(--shelf-record-columns);
-    align-items: baseline;
-    gap: var(--space-4) var(--space-12);
-  }
-
-  .shelf-list .shelf-copy h3 {
-    grid-column: 1 / 3;
-  }
-
-  .shelf-list .shelf-author {
-    grid-column: 3 / -1;
-    text-align: right;
-  }
-
-  .shelf-list .shelf-metadata {
     grid-column: 1 / -1;
-    grid-template-columns: subgrid;
-    margin-top: 0;
-    text-align: right;
   }
-}
-
-@media (min-width: 1024px) {
-  .shelf {
-    --shelf-columns: 5;
-  }
-
-  .shelf-grid .shelf-row:nth-child(n) .shelf-line {
-    display: none;
-  }
-
-  .shelf-grid .shelf-row:nth-child(5n + 1) .shelf-line {
-    display: block;
-  }
-}
-
-@media (min-width: 1280px) {
-  .shelf {
-    --shelf-columns: 6;
-  }
-
-  .shelf-grid .shelf-row:nth-child(n) .shelf-line {
-    display: none;
-  }
-
-  .shelf-grid .shelf-row:nth-child(6n + 1) .shelf-line {
-    display: block;
+  .shelf-grid .shelf-books {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 16px;
   }
 }

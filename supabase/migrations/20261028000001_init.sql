@@ -1,5 +1,5 @@
 -- Quire schema, first migration.
--- Source of truth: docs/SCHEMA.md. Every table carries an owner and RLS.
+-- Source of truth: docs/engineering/SCHEMA.md. Every table carries an owner and RLS.
 
 create extension if not exists pgcrypto;
 

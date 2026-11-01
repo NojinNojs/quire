@@ -1,0 +1,122 @@
+.app-shell {
+  --surface: #f8f3e8;
+  --surface-raised: #fffaf1;
+  --ink: #28221f;
+  --ink-muted: #5f5148;
+  --rule: #c7b8a6;
+  --accent: #702c3b;
+  --on-accent: #fffaf1;
+  background: var(--surface);
+  color: var(--ink);
+  min-height: 100vh;
+}
+body:has(.app-shell) {
+  background: #d6c9b5;
+}
+.app-shell .shell-header {
+  background: #f8f3e8;
+}
+.app-shell .brand {
+  font: italic 600 28px / 1 var(--font-serif);
+  color: #702c3b;
+}
+.app-shell .bottom-nav {
+  background: #e8ddcb;
+  border-color: #c7b8a6;
+}
+.app-shell .bottom-nav a {
+  gap: 8px;
+  border-radius: 6px;
+  color: #3b322c;
+}
+.app-shell .bottom-nav a[aria-current="page"] {
+  color: #702c3b;
+  font-weight: 700;
+  background: #f8f3e8;
+  text-decoration: none;
+}
+.app-shell .nav-indicator {
+  background: #702c3b;
+}
+.app-shell .nav-indicator[data-route="shelf"] {
+  transform: none;
+}
+.app-shell .nav-indicator[data-route="today"] {
+  transform: translateX(100%);
+}
+.app-shell .nav-indicator[data-route="search"] {
+  transform: translateX(200%);
+}
+.app-shell .nav-label {
+  display: block;
+  font: 600 11px / 1.2 var(--font-sans);
+}
+.app-shell .catalog {
+  max-width: 800px;
+  padding: 32px 24px 64px;
+}
+.app-shell .shelf .quire-select {
+  font-family: var(--font-sans);
+}
+.app-shell .shelf .quire-select-control {
+  min-height: 48px;
+  height: auto;
+  border-color: #8b7b6b;
+  border-radius: 6px;
+  padding: 4px 12px;
+}
+.app-shell .shelf .quire-select-panel [role="option"] {
+  min-height: 48px;
+}
+.app-shell .catalog h1 {
+  font: 500 clamp(32px, 3vw, 44px) / 1.1 var(--font-serif);
+}
+.app-shell .catalog .primary {
+  background: #702c3b;
+  color: #fffaf1;
+  padding-inline: 24px;
+}
+.app-shell .catalog-form input {
+  border-radius: 6px;
+}
+.app-shell .entry-tabs button[aria-selected="true"] {
+  color: #702c3b;
+  border-bottom-color: #702c3b;
+  font-weight: 700;
+}
+@media (max-width: 767px) {
+  .app-shell .demo-banner {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 16px 0;
+    padding: 6px 12px;
+    font-size: 12.5px;
+  }
+  .app-shell .demo-banner > p:first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+  }
+  .app-shell .demo-banner-actions {
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  .app-shell .demo-banner .demo-link {
+    min-height: 44px;
+    font-size: 12.5px;
+  }
+  .app-shell .shelf-heading {
+    margin-bottom: 16px;
+  }
+  .app-shell .bottom-nav a {
+    flex-direction: column;
+    gap: 2px;
+    height: 56px;
+  }
+  .app-shell .bottom-nav svg {
+    width: 20px;
+    height: 20px;
+  }
+}

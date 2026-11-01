@@ -1,0 +1,41 @@
+.shell.book-detail {
+  max-width: 72rem;
+  padding-bottom: calc(var(--nav-height) + 32px);
+}
+.book-detail h1 {
+  margin: 12px 0 0;
+  font: italic 500 clamp(28px, 3.2vw, 40px) / 1.1 var(--font-serif);
+  overflow-wrap: anywhere;
+}
+.book-detail .demo-book-record {
+  margin: 24px 0;
+}
+.book-detail .demo-book-actions,
+.book-delete {
+  margin: 24px 0;
+}
+.book-detail button {
+  min-height: 48px;
+}
+.book-detail .catalog-form {
+  max-width: 40rem;
+}
+.book-delete {
+  padding: 16px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+}
+.book-delete button + button {
+  margin-left: 8px;
+}
+.book-extra-field {
+  display: grid;
+  gap: 8px;
+  max-width: 40rem;
+  margin: 16px 0;
+}
+.book-extra-field input {
+  min-height: 48px;
+  width: 100%;
+  font: inherit;
+}

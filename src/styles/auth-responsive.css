@@ -1,0 +1,136 @@
+@media (min-width: 1024px) {
+  .auth-account-links {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    column-gap: 16px;
+  }
+}
+
+@media (max-width: 759px) {
+  .auth-book::after {
+    display: none;
+  }
+
+  .auth-bookmark {
+    right: 24px;
+    left: auto;
+  }
+
+  .auth-verso {
+    width: 100%;
+  }
+
+  .auth-face,
+  .auth-page-foot {
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  .auth-running-head {
+    padding-right: 24px;
+  }
+
+  .auth-recto {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-page *,
+  .auth-page *::before,
+  .auth-page *::after {
+    animation: none;
+    transition: none;
+  }
+
+  .auth-page .primary {
+    transition: none;
+  }
+}
+
+@media (max-width: 359px) {
+  .auth-bookmark {
+    right: 16px;
+  }
+}
+
+@media (min-width: 760px) and (max-height: 850px) {
+  .auth-verso,
+  .auth-recto {
+    padding-block: 20px;
+  }
+
+  .auth-running-head {
+    padding-bottom: 8px;
+  }
+
+  .auth-intro {
+    margin: 12px 0;
+    font-size: clamp(30px, 2.7vw, 38px);
+  }
+
+  .auth-page .auth-reading-cover {
+    width: 160px;
+    height: 240px;
+  }
+
+  .auth-reading-record,
+  .auth-reading-streak,
+  .auth-reading-pages {
+    margin-top: 12px;
+  }
+}
+@media (min-width: 760px) and (max-height: 800px) {
+  .auth-verso:has(.auth-face[data-mode="signup"]) .auth-intro {
+    display: none;
+  }
+}
+
+@media (min-width: 760px) and (max-height: 700px) {
+  .auth-verso,
+  .auth-recto {
+    padding-block: 16px;
+  }
+
+  .auth-page .auth-reading-cover {
+    width: 112px;
+    height: 168px;
+  }
+
+  .auth-reading-record {
+    margin-top: 16px;
+  }
+
+  .auth-reading-streak,
+  .auth-reading-pages {
+    margin-top: 16px;
+  }
+
+  .auth-running-head {
+    padding-bottom: 8px;
+  }
+
+  .auth-page .auth-mode-title {
+    margin-bottom: 8px;
+    font-size: 26px;
+  }
+
+  .auth-intro {
+    margin: 12px 0;
+    font-size: 30px;
+    line-height: 1.1;
+  }
+
+  .auth-page .auth-form input {
+    height: 44px;
+  }
+
+  .auth-page .primary {
+    height: 44px;
+    margin-top: 0;
+  }
+
+  .auth-page-foot {
+    display: none;
+  }
+}

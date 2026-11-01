@@ -10,7 +10,7 @@ web
 
 Quire is a personal book catalogue and reading tracker. Readers collect editions, find books
 on their own shelves, choose one active book, and record pages read. Existing product truth
-is recorded in docs/PRD.md and docs/APP_FLOW.md.
+is recorded in docs/product/PRD.md and docs/product/APP_FLOW.md.
 
 ## Stack
 
@@ -20,7 +20,7 @@ The interactive demo works without an account or Supabase and saves changes on t
 ## Capabilities and constraints
 
 Preserve real cover artwork, one shared missing-cover image, edition identity, notes, ratings,
-reading progress, theme choices, and the working authentication flow. Label sample activity.
+reading progress, the light theme, and the working authentication flow. Label sample activity.
 Do not imply that the demo signs users in or synchronizes changes to an account.
 
 ## Current user direction
@@ -31,5 +31,5 @@ covers must remain actual published artwork, with one placeholder for missing co
 
 ## Accessibility
 
-Support keyboard operation, visible focus, narrow screens, reduced motion, and all six themes.
+Support keyboard operation, visible focus, narrow screens, reduced motion, and the light theme.
 The tour can be skipped and replayed without blocking normal app use.
