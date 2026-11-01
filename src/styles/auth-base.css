@@ -1,0 +1,154 @@
+.auth-page {
+  --auth-paper: #f8f3e8;
+  --auth-secondary-ink: #50483e;
+  --auth-desk: #d6c9b5;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding: 40px 32px;
+  background: var(--auth-desk);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+.auth-page ::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.auth-book {
+  position: relative;
+  width: min(1220px, 100%);
+  background: var(--auth-paper);
+  border-radius: 4px 8px 8px 4px;
+  box-shadow:
+    0 3px 0 #b9aa91,
+    0 7px 0 #e8ddca,
+    0 10px 0 #a99a82,
+    0 22px 35px rgb(58 43 29 / 25%);
+}
+
+.auth-page[data-covered="true"] {
+  height: 100svh;
+  overflow: hidden;
+}
+
+.auth-bookmark {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: calc(50% - 32px);
+  width: 10px;
+  height: 96px;
+  background: var(--accent);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 6px), 0 100%);
+}
+
+/* The fold stays continuous across both pages, including their margins. */
+.auth-book::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset-block: 0;
+  left: calc(50% - 36px);
+  width: 72px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(83 61 39 / 5%) 30%,
+    rgb(70 49 31 / 19%) 48%,
+    rgb(58 40 25 / 27%) 50%,
+    rgb(89 65 40 / 12%) 54%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.auth-book::before {
+  content: "";
+  position: absolute;
+  inset: 3px -5px -7px;
+  z-index: -1;
+  border: 1px solid #ad9d83;
+  border-radius: 5px 9px 9px 5px;
+  background: repeating-linear-gradient(to bottom, #e4d9c5 0 2px, #cbbca4 2px 3px);
+  pointer-events: none;
+}
+
+.auth-verso,
+.auth-recto {
+  min-width: 0;
+  padding: 32px clamp(40px, 5vw, 72px);
+}
+
+.auth-verso {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  min-height: min(700px, calc(100svh - 80px));
+}
+
+.auth-running-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--rule);
+  font: 400 10px / 16px var(--font-mono);
+  letter-spacing: 0.08em;
+}
+
+.auth-intro {
+  max-width: 16ch;
+  margin: 32px 0 24px;
+  font: italic 400 clamp(36px, 3.2vw, 48px) / 1.05 var(--font-serif);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.auth-face {
+  animation: auth-page-arrive 240ms ease-out both;
+}
+
+@keyframes auth-page-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.auth-cover-intro {
+  position: absolute;
+  inset: 0 50% 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 32px clamp(40px, 5vw, 72px);
+  color: var(--ink);
+}
+
+.auth-cover-intro p {
+  max-width: 30ch;
+  margin: 0;
+  font: 400 15px / 24px var(--font-sans);
+}
+
+.auth-cover-intro h1 {
+  max-width: 12ch;
+  margin: 16px 0 24px;
+  font: italic 400 clamp(36px, 3.2vw, 48px) / 1.05 var(--font-serif);
+}
+
+[data-opening="true"] .auth-cover-intro {
+  animation: auth-intro-leave 180ms ease-out forwards;
+}
+
+@keyframes auth-intro-leave {
+  to {
+    opacity: 0;
+  }
+}

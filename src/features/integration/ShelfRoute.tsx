@@ -19,8 +19,8 @@ export function ShelfRoute({ client, owner }: { client: SupabaseClient; owner: s
         error={error}
         onRetry={retry}
         onAddBook={openCatalogue}
-        onSelectBook={() => {
-          window.location.hash = "/today";
+        onSelectBook={(book) => {
+          window.location.hash = `/book/${book.id}`;
         }}
       />
     </main>

@@ -5,7 +5,7 @@ One milestone. Do not start the shelf or the reading loop.
 
 ## Read first
 
-`docs/PRD.md`, `docs/DESIGN_SYSTEM.md`, `docs/SCHEMA.md`, `src/features/catalog/SearchScreen.tsx`,
+`docs/product/PRD.md`, `docs/design/DESIGN_SYSTEM.md`, `docs/engineering/SCHEMA.md`, `src/features/catalog/SearchScreen.tsx`,
 `src/lib/catalog.ts`, `src/lib/supabase.ts`, `src/features/auth/AuthForm.tsx`,
 `app/CONSISTENCY.md` in `../quire-mockups` for the visual rules, and the four issues named above.
 

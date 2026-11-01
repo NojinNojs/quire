@@ -1,45 +1,10 @@
 import { type CSSProperties, useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { TourPanel } from "./TourPanel";
+import { steps } from "./tourSteps";
 import "../../styles/guide.css";
 
 const tourEvent = "quire:open-guide";
-const steps = [
-  {
-    route: "/today",
-    target: ".reading-book, .reading-empty",
-    title: "One book. A place to begin.",
-    body: "Today keeps your current book close. Pick a book from your shelf whenever you want to start something else.",
-    label: "Your current read",
-  },
-  {
-    route: "/today",
-    target: ".reading-stepper, .reading-empty",
-    title: "Make every page count.",
-    body: "Enter the pages you have read, then log them. The preview shows where you will land, and Undo gives you a moment to change your mind.",
-    label: "Log your reading",
-  },
-  {
-    route: "/shelf",
-    target: ".shelf-filters",
-    title: "Find your next read.",
-    body: "Your shelf groups books by subject. Filter by reading status or language, or search for a title. Open a book to keep notes and a rating.",
-    label: "Explore your shelf",
-  },
-  {
-    route: "/search",
-    target: ".entry-tabs",
-    title: "Give your books a home.",
-    body: "Find a book in the catalogue, or enter it manually. A title is enough to get started; you can leave unknown details blank.",
-    label: "Add a book",
-  },
-  {
-    route: "/settings",
-    target: ".settings-themes",
-    title: "Settle into your own space.",
-    body: "Choose a palette and switch between light and dark. You can open Guide at any time to take this tour again.",
-    label: "Make it yours",
-  },
-] as const;
 
 type Rect = { top: number; left: number; width: number; height: number };
 
@@ -50,6 +15,7 @@ export function openProductTour() {
 function initialPhase(key: string): "tour" | null {
   if (typeof window === "undefined") return null;
   if (new URLSearchParams(window.location.search).get("tour") === "1") return "tour";
+  if (window.location.hash && window.location.hash !== "#/shelf") return null;
   try {
     return window.localStorage.getItem(key) ? null : "tour";
   } catch {
@@ -190,85 +156,14 @@ export function ProductTour({ scope }: { scope: string }) {
 
   if (phase !== "tour") return null;
   return createPortal(
-    <div className="product-tour">
-      <div className="tour-backdrop" aria-hidden="true">
-        {rect && rect.height > 0 ? (
-          <>
-            <div
-              className="tour-shade"
-              style={{ top: 0, left: 0, width: "100%", height: rect.top }}
-            />
-            <div
-              className="tour-shade"
-              style={{ top: rect.top + rect.height, bottom: 0, left: 0, width: "100%" }}
-            />
-            <div
-              className="tour-shade"
-              style={{ top: rect.top, left: 0, width: rect.left, height: rect.height }}
-            />
-            <div
-              className="tour-shade"
-              style={{ top: rect.top, left: rect.left + rect.width, right: 0, height: rect.height }}
-            />
-            <div className="tour-spotlight" style={rect} />
-          </>
-        ) : null}
-      </div>
-      <section
-        className="tour-panel"
-        style={placement}
-        role="dialog"
-        aria-modal="false"
-        aria-labelledby="tour-title"
-        aria-describedby="tour-description"
-      >
-        <div className="tour-panel-top">
-          <span>
-            Guide · {index + 1} of {steps.length}
-          </span>
-          <button className="guide-quiet" type="button" onClick={() => close()}>
-            Skip tour
-          </button>
-        </div>
-        <h2 id="tour-title" ref={heading} tabIndex={-1}>
-          {step.title}
-        </h2>
-        <p id="tour-description">{step.body}</p>
-        <ol className="tour-progress" aria-label="Tour steps">
-          {steps.map((item, number) => (
-            <li key={item.route + item.label}>
-              <button
-                type="button"
-                aria-label={item.label}
-                aria-current={number === index ? "step" : undefined}
-                onClick={() => setIndex(number)}
-              >
-                <span />
-              </button>
-            </li>
-          ))}
-        </ol>
-        <div className="tour-panel-bottom">
-          <button
-            className="guide-quiet"
-            type="button"
-            disabled={index === 0}
-            onClick={() => setIndex((value) => value - 1)}
-          >
-            Back
-          </button>
-          <button
-            className="guide-primary"
-            type="button"
-            onClick={() =>
-              index === steps.length - 1 ? close(true) : setIndex((value) => value + 1)
-            }
-          >
-            {index === steps.length - 1 ? "Finish tour" : "Next"}
-          </button>
-        </div>
-      </section>
-    </div>,
+    <TourPanel
+      rect={rect}
+      placement={placement}
+      heading={heading}
+      index={index}
+      setIndex={setIndex}
+      close={close}
+    />,
     document.body,
   );
 }

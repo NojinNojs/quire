@@ -1,7 +1,7 @@
 # Contributing to Quire
 
 Quire is one person's library, built in public. Contributions are welcome; the bar is the process in
-[docs/ENGINEERING.md](docs/ENGINEERING.md).
+[docs/engineering/ENGINEERING.md](docs/engineering/ENGINEERING.md).
 
 ```bash
 nix develop

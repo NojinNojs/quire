@@ -2,7 +2,7 @@
 
 Branch: `feat/shelf-line-two-pane`.
 
-The implementation follows [the bookshelf direction](../../DIRECTION_BOOKSHELF.md).
+The implementation follows [the bookshelf direction](../../design/DIRECTION_BOOKSHELF.md).
 Design dials: ENERGY 1, RHYTHM 2, MOTION 1. Jackets and their class inks remain the
 focal point; full shelf rules and the stamped reading record carry the furniture identity.
 

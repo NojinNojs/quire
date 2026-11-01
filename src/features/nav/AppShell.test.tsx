@@ -13,11 +13,15 @@ describe("shell routes", () => {
     ["#/settings", "settings"],
     ["#catalogue", "search"],
     ["#settings", "settings"],
-    ["#/unknown", "today"],
-    ["", "today"],
-    ["#/shelf/unknown", "today"],
+    ["#/unknown", "shelf"],
+    ["", "shelf"],
+    ["#/shelf/unknown", "shelf"],
   ])("parses %j as %s", (hash, expected) => {
     expect(parseRoute(hash)).toBe(expected);
+  });
+
+  it("parses book detail links", () => {
+    expect(parseRoute("#/book/example-id")).toEqual({ name: "book", id: "example-id" });
   });
 
   it("renders three named navigation links with only Shelf active", () => {
@@ -28,12 +32,16 @@ describe("shell routes", () => {
     );
     const nav = html.slice(html.indexOf('<nav class="bottom-nav"'));
     expect(nav.match(/<a /g)).toHaveLength(3);
-    for (const label of ["Today", "Shelf", "Search"]) {
+    for (const [label, path] of [
+      ["Today", "today"],
+      ["Collection", "shelf"],
+      ["Add book", "search"],
+    ]) {
       expect(nav).toContain(`aria-label="${label}"`);
       expect(nav).toContain(`title="${label}"`);
-      expect(nav).toContain(`href="#/${label.toLowerCase()}"`);
+      expect(nav).toContain(`href="#/${path}"`);
     }
-    expect(nav).toContain('aria-label="Shelf" title="Shelf" aria-current="page"');
+    expect(nav).toContain('aria-label="Collection" title="Collection" aria-current="page"');
     expect(nav.match(/aria-current="page"/g)).toHaveLength(1);
     expect(html).toContain("milestone 3");
   });
@@ -50,7 +58,7 @@ describe("shell routes", () => {
     expect(html).toContain('href="#main-content"');
     expect(html).toContain('id="main-content"');
     expect(html.indexOf("Skip to main content")).toBeLessThan(html.indexOf("<header"));
-    for (const label of ["Today", "Shelf", "Search"]) {
+    for (const label of ["Today", "Collection", "Add book"]) {
       expect(html).toContain(`<span class="nav-label">${label}</span>`);
     }
   });

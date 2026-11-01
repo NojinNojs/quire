@@ -4,9 +4,9 @@ import { openProductTour, ProductTour } from "../guide/ProductTour";
 import type { Route } from "./routes";
 
 const destinations = [
+  { route: "shelf", label: "Collection", Icon: ShelfIcon },
   { route: "today", label: "Today", Icon: TodayIcon },
-  { route: "shelf", label: "Shelf", Icon: ShelfIcon },
-  { route: "search", label: "Search", Icon: SearchIcon },
+  { route: "search", label: "Add book", Icon: SearchIcon },
 ] as const;
 
 export function AppShell({
@@ -56,18 +56,32 @@ export function AppShell({
         </div>
       </header>
       <ProductTour key={guideScope} scope={guideScope} />
-      <div className="shell-screen" id="main-content" ref={content} key={route} tabIndex={-1}>
+      <div
+        className="shell-screen"
+        id="main-content"
+        ref={content}
+        key={typeof route === "object" ? `book-${route.id}` : route}
+        tabIndex={-1}
+      >
         {children}
       </div>
       <nav className="bottom-nav" aria-label="Main navigation">
-        <span className="nav-indicator" data-route={route} aria-hidden="true" />
+        <span
+          className="nav-indicator"
+          data-route={typeof route === "object" ? "shelf" : route}
+          aria-hidden="true"
+        />
         {destinations.map(({ route: destination, label, Icon }) => (
           <a
             key={destination}
             href={`#/${destination}`}
             aria-label={label}
             title={label}
-            aria-current={route === destination ? "page" : undefined}
+            aria-current={
+              route === destination || (typeof route === "object" && destination === "shelf")
+                ? "page"
+                : undefined
+            }
           >
             <Icon />
             <span className="nav-label">{label}</span>

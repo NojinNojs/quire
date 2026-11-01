@@ -13,13 +13,15 @@ The product and design are decided before code, in this order:
 
 | Document | What it decides |
 |---|---|
-| [PRD](docs/PRD.md) | what the product is, and what it refuses to be |
-| [TRD](docs/TRD.md) | stack, hosting, and the reasons |
-| [App Flow](docs/APP_FLOW.md) | the journeys, including the awkward states |
-| [Design Brief](docs/DESIGN_BRIEF.md) | the visual direction |
-| [Design System](docs/DESIGN_SYSTEM.md) | tokens, themes, component contracts |
-| [Schema](docs/SCHEMA.md) | tables, policies, streak rules |
-| [Implementation Plan](docs/IMPLEMENTATION_PLAN.md) | the thirteen steps, in order |
+| [PRD](docs/product/PRD.md) | what the product is, and what it refuses to be |
+| [TRD](docs/engineering/TRD.md) | stack, hosting, and the reasons |
+| [App Flow](docs/product/APP_FLOW.md) | the journeys, including the awkward states |
+| [Design Brief](docs/design/DESIGN_BRIEF.md) | the visual direction |
+| [Design System](docs/design/DESIGN_SYSTEM.md) | tokens, theme, component contracts |
+| [Schema](docs/engineering/SCHEMA.md) | tables, policies, streak rules |
+| [Implementation Plan](docs/engineering/IMPLEMENTATION_PLAN.md) | the thirteen steps, in order |
+
+The full index, including briefs, decisions, and evidence, is [docs/README.md](docs/README.md).
 
 ## Development
 
@@ -46,9 +48,9 @@ configuration is needed. Demo books and reading activity are illustrative; chang
 under a separate browser storage key and never sent to Supabase.
 
 Try logging pages and Undo, filtering the Shelf, opening a book to save notes or a rating,
-choosing another active book, and adding a sample or manual entry from Search. All six themes
-are available in Settings. **Reset demo** restores the sample library; **Leave demo** returns
-to the account app. See [the demo walkthrough](docs/DEMO.md).
+choosing another active book, and adding a sample or manual entry from Search. Quire uses a
+single light theme. **Reset demo** restores the sample library; **Leave demo** returns to the
+account app. See [the demo walkthrough](docs/product/DEMO.md).
 
 Use **Guide** in the app header to replay the five-step product tour, or open
 `http://localhost:5173/?demo=1&tour=1#/today` to launch it directly. Sign-in and registration

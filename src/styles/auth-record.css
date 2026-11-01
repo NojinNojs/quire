@@ -1,0 +1,125 @@
+/* One reading record follows the form in DOM order and faces it on wider screens. */
+.auth-recto {
+  position: absolute;
+  inset: 0 0 0 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auth-bookplate-label,
+.auth-bookplate-owner {
+  display: none;
+}
+
+.auth-page .auth-reading-cover {
+  width: 204px;
+  height: 306px;
+  flex-shrink: 0;
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  box-shadow: 3px 5px 10px rgb(58 43 29 / 18%);
+}
+
+.auth-reading-record {
+  width: 100%;
+  max-width: 272px;
+  margin-top: 24px;
+  overflow-wrap: anywhere;
+}
+
+.auth-book-title {
+  margin: 0;
+  font: italic 400 30px / 32px var(--font-serif);
+}
+
+.auth-book-author {
+  margin: 8px 0 0;
+  font: 400 12px / 24px var(--font-sans);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+}
+
+.auth-reading-streak {
+  margin-top: 24px;
+  padding-top: 15px;
+  border-top: 1px solid var(--rule);
+}
+
+.auth-record-label {
+  margin: 0 0 16px;
+}
+
+.auth-reading-streak ol {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.auth-reading-day {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  color: var(--auth-secondary-ink);
+  font: 400 10px / 16px var(--font-mono);
+}
+
+.auth-day-mark {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--auth-secondary-ink);
+}
+
+.auth-reading-day-filled .auth-day-mark {
+  background: var(--ink);
+}
+
+.auth-reading-day-today .auth-day-mark {
+  border: 2px solid var(--ink);
+}
+
+.auth-reading-day-restored .auth-day-mark {
+  background: none;
+}
+
+.auth-reading-day-restored .auth-day-mark::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 7px;
+  width: 1px;
+  height: 100%;
+  background: var(--ink);
+  transform: rotate(45deg);
+}
+
+.auth-reading-pages {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0 0;
+  padding-block: 15px;
+  border-block: 1px solid var(--rule);
+  font: 400 12px / 24px var(--font-sans);
+}
+
+.auth-reading-pages dd {
+  margin: 0;
+  font: 400 20px / 24px var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.auth-record-note {
+  margin: 16px 0 0;
+  color: var(--auth-secondary-ink);
+  font: 400 10px / 16px var(--font-sans);
+}
+
+.auth-recto-folio {
+  margin-top: auto;
+  padding-top: 24px;
+}

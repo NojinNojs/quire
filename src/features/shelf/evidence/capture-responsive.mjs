@@ -43,146 +43,131 @@ const columnsAt = (width) =>
 try {
   await open();
   await page.locator(".shelf-cover img").evaluate((img) => img.decode());
-  for (const theme of [
-    "shelf-light",
-    "shelf-dark",
-    "municipal-light",
-    "municipal-dark",
-    "oxford-light",
-    "oxford-dark",
-  ]) {
-    await page.evaluate((theme) => {
-      document.documentElement.dataset.theme = theme;
-    }, theme);
-    for (const width of [320, 390, 479, 480, 767, 768, 1023, 1024, 1279, 1280, 1600]) {
-      await page.setViewportSize({ width, height: 844 });
-      const layout = await page.evaluate(() => {
-        const grids = [...document.querySelectorAll(".shelf-books")];
-        const jackets = [...document.querySelectorAll(".shelf-jacket")];
-        const row = document.querySelector(".shelf-row");
-        const copy = row.querySelector(".shelf-copy");
-        const jacket = row.querySelector(".shelf-jacket");
-        const hidden = document.querySelector(".shelf-row:has(.cover-jacket) .shelf-copy");
-        const label = document.querySelector(".shelf-band");
-        return {
-          columns: grids.map(
-            (grid) => getComputedStyle(grid).gridTemplateColumns.split(" ").length,
-          ),
-          widths: jackets.map((jacket) => jacket.getBoundingClientRect().width),
-          overflow: document.documentElement.scrollWidth > innerWidth,
-          labelMode: getComputedStyle(label).writingMode,
-          labelLeft: label.getBoundingClientRect().left,
-          caption: getComputedStyle(copy).display,
-          captionBelow: copy.getBoundingClientRect().top > jacket.getBoundingClientRect().bottom,
-          printedCaption: getComputedStyle(hidden).display,
-          groupSizes: grids.map((grid) => grid.children.length),
-          publisherFont: getComputedStyle(copy.querySelector(".shelf-publisher")).fontFamily,
-          titleFont: getComputedStyle(copy.querySelector("h3 button")).fontFamily,
-          progressWidth: getComputedStyle(document.querySelector(".bookmark-track")).width,
-        };
-      });
-      assert.deepEqual(layout.columns, [columnsAt(width), columnsAt(width)]);
-      assert.deepEqual(layout.groupSizes, [6, 1]);
-      assert.ok(layout.widths.every((value) => value <= 180.01));
-      assert.ok(
-        Math.abs(layout.widths[0] - layout.widths.at(-1)) < 0.1,
-        "single jacket keeps its track width",
-      );
-      assert.equal(layout.overflow, false);
-      assert.equal(layout.labelMode, width >= 768 ? "horizontal-tb" : "vertical-rl");
-      assert.ok(layout.labelLeft >= 0);
-      assert.notEqual(layout.caption, "none");
-      assert.equal(layout.captionBelow, true);
-      assert.equal(layout.printedCaption, "none");
-      assert.match(layout.titleFont, /Newsreader/);
-      assert.match(layout.publisherFont, /mono/);
-      assert.equal(layout.progressWidth, "4px");
-      report.layouts.push({ theme, width, ...layout });
-      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-      const clear = await page.evaluate(() => {
-        const last = document.querySelector(".shelf-group:last-of-type").getBoundingClientRect();
-        return last.bottom <= document.querySelector(".bottom-nav").getBoundingClientRect().top;
-      });
-      assert.equal(clear, true, "last row clears navigation at the end of scrolling");
-    }
-    const contrasts = await page.evaluate(() => {
-      const canvas = document.createElement("canvas");
-      canvas.width = canvas.height = 1;
-      const ctx = canvas.getContext("2d", { willReadFrequently: true });
-      const lum = (color) => {
-        ctx.clearRect(0, 0, 1, 1);
-        ctx.fillStyle = color;
-        ctx.fillRect(0, 0, 1, 1);
-        return [...ctx.getImageData(0, 0, 1, 1).data]
-          .slice(0, 3)
-          .map((n) => {
-            const s = n / 255;
-            return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-          })
-          .reduce((v, n, i) => v + n * [0.2126, 0.7152, 0.0722][i], 0);
+  const theme = "shelf-light";
+  await page.evaluate((theme) => {
+    document.documentElement.dataset.theme = theme;
+  }, theme);
+  for (const width of [320, 390, 479, 480, 767, 768, 1023, 1024, 1279, 1280, 1600]) {
+    await page.setViewportSize({ width, height: 844 });
+    const layout = await page.evaluate(() => {
+      const grids = [...document.querySelectorAll(".shelf-books")];
+      const jackets = [...document.querySelectorAll(".shelf-jacket")];
+      const row = document.querySelector(".shelf-row");
+      const copy = row.querySelector(".shelf-copy");
+      const jacket = row.querySelector(".shelf-jacket");
+      const hidden = document.querySelector(".shelf-row:has(.cover-jacket) .shelf-copy");
+      const label = document.querySelector(".shelf-band");
+      return {
+        columns: grids.map((grid) => getComputedStyle(grid).gridTemplateColumns.split(" ").length),
+        widths: jackets.map((jacket) => jacket.getBoundingClientRect().width),
+        overflow: document.documentElement.scrollWidth > innerWidth,
+        labelMode: getComputedStyle(label).writingMode,
+        labelLeft: label.getBoundingClientRect().left,
+        caption: getComputedStyle(copy).display,
+        captionBelow: copy.getBoundingClientRect().top > jacket.getBoundingClientRect().bottom,
+        printedCaption: getComputedStyle(hidden).display,
+        groupSizes: grids.map((grid) => grid.children.length),
+        publisherFont: getComputedStyle(copy.querySelector(".shelf-publisher")).fontFamily,
+        titleFont: getComputedStyle(copy.querySelector("h3 button")).fontFamily,
+        progressWidth: getComputedStyle(document.querySelector(".bookmark-track")).width,
       };
-      const ratio = (a, b) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
-      const root = getComputedStyle(document.documentElement);
-      const surface = root.getPropertyValue("--surface");
-      const values = { ink: ratio(root.getPropertyValue("--ink"), surface) };
-      // Exercise all ten class inks, including classes absent from this fixture.
-      const band = document.querySelector(".shelf-band");
-      const group = band.closest(".shelf-group");
-      const original = group.style.getPropertyValue("--book-class");
-      for (let digit = 0; digit < 10; digit++) {
-        group.style.setProperty("--book-class", `var(--shelf-class-${digit}00)`);
-        values[`class-${digit}00`] = ratio(getComputedStyle(band).color, surface);
-      }
-      group.style.setProperty("--book-class", original);
-      for (const jacket of document.querySelectorAll(".cover-jacket")) {
-        const style = getComputedStyle(jacket);
-        values[style.backgroundColor] = ratio(style.color, style.backgroundColor);
-      }
-      return values;
     });
-    for (const [name, value] of Object.entries(contrasts))
-      assert.ok(value >= 7, `${theme} ${name}: ${value}`);
-    report.layouts.push({ theme, contrasts });
-    await page.setViewportSize({ width: 768, height: 844 });
-    await page.getByRole("button", { name: "List", exact: true }).click();
-    for (const width of [768, 1280]) {
-      await page.setViewportSize({ width, height: 844 });
-      const records = await page.locator(".shelf-copy").evaluateAll((copies) =>
-        copies.map((copy) => {
-          const title = copy.querySelector("h3").getBoundingClientRect();
-          const author = copy.querySelector(".shelf-author").getBoundingClientRect();
-          const fields = [...copy.querySelectorAll(".shelf-metadata p")];
-          return {
-            firstLine: Math.abs(title.top - author.top) < title.height,
-            tops: fields.map((field) => field.getBoundingClientRect().top),
-            rights: fields.map((field) => field.getBoundingClientRect().right),
-            alignments: fields.map((field) => getComputedStyle(field).textAlign),
-            fonts: fields.map((field) => getComputedStyle(field).fontFamily),
-            metadataTop: fields[0].getBoundingClientRect().top,
-            titleBottom: title.bottom,
-          };
-        }),
-      );
-      for (const record of records) {
-        assert.equal(record.firstLine, true);
-        assert.ok(record.tops.every((value) => Math.abs(value - record.tops[0]) < 0.1));
-        assert.ok(record.alignments.every((value) => value === "right"));
-        assert.ok(record.fonts.every((value) => /mono/.test(value)));
-        assert.ok(record.metadataTop >= record.titleBottom);
-        for (let index = 0; index < 4; index++)
-          assert.ok(Math.abs(record.rights[index] - records[0].rights[index]) < 0.1);
-      }
-      report.layouts.push({ theme, width, records });
-    }
-    if (["shelf-light", "oxford-dark"].includes(theme)) {
-      await capture(`list-${theme}-768`, 768);
-      await capture(`list-${theme}-1280`, 1280);
-    }
-    await page.getByRole("button", { name: "Grid", exact: true }).click();
-    if (["shelf-light", "oxford-dark"].includes(theme)) {
-      for (const width of [390, 768, 1280]) await capture(`grid-${theme}-${width}`, width);
-    }
+    assert.deepEqual(layout.columns, [columnsAt(width), columnsAt(width)]);
+    assert.deepEqual(layout.groupSizes, [6, 1]);
+    assert.ok(layout.widths.every((value) => value <= 180.01));
+    assert.ok(
+      Math.abs(layout.widths[0] - layout.widths.at(-1)) < 0.1,
+      "single jacket keeps its track width",
+    );
+    assert.equal(layout.overflow, false);
+    assert.equal(layout.labelMode, width >= 768 ? "horizontal-tb" : "vertical-rl");
+    assert.ok(layout.labelLeft >= 0);
+    assert.notEqual(layout.caption, "none");
+    assert.equal(layout.captionBelow, true);
+    assert.equal(layout.printedCaption, "none");
+    assert.match(layout.titleFont, /Newsreader/);
+    assert.match(layout.publisherFont, /mono/);
+    assert.equal(layout.progressWidth, "4px");
+    report.layouts.push({ theme, width, ...layout });
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    const clear = await page.evaluate(() => {
+      const last = document.querySelector(".shelf-group:last-of-type").getBoundingClientRect();
+      return last.bottom <= document.querySelector(".bottom-nav").getBoundingClientRect().top;
+    });
+    assert.equal(clear, true, "last row clears navigation at the end of scrolling");
   }
+  const contrasts = await page.evaluate(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 1;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const lum = (color) => {
+      ctx.clearRect(0, 0, 1, 1);
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, 1, 1);
+      return [...ctx.getImageData(0, 0, 1, 1).data]
+        .slice(0, 3)
+        .map((n) => {
+          const s = n / 255;
+          return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+        })
+        .reduce((v, n, i) => v + n * [0.2126, 0.7152, 0.0722][i], 0);
+    };
+    const ratio = (a, b) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
+    const root = getComputedStyle(document.documentElement);
+    const surface = root.getPropertyValue("--surface");
+    const values = { ink: ratio(root.getPropertyValue("--ink"), surface) };
+    // Exercise all ten class inks, including classes absent from this fixture.
+    const band = document.querySelector(".shelf-band");
+    const group = band.closest(".shelf-group");
+    const original = group.style.getPropertyValue("--book-class");
+    for (let digit = 0; digit < 10; digit++) {
+      group.style.setProperty("--book-class", `var(--shelf-class-${digit}00)`);
+      values[`class-${digit}00`] = ratio(getComputedStyle(band).color, surface);
+    }
+    group.style.setProperty("--book-class", original);
+    for (const jacket of document.querySelectorAll(".cover-jacket")) {
+      const style = getComputedStyle(jacket);
+      values[style.backgroundColor] = ratio(style.color, style.backgroundColor);
+    }
+    return values;
+  });
+  for (const [name, value] of Object.entries(contrasts)) assert.ok(value >= 7, `${name}: ${value}`);
+  report.layouts.push({ theme: "shelf-light", contrasts });
+  await page.setViewportSize({ width: 768, height: 844 });
+  await page.getByRole("button", { name: "List", exact: true }).click();
+  for (const width of [768, 1280]) {
+    await page.setViewportSize({ width, height: 844 });
+    const records = await page.locator(".shelf-copy").evaluateAll((copies) =>
+      copies.map((copy) => {
+        const title = copy.querySelector("h3").getBoundingClientRect();
+        const author = copy.querySelector(".shelf-author").getBoundingClientRect();
+        const fields = [...copy.querySelectorAll(".shelf-metadata p")];
+        return {
+          firstLine: Math.abs(title.top - author.top) < title.height,
+          tops: fields.map((field) => field.getBoundingClientRect().top),
+          rights: fields.map((field) => field.getBoundingClientRect().right),
+          alignments: fields.map((field) => getComputedStyle(field).textAlign),
+          fonts: fields.map((field) => getComputedStyle(field).fontFamily),
+          metadataTop: fields[0].getBoundingClientRect().top,
+          titleBottom: title.bottom,
+        };
+      }),
+    );
+    for (const record of records) {
+      assert.equal(record.firstLine, true);
+      assert.ok(record.tops.every((value) => Math.abs(value - record.tops[0]) < 0.1));
+      assert.ok(record.alignments.every((value) => value === "right"));
+      assert.ok(record.fonts.every((value) => /mono/.test(value)));
+      assert.ok(record.metadataTop >= record.titleBottom);
+      for (let index = 0; index < 4; index++)
+        assert.ok(Math.abs(record.rights[index] - records[0].rights[index]) < 0.1);
+    }
+    report.layouts.push({ width, records });
+  }
+  await capture("list-shelf-light-768", 768);
+  await capture("list-shelf-light-1280", 1280);
+  await page.getByRole("button", { name: "Grid", exact: true }).click();
+  for (const width of [390, 768, 1280]) await capture(`grid-shelf-light-${width}`, width);
   await page.getByRole("button", { name: "Add book", exact: true }).click();
   assert.equal(await page.getByLabel("Preview action").textContent(), "Add book selected");
   report.actions.push("Add book: delegates to add callback");
@@ -257,14 +242,7 @@ try {
         false,
       );
       report.states.push({ state, width, bounds });
-      if (width === 1280) {
-        for (const theme of ["shelf-light", "oxford-dark"]) {
-          await page.evaluate((theme) => {
-            document.documentElement.dataset.theme = theme;
-          }, theme);
-          await capture(`${state}-${theme}-1280`, 1280);
-        }
-      }
+      if (width === 1280) await capture(`${state}-shelf-light-1280`, 1280);
     }
     if (state === "empty") {
       await page.getByRole("button", { name: "Add a book", exact: true }).click();
@@ -286,7 +264,7 @@ try {
   assert.deepEqual(errors, []);
   writeFileSync(`${out}/checks.json`, `${JSON.stringify(report, null, 2)}\n`);
   console.log(
-    `Passed ${report.layouts.length} layout/contrast/list checks, ${report.states.length} state checks, ${report.actions.length} interaction checks; no page errors.`,
+    `Passed ${report.layouts.length} shelf-light layout/contrast/list checks, ${report.states.length} state checks, ${report.actions.length} interaction checks; no page errors.`,
   );
 } finally {
   await browser.close();

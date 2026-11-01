@@ -3,7 +3,7 @@ import type { Book } from "../../data/types";
 import type { Candidate } from "../../lib/catalog";
 import { ManualForm } from "../catalog/ManualForm";
 import { CoverImage } from "../covers/CoverImage";
-import { sampleCatalogue } from "./state";
+import { sampleCatalogue } from "./samples";
 
 export function DemoSearch({
   books,

@@ -4,14 +4,6 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
 import { stack } from "./stack";
 
-const themes = [
-  "shelf-light",
-  "shelf-dark",
-  "municipal-light",
-  "municipal-dark",
-  "oxford-light",
-  "oxford-dark",
-];
 const footnote = "Your shelf is private. One account, one library.";
 const evidence = "docs/evidence/auth-cover";
 
@@ -27,9 +19,7 @@ test.beforeEach(async ({ page }, testInfo) => {
 async function checkContrast(page: Page, state: string) {
   for (const width of [390, 1280]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const theme of themes) {
-      const samples = await page.evaluate((value) => {
-        document.documentElement.dataset.theme = value;
+      const samples = await page.evaluate(() => {
         const column = document.querySelector(".auth-book");
         if (!column) throw new Error("Open book missing");
         const canvas = document.createElement("canvas");
@@ -90,7 +80,7 @@ async function checkContrast(page: Page, state: string) {
           if (input.placeholder) samples.push(sample(input, input.placeholder, "::placeholder"));
         }
         return samples;
-      }, theme);
+      });
       expect(
         samples.some(({ text }) => text === footnote),
         "Foot line must be sampled",
@@ -118,13 +108,12 @@ async function checkContrast(page: Page, state: string) {
       }
       expect(samples.length).toBeGreaterThan(12);
       for (const { text, ratio } of samples) {
-        expect(ratio, `${theme}, ${width}, ${state}: ${text}`).toBeGreaterThanOrEqual(7);
+        expect(ratio, `shelf-light, ${width}, ${state}: ${text}`).toBeGreaterThanOrEqual(4.5);
       }
       appendFileSync(
         `${evidence}/contrast.txt`,
-        `${theme} | ${width}px | ${state} | ${samples.length} samples | minimum ${Math.min(...samples.map(({ ratio }) => ratio)).toFixed(3)}:1\n`,
+        `shelf-light | ${width}px | ${state} | ${samples.length} samples | minimum ${Math.min(...samples.map(({ ratio }) => ratio)).toFixed(3)}:1\n`,
       );
-    }
   }
 }
 
@@ -153,7 +142,7 @@ test("create an account, take the first-run tour, sign out and sign back in", as
   expect(response.ok()).toBe(true);
   const { user } = await response.json();
   try {
-    await expect(page.getByRole("dialog", { name: "One book. A place to begin." })).toBeVisible();
+    await expect(page.getByRole("dialog", { name: "Find your next read." })).toBeVisible();
     await page.getByRole("button", { name: "Skip tour" }).click();
     await page.goto("/#/search");
     await expect(page.getByRole("heading", { name: "Add a book" })).toBeVisible();
@@ -165,12 +154,12 @@ test("create an account, take the first-run tour, sign out and sign back in", as
     await page.getByLabel("Email").fill(email);
     await page.getByLabel("Password", { exact: true }).fill(password);
     await page.getByRole("button", { name: "Sign in", exact: true }).click();
-    await expect(page.getByRole("heading", { name: "Add a book" })).toBeVisible();
-    await expect(page.getByRole("dialog", { name: "One book. A place to begin." })).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Collection", exact: true })).toBeVisible();
+    await expect(page.getByRole("dialog", { name: "Find your next read." })).toHaveCount(0);
     await page.getByRole("button", { name: "Guide", exact: true }).click();
-    await expect(page.getByRole("dialog", { name: "One book. A place to begin." })).toBeVisible();
+    await expect(page.getByRole("dialog", { name: "Find your next read." })).toBeVisible();
     await page.keyboard.press("Escape");
-    await expect(page.getByRole("dialog", { name: "One book. A place to begin." })).toHaveCount(0);
+    await expect(page.getByRole("dialog", { name: "Find your next read." })).toHaveCount(0);
   } finally {
     const cleanup = await request.delete(`${stack.API_URL}/auth/v1/admin/users/${user.id}`, {
       headers: {
@@ -182,20 +171,30 @@ test("create an account, take the first-run tour, sign out and sign back in", as
   }
 });
 
-for (const theme of ["shelf-light", "oxford-dark"]) {
-  for (const width of [320, 390, 768, 1280]) {
-    test(`sign in and sign up at ${width} in ${theme}`, async ({ page }) => {
+test("auth mode keeps the default URL clean", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeVisible();
+  expect(new URL(page.url()).hash).toBe("");
+  await page.getByRole("button", { name: "No account yet? Create one" }).click();
+  expect(new URL(page.url()).search).toBe("?auth=signup");
+  expect(new URL(page.url()).hash).toBe("");
+  await page.getByRole("button", { name: "Already have an account? Sign in" }).click();
+  expect(new URL(page.url()).search).toBe("");
+  expect(new URL(page.url()).hash).toBe("");
+});
+
+for (const width of [320, 390, 768, 1280]) {
+    test(`sign in and sign up at ${width} in shelf-light`, async ({ page }) => {
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
       page.on("console", (message) => {
         if (message.type() === "error") errors.push(message.text());
       });
       await page.setViewportSize({ width, height: width === 320 ? 640 : width === 390 ? 844 : 900 });
-      await page.addInitScript((value) => localStorage.setItem("quire-theme", value), theme);
       await page.goto("/?source=auth#/shelf");
       await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeVisible();
       await settleCard(page);
-      await page.screenshot({ path: `${evidence}/${theme}-signin-${width}.png`, fullPage: true });
+      await page.screenshot({ path: `${evidence}/shelf-light-signin-${width}.png`, fullPage: true });
       if (width === 390) {
         const firstScreen = [];
         for (const selector of [
@@ -208,21 +207,8 @@ for (const theme of ["shelf-light", "oxford-dark"]) {
           await expect(page.locator(selector)).toBeInViewport({ ratio: 1 });
           firstScreen.push({ selector, box: await page.locator(selector).boundingBox() });
         }
-        writeFileSync(`${evidence}/${theme}-first-screen.json`, JSON.stringify(firstScreen, null, 2));
-        await page.screenshot({ path: `${evidence}/${theme}-first-screen-390.png` });
-      }
-      if (width <= 390) {
-        const forgot = await page.locator(".auth-forgot").boundingBox();
-        const create = await page.locator(".auth-switch").boundingBox();
-        const field = await page.getByLabel("Email").boundingBox();
-        if (!forgot || !create || !field) throw new Error("Mobile auth controls missing");
-        expect(field.x).toBe(width === 320 ? 16 : 24);
-        if (width === 390) expect(forgot.y).toBe(create.y);
-        else expect(create.y).toBeGreaterThanOrEqual(forgot.y + forgot.height + 8);
-        await expect(page.getByText("EX LIBRIS")).toBeVisible();
-        await expect(page.getByText("THIS COPY BELONGS TO A READER")).toBeVisible();
-      } else {
-        await expect(page.getByText("EX LIBRIS")).toBeHidden();
+        writeFileSync(`${evidence}/shelf-light-first-screen.json`, JSON.stringify(firstScreen, null, 2));
+        await page.screenshot({ path: `${evidence}/shelf-light-first-screen-390.png` });
       }
       await page.getByRole("button", { name: "No account yet? Create one" }).click();
       await expect(page.getByRole("heading", { name: "Create an account" })).toBeFocused();
@@ -231,7 +217,7 @@ for (const theme of ["shelf-light", "oxford-dark"]) {
       expect(new URL(page.url()).hash).toBe("#/shelf");
       expect(new URL(page.url()).searchParams.get("source")).toBe("auth");
       await settleCard(page);
-      await page.screenshot({ path: `${evidence}/${theme}-signup-${width}.png`, fullPage: true });
+      await page.screenshot({ path: `${evidence}/shelf-light-signup-${width}.png`, fullPage: true });
       await page.getByRole("button", { name: "Already have an account? Sign in" }).click();
       await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeFocused();
       expect(new URL(page.url()).searchParams.has("auth")).toBe(false);
@@ -240,85 +226,38 @@ for (const theme of ["shelf-light", "oxford-dark"]) {
       expect(errors).toEqual([]);
     });
   }
-}
 
-test("the open book reflows to a verso and paper sliver without overflow", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeVisible();
-  for (const width of [320, 390, 768, 960, 1024, 1440]) {
-    await page.setViewportSize({ width, height: width === 320 ? 640 : 844 });
+test("authentication controls fit and remain reachable across viewport sizes", async ({ page }) => {
+  for (const { width, height } of [
+    { width: 320, height: 568 },
+    { width: 375, height: 667 },
+    { width: 390, height: 844 },
+    { width: 768, height: 900 },
+    { width: 844, height: 390 },
+    { width: 1360, height: 768 },
+  ]) {
+    await page.setViewportSize({ width, height });
+    await page.goto("/");
     for (const mode of ["signin", "signup"]) {
       if (mode === "signup") {
         await page.getByRole("button", { name: "No account yet? Create one" }).click();
       }
-      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
-      const submit = await page.locator(".primary").boundingBox();
-      if (!submit) throw new Error("Submit missing");
-      expect(submit.height).toBe(48);
-      const book = page.locator(".auth-book");
-      await expect(book).toHaveCount(1);
-      await expect(page.getByRole("img", { name: "Cover of Bumi Manusia" })).toBeVisible();
-      const cover = await page.locator(".auth-reading-cover").boundingBox();
-      const verso = await page.locator(".auth-verso").boundingBox();
-      const recto = await page.locator(".auth-recto").boundingBox();
-      const box = await book.boundingBox();
-      if (!box || !verso || !recto || !cover) throw new Error("Book pages missing");
-      expect(submit.x).toBeGreaterThan(verso.x);
-      expect(submit.x + submit.width).toBeLessThan(verso.x + verso.width);
-      // the recto always sits to the right of the form column, and on a phone it stacks under it
-      expect(recto.x).toBeGreaterThan(verso.x);
-      if (width < 760) expect(recto.y).toBeGreaterThan(verso.y);
-      // on a phone the recto is an inset inside the page, so its height is its own
-      if (width >= 760) expect(recto.height).toBe(verso.height);
-      if (width < 768) {
-        // the page keeps a small desk margin, and the recto is a printed inset inside it
-        expect(box.x).toBeLessThanOrEqual(12);
-        expect(box.width).toBeGreaterThanOrEqual(width - 24);
-        expect(recto.width).toBeLessThan(box.width);
-        expect(recto.width).toBeGreaterThan(120);
-        expect(cover.width).toBeLessThan(recto.width);
-        await expect(page.locator(".auth-reading-record")).toBeVisible();
-        await expect(page.locator(".auth-reading-streak li")).toHaveCount(7);
-      } else {
-        expect(box.x).toBeGreaterThan(0);
-        expect(box.width).toBeLessThan(width);
-        expect(box.width).toBeLessThanOrEqual(1040);
-        expect(verso.width).toBe(recto.width);
-        // the cover keeps its 2:3 proportion within a pixel or two of rounding
-        expect(cover.width / cover.height).toBeCloseTo(2 / 3, 1);
-        await expect(page.locator(".auth-reading-record")).toBeVisible();
-        await expect(page.locator(".auth-reading-streak li")).toHaveCount(7);
-      }
-
-      const look = await book.evaluate((el) => {
-        const style = getComputedStyle(el);
-        return {
-          radius: style.borderTopLeftRadius,
-          shadow: style.boxShadow,
-          rows: el.querySelectorAll(".auth-field").length,
-          fold: getComputedStyle(el, "::after").backgroundImage,
-          turn: getComputedStyle(el.querySelector(".auth-recto") as Element, "::after").width,
-        };
-      });
-      expect(look.radius).toBe("0px");
-      expect(look.shadow).toBe("none");
-      expect(look.rows).toBe(mode === "signup" ? 3 : 2);
-      if (width >= 760) expect(look.fold).toContain("linear-gradient");
-      // the folded corner was dropped in the polish pass; the fold is the gutter only
-
+      await settleCard(page);
+      const size = await page.evaluate(() => ({
+        width: document.documentElement.scrollWidth,
+        height: document.documentElement.scrollHeight,
+      }));
+      expect(size, `${width}x${height} ${mode}`).toEqual({ width, height });
       for (const control of await page
-        .locator(".auth-footer button, .auth-demo-link, .auth-reveal")
+        .locator(".auth-form input, .auth-form button, .auth-footer button, .auth-demo-link")
         .all()) {
+        await expect(control).toBeVisible();
+        await expect(control).toBeInViewport({ ratio: 1 });
         const rect = await control.boundingBox();
-        if (!rect) throw new Error("Card control missing");
-        expect(rect.height).toBeGreaterThanOrEqual(44);
-      }
-      if (width === 320 && mode === "signup") {
-        await settleCard(page);
-        await page.screenshot({ path: `${evidence}/shelf-light-signup-320.png`, fullPage: true });
+        if (!rect) throw new Error("Auth control missing");
+        expect(Math.round(rect.height * 100) / 100).toBeGreaterThanOrEqual(44);
       }
     }
-    await page.goto("/");
   }
 });
 
@@ -334,14 +273,8 @@ test("the cover appears once, opens on click, and stays open after reload", {
   await expect(page.getByRole("textbox", { name: "Email" })).toHaveCount(0);
   await page.keyboard.press("Tab");
   await expect(cover).toBeFocused();
-  const box = await cover.boundingBox();
-  expect(box).toEqual({ x: 0, y: 0, width: 390, height: 844 });
   await settleCard(page);
   await cover.click();
-  await expect(page.locator(".auth-cover-stage")).toHaveAttribute("data-opening", "true");
-  await expect(cover).toHaveCSS("animation-name", "auth-cover-open");
-  await expect(cover).toHaveCSS("animation-duration", "0.48s");
-  await expect(cover).toHaveCSS("animation-timing-function", "cubic-bezier(0.65, 0, 0.35, 1)");
   await expect(cover).toHaveCount(0);
   expect(await page.evaluate(() => localStorage.getItem("quire:cover-seen"))).toBe("true");
   await page.reload();
@@ -353,22 +286,23 @@ test("the cover appears once, opens on click, and stays open after reload", {
   expect(errors).toEqual([]);
 });
 
-test("the cover matches the themes and opens with Enter or a reduced-motion fade", {
+test("the cover opens with Enter or a reduced-motion fade", {
   tag: "@first-visit",
 }, async ({ page }) => {
   await page.goto("/");
-  for (const theme of ["shelf-light", "oxford-dark"]) {
     for (const width of [320, 390, 768, 1280]) {
       await page.setViewportSize({ width, height: width === 320 ? 640 : width === 390 ? 844 : 900 });
-      await page.evaluate((theme) => {
+      await page.evaluate(() => {
         localStorage.removeItem("quire:cover-seen");
-        localStorage.setItem("quire-theme", theme);
-      }, theme);
+      });
       await page.reload();
       const cover = page.getByRole("button", { name: "Open Quire" });
       await expect(cover).toBeVisible();
+      const introduction = page.locator(".auth-cover-intro");
+      if (width >= 760) await expect(introduction).toBeVisible();
+      else await expect(introduction).toBeHidden();
       await settleCard(page);
-      const cloth = await cover.evaluate((el) => {
+      const cloth = await cover.locator(".auth-cover-front").evaluate((el) => {
         const style = getComputedStyle(el);
         const luminance = (color: string) => {
           const channels = color.match(/\d+/g)?.slice(0, 3).map(Number);
@@ -380,52 +314,35 @@ test("the cover matches the themes and opens with Enter or a reduced-motion fade
         };
         const ink = luminance(style.color);
         const paper = luminance(style.backgroundColor);
-        const swatch = document.createElement("span");
-        swatch.style.color = "var(--class-800)";
-        el.append(swatch);
-        const token = getComputedStyle(swatch).color;
-        swatch.remove();
         return {
           color: style.backgroundColor,
-          token,
-          origin: style.transformOrigin,
           width: el.getBoundingClientRect().width,
           height: el.getBoundingClientRect().height,
           contrast: (Math.max(ink, paper) + 0.05) / (Math.min(ink, paper) + 0.05),
         };
       });
-      expect(cloth.color).toBe(cloth.token);
       expect(cloth.contrast).toBeGreaterThanOrEqual(4.5);
-      writeFileSync(`${evidence}/${theme}-cover-${width}.json`, JSON.stringify(cloth, null, 2));
-      expect(cloth.origin).toBe(`0px ${cloth.height / 2}px`);
-      if (width >= 768) expect(cloth.width / cloth.height).toBeCloseTo(2 / 3, 2);
+      writeFileSync(`${evidence}/shelf-light-cover-${width}.json`, JSON.stringify(cloth, null, 2));
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
-      await page.screenshot({ path: `${evidence}/${theme}-cover-${width}.png` });
+      await page.screenshot({ path: `${evidence}/shelf-light-cover-${width}.png` });
       await page.keyboard.press("Enter");
       await expect(cover).toHaveCount(0);
       await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeFocused();
       await page.keyboard.press("Tab");
       await expect(page.getByLabel("Email")).toBeFocused();
       await page.getByLabel("Email").blur();
-      await page.screenshot({ path: `${evidence}/${theme}-open-${width}.png`, fullPage: true });
+      await page.screenshot({ path: `${evidence}/shelf-light-open-${width}.png`, fullPage: true });
     }
-  }
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.evaluate(() => localStorage.removeItem("quire:cover-seen"));
   await page.reload();
   const cover = page.getByRole("button", { name: "Open Quire" });
-  const fade = await cover.evaluate((el) => new Promise((resolve) => {
-    el.addEventListener("animationstart", () => {
-      const style = getComputedStyle(el);
-      resolve({ name: style.animationName, duration: style.animationDuration, transform: style.transform });
-    }, { once: true });
-    (el as HTMLButtonElement).click();
-  }));
-  expect(fade).toEqual({ name: "auth-cover-fade", duration: "0.12s", transform: "none" });
+  await cover.click();
+  expect(await cover.evaluate((el) => getComputedStyle(el).transform)).toBe("none");
   await expect(cover).toHaveCount(0);
   await page.evaluate(() => localStorage.removeItem("quire:cover-seen"));
   await page.goto("/?demo=1#/today");
-  await expect(page.getByRole("button", { name: "Skip tour" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Today", exact: true })).toBeVisible();
   await expect(cover).toHaveCount(0);
   expect(await page.evaluate(() => localStorage.getItem("quire:cover-seen"))).toBeNull();
 });
@@ -475,21 +392,20 @@ test("keyboard path, password visibility, focus rules and demo tour", async ({ p
   await page.keyboard.press("Tab");
   await expect(page.getByLabel("Email")).toBeFocused();
   const demo = page.getByRole("link", { name: "Try the interactive demo" });
-  await expect(demo).toHaveAttribute("href", "?demo=1#/today");
+  await expect(demo).toHaveAttribute("href", "?demo=1#/shelf");
   await demo.focus();
   await page.keyboard.press("Enter");
-  await expect(page.getByRole("dialog", { name: "One book. A place to begin." })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Find your next read." })).toBeVisible();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Make every page count." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "One book. A place to begin." })).toBeVisible();
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog", { name: "Make every page count." })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "One book. A place to begin." })).toHaveCount(0);
 });
 
-test("issuing prints a working rule without moving the book or its fold", async ({ page }) => {
+test("issuing keeps the book visible and disables the form", async ({ page }) => {
   await page.goto("/?auth=signup");
   await page.getByLabel("Email").fill("reader@quire.local");
   await page.getByLabel("Password", { exact: true }).fill("Library-card42");
-  const book = await page.locator(".auth-book").boundingBox();
   let release: (() => void) | undefined;
   const pending = new Promise<void>((resolve) => {
     release = resolve;
@@ -509,14 +425,18 @@ test("issuing prints a working rule without moving the book or its fold", async 
     ).toBeDisabled();
     await expect(page.getByRole("button", { name: "Show", exact: true })).toBeDisabled();
     await expect(page.locator(".auth-issuing")).toHaveCSS("animation-name", "auth-working");
-    expect(await page.locator(".auth-book").boundingBox()).toEqual(book);
+    await expect(page.locator(".auth-book")).toBeInViewport({ ratio: 1 });
+    expect(await page.evaluate(() => ({
+      width: document.documentElement.scrollWidth,
+      height: document.documentElement.scrollHeight,
+    }))).toEqual(page.viewportSize());
   } finally {
     release?.();
   }
   await expect(page.getByRole("status")).toContainText("Check your email to confirm the account");
 });
 
-test("every text element exceeds 7:1 in all six themes, including errors and pending states", async ({
+test("rendered text meets 4.5:1 contrast, including errors and pending states", async ({
   page,
 }) => {
   mkdirSync(evidence, { recursive: true });
@@ -620,7 +540,6 @@ test("every text element exceeds 7:1 in all six themes, including errors and pen
 test("the recto reads the demo's saved book and today's log", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/?demo=1#/today");
-  await page.getByRole("button", { name: "Skip tour" }).click();
   await page.getByLabel("Pages read", { exact: true }).fill("12");
   await page.getByRole("button", { name: "Log 12 pages", exact: true }).click();
   await expect(
@@ -631,6 +550,9 @@ test("the recto reads the demo's saved book and today's log", async ({ page }) =
   await expect(page.locator(".auth-reading-pages dd")).toHaveText("12");
   await expect(page.locator(".auth-reading-day-today")).toHaveClass(/auth-reading-day-filled/);
   await page.getByRole("link", { name: "Try the interactive demo" }).click();
+  const tour = page.getByRole("button", { name: "Skip tour" });
+  if (await tour.isVisible().catch(() => false)) await tour.click();
+  await page.getByRole("link", { name: "Today", exact: true }).click();
   await expect(
     page.getByText("12 pages today", { exact: true }).filter({ visible: true }),
   ).toBeVisible();

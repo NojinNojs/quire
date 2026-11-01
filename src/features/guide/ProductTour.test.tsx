@@ -5,7 +5,7 @@ import { openProductTour, ProductTour } from "./ProductTour";
 
 beforeEach(() => {
   window.localStorage.clear();
-  window.history.replaceState(null, "", "?demo=1#/today");
+  window.history.replaceState(null, "", "?demo=1");
   vi.spyOn(window, "scrollBy").mockImplementation(() => {});
   vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) =>
     window.setTimeout(() => callback(0), 0),
@@ -29,7 +29,7 @@ function fixture() {
         <div className="reading-stepper" />
         <div className="shelf-filters" />
         <div className="entry-tabs" />
-        <div className="settings-themes" />
+        <div className="settings-footer" />
       </main>
       <ProductTour scope="demo" />
     </>,
@@ -42,10 +42,10 @@ it("visits all five real routes, supports Back, remembers completion, and can re
   expect(screen.getByRole("dialog")).toBeTruthy();
   expect(screen.getByRole("button", { name: "Back" }).hasAttribute("disabled")).toBe(true);
   fireEvent.click(screen.getByRole("button", { name: "Next" }));
-  expect(screen.getByRole("heading").textContent).toBe("Make every page count.");
-  fireEvent.click(screen.getByRole("button", { name: "Back" }));
   expect(screen.getByRole("heading").textContent).toBe("One book. A place to begin.");
-  for (const route of ["#/today", "#/shelf", "#/search", "#/settings"]) {
+  fireEvent.click(screen.getByRole("button", { name: "Back" }));
+  expect(screen.getByRole("heading").textContent).toBe("Find your next read.");
+  for (const route of ["#/today", "#/today", "#/search", "#/settings"]) {
     fireEvent.click(screen.getByRole("button", { name: "Next" }));
     await waitFor(() => expect(window.location.hash).toBe(route));
   }
@@ -57,8 +57,20 @@ it("visits all five real routes, supports Back, remembers completion, and can re
   fixture();
   expect(screen.queryByRole("button", { name: "Start tour" })).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Guide" }));
-  expect(screen.getByRole("heading").textContent).toBe("One book. A place to begin.");
+  expect(screen.getByRole("heading").textContent).toBe("Find your next read.");
 });
+
+it.each(["#/today", "#/search", "#/book/example-id"])(
+  "preserves explicit route %s on first visit",
+  (hash) => {
+    window.history.replaceState(null, "", `/?demo=1${hash}`);
+    fixture();
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(window.location.hash).toBe(hash);
+    fireEvent.click(screen.getByRole("button", { name: "Guide" }));
+    expect(screen.getByRole("dialog")).toBeTruthy();
+  },
+);
 
 it("opens a tour link even for a returning reader and Escape restores focus to Guide", () => {
   window.localStorage.setItem("quire:tour:v1:demo", "completed");

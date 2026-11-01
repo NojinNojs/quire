@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CoverImage } from "../covers/CoverImage";
-import { createDemoState, demoStreak, loadDemoState, sampleBooks } from "../demo/state";
+import { sampleBooks } from "../demo/samples";
+import { createDemoState, demoStreak, loadDemoState } from "../demo/state";
 import { readingDay } from "../integration/useReading";
 
 export function AuthReadingRecord() {

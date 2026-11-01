@@ -30,7 +30,7 @@ export function AuthCover({ onOpen }: { onOpen: (keyboard: boolean) => void }) {
     if (!opening) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // Finish even if an animation is cancelled by a change in motion preferences.
-    const timer = window.setTimeout(() => onOpen(keyboard.current), reduced ? 120 : 480);
+    const timer = window.setTimeout(() => onOpen(keyboard.current), reduced ? 160 : 1100);
     return () => window.clearTimeout(timer);
   }, [opening, onOpen]);
 
@@ -47,6 +47,12 @@ export function AuthCover({ onOpen }: { onOpen: (keyboard: boolean) => void }) {
 
   return (
     <div className="auth-cover-stage" data-opening={opening}>
+      <div className="auth-cover-shade" aria-hidden="true" />
+      <div className="auth-cover-intro">
+        <p>A personal library</p>
+        <h1>A home for your reading life.</h1>
+        <p>Open Quire to sign in, create an account, or try the demo.</p>
+      </div>
       <button
         ref={cover}
         type="button"
@@ -54,9 +60,12 @@ export function AuthCover({ onOpen }: { onOpen: (keyboard: boolean) => void }) {
         aria-label="Open Quire"
         onClick={open}
       >
-        <span className="auth-cover-title">QUIRE</span>
-        <span className="auth-cover-subtitle">A personal library</span>
-        <span className="auth-cover-prompt">Tap to open</span>
+        <span className="auth-cover-front">
+          <span className="auth-cover-title">QUIRE</span>
+          <span className="auth-cover-subtitle">A personal library</span>
+          <span className="auth-cover-prompt">Tap to open</span>
+        </span>
+        <span className="auth-cover-back" aria-hidden="true" />
       </button>
     </div>
   );

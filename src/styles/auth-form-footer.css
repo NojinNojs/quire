@@ -1,0 +1,47 @@
+.auth-footer {
+  margin-top: 8px;
+}
+
+.auth-account-links {
+  display: grid;
+  gap: 0 8px;
+}
+
+.auth-demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 1ch;
+  margin: 0;
+  color: var(--auth-secondary-ink);
+  font: 400 12px / 24px var(--font-sans);
+}
+
+.auth-demo-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+}
+
+.auth-page-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 24px;
+  text-align: center;
+}
+
+.auth-folio,
+.auth-recto-folio {
+  margin: 0;
+  font: 400 10px / 16px var(--font-mono);
+}
+
+.auth-footnote {
+  max-width: 44ch;
+  margin: 0;
+  margin-inline: auto;
+  color: var(--auth-secondary-ink);
+  font: 400 10px / 16px var(--font-sans);
+}

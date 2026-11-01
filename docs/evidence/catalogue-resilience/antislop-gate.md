@@ -38,7 +38,7 @@ Scope: catalogue fallback, candidate completion and manual recovery. Existing pa
 - R-34 PASS: candidate, manual and error states pass contrast checks in every existing theme.
 - R-35 PASS: npm run gate builds and tests the app, including live database smoke checks and all 13 browser tests.
 - R-36 PASS: no security, compliance, performance or customer claims added.
-- R-37 PASS: narrow refinement uses docs/DESIGN_SYSTEM.md and the existing rendered design; dials are declared above.
+- R-37 PASS: narrow refinement uses docs/design/DESIGN_SYSTEM.md and the existing rendered design; dials are declared above.
 - R-38 PASS: title and author come from the recorded Google HTML lookup; raw curl responses are retained.
 - Liveliness PASS: the existing book title is the result focal point, rules and whitespace separate edition details, and the active navigation accent and paper editorial typography remain. Both screenshots show the retained composition.
 - C-1 PASS: every new visual decision has a task-specific reason in README.md.

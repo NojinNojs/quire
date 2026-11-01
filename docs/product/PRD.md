@@ -74,11 +74,11 @@ Sosial, mengikuti teman, pinjam-meminjam, Reading Wrapped, rekomendasi AI, impor
 4. **Detail** — metadata, progres, rating, status, catatan, foto stabilo, daftar edisi lain dari judul yang sama.
 5. **Tambah** — empat jalan masuk, lalu blok konfirmasi yang menampilkan edisi sebelum disimpan.
 6. **Tahun** — kotak tahunan dan angka: buku selesai, halaman, bahasa.
-7. **Pengaturan** — akun, tema, target tahunan.
+7. **Pengaturan** — akun dan target tahunan.
 
 ## Nada Visual
 
-Editorial berbasis kertas, bukan kaca. Tiga tema pilihan pembaca (`shelf`, `municipal`, `oxford`) dengan mode terang dan gelap; rincian di [[QUIRE_DESIGN_SYSTEM]] dan `design-systems/DESIGN_SYSTEM.md`.
+Editorial berbasis kertas, bukan kaca. Saat ini Quire memakai satu tema terang `shelf`; rincian di [[QUIRE_DESIGN_SYSTEM]] dan `design-systems/DESIGN_SYSTEM.md`.
 
 Huruf: Newsreader italic hanya untuk judul buku, Plus Jakarta Sans untuk antarmuka, mono untuk angka. Radius 0 untuk pita, 2 untuk input dan tombol, 3 untuk kartu. Satu aksen per layar. Ikon satu set geometris 24px, stroke 1.75.
 

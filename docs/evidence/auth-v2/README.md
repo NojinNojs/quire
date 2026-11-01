@@ -79,9 +79,9 @@ No assets were created. Nine existing published covers supply twelve wall placem
 decorative (`aria-hidden` with empty image alternatives); the form remains the task.
 
 This handoff writes only this evidence README. Existing user-modified
-[BRIEF.md](../../../BRIEF.md) remains untouched. [PRODUCT.md](../../../PRODUCT.md) remains
+[the auth cover brief](../../briefs/auth-cover-open.md) remains untouched. [PRODUCT.md](../../../PRODUCT.md) remains
 the product authority. [DESIGN.md](../../../DESIGN.md), `.impeccable/design.json`, and
-[the earlier auth brief](../../AUTH_ONBOARDING_BRIEF.md) retain pre-existing auth drift:
+[the earlier auth brief](../../briefs/auth-onboarding.md) retain pre-existing auth drift:
 photography, the old split, fluid headings, and taller rounded controls no longer describe
 this surface. Global design-document refresh is outside this task's write boundary.
 

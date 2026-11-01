@@ -13,7 +13,7 @@ Arah kaca gelap **dibatalkan** 28 Oktober 2026. Penggantinya: sistem editorial b
 
 Rujukan resmi: `/home/nojin/works/quire-mockups/design-systems/DESIGN_SYSTEM.md` (v1), ringkasannya di [[QUIRE_DESIGN_SYSTEM]].
 
-Yang berlaku sekarang: permukaan kertas tanpa blur, gradien, atau glow; tiga tema (`shelf`, `municipal`, `oxford`) dengan mode terang dan gelap; radius 0 pita, 2 input dan tombol, 3 kartu; Newsreader italic hanya untuk judul buku; teks antarmuka bahasa Inggris; ikon satu set geometris 24px stroke 1.75; satu aksen per layar.
+Yang berlaku sekarang: tema tunggal `shelf-light`, dengan kertas dan tinta; radius 0 pita, 2 input dan tombol, 3 kartu; Newsreader italic untuk judul buku dan pengantar autentikasi; teks antarmuka bahasa Inggris; ikon satu set geometris 24px stroke 1.75; satu aksen per layar. Autentikasi memakai buku terbuka di atas meja terang, dengan punggung buku yang memisahkan formulir dan catatan bacaan.
 
 ## Warna
 

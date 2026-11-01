@@ -124,12 +124,12 @@ allows the remaining content to be reached.
 - R-14 PASS: composition follows reading, filtering, entry, and book-record tasks.
 - R-19 PASS: existing short route transitions respect reduced motion.
 - R-22 PASS: no illustrations were added.
-- Liveliness PASS: ENERGY 1 / RHYTHM 2 / MOTION 1, per docs/DEMO.md.
+- Liveliness PASS: ENERGY 1 / RHYTHM 2 / MOTION 1, per docs/product/DEMO.md.
 - Focal points PASS: the active book, real shelf covers, search input, and book record lead their screens.
 - Whitespace PASS: existing spacing tokens group forms and separate tasks.
 - Accent PASS: the existing navigation indicator carries the single accent role.
 - Identity PASS: published covers, italic book titles, and DDC group bands identify the collection.
-- Design Read PASS: the paper interface and the user's real-cover direction are recorded in docs/DEMO.md.
+- Design Read PASS: the paper interface and the user's real-cover direction are recorded in docs/product/DEMO.md.
 - C-1 PASS: new controls serve demo identification, collection entry, reading, or recovery.
 - C-2 PASS: each interactive control is accounted for in the browser record.
 - C-3 PASS: no marketing scaffold or filler section was added.
@@ -143,4 +143,4 @@ allows the remaining content to be reached.
 - R-21 PASS: the saved theme is respected; all light and dark options work.
 - R-29 PASS: the existing semantic palette is reused with no extra colors.
 - R-30 PASS: the demo extends the incumbent product rather than introducing another product's visual language.
-- R-31 PASS: new visual decisions and their purpose are recorded in docs/DEMO.md and this report.
+- R-31 PASS: new visual decisions and their purpose are recorded in docs/product/DEMO.md and this report.

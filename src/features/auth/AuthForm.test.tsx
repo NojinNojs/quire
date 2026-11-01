@@ -2,7 +2,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { AuthForm, passwordStrength } from "./AuthForm";
+import { AuthForm } from "./AuthForm";
+import { passwordStrength } from "./auth-mode";
 
 const signUp = vi.fn();
 const signInWithPassword = vi.fn();
