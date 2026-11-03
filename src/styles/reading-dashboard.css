@@ -1,0 +1,54 @@
+/* Inside the Today dashboard the active book is the focal point: one jacket,
+   one title, and the logging controls directly beneath them. */
+.dashboard-reading .reading-today {
+  max-width: none;
+  padding-inline: 0;
+}
+
+.dashboard-reading .reading-two-pane {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-24);
+  width: 100%;
+  max-width: 30rem;
+  margin-inline: auto;
+}
+
+.dashboard-reading .reading-two-pane > * {
+  width: 100%;
+}
+
+.dashboard-reading .reading-book {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  text-align: center;
+}
+
+.dashboard-reading .reading-jacket .reading-cover {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.dashboard-reading .reading-jacket .cover-controls {
+  grid-column: 1;
+  grid-row: 2;
+  justify-content: center;
+}
+
+.dashboard-reading .reading-book-copy {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.dashboard-reading .reading-jacket .bookmark {
+  inset: 0 auto auto calc(50% + var(--today-jacket-width) / 2);
+}
+
+@media (min-width: 1024px) {
+  .app-shell .reading.reading-today:has(.reading-two-pane),
+  .reading:has(.reading-two-pane) {
+    display: block;
+    --today-jacket-width: var(--shelf-jacket-height);
+    --today-jacket-height: calc(var(--today-jacket-width) * 3 / 2);
+  }
+}

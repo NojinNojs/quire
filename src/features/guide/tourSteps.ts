@@ -29,9 +29,9 @@ export const steps = [
   },
   {
     route: "/settings",
-    target: ".settings-footer",
+    target: ".profile-form",
     title: "Your account.",
-    body: "Return to your catalogue or sign out here. You can open Guide at any time to take this tour again.",
+    body: "Save your reader name and yearly goal here. Account settings also let you change your password or sign out. Open Guide whenever you need it.",
     label: "Account settings",
   },
 ] as const;

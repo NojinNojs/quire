@@ -1,3 +1,5 @@
+@import "./reading-dashboard.css";
+
 .bookmark {
   position: absolute;
   inset: var(--space-8) 0 0 auto;
@@ -398,7 +400,6 @@
   border-color: var(--ink);
 }
 
-/* the jacket is printed, not embossed */
 .reading-jacket {
   box-shadow: none;
 }
@@ -416,77 +417,4 @@
 .cover-controls label {
   width: 100%;
   justify-content: center;
-}
-
-.reading-desktop-record {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .app-shell .reading.reading-today:has(.reading-two-pane),
-  .reading:has(.reading-two-pane) {
-    display: block;
-    max-width: calc(var(--gutter) * 2 + var(--touch) * 14 + var(--space-32));
-    --today-jacket-width: var(--shelf-jacket-height);
-    --today-jacket-height: calc(var(--today-jacket-width) * 3 / 2);
-  }
-
-  .reading-two-pane {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
-    column-gap: var(--space-32);
-    align-items: start;
-  }
-
-  .reading .reading-two-pane .reading-book {
-    display: block;
-    grid-column: 1;
-    grid-row: 1 / 5;
-  }
-
-  .reading-two-pane > .reading-book > .reading-book-copy {
-    display: none;
-  }
-
-  .reading .reading-two-pane .reading-jacket {
-    position: relative;
-    display: block;
-  }
-
-  .reading .reading-two-pane .today-cover {
-    display: grid;
-    gap: var(--space-16);
-  }
-
-  .reading .reading-two-pane .cover-controls {
-    grid-row: auto;
-  }
-
-  .reading .reading-two-pane .reading-desktop-record,
-  .reading .reading-two-pane .reading-stepper,
-  .reading .reading-two-pane .reading-feedback,
-  .reading .reading-two-pane .reading-streak {
-    grid-column: 2;
-  }
-
-  .reading .reading-two-pane .reading-desktop-record {
-    display: block;
-    grid-row: 2;
-    margin-top: var(--space-24);
-  }
-
-  .reading .reading-two-pane .reading-stepper {
-    grid-row: 1;
-    padding-top: 0;
-    margin-top: 0;
-    border-top: 0;
-  }
-
-  .reading .reading-two-pane .reading-feedback {
-    grid-row: 3;
-  }
-
-  .reading .reading-two-pane .reading-streak {
-    grid-row: 4;
-  }
 }

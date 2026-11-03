@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { AuthForm } from "./features/auth/AuthForm";
+import { RecoveryScreen } from "./features/auth/RecoveryScreen";
 import { DemoApp } from "./features/demo/DemoApp";
 import { BookRoute } from "./features/integration/BookRoute";
 import { CatalogueRoute } from "./features/integration/CatalogueRoute";
+import { JournalRoute } from "./features/integration/JournalRoute";
 import { ShelfRoute } from "./features/integration/ShelfRoute";
+import { StatsRoute } from "./features/integration/StatsRoute";
 import { TodayRoute } from "./features/integration/TodayRoute";
 import { AppShell } from "./features/nav/AppShell";
 import { parseRoute } from "./features/nav/routes";
-import { SettingsScreen } from "./features/settings/SettingsScreen";
+import { AccountSettings } from "./features/settings/AccountSettings";
 import { ErrorPanel } from "./features/states/ErrorPanel";
 import { SkeletonRows } from "./features/states/SkeletonRows";
 import { isDemoMode } from "./lib/demoMode";
@@ -21,7 +24,8 @@ export default function App() {
 
 function AccountApp() {
   const [route, setRoute] = useState(() => parseRoute(window.location.hash));
-  const { user, ready, client, signOut, error, retry } = useSession();
+  const { user, ready, client, signOut, error, retry, recovery, recoveryError, completeRecovery } =
+    useSession();
 
   useEffect(() => {
     const navigate = () => setRoute(parseRoute(window.location.hash));
@@ -51,6 +55,16 @@ function AccountApp() {
       </main>
     );
   }
+  if (recovery || recoveryError) {
+    return (
+      <RecoveryScreen
+        client={client}
+        user={user}
+        error={recoveryError}
+        completeRecovery={completeRecovery}
+      />
+    );
+  }
 
   if (error)
     return (
@@ -67,11 +81,15 @@ function AccountApp() {
       {typeof route === "object" ? (
         <BookRoute key={route.id} id={route.id} client={client} owner={user.id} />
       ) : route === "settings" ? (
-        <SettingsScreen key={user.id} signOut={signOut} />
+        <AccountSettings key={user.id} user={user} client={client} signOut={signOut} />
       ) : route === "search" ? (
         <CatalogueRoute key={user.id} user={user} client={client} signOut={signOut} />
       ) : route === "shelf" ? (
         <ShelfRoute key={user.id} owner={user.id} client={client} />
+      ) : route === "journal" ? (
+        <JournalRoute key={user.id} owner={user.id} client={client} />
+      ) : route === "stats" ? (
+        <StatsRoute key={user.id} owner={user.id} client={client} />
       ) : (
         <TodayRoute key={user.id} owner={user.id} client={client} />
       )}

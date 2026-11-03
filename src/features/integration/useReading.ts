@@ -6,6 +6,7 @@ import { useLoad } from "./useLoad";
 
 export type ReadingClient = Pick<SupabaseClient, "from">;
 export type ReadingData = {
+  day: string;
   book: ReadingBook;
   streak: ReadingStreak;
   current: number;
@@ -50,6 +51,7 @@ export async function loadReading(
   });
   const logs = progress.filter((log) => log.book_id === book.id);
   return {
+    day,
     book: {
       id: book.id,
       title: book.title,

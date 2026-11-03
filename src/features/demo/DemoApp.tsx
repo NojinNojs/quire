@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
-import type { Book } from "../../data/types";
 import type { Candidate } from "../../lib/catalog";
 import { readingDay } from "../integration/useReading";
 import { AppShell } from "../nav/AppShell";
 import { parseRoute } from "../nav/routes";
-import { SettingsScreen } from "../settings/SettingsScreen";
+import { DemoSettings } from "../settings/DemoSettings";
 import { ShelfScreen } from "../shelf/ShelfScreen";
 import { DemoBanner } from "./DemoBanner";
 import { DemoBook } from "./DemoBook";
+import { DemoInsights } from "./DemoInsights";
 import { DemoSearch } from "./DemoSearch";
 import { DemoToday } from "./DemoToday";
 import { candidateBook } from "./samples";
-import { createDemoState, currentPages, demoKey, loadDemoState } from "./state";
+import { createDemoState, currentPages } from "./state";
+import { useDemoState } from "./useDemoState";
 import "../../styles/demo.css";
 
 function leaveDemo() {
@@ -23,14 +24,7 @@ function leaveDemo() {
 
 export function DemoApp() {
   const [hash, setHash] = useState(window.location.hash);
-  const [state, setState] = useState(() => {
-    try {
-      return loadDemoState(window.localStorage);
-    } catch {
-      return createDemoState();
-    }
-  });
-  const [storageFailed, setStorageFailed] = useState(false);
+  const { state, setState, storageFailed, saveProfile, updateBook } = useDemoState();
   const [resetting, setResetting] = useState(false);
   const [notice, setNotice] = useState("");
   const [generation, setGeneration] = useState(0);
@@ -57,24 +51,6 @@ export function DemoApp() {
     };
   }, []);
 
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(demoKey, JSON.stringify(state));
-      setStorageFailed(false);
-    } catch {
-      setStorageFailed(true);
-    }
-  }, [state]);
-
-  useEffect(() => {
-    if (!state.pending) return;
-    const timer = window.setTimeout(
-      () => setState((value) => ({ ...value, pending: null })),
-      Math.max(0, state.pending.until - Date.now()),
-    );
-    return () => window.clearTimeout(timer);
-  }, [state.pending]);
-
   const parsedRoute = parseRoute(hash);
   const detailId = typeof parsedRoute === "object" ? parsedRoute.id : null;
   const detail = state.books.find((book) => book.id === detailId);
@@ -92,7 +68,7 @@ export function DemoApp() {
     setGeneration((value) => value + 1);
     setResetting(false);
     setNotice("Demo reset. The sample library is ready.");
-    window.location.hash = "/shelf";
+    window.location.hash = "/today";
   }
 
   async function addBook(candidate: Candidate) {
@@ -110,20 +86,6 @@ export function DemoApp() {
     setState((value) => ({ ...value, books: [...value.books, book] }));
     return true;
   }
-
-  function read(book: Book) {
-    setState((value) => ({
-      ...value,
-      pending: null,
-      books: value.books.map((entry) => ({
-        ...entry,
-        status:
-          entry.id === book.id ? "reading" : entry.status === "reading" ? "want" : entry.status,
-      })),
-    }));
-    window.location.hash = "/today";
-  }
-
   return (
     <AppShell route={route} guideScope="demo">
       <DemoBanner
@@ -141,7 +103,8 @@ export function DemoApp() {
               key={detail.id}
               book={detail}
               current={pages[detail.id] ?? 0}
-              read={() => read(detail)}
+              pending={state.logs.find((log) => log.id === state.pending?.id)?.bookId === detail.id}
+              activeBookId={active?.id ?? null}
               remove={() => {
                 setState((value) => {
                   const logs = value.logs.filter((entry) => entry.bookId !== detail.id);
@@ -156,15 +119,7 @@ export function DemoApp() {
                 });
                 window.location.hash = "/shelf";
               }}
-              update={(patch) =>
-                setState((value) => ({
-                  ...value,
-                  pending: patch.status === "finished" ? null : value.pending,
-                  books: value.books.map((book) =>
-                    book.id === detail.id ? { ...book, ...patch } : book,
-                  ),
-                }))
-              }
+              update={(patch) => updateBook(detail.id, patch)}
             />
           ) : (
             <main className="shell">
@@ -176,7 +131,12 @@ export function DemoApp() {
             </main>
           )
         ) : route === "settings" ? (
-          <SettingsScreen signOut={leaveDemo} demo />
+          <DemoSettings
+            profile={state.profile}
+            saveProfile={saveProfile}
+            storageFailed={storageFailed}
+            leaveDemo={leaveDemo}
+          />
         ) : route === "search" ? (
           <DemoSearch books={state.books} addBook={addBook} />
         ) : route === "shelf" ? (
@@ -192,6 +152,8 @@ export function DemoApp() {
               }}
             />
           </main>
+        ) : route === "journal" || route === "stats" ? (
+          <DemoInsights key={route} route={route} state={state} day={day} />
         ) : (
           <DemoToday
             active={active}

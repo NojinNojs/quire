@@ -1,10 +1,15 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { useCallback, useState } from "react";
 import { deleteBook, getBook, updateBook } from "../../data/bookDetails";
+import { saveBookReview, setBookStatus } from "../../data/bookReading";
 import type { Book } from "../../data/types";
-import { BookDetail } from "../demo/BookDetail";
+import { BookDetail } from "../books/BookDetail";
+import { BookReviewForm } from "../books/BookReviewForm";
+import { BookStatusForm } from "../books/BookStatusForm";
+import { readPendingLog } from "../reading/pendingLog";
 import { useShelfProgressState } from "../shelf/useShelfProgress";
 import { useLoad } from "./useLoad";
+import { readingDay } from "./useReading";
 
 export function BookRoute({
   client,
@@ -18,8 +23,6 @@ export function BookRoute({
   const load = useCallback(() => getBook(client, owner, id), [client, owner, id]);
   const { data, loading, error, retry } = useLoad(load);
   const [updated, setUpdated] = useState<Book | null>(null);
-  const [starting, setStarting] = useState(false);
-  const [startError, setStartError] = useState("");
   const book = updated?.id === id ? updated : data;
   const progress = useShelfProgressState(book ? [book.id] : []);
   if (loading)
@@ -64,56 +67,59 @@ export function BookRoute({
       key={book.id}
       book={book}
       current={progress.pages[book.id] ?? 0}
-      save={async (patch) => setUpdated(await updateBook(client, owner, id, patch))}
+      save={async (patch) => {
+        const result = await updateBook(client, owner, id, patch);
+        setUpdated((previous) => ({
+          ...(previous?.id === id ? previous : book),
+          title: result.title,
+          author: result.author,
+          publisher: result.publisher,
+          year: result.year,
+          pages: result.pages,
+          isbn: result.isbn,
+          language: result.language,
+          edition: result.edition,
+          city: result.city,
+        }));
+      }}
       remove={async () => {
         await deleteBook(client, owner, id);
         window.location.hash = "/shelf";
       }}
     >
-      <div className="demo-book-actions">
-        <button
-          className="primary"
-          type="button"
-          disabled={starting}
-          onClick={async () => {
-            if (book.status === "reading") {
-              window.location.hash = "/today";
-              return;
-            }
-            setStarting(true);
-            setStartError("");
-            try {
-              const { data, error } = await client
-                .from("books")
-                .update({ status: "reading" })
-                .eq("owner", owner)
-                .eq("id", id)
-                .select("id")
-                .single();
-              if (error?.code === "23505") {
-                setStartError(
-                  "Another book is already being read. Only one book can be active at a time.",
-                );
-              } else if (error || !data) {
-                setStartError("Could not start reading. Check your connection and try again.");
-              } else {
-                window.location.hash = "/today";
-              }
-            } catch {
-              setStartError("Could not start reading. Check your connection and try again.");
-            } finally {
-              setStarting(false);
-            }
-          }}
-        >
-          {starting
-            ? "Starting…"
-            : book.status === "reading"
-              ? "Continue reading"
-              : "Read this book"}
-        </button>
-      </div>
-      {startError && <p role="alert">{startError}</p>}
+      <BookStatusForm
+        book={book}
+        pending={hasPendingLog(id)}
+        save={async (status) => {
+          const result = await setBookStatus(client, owner, book, status, readingDay());
+          setUpdated((previous) => ({
+            ...(previous?.id === id ? previous : book),
+            status: result.status,
+            started_at: result.started_at,
+            finished_at: result.finished_at,
+          }));
+          return result;
+        }}
+      />
+      <BookReviewForm
+        book={book}
+        save={async (patch) => {
+          const result = await saveBookReview(client, owner, id, patch);
+          setUpdated((previous) => ({
+            ...(previous?.id === id ? previous : book),
+            rating: result.rating,
+            notes: result.notes,
+          }));
+        }}
+      />
     </BookDetail>
   );
+}
+
+function hasPendingLog(id: string): boolean {
+  try {
+    return readPendingLog(window.localStorage, id) !== null;
+  } catch {
+    return false;
+  }
 }

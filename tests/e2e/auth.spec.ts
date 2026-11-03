@@ -154,7 +154,7 @@ test("create an account, take the first-run tour, sign out and sign back in", as
     await page.getByLabel("Email").fill(email);
     await page.getByLabel("Password", { exact: true }).fill(password);
     await page.getByRole("button", { name: "Sign in", exact: true }).click();
-    await expect(page.getByRole("heading", { name: "Collection", exact: true })).toBeVisible();
+    await expect(page.locator(".dashboard-reading > header h1")).toBeVisible();
     await expect(page.getByRole("dialog", { name: "Find your next read." })).toHaveCount(0);
     await page.getByRole("button", { name: "Guide", exact: true }).click();
     await expect(page.getByRole("dialog", { name: "Find your next read." })).toBeVisible();

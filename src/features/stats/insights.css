@@ -1,0 +1,200 @@
+.insights {
+  max-width: 70rem;
+  margin: auto;
+  padding: 1rem;
+  color: var(--ink);
+}
+.insights h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+.insights h2 {
+  margin-top: 1.5rem;
+}
+.insights a {
+  color: var(--accent);
+}
+.insights button,
+.insights input,
+.insights select {
+  min-height: 44px;
+  font: inherit;
+}
+.insights-year {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+.insights-year input {
+  width: 6rem;
+}
+.insights-totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  border-block: 1px solid var(--rule);
+  padding: 1rem 0;
+}
+.insights-totals dd {
+  margin: 0.25rem 0 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+.insights-months {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22.5rem), 1fr));
+  gap: 1.5rem;
+}
+.insights-months h3 {
+  margin: 0 0 0.5rem;
+}
+.insights-weekdays {
+  display: none;
+}
+.insights-days {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+.insights-day-blank {
+  display: none;
+}
+.insights-day {
+  position: relative;
+  min-width: 0;
+}
+.insights-day summary,
+.insights-swatch {
+  border: 1px solid var(--rule);
+  background: var(--surface-raised);
+}
+.insights-day summary {
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  min-height: 2.75rem;
+  padding: 0.25rem;
+  font-variant-numeric: tabular-nums;
+}
+.insights-day summary::marker {
+  content: "";
+}
+.insights-day[open] {
+  grid-column: 1 / -1;
+}
+.insights-day[open] summary {
+  width: 2.75rem;
+}
+@media (min-width: 34rem) {
+  .insights-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+    color: var(--ink-muted);
+    font: var(--label-size) / var(--label-leading) var(--font-mono);
+    text-align: center;
+  }
+  .insights-days {
+    grid-template-columns: repeat(7, minmax(2.75rem, 1fr));
+  }
+  .insights-day-blank {
+    display: block;
+  }
+}
+.insights-day.level-1 summary,
+.insights-swatch.level-1 {
+  border: 2px solid var(--accent);
+}
+.insights-day.level-2 summary,
+.insights-swatch.level-2 {
+  border: 3px double var(--accent);
+}
+.insights-day.level-3 summary,
+.insights-swatch.level-3 {
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 3px double var(--on-accent);
+  outline: 1px solid var(--accent);
+  outline-offset: -1px;
+}
+.insights-day.level-4 summary,
+.insights-swatch.level-4 {
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 1px solid var(--accent);
+}
+.insights-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0;
+}
+.insights-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.insights-swatch {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: inline-block;
+}
+.insights-day p {
+  margin: 0.25rem 0 0;
+  padding: 0.25rem 0 0;
+  border: 0;
+  background: none;
+  overflow-wrap: anywhere;
+}
+.insights table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.insights th,
+.insights td {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+  overflow-wrap: anywhere;
+}
+.journal-day {
+  border-top: 1px solid var(--rule);
+}
+.journal-day li {
+  margin-block: 0.75rem;
+  overflow-wrap: anywhere;
+}
+.dashboard-reading > header {
+  margin-bottom: 1.5rem;
+}
+.dashboard-reading > header > p {
+  margin: 0;
+  color: var(--ink-muted);
+  font: var(--label-size) / var(--label-leading) var(--font-mono);
+}
+.dashboard-reading > header h1 {
+  margin: 0.25rem 0 0;
+  font: italic 500 clamp(1.5rem, 2.2vw, 2rem) / 1.15 var(--font-serif);
+  overflow-wrap: anywhere;
+}
+.dashboard-reading-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+.dashboard-reading-grid > * {
+  min-width: 0;
+}
+.dashboard-reading-grid aside {
+  border-top: 1px solid var(--rule);
+}
+@media (min-width: 850px) {
+  .dashboard-reading-grid {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+}

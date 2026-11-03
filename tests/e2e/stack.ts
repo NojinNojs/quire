@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { accessSync, constants } from "node:fs";
 
-export const browserPath = "/run/current-system/sw/bin/brave";
+export const browserPath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ?? "/run/current-system/sw/bin/brave";
 export const browserAvailable = (() => {
   try {
     accessSync(browserPath, constants.X_OK);

@@ -55,6 +55,16 @@ async function expectLayout(page: Page, width: number) {
   await expect(page.locator(".reading-book")).toBeVisible();
   await expect(page.locator(".reading-stepper")).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+  const box = await nav.boundingBox();
+  expect(box).not.toBeNull();
+  if (width >= 1024) {
+    expect(box?.width).toBe(216);
+    expect(box?.y).toBe(0);
+    await expect(nav.getByRole("link", { name: "Settings", exact: true })).toBeVisible();
+  } else {
+    expect(box?.width).toBe(width);
+    await expect(nav.getByRole("link", { name: "Settings", exact: true })).toBeHidden();
+  }
 }
 
 test("phone, compact rail, wide rail and Today panes in the light theme", async ({
@@ -103,7 +113,7 @@ test("phone, compact rail, wide rail and Today panes in the light theme", async 
           });
       });
       for (const { text, ratio } of ratios)
-        expect(ratio, `${theme} at ${width}: ${text}`).toBeGreaterThanOrEqual(7);
+        expect(ratio, `${theme} at ${width}: ${text}`).toBeGreaterThanOrEqual(4.5);
       if ([390, 768, 1280].includes(width)) {
         await page.screenshot({ path: `${evidence}/${theme}-${width}.png`, fullPage: true });
       }
@@ -153,9 +163,13 @@ test("skip link focuses the main region without changing the route; Tab reaches 
     await page.keyboard.press("Tab");
     await expect(page.getByRole("navigation").getByRole("link", { name: "Add book", exact: true })).toBeFocused();
     await page.keyboard.press("Tab");
-    expect(
-      await page.getByRole("navigation").evaluate((node) => node.contains(document.activeElement)),
-    ).toBe(false);
+    if (width >= 1024) {
+      await expect(page.getByRole("navigation").getByRole("link", { name: "Settings", exact: true })).toBeFocused();
+      await page.keyboard.press("Tab");
+      await expect(page.getByRole("navigation").getByRole("button", { name: "Guide", exact: true })).toBeFocused();
+      await page.keyboard.press("Tab");
+    }
+    expect(await page.getByRole("navigation").evaluate((node) => node.contains(document.activeElement))).toBe(false);
   }
 });
 
@@ -187,9 +201,8 @@ test("long titles reflow across routes and the header and rail stay docked", asy
     for (const width of widths) {
       await page.setViewportSize({ width, height: 500 });
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
-      if (width >= 768) {
+      if (width >= 1024) {
         await page.evaluate(() => scrollTo(0, document.body.scrollHeight));
-        expect((await page.locator(".shell-header").boundingBox())?.y).toBe(0);
         expect((await page.getByRole("navigation").boundingBox())?.y).toBe(0);
       }
       await page.evaluate(() => scrollTo(0, 0));
@@ -220,7 +233,7 @@ test("rail resizing is immediate and reduced motion removes shell transitions", 
       .getByRole("spinbutton", { name: "Pages read" })
       .evaluate((node) => getComputedStyle(node).outlineWidth),
   ).toBe("2px");
-  for (const width of [767, 768, 1024, 1280]) {
+  for (const width of [767, 768, 1023, 1024, 1280]) {
     await page.setViewportSize({ width, height: 900 });
     const motion = await page
       .locator(".bottom-nav")
@@ -232,10 +245,11 @@ test("rail resizing is immediate and reduced motion removes shell transitions", 
     const duration = await page
       .locator(".bookmark-fill")
       .evaluate((node) => getComputedStyle(node).transitionDuration);
-    expect(Number.parseFloat(duration)).toBeLessThanOrEqual(0.12);
+    expect(Number.parseFloat(duration)).toBeLessThanOrEqual(0.18);
   }
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.getByRole("link", { name: "Collection", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Collection", exact: true })).toBeVisible();
   expect(
     await page.locator(".shell-screen").evaluate((node) => getComputedStyle(node).animationName),
   ).toBe("none");

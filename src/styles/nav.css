@@ -146,7 +146,7 @@
   opacity: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .app-shell {
     padding-bottom: 0;
     padding-left: var(--rail-width);
@@ -205,66 +205,15 @@
 }
 
 @media (min-width: 1024px) {
-  .app-shell .reading:has(.reading-book) {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: auto auto auto 1fr;
-    column-gap: var(--space-32);
-    align-items: start;
-  }
-
-  .app-shell .reading > h1 {
-    grid-column: 1 / -1;
-  }
-
-  .app-shell .reading-book {
-    grid-column: 1;
-    grid-row: 2 / 5;
-    min-width: 0;
-  }
-
-  .app-shell .reading-stepper {
-    grid-column: 2;
-    grid-row: 2;
-    min-width: 0;
-    margin-top: 0;
-    padding-top: 0;
-    border-top: 0;
-  }
-
-  .app-shell .reading-feedback {
-    grid-column: 2;
-    grid-row: 3;
-  }
-
-  .app-shell .reading-streak {
-    grid-column: 2;
-    grid-row: 4;
-    min-width: 0;
+  .shell-header,
+  .shell-screen {
+    width: 100%;
+    max-width: 1120px;
+    margin-inline: auto;
   }
 }
 
 @media (min-width: 1280px) {
-  .app-shell {
-    padding-left: var(--rail-wide-width);
-  }
-
-  .shell-header,
-  .shell-screen {
-    width: 100%;
-    max-width: var(--content-max-width);
-    margin-inline: auto;
-  }
-
-  .app-shell .shell-header {
-    max-width: var(--content-max-width);
-  }
-
-  .bottom-nav {
-    width: var(--rail-wide-width);
-    padding-inline: var(--space-16);
-  }
-
   .bottom-nav a {
     flex-direction: row;
     justify-content: flex-start;

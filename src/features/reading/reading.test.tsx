@@ -19,7 +19,7 @@ const book = {
 };
 const streak = { current: 3, longest: 8, days: [] };
 
-it("keeps Today in one column until the two-pane layout starts at 1024px", () => {
+it("renders one active-book heading", () => {
   const state = createPageLogStore({ ...entry, client: { rpc: vi.fn() }, online: () => false });
   const html = renderToStaticMarkup(
     <TodayScreen
@@ -29,14 +29,8 @@ it("keeps Today in one column until the two-pane layout starts at 1024px", () =>
       onCatalogue={() => {}}
     />,
   );
-  expect(html).toContain('class="reading-two-pane"');
-  const css = readFileSync(new URL("../../styles/reading.css", import.meta.url), "utf8");
-  const desktop = css.slice(css.indexOf("@media (min-width: 1024px)"));
-  expect(desktop).toMatch(/\.reading-two-pane\s*\{[^}]*display: grid;[^}]*grid-template-columns:/);
-  expect(desktop).toContain("column-gap: var(--space-32)");
-  expect(css.slice(0, css.indexOf("@media (min-width: 1024px)"))).not.toContain(
-    ".reading-two-pane",
-  );
+  const titles = [...html.matchAll(/<h2[^>]*>Bumi Manusia<\/h2>/g)];
+  expect(titles).toHaveLength(1);
 });
 afterEach(() => {
   vi.useRealTimers();
@@ -61,6 +55,72 @@ describe("page arithmetic", () => {
       ),
     ).toContain("214 -&gt; 215");
   });
+});
+
+it("keeps a pending log on its original day across midnight", async () => {
+  vi.useFakeTimers();
+  const rpc = vi.fn().mockResolvedValue(result);
+  const store = createPageLogStore({ ...entry, client: { rpc }, online: () => true });
+  store.log(10);
+  store.setDay("2026-10-30");
+  expect(store.getSnapshot()).toMatchObject({
+    current: 224,
+    pagesToday: 0,
+    pending: { day: "2026-10-29" },
+  });
+  await vi.advanceTimersByTimeAsync(5000);
+  expect(rpc).toHaveBeenCalledTimes(1);
+  expect(store.getSnapshot()).toMatchObject({ status: "saved", current: 224, pagesToday: 0 });
+  store.log(3);
+  expect(store.getSnapshot()).toMatchObject({ pagesToday: 3, pending: { day: "2026-10-30" } });
+  store.undo();
+});
+
+it("reconciles the new day without losing an older pending log", () => {
+  vi.useFakeTimers();
+  const store = createPageLogStore({ ...entry, client: { rpc: vi.fn() }, online: () => false });
+  store.log(10);
+  store.setDay("2026-10-30");
+  store.syncDay("2026-10-30", 7);
+  expect(store.getSnapshot()).toMatchObject({ current: 224, pagesToday: 7, status: "undo" });
+  store.undo();
+  expect(store.getSnapshot()).toMatchObject({ current: 214, pagesToday: 7, pending: null });
+  store.log(3);
+  store.syncDay("2026-10-30", 7);
+  expect(store.getSnapshot()).toMatchObject({ pagesToday: 10, status: "undo" });
+  store.undo();
+});
+
+it("keeps an in-flight log while applying the new day baseline", async () => {
+  vi.useFakeTimers();
+  let complete: (value: typeof result) => void = () => {};
+  const rpc = vi.fn(
+    () =>
+      new Promise<typeof result>((resolve) => {
+        complete = resolve;
+      }),
+  );
+  const store = createPageLogStore({ ...entry, client: { rpc }, online: () => true });
+  store.log(10);
+  await vi.advanceTimersByTimeAsync(5000);
+  store.setDay("2026-10-30");
+  store.syncDay("2026-10-30", 7);
+  expect(store.getSnapshot()).toMatchObject({
+    current: 224,
+    pagesToday: 7,
+    status: "saving",
+    pending: { day: "2026-10-29" },
+  });
+  complete(result);
+  await Promise.resolve();
+  await Promise.resolve();
+  expect(store.getSnapshot()).toMatchObject({
+    current: 224,
+    pagesToday: 7,
+    status: "saved",
+    pending: null,
+  });
+  expect(rpc).toHaveBeenCalledTimes(1);
 });
 
 describe("optimistic page log", () => {
@@ -226,5 +286,3 @@ it("reconstructs restored dates with one restoration per month, including after 
   expect([...restoredDays([...logs])]).toEqual(["2026-09-28", "2026-09-30"]);
   expect([...restoredDays(["2026-10-27", "2026-10-27", "2026-10-29"])]).toEqual(["2026-10-28"]);
 });
-
-import { readFileSync } from "node:fs";

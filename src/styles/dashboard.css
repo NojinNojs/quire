@@ -6,6 +6,11 @@
   --rule: #c7b8a6;
   --accent: #702c3b;
   --on-accent: #fffaf1;
+  --shell-focus-ink: var(--accent);
+  --rail-width: 216px;
+  --rail-wide-width: 216px;
+  --content-max-width: 1120px;
+  --motion: 150ms;
   background: var(--surface);
   color: var(--ink);
   min-height: 100vh;
@@ -14,29 +19,30 @@ body:has(.app-shell) {
   background: #d6c9b5;
 }
 .app-shell .shell-header {
-  background: #f8f3e8;
+  background: var(--surface);
 }
 .app-shell .brand {
   font: italic 600 28px / 1 var(--font-serif);
-  color: #702c3b;
+  color: var(--accent);
 }
 .app-shell .bottom-nav {
-  background: #e8ddcb;
-  border-color: #c7b8a6;
+  max-width: none;
+  background: var(--surface-raised);
+  border-color: var(--rule);
 }
 .app-shell .bottom-nav a {
   gap: 8px;
   border-radius: 6px;
-  color: #3b322c;
+  color: var(--ink-muted);
 }
 .app-shell .bottom-nav a[aria-current="page"] {
-  color: #702c3b;
+  color: var(--accent);
   font-weight: 700;
-  background: #f8f3e8;
+  background: var(--surface);
   text-decoration: none;
 }
 .app-shell .nav-indicator {
-  background: #702c3b;
+  background: var(--accent);
 }
 .app-shell .nav-indicator[data-route="shelf"] {
   transform: none;
@@ -49,11 +55,11 @@ body:has(.app-shell) {
 }
 .app-shell .nav-label {
   display: block;
-  font: 600 11px / 1.2 var(--font-sans);
+  font: 600 12px / 1.2 var(--font-sans);
 }
 .app-shell .catalog {
-  max-width: 800px;
-  padding: 32px 24px 64px;
+  max-width: none;
+  padding: 32px 16px 64px;
 }
 .app-shell .shelf .quire-select {
   font-family: var(--font-sans);
@@ -61,7 +67,7 @@ body:has(.app-shell) {
 .app-shell .shelf .quire-select-control {
   min-height: 48px;
   height: auto;
-  border-color: #8b7b6b;
+  border-color: var(--ink-muted);
   border-radius: 6px;
   padding: 4px 12px;
 }
@@ -72,22 +78,32 @@ body:has(.app-shell) {
   font: 500 clamp(32px, 3vw, 44px) / 1.1 var(--font-serif);
 }
 .app-shell .catalog .primary {
-  background: #702c3b;
-  color: #fffaf1;
+  background: var(--accent);
+  color: var(--on-accent);
   padding-inline: 24px;
 }
 .app-shell .catalog-form input {
   border-radius: 6px;
 }
 .app-shell .entry-tabs button[aria-selected="true"] {
-  color: #702c3b;
-  border-bottom-color: #702c3b;
+  color: var(--accent);
+  border-bottom-color: var(--accent);
   font-weight: 700;
 }
-@media (max-width: 767px) {
+.app-shell .rail-brand,
+.app-shell .rail-settings,
+.app-shell .rail-guide {
+  display: none;
+}
+@media (max-width: 1023px) {
+  .app-shell .shell,
+  .app-shell .integration-screen,
+  .app-shell .reading {
+    width: 100%;
+    max-width: none;
+  }
   .app-shell .demo-banner {
-    flex-wrap: nowrap;
-    align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
     margin: 8px 16px 0;
     padding: 6px 12px;
@@ -99,8 +115,7 @@ body:has(.app-shell) {
     margin: 0;
   }
   .app-shell .demo-banner-actions {
-    flex: 0 0 auto;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 8px;
   }
   .app-shell .demo-banner .demo-link {
@@ -118,5 +133,48 @@ body:has(.app-shell) {
   .app-shell .bottom-nav svg {
     width: 20px;
     height: 20px;
+  }
+}
+@media (min-width: 1024px) {
+  .app-shell .shell-header {
+    display: none;
+  }
+  .app-shell .bottom-nav {
+    width: 216px;
+    padding: 32px 16px;
+    gap: 12px;
+  }
+  .app-shell .bottom-nav a {
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 48px;
+    padding-inline: 16px;
+  }
+  .app-shell .bottom-nav .rail-brand {
+    display: block;
+    padding: 0 16px 32px;
+  }
+  .app-shell .bottom-nav .rail-settings {
+    display: flex;
+  }
+  .app-shell .bottom-nav .rail-guide {
+    display: block;
+    text-align: left;
+    min-height: 44px;
+    padding-inline: 16px;
+  }
+  .app-shell .catalog {
+    padding-inline: 32px;
+  }
+  .app-shell .integration-screen {
+    padding-inline: 32px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-shell *,
+  .app-shell *::before,
+  .app-shell *::after {
+    transition: none !important;
+    animation: none !important;
   }
 }

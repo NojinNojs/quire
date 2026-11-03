@@ -1,0 +1,153 @@
+/* Settings is a reading-room ledger: rules and space, not a stack of cards. */
+.settings {
+  max-width: 720px;
+  margin-inline: auto;
+  padding: var(--space-32) 16px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-32);
+  color: var(--ink);
+}
+
+.settings-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.settings-head h1 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding-top: var(--space-24);
+  border-top: var(--rule-width) solid var(--rule);
+}
+
+.settings-section h2 {
+  margin: 0;
+  font: 600 var(--small-size) / var(--small-leading) var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  max-width: 440px;
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.settings-field input {
+  min-height: var(--touch);
+  padding: 0 var(--space-12);
+  border: var(--rule-width) solid var(--rule);
+  border-radius: var(--radius-input);
+  background: var(--surface-raised, #fffaf1);
+  color: var(--ink);
+  font: inherit;
+}
+
+.settings-field input[aria-invalid="true"] {
+  border-color: var(--accent);
+}
+
+.settings-hint {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+  line-height: var(--small-leading);
+}
+
+.settings-secret {
+  position: relative;
+  display: flex;
+}
+
+.settings-secret input {
+  flex: 1;
+  min-width: 0;
+  padding-right: 72px;
+}
+
+.settings-reveal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-height: var(--touch);
+  min-width: var(--touch);
+  padding: 0 var(--space-8);
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: var(--small-size);
+  text-decoration: underline;
+  text-underline-offset: var(--space-4);
+  cursor: pointer;
+}
+
+.settings-error {
+  margin: 0;
+  color: var(--accent);
+  font-size: var(--small-size);
+  line-height: var(--small-leading);
+}
+
+.settings-status {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+  line-height: var(--small-leading);
+}
+
+.settings-submit {
+  align-self: flex-start;
+  min-width: 160px;
+  padding-inline: var(--space-24);
+}
+
+.settings-readonly {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.settings-value {
+  margin: 0;
+  font-size: var(--body-size);
+  line-height: var(--body-leading);
+  overflow-wrap: anywhere;
+}
+
+.settings-warning {
+  margin: 0;
+  padding: var(--space-12) var(--space-16);
+  border: var(--rule-width) solid var(--ink-muted);
+  border-radius: var(--radius-input);
+  background: var(--surface-raised, #fffaf1);
+  font-size: var(--small-size);
+  line-height: var(--small-leading);
+}
+
+.settings-footer {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  padding-top: var(--space-16);
+  border-top: var(--rule-width) solid var(--rule);
+}

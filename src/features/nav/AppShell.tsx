@@ -19,6 +19,7 @@ export function AppShell({
   guideScope?: string;
 }) {
   const content = useRef<HTMLDivElement>(null);
+  const selected = route === "journal" || route === "stats" ? "today" : route;
 
   return (
     <div className="app-shell">
@@ -66,9 +67,10 @@ export function AppShell({
         {children}
       </div>
       <nav className="bottom-nav" aria-label="Main navigation">
+        <span className="brand rail-brand">Quire</span>
         <span
           className="nav-indicator"
-          data-route={typeof route === "object" ? "shelf" : route}
+          data-route={typeof selected === "object" ? "shelf" : selected}
           aria-hidden="true"
         />
         {destinations.map(({ route: destination, label, Icon }) => (
@@ -78,7 +80,7 @@ export function AppShell({
             aria-label={label}
             title={label}
             aria-current={
-              route === destination || (typeof route === "object" && destination === "shelf")
+              selected === destination || (typeof selected === "object" && destination === "shelf")
                 ? "page"
                 : undefined
             }
@@ -87,6 +89,18 @@ export function AppShell({
             <span className="nav-label">{label}</span>
           </a>
         ))}
+        <a
+          className="rail-settings"
+          href="#/settings"
+          aria-label="Settings"
+          aria-current={route === "settings" ? "page" : undefined}
+        >
+          <SettingsIcon />
+          <span className="nav-label">Settings</span>
+        </a>
+        <button className="shell-guide rail-guide" type="button" onClick={openProductTour}>
+          Guide
+        </button>
       </nav>
     </div>
   );
