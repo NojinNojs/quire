@@ -116,6 +116,7 @@ test("undo discards pages while persisted pages reach the journal and the readin
   await addBook(page, title, "200");
   await openBook(page, title);
   await page.getByRole("combobox", { name: "Reading status" }).selectOption("reading");
+  await expect(page.getByRole("link", { name: "Continue reading", exact: true })).toBeVisible();
 
   await page.goto("/#/today");
   await page.getByLabel("Pages read").fill("10");
@@ -152,6 +153,7 @@ test("offline queued pages stay out of history and block finishing until retry s
   await openBook(page, title);
   const bookHash = new URL(page.url()).hash;
   await page.getByRole("combobox", { name: "Reading status" }).selectOption("reading");
+  await expect(page.getByRole("link", { name: "Continue reading", exact: true })).toBeVisible();
   await page.goto("/#/today");
   await expect(page.getByLabel("Pages read")).toBeEnabled();
   await page.context().setOffline(true);
