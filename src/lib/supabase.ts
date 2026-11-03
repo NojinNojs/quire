@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import "./authCallback";
 import { isDemoMode } from "./demoMode";
 
 const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;

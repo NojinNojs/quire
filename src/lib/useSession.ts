@@ -1,11 +1,14 @@
 import type { User } from "@supabase/supabase-js";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { authCallback, clearAuthCallback, dropAuthMarker } from "./authCallback";
 import { supabase } from "./supabase";
 
 export function useSession() {
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState("");
+  const [recovery, setRecovery] = useState(authCallback.recovery);
+  const [recoveryError, setRecoveryError] = useState<string | null>(authCallback.error);
   const [revision, setRevision] = useState(0);
   const generation = useRef(0);
   const signingOut = useRef(false);
@@ -32,8 +35,20 @@ export function useSession() {
           setReady(true);
         }
       });
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (current === generation.current) setUser(session?.user ?? null);
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (current !== generation.current) return;
+      setUser(session?.user ?? null);
+      if (event === "PASSWORD_RECOVERY") {
+        setRecovery(true);
+        const url = new URL(window.location.href);
+        url.searchParams.set("auth", "recovery");
+        window.history.replaceState(null, "", url);
+      }
+      if (event === "SIGNED_OUT") {
+        setRecovery(false);
+        setRecoveryError(null);
+        dropAuthMarker();
+      }
     });
     return () => {
       generation.current += 1;
@@ -47,11 +62,16 @@ export function useSession() {
     try {
       const result = await supabase?.auth.signOut();
       if (result?.error) throw result.error;
-      if (window.location.hash) {
-        const url = new URL(window.location.href);
+      setRecovery(false);
+      setRecoveryError(null);
+      const url = new URL(window.location.href);
+      url.searchParams.delete("auth");
+      if (url.hash) {
         url.hash = "";
         window.history.replaceState(null, "", url);
         window.dispatchEvent(new window.Event("hashchange"));
+      } else if (url.href !== window.location.href) {
+        window.history.replaceState(null, "", url);
       }
     } catch {
       setError("Could not sign out. Check your connection and try again.");
@@ -63,6 +83,13 @@ export function useSession() {
     user,
     ready,
     error,
+    recovery,
+    recoveryError,
+    completeRecovery: () => {
+      setRecovery(false);
+      setRecoveryError(null);
+      clearAuthCallback();
+    },
     retry: () => {
       if (signingOut.current) void signOut();
       else setRevision((value) => value + 1);
