@@ -112,7 +112,7 @@ create policy own_rows on books
   for all using (owner = auth.uid()) with check (owner = auth.uid());
 ```
 
-`works` boleh dibaca semua pengguna terdaftar, ditulis hanya oleh pembuatnya. `profiles` hanya pemilik.
+`works` boleh dibaca semua pengguna terdaftar, ditulis hanya oleh pembuatnya. `profiles` boleh dibaca, dibuat, dan diubah oleh pemiliknya, tetapi tidak dihapus lewat API. `progress_log` hanya bisa dibaca pemilik; menulis, mengubah, dan menghapus baris progres hanya lewat RPC `log_pages` agar streak tidak bisa dilewati.
 
 ## Streak
 

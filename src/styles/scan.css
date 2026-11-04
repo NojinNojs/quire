@@ -40,6 +40,16 @@
   font-size: var(--title-size);
   line-height: var(--title-leading);
 }
+/* The close is an icon target of at least 44px with its name in the tooltip,
+   so the header keeps one line and the target lives at the thumb's edge. */
+.scan-sheet .scan-close {
+  flex: none;
+  color: var(--ink-muted);
+}
+.scan-sheet .scan-close:hover:not(:disabled) {
+  background: var(--surface-subtle);
+  color: var(--ink);
+}
 .scan-body {
   display: flex;
   flex: 1;
@@ -85,50 +95,34 @@
   flex-direction: column;
   gap: var(--space-12);
 }
-.scan-sheet button,
-.scan-sheet input {
+/* The light toggle is the one button outside the shared controls: it is a
+   secondary action that only exists while the camera runs. */
+.scan-torch button {
   box-sizing: border-box;
-  min-width: var(--touch);
-  min-height: var(--touch);
+  min-width: var(--control-height);
+  min-height: var(--control-height);
   padding: var(--space-8) var(--space-12);
   border: var(--rule-width) solid var(--ink-muted);
   border-radius: var(--radius-input);
   background: var(--surface-raised);
   color: var(--ink);
   font: inherit;
-}
-.scan-sheet input {
-  width: 100%;
-  min-width: 0;
-  caret-color: var(--ink);
-  font-variant-numeric: tabular-nums;
-}
-.scan-sheet input[aria-invalid="true"] {
-  border-color: var(--ink);
-  border-width: var(--focus-width);
-}
-.scan-sheet button {
   cursor: pointer;
 }
-.scan-fallback button {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--on-accent);
-}
-.scan-sheet button:hover:not(:disabled) {
+.scan-torch button:hover:not(:disabled) {
   text-decoration: underline;
 }
-.scan-sheet button:active:not(:disabled) {
-  text-decoration: underline double;
-}
-.scan-sheet button:disabled,
-.scan-sheet input:disabled {
+.scan-torch button:disabled {
   cursor: default;
   border-style: dashed;
 }
-.scan-sheet :focus-visible {
+.scan-torch button:focus-visible {
   outline: var(--focus-width) solid var(--ink);
   outline-offset: var(--focus-offset);
+}
+/* The ISBN field is the shared control: 44px line, shared focus and error ink. */
+.scan-fallback .control-input {
+  font-variant-numeric: tabular-nums;
 }
 .scan-sheet ::selection {
   background: var(--ink);

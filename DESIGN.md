@@ -1,14 +1,14 @@
 ---
 name: Quire
-description: Paper and ink for a personal book catalogue and reading tracker.
+description: A neutral, ink-green reading workspace with compact progress logging and cover-led collections.
 colors:
-  "shelf-light-surface": "#f4f4f1"
-  "shelf-light-surface-raised": "#fcfcfa"
-  "shelf-light-ink": "#131313"
-  "shelf-light-ink-muted": "#52524d"
-  "shelf-light-rule": "#cacac3"
-  "shelf-light-accent": "#8c2f39"
-  "shelf-light-on-accent": "#fcfcfa"
+  "shelf-light-surface": "#f5f7f6"
+  "shelf-light-surface-raised": "#ffffff"
+  "shelf-light-ink": "#202a27"
+  "shelf-light-ink-muted": "#414e48"
+  "shelf-light-rule": "#d5dfd9"
+  "shelf-light-accent": "#205b48"
+  "shelf-light-on-accent": "#ffffff"
   "shelf-light-class-800": "#8c2f39"
   "shelf-light-class-900": "#2b4a6f"
   "shelf-light-class-100": "#8a6a1f"
@@ -63,8 +63,8 @@ typography:
     lineHeight: "1.1"
     letterSpacing: "-0.03em"
 rounded:
-  "input": "2px"
-  "card": "3px"
+  "input": "8px"
+  "card": "12px"
   "band": "0px"
   "auth-control": "8px"
   "guide-control": "8px"
@@ -88,8 +88,8 @@ components:
   auth-primary:
     height: "52px"
     width: "100%"
-    backgroundColor: "{colors.shelf-light-ink}"
-    textColor: "{colors.shelf-light-surface}"
+    backgroundColor: "{colors.shelf-light-accent}"
+    textColor: "{colors.shelf-light-on-accent}"
     rounded: "{rounded.auth-control}"
   guide-primary:
     padding: "8px 16px"
@@ -129,122 +129,61 @@ components:
 ---
 # Design System: Quire
 
-## Overview
+## Direction
 
-**Creative North Star: "The Reading Space"**
+A task-first reading workspace. The user explicitly replaced the beige editorial dashboard with neutral light surfaces and ink-green actions. Continuing the current book and logging pages lead the first viewport. StoryGraph informs familiar reading workflows, not copied branding or unsupported statistics.
 
-Quire is a considered reading space: paper surfaces, strong ink, italic book titles, and published cover artwork. Classification colors organize the collection while books carry its visual identity.
+## Palette and scope
 
-The catalogue retains compact, ruled forms. Authentication presents a borrower card in a physical open book on a warm light desk. Shelf light is the only runtime theme.
+Application tokens live in `src/styles/dashboard.css`, scoped to `.app-shell`: canvas `#f5f7f6`, white surfaces `#ffffff`, ink `#202a27`, supporting ink `#414e48`, separators `#d5dfd9`, accent `#205b48`, on-accent white. Selected surfaces use `#e4efe8`; subtle areas use `#edf2ef`. Focus, caret and selection use this palette. Separators are decorative, not the only affordance identifying a control.
 
-**Key Characteristics:**
-
-- Paper and ink with classification used as information.
-- Plus Jakarta Sans UI, Newsreader italic book titles, and tabular monospace numbers.
-- Flat catalogue furniture with bounded auth and guide exceptions.
-- Real published covers and one shared missing-cover image.
-
-## Colors
-
-Shelf light uses neutral paper and oxblood. Runtime semantic values come from `src/styles/themes.css`; classification colors help books carry the visual identity.
-
-### Primary
-
-Accent and on-accent supply the base primary action. Auth, guide, and demo actions use ink on surface. Active mobile navigation uses class-800. Classification colors convey filing categories rather than decoration.
-
-### Neutral
-
-Surface supplies the page, surface-raised supplies inputs and layered furniture, ink supplies primary text, ink-muted supplies supporting text, and rule supplies separators. The shell, auth, and active tour derive supporting ink through the existing shell-secondary-ink mix. Shell focus mixes accent with ink.
-
-Authentication uses warm light desk and paper tones to frame the open book. A defined spine, page edges and restrained shadow give the pages physical depth, while space above and below separates the book from the viewport. The guide's translucent shade belongs to its spotlight overlay.
-
-On narrow screens, the borrower card becomes an inset pocket book on the same warm desk. Its paper edge and restrained shadow distinguish the reading surface; the ruled account and demo groups keep secondary actions separate from the ink primary. Compact heights reduce margins rather than the 48px mobile controls. Newsreader keeps the book's editorial voice, while the existing monospace running head and labels recall library furniture. Authentication uses ENERGY 2 / RHYTHM 2 / MOTION 2.
-
-**The Theme Roles Rule.** Keep surface, ink, rule, accent, and classification assignments semantic in shelf light.
+Authentication keeps the physical book, but its palette now belongs to the same application: canvas `#f5f7f6`, white pages with cool-white page edges (`#eef3f0`, rim `#d5dfd9`), ink `#202a27`, supporting ink `#414e48`, and a dark-green cloth cover `#205b48` carrying `#f5f7f6` titling and a `#17493a` spine shade. Accent, focus, caret and selection use `#205b48` and `#e4efe8`, so sign-in, account creation and password reset read as the same application. The auth roles are scoped to `.auth-page` in `src/styles/auth-base.css` rather than reusing shell tokens. There is one light application theme; no inert theme toggle.
 
 ## Typography
 
-**UI Font:** Plus Jakarta Sans with system sans fallback. **Book Title Font:** Newsreader with Georgia serif fallback, italic. **Number Font:** ui-monospace with SF Mono and Menlo fallbacks.
+Plus Jakarta Sans carries headings, controls and body text. Newsreader is reserved for the Quire wordmark and book titles, not oversized interface greetings. Tabular numerals support progress and totals. Human-readable dates replace raw ISO dates in summaries; stored dates remain date-only values.
 
-Sans carries navigation, forms, and explanatory copy. Italic serif identifies book titles and the authentication introduction. Tabular monospace carries counts and edition metadata.
+## Layout and navigation
 
-### Hierarchy
+Today comes first, followed by Collection and Add book. At 1024px and above, a labelled 216px rail collapses to an 80px icon rail through an accessible toggle. `quire:nav-mode:v1` stores the device preference; blocked storage still permits session-only toggling. Brand, reading destinations and utility actions are separate groups, informed by shadcn's compositional sidebar pattern but implemented with Quire's own typography, colors and existing components. Both modes retain accessible names, focus, Settings and Guide. Below 1024px, a 56px header provides route context and Settings/Guide. The mobile dock is inset 12px, bounded to 480px, and lifted 8px above the safe area. Its opaque white surface, 14px radius and restrained shadow distinguish fixed navigation from scrolling books; three 48px targets retain labels. A sliding active surface tracks the real route and disappears on Settings. Content clearance includes dock height, spacing and the safe area once.
 
-Frontmatter records the observed title, book-title, row-title, body, small, label, and number roles. The authentication introduction uses a fluid italic serif and compacts to 24px on short screens; its ruled fields use small monospace labels. Tour headings use the book-title size with sans; short-phone layouts reduce them to 18px/24px.
+The active book is compact and cover-led, with actual page count, honest percentage only when total pages are known, and nearby logging controls. Desktop places identity and logging side by side where space allows. Mobile stacks them without a decorative giant jacket or empty spacer. Annual goal and activity support the task rather than delaying it.
 
-The declared display scale (44px/48px) remains in `tokens.css`; it is not promoted into a new display component. Existing shell brand also uses serif.
+### Shell reference decisions
 
-## Layout
+[shadcn Sidebar](https://ui.shadcn.com/docs/components/base/sidebar) supplies the composition model: persistent header/footer, scrollable grouped destinations and an inset reading workspace. [Aceternity Sidebar](https://ui.aceternity.com/components/sidebar) and [Floating Dock](https://ui.aceternity.com/components/floating-dock) inform bounded transitions and clear icon feedback, not automatic hover expansion or pointer-driven magnification. Explicit collapse avoids moving the reading surface unexpectedly; fixed mobile targets remain predictable.
 
-Spacing follows the source's seven-step scale, with a separate page gutter (20px). Catalogue content begins with a phone shell (390px). At 768px the bottom navigation becomes a side rail (72px); at 1280px the rail expands (200px) and content is bounded by the existing maximum (1120px). Today gains paired reading and logging areas on wider screens, with an additional 1024px rule.
+Library and Insights are separate groups. Journal and Reading year get direct destinations instead of masquerading as Today. Navigation search is scoped to application pages, not a misleading book search. Its keyboard shortcut and the mobile More menu supplement visible links; modal overlays must restore focus on cancellation and hand focus to the destination on navigation. All shell enhancements reuse existing Base UI rather than introducing a second component runtime.
 
-Authentication uses a borrower-card form in an open book, with a demo reading record on the facing page on wider screens. The spine separates the form from the record; editorial typography makes the introduction and form easy to scan. On narrower screens the form takes priority. The composition keeps controls reachable without page scroll at supported viewport sizes.
+## Controls and states
 
-Before opening on desktop, a short introduction sits directly on the desk to the left of the closed book. Only the closed book casts a shadow: the empty left half must not look like a blank card. The cover's front and paper inside face share a fixed spine; the login page is revealed as part of that opening rather than replacing a red panel at the end.
+Controls use approximately 8px corners, 44px minimum touch targets, labels and visible focus. Primary actions use ink-green with white text. Presets select a page amount; the input states that it records pages read, not an absolute page position. Preview shows the resulting position before commit.
 
-The tour panel sits above mobile navigation, scrolls within the viewport, and uses a desktop width (360px) from 768px. Source measures the highlighted control and adjusts placement to keep it visible. A short-phone rule applies below 768px when viewport height is at most 740px.
+Every writable field keeps its visible label, and a placeholder adds at most a format example (`e.g. 9780140126938`, `name@example.com`) rather than replacing the label. Autocomplete names appear only where the browser holds real data (email, nickname, current and new passwords); catalogue search, manual edition entry and numeric controls opt out. Selects, file pickers, rating radios and steppers that always hold a value take no placeholder. Field borders, placeholder text and focus rings meet their contrast floors against the surface they sit on, so a control is never identified by a hairline tint alone.
 
-## Elevation & Depth
+Undo, pending, saved and failure feedback stays next to logging. Pending pages are not reported as persisted annual history. Reduced motion removes decorative transitions. Status, selection and validation must not rely on color alone.
 
-There is no shadow elevation system. Raised surfaces, one-pixel rules, and ink contrast separate catalogue furniture. The guide uses a translucent shade around a bordered spotlight and a separately layered panel. Navigation, header, and skip-link retain existing layer tokens; tour backdrop and panel use layers 20 and 21.
+### Component references
 
-The auth form enters over 240ms, primary actions use an outline on hover and press, and strength feedback changes width. The working indicator moves while a request is pending. Reduced-motion mode removes form and control transitions and uses a short cover fade. Existing shell entry motion and navigation transitions remain as implemented.
+Use [Base UI](https://base-ui.com/react/overview/quick-start) for accessible popup behavior, with Quire CSS rather than a second styling framework. [shadcn button variants](https://ui.shadcn.com/docs/components/base/button) inform primary, secondary, quiet and destructive action hierarchy; [tooltip composition](https://ui.shadcn.com/docs/components/base/tooltip) informs contextual icon descriptions. Tooltips supplement accessible names, never replace visible form labels or essential instructions. Toasts confirm completed mutations; field errors and reading Undo remain beside their controls. Pending local work must not be announced as saved to the account.
 
-## Shapes
+Popup opening and closing use the same reversible transition, following [Base UI's animation lifecycle](https://base-ui.com/react/handbook/animation). A user reversing an interaction mid-transition must not reset it to the opposite endpoint. Keep exits mounted until their transition completes and honor reduced motion.
 
-Catalogue controls retain input corners; catalogue containers retain card corners; classification bands remain square. Cover frames use input corners and preserve artwork inside their boxes.
+## Motion
 
-Auth fields are ruled and square, while the ink-filled primary action retains the input radius. Guide invitation, guide controls, header Guide control, and spotlight use guide-control corners; the tour panel uses guide-panel corners; quick page amounts and rating touch surfaces use their corresponding local corners.
+Motion is a shared interaction language, not perpetual decoration. `motion.css` defines 110ms control feedback, 160ms panel transitions, 260ms route entrances and bounded 20ms row staggering. Navigation owns its 260ms rail/content transition and sliding mobile indicator. Route entrances move only 6px; button presses scale to 0.985 without changing layout. Fields ease border/background changes without delaying input. Real list rows, catalogue results, journal days, calendar disclosures, settings/review feedback, select popovers and guide/dialog surfaces share restrained entry and state feedback. The first eight rows may stagger; later content is immediately available. Auth mode/feedback motion preserves the physical cover animation. Grid/list changes keep existing React nodes rather than forcing remounts to replay animation. Reduced-motion removes nonessential animation and transforms. No scroll hijacking, synthetic loaders, `transition: all`, or permanently moving decoration.
 
-**The Local Corners Rule.** Use larger corners only on the documented guide, preset, and rating surfaces. Catalogue controls and containers retain their incumbent radii.
+## Collection and detail
 
-## Components
+Published covers provide visual variety. Preserve complete artwork and use `/covers/placeholder.svg` for missing or failed covers. Compact grids favor scanning; list view exposes edition metadata. Filters describe actual status and metadata. Detail separates identity, lifecycle, review and metadata without a giant cover or blank panel.
 
-### Buttons
+## Journal and statistics
 
-Base primary uses the theme accent pair and input corners. Auth uses a full-width ink primary, 48px high on mobile or 44px on compact-height desktop screens, with an outline on hover and focus. Guide primary uses ink on surface and a minimum touch height (48px); quiet actions underline on hover. Global focus is a two-pixel outline with a two-pixel offset; the shell substitutes its derived focus ink.
+Use saved daily aggregates. Year and language filters stay adjacent to their data. Month summaries provide compact navigation into date details instead of hundreds of oversized controls. All dates remain reachable by keyboard and touch. Notes are labelled current book notes, not historical notes. Goal applies only to the current year.
 
-### Inputs / Fields
+## Constraints
 
-Catalogue fields use raised surface, an ink-muted one-pixel border, input corners, and minimum touch height. Auth fields use transparent, ruled inputs with monospace labels and a password visibility control. Validation stays adjacent to the field; password strength uses text and a filled track.
-
-### Chips
-
-Quick page amounts are action presets with flexible equal widths, small text, and minimum touch height. Selected amounts reverse to ink fill and surface text. They change the amount before the existing logging action is submitted.
-
-### Cards / Containers
-
-The guide invitation is a ruled raised surface with wrapping actions. The tour panel uses local panel corners, supporting copy, Back/Next/Skip, and desktop progress. The authentication demo link opens the interactive demo; its facing page displays a published cover and sample reading record on wider screens. Ordinary catalogue rows remain ruled rows.
-
-### Navigation
-
-Collection is the default destination, with Today and Add book alongside it. Mobile keeps all three labelled and reachable; desktop uses a rail. Settings and the replayable Guide remain in the header. Book details live at `#/book/<id>`.
-
-### Cover and reading furniture
-
-Published covers remain intact in source-defined row, Today, shelf, and authentication reading-record boxes. DDC classification stays outside artwork. Cover provenance is in `public/covers/SOURCES.md`.
-
-### Collection and catalogue direction
-
-Dial: ENERGY 2 / RHYTHM 2 / MOTION 1. Warm paper `#f8f3e8`, desk `#d6c9b5`, dark ink, and burgundy connect the dashboard to authentication. Newsreader gives collection headings and book titles an editorial voice; Plus Jakarta Sans keeps controls readable. Compact cover grids prioritize actual books, while list view exposes edition details. The 8px spacing rhythm separates filters from results; modest nested radii identify controls without decorative cards. Status labels describe real reading state. No decorative illustrations or new animation are needed.
-
-Rating uses five radio controls with inline SVG stars, cumulative filled selection, hover feedback, visible keyboard focus, a status message, and Clear rating.
-
-**The Published Artwork Rule.** Use actual published covers. Every missing or failed cover resolves to the shared /covers/placeholder.svg.
-
-## Do's and Don'ts
-
-### Do:
-
-- **Do** use active theme variables for interface surfaces, text, rules, and focus.
-- **Do** preserve complete published covers with object-fit: contain in catalogue cover boxes.
-- **Do** preserve the borrower-card and open-book treatment on authentication screens.
-- **Do** retain visible focus, at least 44px auth touch targets, and reduced-motion behavior.
-- **Do** keep the guide skippable and replayable while highlighting real controls.
-
-### Don't:
-
-- **Don't** make collection covers so large that routine browsing loses density.
-- **Don't** use auth's no-scroll layout for the collection; books must remain reachable by scrolling.
-- **Don't** generate title-specific replacement covers or multiple missing-cover placeholders.
-- **Don't** add shadow elevation, gradients, or backdrop blur to the catalogue.
+- Keep account and demo equivalent; label local sample activity.
+- Do not invent page totals, metrics, covers, social interactions or historical goal snapshots.
+- No beige application framing, oversized serif shell headings, gradients, decorative glass or nested card stacks.
+- Preserve error/retry, offline queue, undo, one-active-book rules, cover upload, editing, deletion and replayable guide.

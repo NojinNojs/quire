@@ -1,3 +1,5 @@
+import { UndoIcon } from "../../components/icons";
+
 export function DemoBanner({
   storageFailed,
   resetting,
@@ -20,20 +22,21 @@ export function DemoBanner({
         {storageFailed ? "Changes last for this visit only." : "Changes stay on this device."}
       </p>
       <div className="demo-banner-actions">
-        <button className="demo-link" type="button" onClick={() => setResetting(true)}>
+        <button className="quiet" type="button" onClick={() => setResetting(true)}>
           Reset demo
         </button>
-        <button className="demo-link" type="button" onClick={leave}>
+        <button className="quiet" type="button" onClick={leave}>
           Leave demo
         </button>
       </div>
       {resetting && (
         <fieldset className="demo-reset" aria-label="Confirm reset">
           <p>Replace your demo changes with the sample library?</p>
-          <button className="demo-button" type="button" onClick={reset}>
+          <button className="secondary" type="button" onClick={reset}>
+            <UndoIcon />
             Reset sample library
           </button>
-          <button className="demo-link" type="button" onClick={() => setResetting(false)}>
+          <button className="quiet" type="button" onClick={() => setResetting(false)}>
             Keep changes
           </button>
         </fieldset>

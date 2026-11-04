@@ -29,7 +29,7 @@
   --gutter: 20px;
 
   /* shape */
-  --radius-input: 2px;
+  --radius-input: 8px;
   --radius-card: 3px;
   --radius-band: 0px;
   --rule-width: 1px;

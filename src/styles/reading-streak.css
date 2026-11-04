@@ -1,0 +1,149 @@
+/* Week strip: current and longest frame seven real days, today at double weight. */
+.insights.dashboard-reading .reading-streak {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "current week best"
+    "count week best";
+  align-items: center;
+  column-gap: 24px;
+  margin: 0;
+  padding: 16px;
+  border-radius: 0;
+  background: transparent;
+}
+
+.insights.dashboard-reading .reading-stamps {
+  display: contents;
+}
+
+.insights.dashboard-reading .reading-streak-kicker {
+  grid-area: current;
+  align-self: end;
+  margin: 0;
+  color: var(--ink-muted);
+  font: 500 10px / 1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.insights.dashboard-reading .reading-stamps h2 {
+  grid-area: count;
+  align-self: start;
+  margin: 0;
+  color: var(--ink);
+  font: 700 18px / 1.2 var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+.insights.dashboard-reading .reading-stamps ol {
+  grid-area: week;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  justify-self: end;
+  width: 100%;
+  max-width: 300px;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.insights.dashboard-reading .reading-stamps .reading-day {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  opacity: 1;
+}
+
+.insights.dashboard-reading .reading-day-mark {
+  width: 18px;
+  height: 18px;
+  max-height: none;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: transparent;
+}
+
+.insights.dashboard-reading .reading-day-filled .reading-day-mark {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.insights.dashboard-reading .reading-day-restored .reading-day-mark {
+  border-color: var(--accent);
+  background: linear-gradient(
+    to top right,
+    transparent calc(50% - 1px),
+    var(--accent) calc(50% - 1px),
+    var(--accent) calc(50% + 1px),
+    transparent calc(50% + 1px)
+  );
+}
+
+/* The mark carries the restored diagonal; the legacy cell pseudo is retired. */
+.insights.dashboard-reading .reading-day-restored::after {
+  content: none;
+}
+
+.insights.dashboard-reading .reading-day-letter {
+  color: var(--ink-muted);
+  font: 500 10px / 1.2 var(--font-sans);
+}
+
+/* Today is the only outlined mark until its pages are actually logged. */
+.insights.dashboard-reading .reading-day-today .reading-day-mark {
+  border: 2px solid var(--accent);
+  background: transparent;
+}
+
+.insights.dashboard-reading .reading-day-today.reading-day-filled .reading-day-mark {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.insights.dashboard-reading .reading-day-today .reading-day-letter {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.insights.dashboard-reading .reading-streak-best {
+  grid-area: best;
+  align-self: center;
+  justify-self: end;
+  margin: 0;
+  color: var(--ink-muted);
+  font: 400 12px / 1.4 var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.insights.dashboard-reading .reading-streak-best strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Phones: current and longest share the top line, the week takes the width. */
+@container (max-width: 559px) {
+  .insights.dashboard-reading .reading-streak {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "current best"
+      "count best"
+      "week week";
+    column-gap: 12px;
+    row-gap: 6px;
+  }
+
+  .insights.dashboard-reading .reading-stamps ol {
+    max-width: none;
+    justify-self: stretch;
+    margin-top: 2px;
+  }
+}

@@ -1,3 +1,4 @@
+import { CheckIcon, PlusIcon } from "../../components/icons";
 import type { Candidate } from "../../lib/catalog";
 import { CoverImage } from "../covers/CoverImage";
 import { identity } from "./identity";
@@ -43,6 +44,7 @@ export function CandidateRow({
             }
           }}
         >
+          {added ? <CheckIcon /> : <PlusIcon />}
           {added
             ? "Added"
             : saving === key

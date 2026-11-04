@@ -1,3 +1,5 @@
+@import "./reading-dashboard.css";
+
 .bookmark {
   position: absolute;
   inset: var(--space-8) 0 0 auto;
@@ -82,36 +84,8 @@
   margin-top: var(--space-24);
   border-top: var(--rule-width) solid var(--rule);
 }
-.reading input,
-.reading button {
-  min-height: var(--touch);
-  min-width: var(--touch);
-  border: var(--rule-width) solid var(--ink-muted);
-  border-radius: var(--radius-input);
-  background: var(--surface-raised);
-  color: var(--ink);
-  font: inherit;
-  padding: var(--space-8) var(--space-12);
-}
-.reading input {
-  width: 100%;
-  caret-color: var(--ink);
-}
-.reading button {
-  cursor: pointer;
-}
-.reading button:hover:not(:disabled) {
-  text-decoration: underline;
-}
-.reading button:active:not(:disabled) {
-  background: var(--surface);
-}
-.reading button:disabled {
-  color: var(--ink-muted);
-  cursor: default;
-}
 .reading :focus-visible {
-  outline: var(--focus-width) solid var(--ink);
+  outline: var(--focus-width) solid var(--accent);
   outline-offset: var(--focus-offset);
 }
 .reading-steps {
@@ -119,29 +93,11 @@
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-8);
 }
-.reading button.reading-primary {
-  background: var(--accent);
-  color: var(--on-accent);
-  border-color: var(--accent);
-}
-.reading button.reading-primary:active:not(:disabled) {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--surface);
-}
-.reading button.reading-primary:disabled {
-  background: var(--surface-raised);
-  color: var(--ink);
-  border-color: var(--rule);
-}
 .reading-feedback:has(p:empty):not(:has(button)) {
   display: none;
 }
 .reading-feedback {
   margin-top: var(--space-16);
-}
-.reading-feedback button {
-  margin-top: var(--space-8);
 }
 .reading-streak {
   margin-top: var(--space-32);
@@ -173,8 +129,7 @@
   padding: var(--space-48) 0;
   text-align: center;
 }
-.reading-empty button {
-  width: 100%;
+.reading-empty .primary {
   margin-top: var(--space-24);
 }
 
@@ -244,16 +199,6 @@
   background: var(--ink);
   transform: rotate(45deg);
 }
-.reading button.reading-primary {
-  background: var(--ink);
-  color: var(--surface);
-  border-color: var(--ink);
-}
-.reading button:disabled {
-  color: var(--ink);
-  border-style: solid;
-}
-
 .reading-jacket .reading-cover {
   animation: jacket-settle var(--motion) var(--ease);
 }
@@ -285,10 +230,6 @@
   display: grid;
   place-content: center;
   border-block: var(--rule-width) solid var(--rule);
-}
-
-.reading-empty button {
-  width: auto;
 }
 
 /* a file input is a browser control until you dress it */
@@ -398,7 +339,6 @@
   border-color: var(--ink);
 }
 
-/* the jacket is printed, not embossed */
 .reading-jacket {
   box-shadow: none;
 }
@@ -416,77 +356,4 @@
 .cover-controls label {
   width: 100%;
   justify-content: center;
-}
-
-.reading-desktop-record {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .app-shell .reading.reading-today:has(.reading-two-pane),
-  .reading:has(.reading-two-pane) {
-    display: block;
-    max-width: calc(var(--gutter) * 2 + var(--touch) * 14 + var(--space-32));
-    --today-jacket-width: var(--shelf-jacket-height);
-    --today-jacket-height: calc(var(--today-jacket-width) * 3 / 2);
-  }
-
-  .reading-two-pane {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
-    column-gap: var(--space-32);
-    align-items: start;
-  }
-
-  .reading .reading-two-pane .reading-book {
-    display: block;
-    grid-column: 1;
-    grid-row: 1 / 5;
-  }
-
-  .reading-two-pane > .reading-book > .reading-book-copy {
-    display: none;
-  }
-
-  .reading .reading-two-pane .reading-jacket {
-    position: relative;
-    display: block;
-  }
-
-  .reading .reading-two-pane .today-cover {
-    display: grid;
-    gap: var(--space-16);
-  }
-
-  .reading .reading-two-pane .cover-controls {
-    grid-row: auto;
-  }
-
-  .reading .reading-two-pane .reading-desktop-record,
-  .reading .reading-two-pane .reading-stepper,
-  .reading .reading-two-pane .reading-feedback,
-  .reading .reading-two-pane .reading-streak {
-    grid-column: 2;
-  }
-
-  .reading .reading-two-pane .reading-desktop-record {
-    display: block;
-    grid-row: 2;
-    margin-top: var(--space-24);
-  }
-
-  .reading .reading-two-pane .reading-stepper {
-    grid-row: 1;
-    padding-top: 0;
-    margin-top: 0;
-    border-top: 0;
-  }
-
-  .reading .reading-two-pane .reading-feedback {
-    grid-row: 3;
-  }
-
-  .reading .reading-two-pane .reading-streak {
-    grid-row: 4;
-  }
 }

@@ -52,27 +52,6 @@
   line-height: var(--small-leading);
 }
 
-.cover-controls input[type="file"] {
-  width: 100%;
-  min-width: 0;
-  padding: var(--space-4);
-  font-size: var(--small-size);
-}
-
-.cover-controls input::file-selector-button {
-  min-height: var(--touch);
-  margin-right: var(--space-8);
-  border: 0;
-  background: var(--surface-raised);
-  color: var(--ink);
-  font: inherit;
-  cursor: pointer;
-}
-
-.cover-controls input::file-selector-button:hover {
-  text-decoration: underline;
-}
-
 .reading .cover-controls button {
   padding: var(--space-8);
   font-size: var(--small-size);

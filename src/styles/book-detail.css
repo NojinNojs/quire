@@ -1,41 +1,144 @@
+@import "./book-review.css";
+@import "./book-detail-status.css";
+@import "./book-detail-edit.css";
+
+/* Book detail: identity, edition facts, and the action that follows. */
 .shell.book-detail {
-  max-width: 72rem;
-  padding-bottom: calc(var(--nav-height) + 32px);
+  max-width: 60rem;
+  padding: var(--space-24) 20px calc(var(--nav-height) + var(--space-32));
 }
+
+.book-detail-entry {
+  max-width: 52rem;
+}
+
+.book-detail > .book-detail-entry > .settings-link {
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+  line-height: var(--small-leading);
+}
+
+.book-detail > .book-detail-entry > .settings-link:hover {
+  color: var(--ink);
+}
+
+.book-detail-head {
+  margin: var(--space-8) 0 var(--space-16);
+}
+
 .book-detail h1 {
-  margin: 12px 0 0;
-  font: italic 500 clamp(28px, 3.2vw, 40px) / 1.1 var(--font-serif);
+  margin: 0;
+  font: 700 clamp(24px, 2.6vw, 32px) / 1.2 var(--font-sans);
+  letter-spacing: -0.03em;
   overflow-wrap: anywhere;
 }
-.book-detail .demo-book-record {
-  margin: 24px 0;
+
+.book-detail-author {
+  margin: var(--space-4) 0 0;
+  color: var(--ink-muted);
+  font: 400 var(--body-size) / var(--body-leading) var(--font-sans);
 }
-.book-detail .demo-book-actions,
-.book-delete {
-  margin: 24px 0;
-}
-.book-detail button {
-  min-height: 48px;
-}
-.book-detail .catalog-form {
-  max-width: 40rem;
-}
-.book-delete {
-  padding: 16px;
-  border: 1px solid currentColor;
-  border-radius: 8px;
-}
-.book-delete button + button {
-  margin-left: 8px;
-}
-.book-extra-field {
+
+.book-detail-record {
   display: grid;
-  gap: 8px;
-  max-width: 40rem;
-  margin: 16px 0;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-16) var(--space-24);
+  padding-bottom: var(--space-24);
+  border-bottom: var(--rule-width) solid var(--rule);
 }
-.book-extra-field input {
-  min-height: 48px;
+
+.book-detail-cover {
+  min-width: 0;
+}
+
+.book-detail .demo-detail-cover {
+  display: block;
   width: 100%;
-  font: inherit;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  border: var(--rule-width) solid var(--rule);
+  border-radius: 6px;
+  background: var(--surface-subtle);
+  object-fit: contain;
+}
+
+.book-detail-facts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8) var(--space-24);
+  min-width: 0;
+  margin: 0;
+}
+
+.book-detail-facts > div {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.book-detail-facts dt {
+  color: var(--ink-muted);
+  font: 500 10px / 1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.book-detail-facts dd {
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--small-size);
+  line-height: var(--small-leading);
+  overflow-wrap: anywhere;
+}
+
+.book-detail-status dd {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.book-detail-reading {
+  display: grid;
+  gap: var(--space-24) var(--space-32);
+  align-items: start;
+}
+
+.book-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-top: var(--space-24);
+  padding-top: var(--space-16);
+  border-top: var(--rule-width) solid var(--rule);
+}
+
+.book-detail-actions .book-detail-delete {
+  color: var(--accent);
+}
+
+@media (min-width: 40rem) {
+  .book-detail-record {
+    grid-template-columns: 140px minmax(0, 1fr);
+  }
+
+  .book-detail-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .book-detail-reading {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 30rem) {
+  .shell.book-detail {
+    padding-inline: var(--space-16);
+  }
+
+  .book-detail-record {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: var(--space-12) var(--space-16);
+  }
 }

@@ -2,7 +2,7 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { createPageLogStore, type PageLogOptions } from "./pageLogStore";
 
 /** Mount once per active book and reader, using a key when that identity changes. */
-export function usePageLog(options: PageLogOptions) {
+export function usePageLog(options: PageLogOptions & { snapshotDay?: string }) {
   const [store] = useState(() =>
     createPageLogStore({
       ...options,
@@ -10,6 +10,10 @@ export function usePageLog(options: PageLogOptions) {
     }),
   );
   const snapshot = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot);
+  useEffect(() => {
+    store.setDay(options.day);
+    if (options.snapshotDay) store.syncDay(options.snapshotDay, options.pagesToday);
+  }, [store, options.day, options.snapshotDay, options.pagesToday]);
   useEffect(() => {
     const retry = () => {
       void store.retry();

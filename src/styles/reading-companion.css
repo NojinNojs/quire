@@ -1,0 +1,189 @@
+/* The reading desk: the book, its log console and the week share one surface,
+   divided by rules instead of three floating cards. */
+.insights.dashboard-reading .reading-today {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* The desk is sized by its own column, not the viewport. */
+.insights.dashboard-reading .dashboard-reading-main {
+  container-type: inline-size;
+}
+
+.insights.dashboard-reading .reading-two-pane {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--surface-raised);
+}
+
+.insights.dashboard-reading .reading-two-pane > * {
+  min-width: 0;
+}
+
+.insights.dashboard-reading .reading-console,
+.insights.dashboard-reading .reading-streak {
+  border-top: 1px solid var(--rule);
+}
+
+/* The book: jacket and identity on top, progress rule across the cell base. */
+.insights.dashboard-reading .reading-book {
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(88px, 18cqw, 124px) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto auto auto;
+  grid-template-areas:
+    "cover copy"
+    "progress progress"
+    "link link"
+    "controls controls";
+  align-items: start;
+  column-gap: 16px;
+  row-gap: 2px;
+  padding: 16px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.insights.dashboard-reading .reading-jacket,
+.insights.dashboard-reading .reading-jacket .today-cover {
+  display: contents;
+}
+
+.insights.dashboard-reading .reading-jacket .reading-cover {
+  grid-area: cover;
+  align-self: start;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  flex: none;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--surface-subtle, #edf2ef);
+  animation: none;
+}
+
+.insights.dashboard-reading .reading-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.insights.dashboard-reading .reading-book-copy {
+  grid-area: copy;
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  min-width: 0;
+}
+
+.insights.dashboard-reading .reading-book-copy h2 {
+  min-width: 0;
+  margin: 0;
+  color: var(--ink);
+  font: 600 21px / 1.25 var(--font-sans);
+  letter-spacing: -0.015em;
+  overflow-wrap: anywhere;
+}
+
+.insights.dashboard-reading .reading-book-copy p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.insights.dashboard-reading .reading-author {
+  color: var(--ink);
+  font: 500 14px / 1.4 var(--font-sans);
+}
+
+.insights.dashboard-reading .reading-meta {
+  color: var(--ink-muted);
+  font: 400 12.5px / 1.5 var(--font-sans);
+}
+
+.insights.dashboard-reading .reading-progress {
+  grid-area: progress;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+}
+
+.insights.dashboard-reading .reading-progress-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 12px;
+}
+
+.insights.dashboard-reading .reading-progress-head-unknown {
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.insights.dashboard-reading .reading-progress-head-unknown .reading-number {
+  margin: 0;
+  color: var(--ink);
+  font: 700 13px / 1.5 var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+.insights.dashboard-reading .reading-position {
+  margin: 0;
+  color: var(--ink);
+  font: 500 13px / 1.5 var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+.insights.dashboard-reading .reading-progress .reading-position strong {
+  font-weight: 700;
+}
+
+.insights.dashboard-reading .reading-percent {
+  margin: 0;
+  color: var(--accent);
+  font: 700 12px / 1.5 var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+.insights.dashboard-reading .reading-progress-note {
+  margin: 6px 0 0;
+  color: var(--ink-muted);
+  font: 400 12px / 1.4 var(--font-sans);
+}
+
+.insights.dashboard-reading .reading-detail-link {
+  grid-area: link;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--accent);
+  font: 600 13px / 1.3 var(--font-sans);
+  text-underline-offset: 3px;
+}
+
+/* Only split when both halves fit; below that the desk stacks by design. */
+@container (min-width: 640px) {
+  .insights.dashboard-reading .reading-two-pane {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .insights.dashboard-reading .reading-console {
+    border-top: 0;
+    border-left: 1px solid var(--rule);
+  }
+
+  .insights.dashboard-reading .reading-streak {
+    grid-column: 1 / -1;
+  }
+}

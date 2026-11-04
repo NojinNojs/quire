@@ -48,6 +48,7 @@ export const sampleBooks = [
     year: 1929,
     pages: 172,
     status: "finished",
+    finished_at: "2026-01-01",
     rating: 5,
   }),
   book("demo-meditations", "Meditations", "Marcus Aurelius", "188", {

@@ -16,9 +16,9 @@
   width: 204px;
   height: 306px;
   flex-shrink: 0;
-  border: 1px solid var(--rule);
+  border: 1px solid var(--auth-rule);
   border-radius: 0;
-  box-shadow: 3px 5px 10px rgb(58 43 29 / 18%);
+  box-shadow: 3px 5px 10px var(--auth-shadow);
 }
 
 .auth-reading-record {
@@ -43,7 +43,7 @@
 .auth-reading-streak {
   margin-top: 24px;
   padding-top: 15px;
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--auth-rule);
 }
 
 .auth-record-label {
@@ -74,11 +74,11 @@
 }
 
 .auth-reading-day-filled .auth-day-mark {
-  background: var(--ink);
+  background: var(--auth-ink);
 }
 
 .auth-reading-day-today .auth-day-mark {
-  border: 2px solid var(--ink);
+  border: 2px solid var(--auth-ink);
 }
 
 .auth-reading-day-restored .auth-day-mark {
@@ -92,7 +92,7 @@
   left: 7px;
   width: 1px;
   height: 100%;
-  background: var(--ink);
+  background: var(--auth-ink);
   transform: rotate(45deg);
 }
 
@@ -103,7 +103,7 @@
   gap: 16px;
   margin: 24px 0 0;
   padding-block: 15px;
-  border-block: 1px solid var(--rule);
+  border-block: 1px solid var(--auth-rule);
   font: 400 12px / 24px var(--font-sans);
 }
 

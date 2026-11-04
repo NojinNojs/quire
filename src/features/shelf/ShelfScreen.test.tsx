@@ -26,6 +26,13 @@ function setup(overrides: Partial<Parameters<typeof ShelfScreen>[0]> = {}) {
   };
 }
 
+/** Base UI commits on a real pointer activation, so mirror the browser sequence. */
+function choose(view: ReturnType<typeof setup>, name: string) {
+  const option = view.getByRole("option", { name });
+  fireEvent.pointerDown(option, { pointerType: "mouse" });
+  fireEvent.click(option, { detail: 1 });
+}
+
 describe("shelf", () => {
   it("groups editions by DDC class, including unclassified books", () => {
     const view = setup();
@@ -51,9 +58,9 @@ describe("shelf", () => {
       ],
     });
     fireEvent.click(view.getByRole("combobox", { name: "Status" }));
-    fireEvent.click(view.getByRole("option", { name: "Reading" }));
+    choose(view, "Reading");
     fireEvent.click(view.getByRole("combobox", { name: "Language" }));
-    fireEvent.click(view.getByRole("option", { name: "en" }));
+    choose(view, "en");
     fireEvent.change(view.getByRole("searchbox", { name: "Search books" }), {
       target: { value: "  WAVES  " },
     });
@@ -64,7 +71,7 @@ describe("shelf", () => {
     fireEvent.change(view.getByRole("searchbox"), { target: { value: "no match" } });
     expect(view.getByText("No books match these filters.")).toBeTruthy();
     expect(view.queryByRole("list")).toBeNull();
-    fireEvent.click(view.getByRole("button", { name: "Clear filters" }));
+    fireEvent.click(view.getByRole("button", { name: "Reset filters" }));
     expect(view.getByText("7 books")).toBeTruthy();
     expect(view.queryByText("0 active filters")).toBeNull();
   });
@@ -119,7 +126,7 @@ describe("shelf", () => {
   it("filters books with an unknown language", () => {
     const view = setup();
     fireEvent.click(view.getByRole("combobox", { name: "Language" }));
-    fireEvent.click(view.getByRole("option", { name: "Unknown" }));
+    choose(view, "Unknown");
     expect(view.getAllByRole("listitem")).toHaveLength(1);
     expect(view.getByRole("button", { name: "Reading notebook" })).toBeTruthy();
   });

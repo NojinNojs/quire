@@ -1,0 +1,207 @@
+/* Desktop rail: grouped destinations, utility footer and the compact state.
+   Rules are ordered by ascending specificity so the cascade reads top to bottom. */
+@media (min-width: 1024px) {
+  .rail-group-label {
+    display: block;
+    max-height: 24px;
+    margin: var(--space-8) 0 var(--space-4);
+    padding-inline: var(--space-12);
+    overflow: hidden;
+    color: var(--ink-muted);
+    font: 600 var(--label-size) / 1.4 var(--font-sans);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .rail-group-label[data-group="insights"] {
+    margin-top: var(--space-16);
+  }
+
+  .nav-destinations {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav-records {
+    display: flex;
+  }
+
+  .rail-identity {
+    max-height: 20px;
+    margin: 0 0 var(--space-8);
+    padding-inline: var(--space-12);
+    overflow: hidden;
+    color: var(--ink-muted);
+    font: 500 var(--small-size) / 1.4 var(--font-sans);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .rail-footer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-top: auto;
+    padding-top: var(--space-12);
+    border-top: var(--rule-width) solid var(--rule);
+  }
+
+  .dock-glider {
+    display: none;
+  }
+
+  .app-shell .nav-label {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    font: 500 var(--small-size) / var(--small-leading) var(--font-sans);
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+
+  /* The guide row keeps a glyph so it aligns with the settings row at both widths. */
+  .app-shell .guide-glyph {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+    border: var(--rule-width) solid currentColor;
+    border-radius: 50%;
+    font: 600 12px / 1 var(--font-sans);
+  }
+
+  .nav-destinations li {
+    display: flex;
+    min-width: 0;
+  }
+
+  .app-shell .bottom-nav a,
+  .app-shell .rail-footer a,
+  .app-shell .rail-guide {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-12);
+    width: 100%;
+    min-height: var(--touch);
+    min-width: var(--touch);
+    padding: 0 var(--space-12);
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: var(--ink-muted);
+    font: 500 var(--small-size) / var(--small-leading) var(--font-sans);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color var(--motion-fast, 120ms) var(--ease),
+      color var(--motion-fast, 120ms) var(--ease);
+  }
+
+  .app-shell .rail-footer svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+  }
+
+  .app-shell .bottom-nav a svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Motion exists only inside a toggle's window, so a breakpoint swap is instant. */
+  .app-shell[data-nav-animating="true"] .rail-group-label,
+  .app-shell[data-nav-animating="true"] .rail-identity,
+  .app-shell[data-nav-animating="true"] .nav-label {
+    transition:
+      max-width var(--shell-rail-motion) var(--ease),
+      max-height var(--shell-rail-motion) var(--ease),
+      margin var(--shell-rail-motion) var(--ease),
+      opacity var(--motion-fast, 120ms) var(--ease);
+  }
+
+  .app-shell[data-nav-mode="compact"] .brand-word,
+  .app-shell[data-nav-mode="compact"] .rail-note,
+  .app-shell[data-nav-mode="compact"] .rail-identity,
+  .app-shell[data-nav-mode="compact"] .nav-label {
+    opacity: 0;
+  }
+
+  /* Words leave no width behind, so marks and glyphs sit on the compact centre. */
+  .app-shell[data-nav-mode="compact"] .brand-word,
+  .app-shell[data-nav-mode="compact"] .nav-label {
+    max-width: 0;
+  }
+
+  .app-shell[data-nav-mode="compact"] .rail-note,
+  .app-shell[data-nav-mode="compact"] .rail-identity {
+    max-height: 0;
+    margin-bottom: 0;
+  }
+
+  .app-shell[data-nav-mode="compact"] .brand-mark {
+    width: 32px;
+    opacity: 1;
+  }
+
+  .app-shell[data-nav-mode="compact"] .rail-group-label {
+    max-height: 0;
+    margin: 0;
+    opacity: 0;
+  }
+
+  .app-shell[data-nav-animating="true"] .bottom-nav a,
+  .app-shell[data-nav-animating="true"] .rail-footer a,
+  .app-shell[data-nav-animating="true"] .rail-guide {
+    transition:
+      background-color var(--motion-fast, 120ms) var(--ease),
+      color var(--motion-fast, 120ms) var(--ease),
+      gap var(--shell-rail-motion) var(--ease),
+      padding var(--shell-rail-motion) var(--ease);
+  }
+
+  .app-shell .bottom-nav a:hover,
+  .app-shell .rail-footer a:hover,
+  .app-shell .rail-guide:hover {
+    background: var(--surface-subtle);
+    color: var(--ink);
+  }
+
+  .app-shell .bottom-nav a[aria-current="page"] {
+    background: var(--surface-selected);
+    box-shadow: inset 0 0 0 var(--rule-width) var(--shell-active-ring);
+  }
+
+  .app-shell .rail-footer a[aria-current="page"] {
+    background: var(--surface-selected);
+    color: var(--accent);
+  }
+
+  .app-shell[data-nav-mode="compact"] .bottom-nav a,
+  .app-shell[data-nav-mode="compact"] .rail-footer a,
+  .app-shell[data-nav-mode="compact"] .rail-guide {
+    gap: 0;
+    padding-inline: 18px;
+  }
+
+  /* A word appears only after the rail has opened enough to hold it. */
+  .app-shell[data-nav-animating="true"][data-nav-mode="expanded"] .nav-label,
+  .app-shell[data-nav-animating="true"][data-nav-mode="expanded"] .brand-word,
+  .app-shell[data-nav-animating="true"][data-nav-mode="expanded"] .rail-note {
+    transition-delay: 110ms;
+  }
+
+  .app-shell .bottom-nav a[aria-current="page"] .nav-label {
+    font-weight: 700;
+  }
+}

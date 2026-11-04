@@ -1,0 +1,222 @@
+/* Shared header: the wordmark and route context, the rail width control on
+   desktop, one search trigger, and the capture pair. On phones the capture pair
+   keeps both add paths one thumb away and names the scan half "Scan", so four
+   44px targets plus the wordmark still fit 320px; from 768px the scan half and
+   the Search trigger spell out their full words. */
+.app-shell .shell-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--layer-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  width: 100%;
+  max-width: none;
+  height: var(--shell-header-height);
+  margin: 0;
+  padding: 0 var(--shell-header-inset);
+  border-bottom: var(--rule-width) solid var(--rule);
+  background: var(--surface-raised);
+}
+
+.shell-header-id {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  min-width: 0;
+}
+
+.app-shell .shell-header .brand {
+  flex: none;
+  color: var(--accent);
+  font: 600 20px / 1 var(--font-serif);
+  letter-spacing: -0.02em;
+}
+
+/* Breadcrumb text is context, never a heading; the page keeps its own h1. */
+.shell-breadcrumb {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink-muted);
+  font: 500 var(--small-size) / var(--small-leading) var(--font-sans);
+  white-space: nowrap;
+}
+
+.shell-breadcrumb-group,
+.shell-breadcrumb-sep {
+  flex: none;
+  color: var(--ink-muted);
+}
+
+.shell-breadcrumb-current {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.shell-header-actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.app-shell .shell-search {
+  gap: var(--space-8);
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--space-12);
+  border: var(--rule-width) solid transparent;
+  border-radius: 8px;
+  color: var(--ink-muted);
+  font: 600 var(--small-size) / var(--small-leading) var(--font-sans);
+}
+
+.app-shell .shell-search:hover {
+  border-color: var(--rule);
+  background: var(--surface-subtle);
+  color: var(--ink);
+}
+
+.app-shell .shell-search svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.shell-search-key {
+  display: inline-flex;
+}
+
+.shell-search-key > kbd {
+  padding: 2px 4px;
+  border: var(--rule-width) solid var(--rule);
+  border-radius: 4px;
+  color: var(--ink-muted);
+  font: 500 10px / 1.2 var(--font-mono);
+}
+
+/* The More trigger is a disclosure, not a route: no dock slot, no glider. */
+.app-shell .shell-more {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: var(--rule-width) solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.app-shell .shell-more:hover,
+.app-shell .shell-more[data-popup-open] {
+  border-color: var(--rule);
+  background: var(--surface-subtle);
+  color: var(--ink);
+}
+
+.app-shell .shell-more[data-active="true"] {
+  background: var(--surface-selected);
+  color: var(--accent);
+}
+
+.app-shell .shell-more svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* The rail owns navigation utilities from 1024px up; the width control moves
+   into the header there, so the rail head is logo only. */
+.rail-head,
+.rail-footer,
+.rail-group-label {
+  display: none;
+}
+
+.app-shell .shell-rail-toggle {
+  display: none;
+}
+
+/* Below the rail, both add paths stay icon-sized and the shortcut hint waits. */
+@media (max-width: 767px) {
+  .shell-search-label,
+  .shell-search-key,
+  .shell-breadcrumb-group,
+  .shell-breadcrumb-sep {
+    display: none;
+  }
+
+  .app-shell .shell-search {
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+}
+
+/* At 320px the wordmark, four 44px targets and the scan/more words only fit
+   once the inset and the header gap tighten; no target shrinks. */
+@media (max-width: 399px) {
+  .app-shell .shell-header {
+    gap: var(--space-8);
+    padding-inline: var(--space-12);
+  }
+
+  .shell-breadcrumb {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* The header's first line starts where the page's content does, once the
+     centred content column is accounted for. */
+  .app-shell .shell-header {
+    padding-inline: max(
+      var(--space-32),
+      calc((100% - var(--content-max-width)) / 2 + var(--space-32))
+    );
+  }
+
+  .app-shell .shell-header .brand,
+  .app-shell .shell-more {
+    display: none;
+  }
+
+  .app-shell .shell-rail-toggle {
+    display: inline-flex;
+    flex: none;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+    border: var(--rule-width) solid transparent;
+    border-radius: 8px;
+    color: var(--ink-muted);
+  }
+
+  .app-shell .shell-rail-toggle:hover {
+    border-color: var(--rule);
+    background: var(--surface-subtle);
+    color: var(--ink);
+  }
+
+  .app-shell .shell-rail-toggle svg {
+    width: 20px;
+    height: 20px;
+    transform: rotate(180deg);
+  }
+
+  .app-shell[data-nav-mode="compact"] .shell-rail-toggle svg {
+    transform: none;
+  }
+
+  /* Motion exists only inside a toggle's window, so a breakpoint swap is instant. */
+  .app-shell[data-nav-animating="true"] .shell-rail-toggle svg {
+    transition: transform var(--motion-ui, 160ms) var(--ease);
+  }
+}

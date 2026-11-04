@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { accessSync, constants } from "node:fs";
 
-export const browserPath = "/run/current-system/sw/bin/brave";
+export const browserPath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ?? "/run/current-system/sw/bin/brave";
 export const browserAvailable = (() => {
   try {
     accessSync(browserPath, constants.X_OK);
@@ -19,7 +19,7 @@ export const stack = (() => {
         stdio: ["ignore", "pipe", "ignore"],
         timeout: 10_000,
       }),
-    ) as { API_URL: string; ANON_KEY: string; SERVICE_ROLE_KEY: string };
+    ) as { API_URL: string; ANON_KEY: string; SERVICE_ROLE_KEY: string; MAILPIT_URL?: string; INBUCKET_URL?: string };
   } catch {
     return null;
   }

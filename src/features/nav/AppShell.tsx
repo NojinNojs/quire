@@ -1,27 +1,47 @@
-import { type ReactNode, useRef } from "react";
-import { SearchIcon, SettingsIcon, ShelfIcon, TodayIcon } from "../../components/icons";
-import { openProductTour, ProductTour } from "../guide/ProductTour";
+import { Tooltip } from "@base-ui/react/tooltip";
+import { type ReactNode, type TransitionEvent, useCallback, useRef, useState } from "react";
+import { ProductTour } from "../guide/ProductTour";
+import { NavigationSearch } from "./NavigationSearch";
 import type { Route } from "./routes";
-
-const destinations = [
-  { route: "shelf", label: "Collection", Icon: ShelfIcon },
-  { route: "today", label: "Today", Icon: TodayIcon },
-  { route: "search", label: "Add book", Icon: SearchIcon },
-] as const;
+import { ShellHeader } from "./ShellHeader";
+import { ShellNav } from "./ShellNav";
+import { useNavMode } from "./useNavMode";
+import { useRailMotion } from "./useRailMotion";
 
 export function AppShell({
   route,
   children,
   guideScope = "reader",
+  onScan,
 }: {
   route: Route;
   children: ReactNode;
   guideScope?: string;
+  onScan?: () => void;
 }) {
   const content = useRef<HTMLDivElement>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const openSearch = useCallback(() => setSearchOpen(true), []);
+  const closeSearch = useCallback(() => setSearchOpen(false), []);
+  const { mode, toggle: toggleMode } = useNavMode();
+  const { animating, toggle, stop } = useRailMotion(toggleMode);
+
+  // Rail motion belongs to the toggle alone: crossing the layout breakpoint must
+  // swap widths instantly, so the transition only exists while a toggle is fresh.
+  const endRailMotion = useCallback(
+    (event: TransitionEvent<HTMLDivElement>) => {
+      if (event.target === event.currentTarget && event.propertyName === "padding-left") stop();
+    },
+    [stop],
+  );
 
   return (
-    <div className="app-shell">
+    <div
+      className="app-shell"
+      data-nav-mode={mode}
+      data-nav-animating={animating ? "true" : undefined}
+      onTransitionEnd={endRailMotion}
+    >
       {/* biome-ignore lint/a11y/useValidAnchor: native skip-link semantics with focus managed to preserve the hash route. */}
       <a
         className="skip-link"
@@ -38,56 +58,28 @@ export function AppShell({
       >
         Skip to main content
       </a>
-      <header className="shell app-header shell-header">
-        <span className="brand">Quire</span>
-        <div className="shell-header-actions">
-          <button className="shell-guide" type="button" onClick={openProductTour}>
-            Guide
-          </button>
-          <a
-            className="shell-settings"
-            href="#/settings"
-            aria-label="Settings"
-            title="Settings"
-            aria-current={route === "settings" ? "page" : undefined}
-          >
-            <SettingsIcon />
-          </a>
-        </div>
-      </header>
-      <ProductTour key={guideScope} scope={guideScope} />
-      <div
-        className="shell-screen"
-        id="main-content"
-        ref={content}
-        key={typeof route === "object" ? `book-${route.id}` : route}
-        tabIndex={-1}
-      >
-        {children}
-      </div>
-      <nav className="bottom-nav" aria-label="Main navigation">
-        <span
-          className="nav-indicator"
-          data-route={typeof route === "object" ? "shelf" : route}
-          aria-hidden="true"
+      <Tooltip.Provider delay={450} closeDelay={80}>
+        <ShellHeader
+          route={route}
+          mode={mode}
+          onToggle={toggle}
+          searchOpen={searchOpen}
+          onOpenSearch={openSearch}
+          onScan={onScan}
         />
-        {destinations.map(({ route: destination, label, Icon }) => (
-          <a
-            key={destination}
-            href={`#/${destination}`}
-            aria-label={label}
-            title={label}
-            aria-current={
-              route === destination || (typeof route === "object" && destination === "shelf")
-                ? "page"
-                : undefined
-            }
-          >
-            <Icon />
-            <span className="nav-label">{label}</span>
-          </a>
-        ))}
-      </nav>
+        <ProductTour key={guideScope} scope={guideScope} />
+        <NavigationSearch open={searchOpen} onOpenChange={setSearchOpen} onNavigate={closeSearch} />
+        <div
+          className="shell-screen"
+          id="main-content"
+          ref={content}
+          key={typeof route === "object" ? `book-${route.id}` : route}
+          tabIndex={-1}
+        >
+          {children}
+        </div>
+        <ShellNav route={route} mode={mode} />
+      </Tooltip.Provider>
     </div>
   );
 }

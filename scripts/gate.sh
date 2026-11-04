@@ -26,8 +26,8 @@ done
 echo "== end to end smoke (skipped when supabase or system Chromium is unavailable)"
 if ! supabase status >/dev/null 2>&1; then
   echo "supabase not running, skipping end to end smoke"
-elif [ ! -x /run/current-system/sw/bin/brave ]; then
-  echo "system Chromium missing or not executable at /run/current-system/sw/bin/brave, skipping end to end smoke; no browser downloaded"
+elif [ ! -x "${PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH:-/run/current-system/sw/bin/brave}" ]; then
+  echo "system Chromium missing or not executable; set PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH; no browser downloaded"
 else
   npm run test:e2e || exit 1
 fi

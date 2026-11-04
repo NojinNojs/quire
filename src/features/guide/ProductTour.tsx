@@ -49,10 +49,20 @@ export function ProductTour({ scope }: { scope: string }) {
       }
       setPhase(null);
       setRect(null);
+      const isVisible = (node: HTMLElement | null) => {
+        if (!node?.isConnected) return false;
+        for (let element: HTMLElement | null = node; element; element = element.parentElement) {
+          if (getComputedStyle(element).display === "none") return false;
+        }
+        return true;
+      };
       const previous = returnFocus.current;
-      if (previous?.isConnected) previous.focus({ preventScroll: true });
-      else
-        document.querySelector<HTMLButtonElement>(".shell-guide")?.focus({ preventScroll: true });
+      const target = isVisible(previous)
+        ? previous
+        : [...document.querySelectorAll<HTMLElement>(".shell-guide")].find(
+            (node) => !node.hasAttribute("disabled") && isVisible(node),
+          );
+      target?.focus({ preventScroll: true });
     },
     [key],
   );

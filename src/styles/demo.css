@@ -19,29 +19,10 @@
 }
 
 .demo-banner-actions,
-.demo-book-actions,
-.demo-reading-actions {
+.demo-book-actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-8) var(--space-16);
-}
-
-.demo-link {
-  min-height: var(--touch);
-  padding: var(--space-8) 0;
-  border: 0;
-  background: none;
-  color: var(--ink);
-  font: inherit;
-  text-decoration: underline;
-  text-underline-offset: var(--space-4);
-  cursor: pointer;
-}
-
-.demo-link:hover,
-.demo-button:hover {
-  background: var(--surface-raised);
-  text-decoration: underline;
 }
 
 .demo-reset,
@@ -61,19 +42,8 @@
   display: none;
 }
 
-.demo-reset .demo-link {
+.demo-reset .quiet {
   margin-inline-start: var(--space-16);
-}
-
-.demo-button {
-  min-height: var(--touch);
-  padding: var(--space-8) var(--space-16);
-  border: var(--rule-width) solid var(--ink-muted);
-  border-radius: var(--radius-input);
-  background: var(--surface);
-  color: var(--ink);
-  font: inherit;
-  cursor: pointer;
 }
 
 .demo-help,
@@ -96,76 +66,6 @@
 
 .demo-search button:disabled {
   color: var(--ink-muted);
-}
-
-.demo-book-record {
-  display: grid;
-  grid-template-columns: var(--today-jacket-width) minmax(0, 1fr);
-  gap: var(--space-16);
-  margin-block: var(--space-24);
-}
-
-.demo-detail-cover {
-  width: var(--today-jacket-width);
-  height: var(--today-jacket-height);
-}
-
-.demo-book-record p {
-  margin: var(--space-8) 0;
-}
-
-.demo-progress {
-  font-family: var(--font-mono);
-  font-size: var(--mono-size);
-  font-variant-numeric: tabular-nums;
-}
-
-.demo-book-actions > .primary {
-  flex: 1;
-  min-width: 0;
-  height: auto;
-  min-height: var(--touch);
-  padding: var(--space-8) var(--space-16);
-}
-
-.demo-book-actions > .primary,
-.demo-search .primary {
-  background: var(--ink);
-  color: var(--surface);
-}
-
-.demo-field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
-  margin-top: var(--space-24);
-}
-
-.demo-field select,
-.demo-field textarea {
-  width: 100%;
-  min-width: 0;
-  min-height: var(--touch);
-  padding: var(--space-12);
-  border: var(--rule-width) solid var(--ink-muted);
-  border-radius: var(--radius-input);
-  background: var(--surface-raised);
-  color: var(--ink);
-  font: inherit;
-  caret-color: var(--ink);
-}
-
-.demo-field textarea {
-  resize: vertical;
-}
-
-.demo-field textarea::placeholder {
-  color: var(--ink-muted);
-  opacity: 1;
-}
-
-.demo-notes > button {
-  margin-top: var(--space-12);
 }
 
 .book-rating {
@@ -210,10 +110,6 @@
   margin: var(--space-8) 0 0;
   color: var(--ink-muted);
   font-size: var(--small-size);
-}
-
-.demo-reading-actions {
-  padding: 0 var(--gutter) var(--space-32);
 }
 
 @media (min-width: 768px) {

@@ -1,0 +1,33 @@
+@media (max-width: 56rem) {
+  .shelf-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .shelf-search {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 34rem) {
+  .shelf {
+    padding: var(--space-24) var(--space-16) var(--space-48);
+  }
+
+  .shelf-heading {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .shelf-heading > .primary {
+    width: 100%;
+  }
+
+  .shelf-grid .shelf-books {
+    gap: var(--space-24) var(--space-12);
+  }
+
+  .shelf-list .shelf-row {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: var(--space-12);
+  }
+}

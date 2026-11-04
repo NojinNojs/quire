@@ -1,0 +1,17 @@
+@media (prefers-reduced-motion: reduce) {
+  .app-shell,
+  .app-shell[data-nav-animating="true"],
+  .app-shell[data-nav-animating="true"] .bottom-nav,
+  .app-shell[data-nav-animating="true"] .shell-rail-toggle svg,
+  .app-shell[data-nav-animating="true"] .brand-mark,
+  .app-shell[data-nav-animating="true"] .brand-word,
+  .app-shell[data-nav-animating="true"] .rail-note,
+  .app-shell[data-nav-animating="true"] .rail-group-label,
+  .app-shell[data-nav-animating="true"] .rail-identity,
+  .app-shell[data-nav-animating="true"] .nav-label,
+  .app-shell[data-nav-animating="true"] .bottom-nav a,
+  .app-shell[data-nav-animating="true"] .rail-footer a,
+  .app-shell[data-nav-animating="true"] .rail-guide {
+    transition: none;
+  }
+}

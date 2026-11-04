@@ -1,4 +1,5 @@
 import { type LogResult, logPages, type PageLog, type PageLogClient } from "./log";
+import { readPendingLog } from "./pendingLog";
 
 export type LogStatus = "idle" | "undo" | "queued" | "saving" | "saved" | "error";
 export type LogSnapshot = {
@@ -21,7 +22,9 @@ export type PageLogOptions = {
 };
 
 export function createPageLogStore(options: PageLogOptions) {
-  const { client, bookId, day, storage } = options;
+  const { client, bookId, storage } = options;
+  let day = options.day;
+  let syncedDay = day;
   const key = `quire:page-log:${bookId}`;
   const online = options.online ?? (() => navigator.onLine);
   const listeners = new Set<() => void>();
@@ -35,34 +38,15 @@ export function createPageLogStore(options: PageLogOptions) {
     result: null,
     error: null,
   };
-  try {
-    const raw = storage?.getItem(key);
-    const saved: unknown = raw ? JSON.parse(raw) : null;
-    if (
-      saved &&
-      typeof saved === "object" &&
-      "bookId" in saved &&
-      saved.bookId === bookId &&
-      "pages" in saved &&
-      typeof saved.pages === "number" &&
-      Number.isInteger(saved.pages) &&
-      saved.pages > 0 &&
-      saved.pages <= 2_147_483_647 &&
-      "day" in saved &&
-      typeof saved.day === "string" &&
-      /^\d{4}-\d{2}-\d{2}$/.test(saved.day)
-    ) {
-      const pending = saved as PageLog;
-      state = {
-        ...state,
-        pending,
-        current: state.current + pending.pages,
-        pagesToday: state.pagesToday + (pending.day === day ? pending.pages : 0),
-        status: "queued",
-      };
-    }
-  } catch {
-    // Storage may be unavailable in private browsing; the mounted queue still works.
+  const pending = storage ? readPendingLog(storage, bookId) : null;
+  if (pending) {
+    state = {
+      ...state,
+      pending,
+      current: state.current + pending.pages,
+      pagesToday: state.pagesToday + (pending.day === day ? pending.pages : 0),
+      status: "queued",
+    };
   }
   function update(next: Partial<LogSnapshot>) {
     state = { ...state, ...next };
@@ -130,7 +114,7 @@ export function createPageLogStore(options: PageLogOptions) {
     persist(null);
     update({
       current: state.current - pages,
-      pagesToday: state.pagesToday - pages,
+      pagesToday: state.pagesToday - (state.pending.day === day ? pages : 0),
       pending: null,
       status: "idle",
       error: null,
@@ -145,6 +129,17 @@ export function createPageLogStore(options: PageLogOptions) {
       return () => {
         listeners.delete(listener);
       };
+    },
+    setDay: (next: string) => {
+      if (next !== day) {
+        day = next;
+        update({ pagesToday: state.pending?.day === next ? state.pending.pages : 0 });
+      }
+    },
+    syncDay: (snapshotDay: string, pagesToday: number) => {
+      if (snapshotDay !== day || syncedDay === day) return;
+      syncedDay = day;
+      update({ pagesToday: state.pagesToday + pagesToday });
     },
     log,
     undo,

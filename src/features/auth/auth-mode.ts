@@ -82,9 +82,11 @@ export function useAuthMode(client: SupabaseClient): AuthMode {
     setFailed(false);
     setMessage(null);
     try {
-      const { error } = await client.auth.resetPasswordForEmail(email.trim());
+      const { error } = await client.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: window.location.origin + window.location.pathname,
+      });
       if (error) throw error;
-      setMessage("Reset link sent. Check your email, then sign in with the new password.");
+      setMessage("Reset link sent. Open the link in your email to choose a new password.");
     } catch {
       setFailed(true);
       setMessage("Could not send a reset link. Check your connection and try again.");

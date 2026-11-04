@@ -1,36 +1,125 @@
-.primary {
-  transition: none;
+/*
+ * Motion system. Loaded last so interaction feedback and route entrances win
+ * over component defaults. Every animation here has an explicit reduced-motion
+ * counterpart; the shell blanket in dashboard-responsive.css also zeroes any
+ * component transition under reduced motion.
+ */
+:root {
+  --motion-fast: 110ms;
+  --motion-ui: 160ms;
+  --motion-enter: 260ms;
+  --motion-exit: 160ms;
+  --motion-stagger: 20ms;
+  --ease-standard: var(--ease);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-press: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.shell-screen {
-  animation: screen-enter var(--motion) var(--ease);
+/* Interactive controls: colour and opacity only, plus a press nudge. */
+.app-shell :is(button, [role="button"], [role="combobox"], summary):not(.auth-cover),
+.auth-page :is(button, [role="button"], [role="combobox"], summary):not(.auth-cover) {
+  transition:
+    color var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    border-color var(--motion-fast) var(--ease-standard),
+    text-decoration-color var(--motion-fast) var(--ease-standard),
+    opacity var(--motion-fast) var(--ease-standard),
+    transform var(--motion-fast) var(--ease-press);
 }
 
-@media (max-width: 767px) {
-  .nav-indicator {
-    transition:
-      transform var(--motion) var(--ease),
-      opacity var(--motion) var(--ease);
-  }
+:is(.app-shell, .auth-page)
+  :is(button, [role="button"], [role="combobox"]):not(.auth-cover):active:not(
+    :disabled,
+    [aria-disabled="true"]
+  ) {
+  transform: scale(0.985);
+}
+
+/* Text links keep their underline; only the ink eases. */
+.shell-screen :is(a, .settings-link),
+.settings-footer :is(a, button),
+.auth-page :is(a, .auth-forgot, .auth-switch, .auth-reveal) {
+  transition:
+    color var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    text-decoration-color var(--motion-fast) var(--ease-standard);
+}
+
+.shell-header .shell-settings {
+  transition:
+    color var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
+}
+
+/* Form fields announce focus through border and paper, never through value. */
+:is(.app-shell, .auth-page) :is(input, textarea, select) {
+  transition:
+    border-color var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard);
+}
+
+/* A route change eases the new screen in without holding focus or content back. */
+.app-shell .shell-screen {
+  animation: screen-enter var(--motion-enter) var(--ease-out) backwards;
 }
 
 @keyframes screen-enter {
   from {
     opacity: 0;
-    transform: translateY(var(--space-8));
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shell-screen {
+  :root {
+    --motion-fast: 0ms;
+    --motion-ui: 0ms;
+    --motion-enter: 0ms;
+    --motion-exit: 0ms;
+    --motion-stagger: 0ms;
+  }
+
+  .app-shell .shell-screen {
     animation: none;
   }
 
-  .nav-indicator {
-    transition: none;
+  :is(.app-shell, .auth-page)
+    :is(button, [role="button"], [role="combobox"]):not(.auth-cover):active {
+    transform: none;
+  }
+
+  :is(
+    .catalog-results > .catalog-row,
+    .shelf-books > .shelf-row,
+    .journal-days > li,
+    .reading-activity-list > li,
+    .reading-calendar-month[open] > .reading-calendar-days,
+    .quire-select-panel,
+    .book-detail-entry > section[aria-label="Edit book"],
+    .book-detail-entry > section[aria-label="Confirm deletion"],
+    .book-detail .demo-book-actions,
+    .demo-reset,
+    .tour-panel,
+    .tour-backdrop,
+    .scan-sheet[open],
+    .app-shell [role="alert"],
+    .reading-feedback,
+    .reading-feedback button,
+    .shelf-filter-count,
+    .insights-empty,
+    .auth-page .auth-face,
+    .auth-page :is(.auth-message, .auth-field-error, .auth-help)
+  ) {
+    animation: none;
+  }
+
+  .scan-sheet[open]::backdrop {
+    animation: none;
   }
 }

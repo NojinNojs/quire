@@ -1,0 +1,117 @@
+/* Desktop rail: geometry, logo cell and the shared top band. */
+@media (min-width: 1024px) {
+  .app-shell {
+    padding-bottom: 0;
+    padding-left: var(--rail-width);
+  }
+
+  .app-shell[data-nav-animating="true"] {
+    transition: padding-left var(--shell-rail-motion) var(--ease);
+  }
+
+  .app-shell .shell,
+  .app-shell .integration-screen,
+  .app-shell .reading {
+    width: 100%;
+    max-width: none;
+  }
+
+  .bottom-nav {
+    inset: 0 auto 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+    width: var(--rail-width);
+    max-width: none;
+    height: 100%;
+    margin: 0;
+    /* No top padding: the logo cell starts at the same y as the header. */
+    padding: 0 var(--space-12) var(--space-16);
+    border: 0;
+    border-right: var(--rule-width) solid var(--rule);
+    border-radius: 0;
+    background: var(--surface-raised);
+    box-shadow: none;
+    overflow-x: clip;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .app-shell[data-nav-animating="true"] .bottom-nav {
+    transition: width var(--shell-rail-motion) var(--ease);
+  }
+
+  /* One header band: the logo cell is exactly as tall as the header, and its
+     bottom rule runs from the viewport edge into the header rule. */
+  .rail-head {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    height: var(--shell-header-height);
+    margin: 0 calc(-1 * var(--space-12));
+    padding: 0 var(--space-12);
+    border-bottom: var(--rule-width) solid var(--rule);
+  }
+
+  .rail-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .app-shell .rail-head .brand {
+    color: var(--accent);
+    font: 600 20px / 1.15 var(--font-serif);
+    letter-spacing: -0.02em;
+  }
+
+  .brand-word {
+    flex: 0 0 auto;
+    max-width: 96px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .brand-mark {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 0;
+    height: 32px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--surface-subtle);
+    color: var(--accent);
+    font: italic 600 18px / 1 var(--font-serif);
+    opacity: 0;
+  }
+
+  .rail-note {
+    max-width: 100%;
+    max-height: 16px;
+    overflow: hidden;
+    color: var(--ink-muted);
+    font: 400 10px / 1.4 var(--font-sans);
+    letter-spacing: 0.02em;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* Motion exists only inside a toggle's window, so a breakpoint swap is instant. */
+  .app-shell[data-nav-animating="true"] .brand-mark,
+  .app-shell[data-nav-animating="true"] .brand-word,
+  .app-shell[data-nav-animating="true"] .rail-note {
+    transition:
+      width var(--shell-rail-motion) var(--ease),
+      max-width var(--shell-rail-motion) var(--ease),
+      max-height var(--shell-rail-motion) var(--ease),
+      margin var(--shell-rail-motion) var(--ease),
+      opacity var(--motion-ui, 160ms) var(--ease);
+  }
+}

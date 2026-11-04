@@ -1,8 +1,12 @@
-import { type KeyboardEvent, useEffect, useId, useRef, useState } from "react";
+import { Select as BaseSelect } from "@base-ui/react/select";
 import "./select.css";
 
 export type SelectOption = { value: string; label: string };
 
+/**
+ * Single-choice dropdown. The API stays `label/value/options/onChange`; Base UI
+ * owns the portal, keyboard, typeahead, focus restore and the exit transition.
+ */
 export function Select({
   label,
   value,
@@ -14,132 +18,52 @@ export function Select({
   options: readonly SelectOption[];
   onChange: (value: string) => void;
 }) {
-  const id = useId();
-  const root = useRef<HTMLDivElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
-  const selected = Math.max(
-    0,
-    options.findIndex((option) => option.value === value),
-  );
-  const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(selected);
-  const activeIndex = Math.min(active, options.length - 1);
-
-  useEffect(() => {
-    if (!open) return;
-    function outside(event: PointerEvent) {
-      if (!root.current?.contains(event.target as Node)) setOpen(false);
-    }
-    document.addEventListener("pointerdown", outside);
-    return () => document.removeEventListener("pointerdown", outside);
-  }, [open]);
-
-  useEffect(() => {
-    if (open)
-      document
-        .getElementById(`${id}-option-${activeIndex}`)
-        ?.scrollIntoView?.({ block: "nearest" });
-  }, [activeIndex, id, open]);
-
-  function choose(index: number) {
-    const option = options[index];
-    if (option) onChange(option.value);
-    setOpen(false);
-    trigger.current?.focus();
-  }
-
-  function keyDown(event: KeyboardEvent) {
-    switch (event.key) {
-      case "ArrowDown":
-      case "ArrowUp":
-        event.preventDefault();
-        setActive(
-          open
-            ? Math.max(
-                0,
-                Math.min(options.length - 1, activeIndex + (event.key === "ArrowDown" ? 1 : -1)),
-              )
-            : selected,
-        );
-        setOpen(true);
-        break;
-      case "Home":
-      case "End":
-        event.preventDefault();
-        setActive(event.key === "Home" ? 0 : options.length - 1);
-        setOpen(true);
-        break;
-      case "Enter":
-      case " ":
-        event.preventDefault();
-        if (open) choose(activeIndex);
-        else {
-          setActive(selected);
-          setOpen(true);
-        }
-        break;
-      case "Escape":
-        if (open) event.preventDefault();
-        setOpen(false);
-        break;
-      case "Tab":
-        setOpen(false);
-        break;
-    }
-  }
-
   return (
-    <div className="quire-select" ref={root}>
-      <button
-        ref={trigger}
-        type="button"
-        role="combobox"
-        className="quire-select-control"
-        aria-label={label}
-        aria-describedby={`${id}-value`}
-        aria-expanded={open}
-        aria-haspopup="listbox"
-        aria-controls={`${id}-listbox`}
-        aria-activedescendant={open ? `${id}-option-${activeIndex}` : undefined}
-        onKeyDown={keyDown}
-        onBlur={() => setOpen(false)}
-        onClick={() => {
-          setActive(selected);
-          setOpen(!open);
+    <div className="quire-select">
+      <BaseSelect.Root
+        items={options}
+        value={value}
+        modal={false}
+        onValueChange={(next) => {
+          if (typeof next === "string") onChange(next);
         }}
       >
-        <span className="quire-select-label">{label}</span>
-        <span className="quire-select-value" id={`${id}-value`}>
-          {options[selected]?.label}
-        </span>
-        <span className="quire-select-chevron" aria-hidden="true" />
-      </button>
-      {open && (
-        <div
-          className="quire-select-panel"
-          id={`${id}-listbox`}
-          role="listbox"
-          aria-label={label}
-          tabIndex={-1}
-        >
-          {options.map((option, index) => (
-            <div
-              key={option.value}
-              id={`${id}-option-${index}`}
-              role="option"
-              tabIndex={-1}
-              aria-selected={value === option.value}
-              data-active={activeIndex === index}
-              onPointerDown={(event) => event.preventDefault()}
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={() => choose(index)}
-              onKeyDown={keyDown}
-            >
-              {option.label}
-            </div>
-          ))}
-        </div>
-      )}
+        <BaseSelect.Trigger className="quire-select-control" aria-label={label}>
+          <span className="quire-select-label" aria-hidden="true">
+            {label}
+          </span>
+          <span className="quire-select-value">
+            <BaseSelect.Value />
+          </span>
+          <BaseSelect.Icon className="quire-select-chevron" aria-hidden="true" />
+        </BaseSelect.Trigger>
+        <BaseSelect.Portal>
+          <BaseSelect.Positioner
+            className="quire-select-positioner"
+            sideOffset={4}
+            alignItemWithTrigger={false}
+            collisionAvoidance={{ side: "flip", align: "shift" }}
+          >
+            <BaseSelect.Popup className="quire-select-panel">
+              <BaseSelect.List>
+                {options.map((option) => (
+                  <BaseSelect.Item
+                    key={option.value}
+                    value={option.value}
+                    className="quire-select-option"
+                    label={option.label}
+                  >
+                    <BaseSelect.ItemText>{option.label}</BaseSelect.ItemText>
+                    <BaseSelect.ItemIndicator className="quire-select-indicator">
+                      <span className="quire-select-check" />
+                    </BaseSelect.ItemIndicator>
+                  </BaseSelect.Item>
+                ))}
+              </BaseSelect.List>
+            </BaseSelect.Popup>
+          </BaseSelect.Positioner>
+        </BaseSelect.Portal>
+      </BaseSelect.Root>
     </div>
   );
 }

@@ -44,6 +44,17 @@ describe("authentication", () => {
     expect(screen.getByRole("link", { name: "Try the interactive demo" })).toBeTruthy();
   });
 
+  it("sends the reset link back to this page so the recovery view can open", async () => {
+    resetPasswordForEmail.mockResolvedValueOnce({ error: null });
+    render(<AuthForm client={client} />);
+    credentials();
+    fireEvent.click(screen.getByRole("button", { name: "Forgot your password?" }));
+    await waitFor(() => expect(resetPasswordForEmail).toHaveBeenCalledOnce());
+    expect(resetPasswordForEmail).toHaveBeenCalledWith("reader@quire.local", {
+      redirectTo: `${window.location.origin}/`,
+    });
+  });
+
   it("recovers from a reset-link network failure and permits retry", async () => {
     resetPasswordForEmail.mockRejectedValueOnce(new Error("offline"));
     render(<AuthForm client={client} />);

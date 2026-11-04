@@ -1,0 +1,13 @@
+@media (max-width: 30rem) {
+  .settings {
+    padding-inline: var(--space-16);
+  }
+
+  .settings-form {
+    max-width: none;
+  }
+
+  .settings-submit {
+    align-self: stretch;
+  }
+}

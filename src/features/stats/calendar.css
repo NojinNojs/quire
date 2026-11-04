@@ -1,0 +1,200 @@
+/* A year reads as twelve ruled rows. Opening a month reveals a plain day log,
+   so the page stays scannable while every logged date and page count stays reachable. */
+.reading-calendar {
+  margin-top: var(--space-32);
+}
+
+.reading-calendar-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-16);
+  padding-bottom: var(--space-8);
+  border-bottom: var(--rule-width) solid var(--rule);
+}
+
+.reading-calendar .reading-calendar-head h2 {
+  margin: 0;
+  font: 600 var(--body-size) / var(--body-leading) var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+.reading-calendar-head p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+  line-height: var(--small-leading);
+}
+
+.reading-calendar-months {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reading-calendar-months > li {
+  min-width: 0;
+  border-bottom: var(--rule-width) solid var(--rule);
+}
+
+.reading-calendar-month > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto var(--space-12);
+  align-items: center;
+  gap: var(--space-16);
+  min-height: var(--touch);
+  padding: var(--space-8);
+  border-radius: 8px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.reading-calendar-month > summary::-webkit-details-marker {
+  display: none;
+}
+
+.reading-calendar-month > summary::marker {
+  content: "";
+}
+
+.reading-calendar-month > summary:hover {
+  background: var(--surface-subtle);
+}
+
+.reading-calendar-month > summary:focus-visible {
+  outline: var(--focus-width) solid var(--accent);
+  outline-offset: calc(var(--focus-offset) * -1);
+}
+
+.reading-calendar-month-name {
+  font: 600 var(--body-size) / var(--body-leading) var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+.reading-calendar-month-count {
+  color: var(--ink-muted);
+  font: var(--mono-size) / var(--mono-leading) var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.reading-calendar-chevron {
+  width: 8px;
+  height: 8px;
+  border-right: var(--focus-width) solid var(--ink-muted);
+  border-bottom: var(--focus-width) solid var(--ink-muted);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform var(--motion) var(--ease);
+}
+
+.reading-calendar-month[open] .reading-calendar-chevron {
+  transform: rotate(225deg) translate(-2px, -2px);
+}
+
+.reading-calendar-month[open] > summary {
+  background: var(--surface-subtle);
+}
+
+.reading-calendar-month.is-empty .reading-calendar-month-name,
+.reading-calendar-month.is-empty .reading-calendar-month-count {
+  color: var(--ink-muted);
+}
+
+.reading-calendar-month.is-empty .reading-calendar-month-name {
+  font-weight: 500;
+}
+
+.reading-calendar-empty {
+  margin: 0;
+  padding: var(--space-12) var(--space-8) var(--space-16);
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+  line-height: var(--small-leading);
+}
+
+.reading-calendar-days {
+  margin: 0;
+  padding: 0 var(--space-8) var(--space-16);
+  list-style: none;
+}
+
+.reading-calendar-day {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-16);
+  padding: var(--space-8) var(--space-4);
+  border-bottom: var(--rule-width) solid color-mix(in srgb, var(--rule) 60%, transparent);
+}
+
+.reading-calendar-day:last-child {
+  border-bottom: 0;
+}
+
+.reading-calendar-day time {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+  min-width: 0;
+}
+
+.reading-calendar-weekday {
+  min-width: 2.5rem;
+  color: var(--ink-muted);
+  font: var(--mono-size) / var(--mono-leading) var(--font-mono);
+}
+
+.reading-calendar-date {
+  font: var(--small-size) / var(--small-leading) var(--font-sans);
+  font-weight: 600;
+}
+
+.reading-calendar-pages {
+  color: var(--ink-muted);
+  font: var(--mono-size) / var(--mono-leading) var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.reading-calendar-day.has-pages .reading-calendar-pages {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+@media (min-width: 48rem) {
+  .reading-calendar-months {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-32);
+  }
+
+  .reading-calendar-month > summary {
+    padding-inline: var(--space-8) 0;
+  }
+
+  .reading-calendar-empty,
+  .reading-calendar-days {
+    padding-inline: var(--space-8) 0;
+  }
+}
+
+@media (min-width: 40rem) {
+  .reading-calendar-days {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-32);
+  }
+
+  .reading-calendar-day:nth-last-child(2),
+  .reading-calendar-day:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-calendar-chevron {
+    transition: none;
+  }
+}

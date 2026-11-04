@@ -21,7 +21,8 @@ test("account book metadata and deletion persist", async ({ signedInPage: page }
   await page.getByLabel("Title (required)").fill("Discarded title");
   await page.getByRole("button", { name: "Cancel edit" }).click();
   await expect(page.getByRole("heading", { name: "Account revised title" })).toBeVisible();
-  await page.getByRole("button", { name: "Read this book" }).click();
+  await page.getByRole("combobox", { name: "Reading status", exact: true }).selectOption("reading");
+  await page.getByRole("link", { name: "Continue reading", exact: true }).click();
   await expect(page).toHaveURL(/#\/today$/);
   await expect(page.getByRole("heading", { name: "Account revised title" })).toBeVisible();
   await page.goto("/#/shelf");
@@ -50,7 +51,12 @@ test("demo edits survive reload and deleting active book clears Today", async ({
   await page.getByRole("button", { name: "Save book" }).click();
   await page.reload();
   await expect(page.getByRole("heading", { name: "Demo revised title" })).toBeVisible();
-  await page.getByRole("button", { name: "Read this book" }).click();
+  const detailUrl = page.url();
+  await page.goto("/?demo=1#/book/demo-bumi");
+  await page.getByRole("button", { name: "Mark as finished" }).click();
+  await page.goto(detailUrl);
+  await page.getByRole("combobox", { name: "Reading status", exact: true }).selectOption("reading");
+  await expect(page.getByRole("link", { name: "Continue reading", exact: true })).toBeVisible();
   await page.goto("/?demo=1#/shelf");
   await page.getByText("Demo revised title", { exact: true }).click();
   await page.getByRole("button", { name: "Delete book" }).click();

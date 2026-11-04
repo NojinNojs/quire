@@ -10,5 +10,5 @@ export function stepPages(value: number, step: number, current: number, total: n
 }
 
 export function previewPages(current: number, amount: number): string {
-  return `${current} -> ${current + amount}`;
+  return `${current} → ${current + amount}`;
 }

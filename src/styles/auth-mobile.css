@@ -1,16 +1,16 @@
 @media (max-width: 759px) {
   .auth-page {
     padding: 16px;
-    background: var(--auth-desk);
+    background: var(--auth-canvas);
   }
 
   .auth-book {
     width: min(100%, 480px);
     border-radius: 4px 8px 8px 4px;
     box-shadow:
-      0 3px 0 #b9aa91,
-      0 6px 0 #e8ddca,
-      0 12px 24px rgb(58 43 29 / 18%);
+      0 3px 0 var(--auth-page-edge),
+      0 6px 0 var(--auth-paper),
+      0 12px 24px var(--auth-shadow);
   }
 
   .auth-book::before {
@@ -51,7 +51,7 @@
 
   .auth-footer {
     margin-top: 16px;
-    border-top: 1px solid var(--rule);
+    border-top: 1px solid var(--auth-rule);
   }
 
   .auth-account-links {
@@ -64,7 +64,7 @@
   }
 
   .auth-demo {
-    border-top: 1px solid var(--rule);
+    border-top: 1px solid var(--auth-rule);
     flex-wrap: nowrap;
   }
 
@@ -135,9 +135,9 @@
   .auth-page[data-covered="true"] .auth-book {
     background: var(--auth-paper);
     box-shadow:
-      0 3px 0 #b9aa91,
-      0 6px 0 #e8ddca,
-      0 12px 24px rgb(58 43 29 / 18%);
+      0 3px 0 var(--auth-page-edge),
+      0 6px 0 var(--auth-paper),
+      0 12px 24px var(--auth-shadow);
   }
   .auth-cover {
     left: 0;

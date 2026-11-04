@@ -237,6 +237,7 @@ it("validates the standalone fallback and ignores duplicate submissions", () => 
   const onDetected = vi.fn();
   render(<ScanFallback onDetected={onDetected} />);
   const input = screen.getByRole("textbox");
+  expect(input.getAttribute("placeholder")).toBe("9780140328721");
   for (const value of ["", "4006381333931", "9780140328722", "abcdefghijklm"]) {
     fireEvent.change(input, { target: { value } });
     fireEvent.click(screen.getByRole("button", { name: "Use ISBN" }));

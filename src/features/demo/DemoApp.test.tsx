@@ -37,7 +37,6 @@ describe("interactive demo", () => {
   it("logs, undoes, survives navigation and reload, and resets only demo data", () => {
     window.localStorage.setItem("account-data", "keep");
     const view = render(<App />);
-    expect(screen.getByRole("heading", { name: "Today" })).toBeTruthy();
     fireEvent.change(screen.getByLabelText("Pages read"), { target: { value: "10" } });
     fireEvent.click(screen.getByRole("button", { name: "Log 10 pages" }));
     expect(currentPages(loadDemoState(window.localStorage), "demo-bumi")).toBe(58);
@@ -49,7 +48,11 @@ describe("interactive demo", () => {
     view.unmount();
     render(<App />);
     navigate("#/today");
-    expect(screen.getAllByText("58 / 550").length).toBeGreaterThan(0);
+    const progress = screen.getByRole("progressbar", {
+      name: "Reading progress: 58 of 550 pages",
+    });
+    expect(progress.getAttribute("value")).toBe("58");
+    expect(progress.getAttribute("max")).toBe("550");
     expect(screen.getByRole("heading", { name: "4 days streak" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Reset demo" }));
     fireEvent.click(screen.getByRole("button", { name: "Keep changes" }));
@@ -73,12 +76,30 @@ describe("interactive demo", () => {
     );
     expect(added?.pages).toBeNull();
     navigate(`#/book/${added?.id}`);
-    fireEvent.change(screen.getByLabelText("Notes"), {
+    fireEvent.change(screen.getByLabelText("Private notes and review"), {
       target: { value: "A note worth keeping." },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Save notes" }));
     fireEvent.click(screen.getByRole("radio", { name: "4 out of 5" }));
-    fireEvent.click(screen.getByRole("button", { name: "Read this book" }));
+    await act(async () => fireEvent.click(screen.getByRole("button", { name: "Save review" })));
+    await act(async () =>
+      fireEvent.change(screen.getByRole("combobox", { name: "Reading status" }), {
+        target: { value: "reading" },
+      }),
+    );
+    expect(screen.getAllByText(/Another book is already being read/).length).toBeGreaterThan(0);
+    expect(
+      loadDemoState(window.localStorage).books.find((book) => book.status === "reading")?.id,
+    ).toBe("demo-bumi");
+    navigate("#/book/demo-bumi");
+    await act(async () =>
+      fireEvent.click(screen.getByRole("button", { name: "Mark as finished" })),
+    );
+    navigate(`#/book/${added?.id}`);
+    await act(async () =>
+      fireEvent.change(screen.getByRole("combobox", { name: "Reading status" }), {
+        target: { value: "reading" },
+      }),
+    );
     const state = loadDemoState(window.localStorage);
     expect(state.books.filter((book) => book.status === "reading").map((book) => book.id)).toEqual([
       added?.id,
@@ -103,22 +124,31 @@ describe("interactive demo", () => {
     expect(screen.getByText(/Changes last for this visit only/)).toBeTruthy();
     navigate("#/today");
     fireEvent.click(screen.getByRole("button", { name: "Log 1 page" }));
-    expect(screen.getAllByText("49 / 550").length).toBeGreaterThan(0);
+    const progress = screen.getByRole("progressbar", {
+      name: "Reading progress: 49 of 550 pages",
+    });
+    expect(progress.getAttribute("value")).toBe("49");
+    expect(progress.getAttribute("max")).toBe("550");
   });
 
-  it("commits the previous book's pending log when choosing another active book", () => {
+  it("keeps the pending undo window and blocks finish until persistence", async () => {
     render(<App />);
     fireEvent.click(screen.getByRole("button", { name: "Log 1 page" }));
-    navigate("#/book/demo-meditations");
-    fireEvent.click(screen.getByRole("button", { name: "Read this book" }));
-    navigate("#/today");
-    expect(screen.queryByRole("button", { name: "Undo" })).toBeNull();
-    expect(currentPages(loadDemoState(window.localStorage), "demo-bumi")).toBe(49);
-    expect(screen.getByRole("button", { name: "Log 1 page" }).hasAttribute("disabled")).toBe(false);
-    navigate("#/book/demo-meditations");
-    fireEvent.click(screen.getByRole("button", { name: "Mark as finished" }));
-    navigate("#/today");
-    expect(screen.getByRole("button", { name: "Browse catalogue" })).toBeTruthy();
+    navigate("#/book/demo-bumi");
+    expect(screen.getByRole("button", { name: "Mark as finished" }).hasAttribute("disabled")).toBe(
+      true,
+    );
+    expect(loadDemoState(window.localStorage).pending).not.toBeNull();
+    act(() => vi.advanceTimersByTime(5000));
+    await act(async () =>
+      fireEvent.click(screen.getByRole("button", { name: "Mark as finished" })),
+    );
+    const saved = loadDemoState(window.localStorage);
+    expect(saved.books.find((book) => book.id === "demo-bumi")).toMatchObject({
+      status: "finished",
+      finished_at: "2026-10-29",
+    });
+    expect(currentPages(saved, "demo-bumi")).toBe(49);
   });
 });
 

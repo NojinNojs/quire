@@ -1,122 +1,103 @@
+@import "./dashboard-responsive.css";
+
 .app-shell {
-  --surface: #f8f3e8;
-  --surface-raised: #fffaf1;
-  --ink: #28221f;
-  --ink-muted: #5f5148;
-  --rule: #c7b8a6;
-  --accent: #702c3b;
-  --on-accent: #fffaf1;
+  --surface: #f5f7f6;
+  --surface-raised: #ffffff;
+  --ink: #202a27;
+  --ink-muted: #414e48;
+  --rule: #d5dfd9;
+  --accent: #205b48;
+  --on-accent: #ffffff;
+  --surface-selected: #e4efe8;
+  --surface-subtle: #edf2ef;
+  --shell-focus-ink: var(--accent);
+  --rail-wide-width: 216px;
+  --rail-compact-width: 80px;
+  --rail-width: var(--rail-wide-width);
+  --content-max-width: 1200px;
+  --motion: 150ms;
+  min-height: 100vh;
   background: var(--surface);
   color: var(--ink);
-  min-height: 100vh;
+  accent-color: var(--accent);
+  caret-color: var(--accent);
 }
 body:has(.app-shell) {
-  background: #d6c9b5;
+  background: #f5f7f6;
 }
-.app-shell .shell-header {
-  background: #f8f3e8;
+.app-shell ::selection {
+  background: var(--surface-selected);
+  color: var(--ink);
+}
+.app-shell :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.app-shell button,
+.app-shell input,
+.app-shell select,
+.app-shell textarea {
+  font-family: var(--font-sans);
+}
+.app-shell button,
+.app-shell a,
+.app-shell input,
+.app-shell select,
+.app-shell textarea {
+  scroll-margin-block: 88px;
 }
 .app-shell .brand {
-  font: italic 600 28px / 1 var(--font-serif);
-  color: #702c3b;
+  font: 600 30px / 1 var(--font-serif);
+  color: var(--accent);
+  letter-spacing: -0.035em;
 }
-.app-shell .bottom-nav {
-  background: #e8ddcb;
-  border-color: #c7b8a6;
+.app-shell[data-nav-mode="compact"] {
+  --rail-width: var(--rail-compact-width);
 }
-.app-shell .bottom-nav a {
-  gap: 8px;
-  border-radius: 6px;
-  color: #3b322c;
-}
-.app-shell .bottom-nav a[aria-current="page"] {
-  color: #702c3b;
-  font-weight: 700;
-  background: #f8f3e8;
-  text-decoration: none;
-}
-.app-shell .nav-indicator {
-  background: #702c3b;
-}
-.app-shell .nav-indicator[data-route="shelf"] {
-  transform: none;
-}
-.app-shell .nav-indicator[data-route="today"] {
-  transform: translateX(100%);
-}
-.app-shell .nav-indicator[data-route="search"] {
-  transform: translateX(200%);
-}
-.app-shell .nav-label {
-  display: block;
-  font: 600 11px / 1.2 var(--font-sans);
+.app-shell .shell-screen {
+  max-width: 1200px;
+  margin-inline: auto;
 }
 .app-shell .catalog {
-  max-width: 800px;
-  padding: 32px 24px 64px;
+  max-width: none;
+  padding: 28px 20px 48px;
+}
+.app-shell .catalog h1,
+.app-shell .shelf-heading h1,
+.app-shell .insights h1,
+.app-shell .demo-book h1 {
+  font: 700 clamp(26px, 2.5vw, 34px) / 1.2 var(--font-sans);
+  letter-spacing: -0.035em;
+  color: var(--ink);
 }
 .app-shell .shelf .quire-select {
   font-family: var(--font-sans);
 }
 .app-shell .shelf .quire-select-control {
-  min-height: 48px;
+  min-height: 44px;
   height: auto;
-  border-color: #8b7b6b;
-  border-radius: 6px;
+  border: 1px solid var(--ink-muted);
+  border-radius: 8px;
   padding: 4px 12px;
+  background: var(--surface-raised);
 }
-.app-shell .shelf .quire-select-panel [role="option"] {
-  min-height: 48px;
-}
-.app-shell .catalog h1 {
-  font: 500 clamp(32px, 3vw, 44px) / 1.1 var(--font-serif);
-}
-.app-shell .catalog .primary {
-  background: #702c3b;
-  color: #fffaf1;
-  padding-inline: 24px;
-}
-.app-shell .catalog-form input {
-  border-radius: 6px;
-}
+
 .app-shell .entry-tabs button[aria-selected="true"] {
-  color: #702c3b;
-  border-bottom-color: #702c3b;
+  color: var(--accent);
+  border-bottom-color: var(--accent);
   font-weight: 700;
 }
-@media (max-width: 767px) {
-  .app-shell .demo-banner {
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 8px;
-    margin: 8px 16px 0;
-    padding: 6px 12px;
-    font-size: 12.5px;
-  }
-  .app-shell .demo-banner > p:first-child {
-    flex: 1 1 auto;
-    min-width: 0;
-    margin: 0;
-  }
-  .app-shell .demo-banner-actions {
-    flex: 0 0 auto;
-    flex-wrap: nowrap;
-    gap: 8px;
-  }
-  .app-shell .demo-banner .demo-link {
-    min-height: 44px;
-    font-size: 12.5px;
-  }
-  .app-shell .shelf-heading {
-    margin-bottom: 16px;
-  }
-  .app-shell .bottom-nav a {
-    flex-direction: column;
-    gap: 2px;
-    height: 56px;
-  }
-  .app-shell .bottom-nav svg {
-    width: 20px;
-    height: 20px;
-  }
+.app-shell .demo-banner {
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+  margin: 0 24px;
+  padding: 8px 0;
+  font-size: 12px;
+}
+.app-shell .demo-banner-actions {
+  gap: 12px;
+}
+.app-shell .demo-banner .quiet {
+  font-size: 12px;
 }

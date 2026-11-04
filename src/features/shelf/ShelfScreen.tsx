@@ -1,4 +1,5 @@
 import { useId, useState } from "react";
+import { CloseIcon, PlusIcon } from "../../components/icons";
 import { Select } from "../../components/select/Select";
 import type { Book } from "../../data/types";
 import { ErrorPanel } from "../states/ErrorPanel";
@@ -76,16 +77,24 @@ export function ShelfScreen({
       <header className="shelf-heading">
         <div>
           <h1 id={`${id}-heading`}>Collection</h1>
-          <p>Your books, all in one place.</p>
+          <p>Every edition you own, filed by classification.</p>
         </div>
-        <button className="shelf-action" type="button" onClick={onAddBook}>
+        <button className="primary" type="button" onClick={onAddBook}>
+          <PlusIcon />
           Add book
         </button>
       </header>
       <search className="shelf-filters" aria-label="Filter shelf">
         <label className="shelf-search">
-          <span>Search books</span>
-          <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} />
+          <span className="label">Search books</span>
+          <input
+            className="control-input"
+            type="search"
+            placeholder="Title, author, ISBN"
+            autoComplete="off"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
         </label>
         <Select
           label="Status"
@@ -110,17 +119,15 @@ export function ShelfScreen({
         />
       </search>
       <div className="shelf-summary">
-        <span role="status" aria-live="polite">
-          <span>
-            {loading
-              ? "Loading books"
-              : `${filtered.length} ${filtered.length === 1 ? "book" : "books"}`}
-          </span>
-        </span>
+        <p className="shelf-summary-count" role="status" aria-live="polite">
+          {loading
+            ? "Loading books"
+            : `${filtered.length} ${filtered.length === 1 ? "book" : "books"}`}
+        </p>
         <fieldset className="shelf-view" aria-label="Shelf view">
           <button
             type="button"
-            className="shelf-action"
+            className="secondary"
             aria-pressed={view === "grid"}
             onClick={() => changeView("grid")}
           >
@@ -128,7 +135,7 @@ export function ShelfScreen({
           </button>
           <button
             type="button"
-            className="shelf-action"
+            className="secondary"
             aria-pressed={view === "list"}
             onClick={() => changeView("list")}
           >
@@ -138,7 +145,16 @@ export function ShelfScreen({
       </div>
       {activeCount > 0 && (
         <p className="shelf-filter-count">
-          {activeCount} active {activeCount === 1 ? "filter" : "filters"}
+          <span>
+            Showing {filtered.length} of {books.length} {books.length === 1 ? "book" : "books"}
+          </span>
+          <span>
+            {activeCount} active {activeCount === 1 ? "filter" : "filters"}
+          </span>
+          <button className="quiet" type="button" onClick={clearFilters}>
+            <CloseIcon />
+            Clear filters
+          </button>
         </p>
       )}
       {loading ? (
@@ -173,11 +189,11 @@ export function ShelfScreen({
               : "Your shelf is waiting for its first book."}
           </p>
           <button
-            className="shelf-action"
+            className={books.length ? "secondary" : "primary"}
             type="button"
             onClick={books.length ? clearFilters : onAddBook}
           >
-            {books.length ? "Clear filters" : "Add a book"}
+            {books.length ? "Reset filters" : "Add a book"}
           </button>
         </div>
       ) : (

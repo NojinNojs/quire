@@ -12,11 +12,13 @@ export type DemoState = {
   books: Book[];
   logs: DemoLog[];
   pending: { id: string; until: number } | null;
+  profile: { display_name: string | null; annual_goal: number | null };
 };
 
 export function createDemoState(date = new Date()): DemoState {
   return {
     version: 1,
+    profile: { display_name: null, annual_goal: null },
     books: sampleBooks.map((entry) => ({ ...entry })),
     logs: [
       ...[3, 2, 1].map((ago) => {
@@ -79,6 +81,16 @@ export function loadDemoState(storage: Pick<Storage, "getItem">): DemoState {
     const pending = value.pending;
     return {
       ...value,
+      profile: {
+        display_name:
+          typeof value.profile?.display_name === "string" ? value.profile.display_name : null,
+        annual_goal:
+          Number.isInteger(value.profile?.annual_goal) &&
+          (value.profile?.annual_goal ?? 0) >= 1 &&
+          (value.profile?.annual_goal ?? 0) <= 500
+            ? value.profile.annual_goal
+            : null,
+      },
       books: value.books.map((entry) => ({
         ...entry,
         cover_url: sampleCover(entry.title, entry.author),

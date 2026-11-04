@@ -1,0 +1,124 @@
+/* Phone dock: inset surface, shared highlight and 48px destinations. */
+.bottom-nav {
+  position: fixed;
+  z-index: var(--layer-nav);
+  inset-inline: 0;
+  bottom: calc(var(--space-8) + env(safe-area-inset-bottom));
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--shell-dock-gap);
+  width: min(calc(100% - 2 * var(--shell-dock-inset)), 480px);
+  margin-inline: auto;
+  padding: var(--space-8);
+  border: var(--rule-width) solid var(--rule);
+  border-radius: var(--shell-dock-radius);
+  background: var(--surface-raised);
+  box-shadow: var(--shell-dock-shadow);
+}
+
+.nav-destinations {
+  display: contents;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Journal and Reading year live in More on phones, never in a fourth dock slot. */
+.nav-records {
+  display: none;
+}
+
+.nav-destinations li {
+  display: flex;
+  grid-row: 1;
+  min-width: 0;
+}
+
+.nav-destinations li[data-dock-slot="0"] {
+  grid-column: 1;
+}
+
+.nav-destinations li[data-dock-slot="1"] {
+  grid-column: 2;
+}
+
+.nav-destinations li[data-dock-slot="2"] {
+  grid-column: 3;
+}
+
+.bottom-nav a {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  min-height: var(--touch);
+  padding: var(--space-4);
+  border-radius: 10px;
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition:
+    background-color var(--motion-fast, 120ms) var(--ease),
+    color var(--motion-fast, 120ms) var(--ease);
+}
+
+.app-shell .bottom-nav a svg {
+  width: var(--nav-icon-size);
+  height: var(--nav-icon-size);
+}
+
+.nav-label {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  font: 500 12px / 16px var(--font-sans);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bottom-nav a:hover {
+  background: var(--surface-subtle);
+  color: var(--ink);
+}
+
+.bottom-nav a[aria-current="page"] {
+  color: var(--accent);
+}
+
+.bottom-nav a[aria-current="page"] .nav-label {
+  font-weight: 700;
+}
+
+/* The glider is a grid item in the first cell; route data slides it. */
+.dock-glider {
+  grid-area: 1 / 1 / 2 / 2;
+  z-index: 0;
+  border-radius: 10px;
+  background: var(--surface-selected);
+  box-shadow: inset 0 0 0 var(--rule-width) var(--shell-active-ring);
+  pointer-events: none;
+  translate: calc(var(--dock-index) * 100% + var(--dock-index) * var(--shell-dock-gap)) 0;
+  transition:
+    translate var(--motion-ui, 160ms) var(--ease),
+    opacity var(--motion-ui, 160ms) var(--ease);
+}
+
+.bottom-nav[data-dock-index="0"] {
+  --dock-index: 0;
+}
+
+.bottom-nav[data-dock-index="1"] {
+  --dock-index: 1;
+}
+
+.bottom-nav[data-dock-index="2"] {
+  --dock-index: 2;
+}
+
+.bottom-nav[data-dock-index="none"] .dock-glider {
+  opacity: 0;
+}

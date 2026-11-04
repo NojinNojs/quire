@@ -1,0 +1,154 @@
+.shelf-group {
+  margin-top: var(--space-32);
+}
+
+.shelf-band-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-8) var(--space-16);
+  margin: 0 0 var(--space-16);
+  padding-bottom: var(--space-8);
+  border-bottom: var(--rule-width) solid var(--rule);
+}
+
+.shelf-band {
+  margin: 0;
+  font: 600 var(--body-size) / var(--body-leading) var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+.shelf-band-count {
+  color: var(--ink-muted);
+  font: 500 var(--small-size) / var(--small-leading) var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.shelf-class-number {
+  color: var(--accent);
+  font: 500 var(--mono-size) / var(--mono-leading) var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.shelf-books {
+  display: grid;
+  gap: var(--space-24) var(--space-16);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shelf-grid .shelf-books {
+  grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+}
+
+.shelf-row {
+  min-width: 0;
+}
+
+.shelf-jacket {
+  position: relative;
+  width: 100%;
+  max-width: 184px;
+}
+
+/* The bookmark rail only needs room when a bookmark is actually rendered. */
+.shelf-jacket:has(.bookmark) {
+  padding-right: calc(var(--bookmark-width) + var(--mono-size) + var(--space-8));
+}
+
+.shelf-jacket-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-input);
+  background: none;
+  cursor: pointer;
+}
+
+.shelf-jacket-button:focus-visible {
+  outline: var(--focus-width) solid var(--accent);
+  outline-offset: var(--focus-offset);
+}
+
+.shelf-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+}
+
+.shelf-copy {
+  min-width: 0;
+  margin-top: var(--space-8);
+  overflow-wrap: anywhere;
+}
+
+.shelf-copy h3,
+.shelf-copy p {
+  margin: 0;
+}
+
+.shelf-copy h3 button {
+  min-height: var(--control-height);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: 400 var(--body-size) / 1.35 var(--font-serif);
+  font-style: italic;
+  text-align: left;
+  text-underline-offset: var(--space-4);
+  cursor: pointer;
+}
+
+.shelf-copy h3 button:hover {
+  text-decoration: underline;
+}
+
+.shelf-copy .shelf-author {
+  margin-top: var(--space-4);
+  color: var(--ink-muted);
+  font-size: 12px;
+  line-height: var(--small-leading);
+}
+
+.shelf-copy .shelf-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-8);
+  margin-top: var(--space-4);
+  color: var(--ink-muted);
+  font-size: 12px;
+  line-height: var(--small-leading);
+}
+
+.shelf-status {
+  color: var(--accent);
+  font-size: var(--label-size);
+  font-weight: 600;
+}
+
+.shelf-grid .shelf-publisher,
+.shelf-grid .shelf-year,
+.shelf-grid .shelf-pages {
+  display: none;
+}
+
+@media (min-width: 64rem) {
+  .shelf-grid .shelf-metadata {
+    gap: var(--space-4) var(--space-12);
+  }
+
+  .shelf-grid .shelf-publisher,
+  .shelf-grid .shelf-year,
+  .shelf-grid .shelf-pages {
+    display: block;
+  }
+
+  .shelf-grid .shelf-year,
+  .shelf-grid .shelf-pages {
+    font-variant-numeric: tabular-nums;
+  }
+}

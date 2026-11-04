@@ -7,14 +7,41 @@
   flex-wrap: wrap;
   gap: var(--space-8);
 }
+
+/* Explicit preset chrome: never fall back to the browser's gray button. */
 .reading .reading-presets button {
   flex: 1;
-  min-height: var(--touch);
-  padding: var(--space-8);
-  border-radius: 8px;
-  font-size: var(--small-size);
+  min-height: var(--control-height);
+  padding: 0 var(--space-8);
+  appearance: none;
+  border: 1px solid color-mix(in srgb, var(--ink-muted) 60%, var(--rule));
+  border-radius: var(--control-radius);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: 600 var(--small-size) / 1.2 var(--font-sans);
+  cursor: pointer;
 }
+
+.reading .reading-presets button:hover:not(:disabled) {
+  border-color: var(--ink-muted);
+  background: var(--surface-subtle);
+}
+
 .reading .reading-presets button[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--surface);
+  border-color: var(--accent);
+  background: var(--surface-selected);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.reading .reading-presets button:disabled {
+  border-color: var(--rule);
+  background: var(--surface-subtle);
+  color: var(--ink-muted);
+  cursor: not-allowed;
+}
+
+.reading .reading-presets button:focus-visible {
+  outline: var(--focus-width) solid var(--accent);
+  outline-offset: var(--focus-offset);
 }

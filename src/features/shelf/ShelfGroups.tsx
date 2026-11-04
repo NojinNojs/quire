@@ -36,16 +36,21 @@ export function ShelfGroups({
           } as CSSProperties
         }
       >
-        <h2 className="shelf-band" id={`${id}-group-${index}`}>
-          {classification ? (
-            <>
-              <span className="shelf-class-number">{classification.code}</span>{" "}
-              {classification.label}
-            </>
-          ) : (
-            label
-          )}
-        </h2>
+        <div className="shelf-band-row">
+          <h2 className="shelf-band" id={`${id}-group-${index}`}>
+            {classification ? (
+              <>
+                <span className="shelf-class-number">{classification.code}</span>{" "}
+                {classification.label}
+              </>
+            ) : (
+              label
+            )}
+          </h2>
+          <span className="shelf-band-count">
+            {members.length} {members.length === 1 ? "title" : "titles"}
+          </span>
+        </div>
         <ul className="shelf-books">
           {members.map((book) => (
             <li className="shelf-row" key={book.id}>
@@ -65,7 +70,7 @@ export function ShelfGroups({
                     className="shelf-cover"
                   />
                 </button>
-                {pages[book.id] !== undefined && (
+                {(pages[book.id] ?? 0) > 0 && (
                   <Bookmark current={pages[book.id] ?? 0} total={book.pages} />
                 )}
               </div>

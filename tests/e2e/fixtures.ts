@@ -19,6 +19,8 @@ export const test = base.extend<{ signedInPage: Page; prerequisites: void }>({
     if (!stack) throw new Error("Local Supabase is required");
     await page.goto("/");
     await page.getByRole("button", { name: "Open Quire" }).click();
+    await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeVisible();
+    await expect(page.getByLabel("Email", { exact: true })).toBeEnabled();
     await page.getByRole("button", { name: "No account yet? Create one" }).click();
     await page.getByLabel("Email").fill(`e2e.${randomUUID()}@quire.local`);
     await page.getByLabel("Password").fill(`E2e-${randomUUID()}`);
@@ -31,9 +33,10 @@ export const test = base.extend<{ signedInPage: Page; prerequisites: void }>({
     expect(response.ok()).toBeTruthy();
     const { user } = await response.json();
     try {
-      // The first visit opens the product tour; a reader dismisses it too.
       const skip = page.getByRole("button", { name: "Skip tour" });
-      if (await skip.isVisible().catch(() => false)) await skip.click();
+      const shell = page.getByRole("navigation", { name: "Main navigation" });
+      await expect(skip.or(shell).first()).toBeVisible();
+      if (await skip.isVisible()) await skip.click();
       await page.goto("/#/search");
       await expect(page.getByRole("heading", { name: "Add a book" })).toBeVisible();
       await expect(page.getByText("0 books", { exact: true })).toBeVisible();
