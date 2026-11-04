@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ChevronIcon } from "../../components/icons";
 
 export function YearControl({
   year,
@@ -18,14 +19,23 @@ export function YearControl({
     else setDraft(String(year));
   }
   return (
-    <div className="insights-year">
-      <button type="button" disabled={year <= 1} onClick={() => setYear(year - 1)}>
-        Previous year
+    <fieldset className="insights-year" aria-label="Choose reading year">
+      <button
+        type="button"
+        className="insights-year-step"
+        aria-label="Previous year"
+        title="Previous year"
+        disabled={year <= 1}
+        onClick={() => setYear(year - 1)}
+      >
+        <ChevronIcon className="insights-year-icon insights-year-prev" />
       </button>
-      <label>
-        Year{" "}
+      <label className="insights-year-field">
+        <span>Year</span>
         <input
           type="number"
+          inputMode="numeric"
+          autoComplete="off"
           min="1"
           max={currentYear}
           step="1"
@@ -40,9 +50,16 @@ export function YearControl({
           }}
         />
       </label>
-      <button type="button" disabled={year >= currentYear} onClick={() => setYear(year + 1)}>
-        Next year
+      <button
+        type="button"
+        className="insights-year-step"
+        aria-label="Next year"
+        title="Next year"
+        disabled={year >= currentYear}
+        onClick={() => setYear(year + 1)}
+      >
+        <ChevronIcon className="insights-year-icon" />
       </button>
-    </div>
+    </fieldset>
   );
 }

@@ -1,11 +1,13 @@
 :root {
-  --surface: #f4f4f1;
-  --surface-raised: #fcfcfa;
-  --ink: #131313;
-  --ink-muted: #52524d;
-  --rule: #cacac3;
-  --accent: #8c2f39;
-  --on-accent: #fcfcfa;
+  --surface: #f5f7f6;
+  --surface-raised: #ffffff;
+  --surface-selected: #e4efe8;
+  --surface-subtle: #edf2ef;
+  --ink: #202a27;
+  --ink-muted: #414e48;
+  --rule: #d5dfd9;
+  --accent: #205b48;
+  --on-accent: #ffffff;
   --class-800: #8c2f39;
   --class-900: #2b4a6f;
   --class-100: #8a6a1f;

@@ -1,0 +1,136 @@
+/* Journal days are ruled ledger rows: the date leads, the logged books follow. */
+.journal-summary {
+  margin: calc(var(--space-8) * -1) 0 0;
+  padding-bottom: var(--space-12);
+  color: var(--ink-muted);
+  font: var(--mono-size) / var(--mono-leading) var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.journal-days {
+  margin: var(--space-16) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.journal-days > li {
+  border-bottom: var(--rule-width) solid var(--rule);
+}
+
+.journal-day {
+  padding: var(--space-16) 0;
+}
+
+.journal-day-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--space-4) var(--space-12);
+}
+
+.journal .journal-day-head h2 {
+  margin: 0;
+  color: var(--ink);
+  font: 600 15px / 1.4 var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+.journal-day-total {
+  margin: 0;
+  color: var(--accent);
+  font: 600 var(--mono-size) / var(--mono-leading) var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.journal-lines {
+  margin: var(--space-8) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.journal-lines > li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: var(--space-16);
+  padding: var(--space-8) 0;
+  border-top: var(--rule-width) solid color-mix(in srgb, var(--rule) 55%, transparent);
+}
+
+.journal-lines > li:first-child {
+  border-top: 0;
+}
+
+.journal-book {
+  min-width: 0;
+  color: var(--ink);
+  font: 400 16px / 1.35 var(--font-serif);
+  font-style: italic;
+  text-underline-offset: var(--space-4);
+  overflow-wrap: anywhere;
+}
+
+.journal-book:hover {
+  color: var(--accent);
+}
+
+.journal-author {
+  grid-column: 1;
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+  line-height: var(--small-leading);
+  overflow-wrap: anywhere;
+}
+
+.journal-pages {
+  grid-column: 2;
+  grid-row: 1;
+  color: var(--ink-muted);
+  font: var(--mono-size) / var(--mono-leading) var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.journal-more {
+  min-height: 44px;
+  margin-top: var(--space-24);
+  padding: 0 var(--space-16);
+  border: var(--rule-width) solid var(--rule);
+  border-radius: 8px;
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: 500 var(--small-size) / 1 var(--font-sans);
+  cursor: pointer;
+  transition:
+    background-color var(--motion) var(--ease),
+    border-color var(--motion) var(--ease);
+}
+
+.journal-more:hover {
+  border-color: var(--ink-muted);
+  background: var(--surface-subtle);
+}
+
+@media (max-width: 26rem) {
+  .journal-day-head {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .journal-day-date {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .journal-day-total {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journal-more {
+    transition: none;
+  }
+}

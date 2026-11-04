@@ -366,7 +366,9 @@ test("keyboard path, password visibility, focus rules and demo tour", async ({ p
     await expect(control).toBeFocused();
     const style = await control.evaluate((el) => {
       const style = getComputedStyle(el);
-      const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+      const accent = getComputedStyle(el.closest(".auth-page") ?? document.documentElement)
+        .getPropertyValue("--auth-accent")
+        .trim();
       const swatch = document.createElement("span");
       swatch.style.color = accent;
       document.body.append(swatch);
@@ -542,9 +544,7 @@ test("the recto reads the demo's saved book and today's log", async ({ page }) =
   await page.goto("/?demo=1#/today");
   await page.getByLabel("Pages read", { exact: true }).fill("12");
   await page.getByRole("button", { name: "Log 12 pages", exact: true }).click();
-  await expect(
-    page.getByText("12 pages today", { exact: true }).filter({ visible: true }),
-  ).toBeVisible();
+  await expect(page.getByRole("progressbar", { name: "Reading progress: 60 of 550 pages" })).toHaveAttribute("value", "60");
   await page.goto("/");
   await expect(page.locator(".auth-book-title")).toHaveText("Bumi Manusia");
   await expect(page.locator(".auth-reading-pages dd")).toHaveText("12");
@@ -553,9 +553,7 @@ test("the recto reads the demo's saved book and today's log", async ({ page }) =
   const tour = page.getByRole("button", { name: "Skip tour" });
   if (await tour.isVisible().catch(() => false)) await tour.click();
   await page.getByRole("link", { name: "Today", exact: true }).click();
-  await expect(
-    page.getByText("12 pages today", { exact: true }).filter({ visible: true }),
-  ).toBeVisible();
+  await expect(page.getByRole("progressbar", { name: "Reading progress: 60 of 550 pages" })).toHaveAttribute("value", "60");
 });
 
 test("a missing cover uses the shared placeholder and storage denial leaves auth usable", async ({

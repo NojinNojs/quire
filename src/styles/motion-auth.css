@@ -1,0 +1,46 @@
+/*
+ * Auth motion after the cover has opened: mode faces, field feedback and the
+ * password-strength bar. The cover keyframes stay untouched in auth-cover.css.
+ */
+
+.auth-page .auth-face {
+  animation: auth-face-enter var(--motion-enter) var(--ease-out) backwards;
+}
+
+.auth-page :is(.auth-message, .auth-field-error, .auth-help) {
+  animation: feedback-enter-auth var(--motion-ui) var(--ease-out) backwards;
+  transition: color var(--motion-ui) var(--ease-standard);
+}
+
+.auth-page .auth-strength-track > span {
+  transition: width var(--motion-ui) var(--ease-out);
+}
+
+.auth-page :is(.auth-reveal, .auth-forgot, .auth-switch) {
+  transition:
+    color var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    text-decoration-color var(--motion-fast) var(--ease-standard);
+}
+
+@keyframes auth-face-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes feedback-enter-auth {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

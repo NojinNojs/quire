@@ -46,9 +46,11 @@ locally, including profile, reviews, status, journal, and reading year.
 
 ## Current user direction
 
-The user requested a complete personal reading companion in a warm editorial light style,
-with a useful dashboard and no social or admin surface. Book covers must remain actual
-published artwork, with one placeholder for missing covers.
+The user rejected the warm beige, oversized editorial dashboard. The confirmed replacement is
+a neutral light reading workspace with ink-green accents. Continue reading and logging progress
+come first: book identity, current progress and the logging action must be visible together.
+StoryGraph informs familiar reader workflows, not copied assets or unsupported social features.
+Published book covers remain the source of visual variety, with one shared missing-cover image.
 
 ## Accessibility
 

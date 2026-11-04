@@ -2,6 +2,7 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { renderWithToast } from "../../components/toast/test-utils";
 import { normaliseGoogleBooks } from "../../lib/catalog";
 import { CandidateList } from "./CandidateList";
 import { SearchScreen } from "./SearchScreen";
@@ -45,6 +46,46 @@ describe("catalogue states", () => {
     expect(screen.queryByRole("alert")).toBeNull();
     expect(screen.queryByText(/rate limiting/)).toBeNull();
   });
+  it("runs a scanned ISBN through the same search flow and repeats the same ISBN", async () => {
+    const query = Object.assign(Promise.resolve({ count: 0, error: null }), {
+      select: () => query,
+      eq: () => query,
+    });
+    const client = { from: () => query } as unknown as SupabaseClient;
+    const fetchMock = vi.fn(async () => ({
+      ok: false,
+      status: 429,
+      json: async () => ({}),
+      text: async () => "",
+    }));
+    vi.stubGlobal("fetch", fetchMock);
+    const onScanHandled = vi.fn();
+    const view = renderWithToast(
+      <SearchScreen
+        user={{ id: "reader" } as User}
+        client={client}
+        signOut={() => {}}
+        scanRequest={{ isbn: "9780140328721", nonce: 1 }}
+        onScanHandled={onScanHandled}
+      />,
+    );
+    await waitFor(() => expect(onScanHandled).toHaveBeenCalledWith(1));
+    expect((screen.getByRole("searchbox") as HTMLInputElement).value).toBe("9780140328721");
+    const calls = fetchMock.mock.calls.length;
+    expect(calls).toBeGreaterThan(0);
+    view.rerender(
+      <SearchScreen
+        user={{ id: "reader" } as User}
+        client={client}
+        signOut={() => {}}
+        scanRequest={{ isbn: "9780140328721", nonce: 2 }}
+        onScanHandled={onScanHandled}
+      />,
+    );
+    await waitFor(() => expect(onScanHandled).toHaveBeenLastCalledWith(2));
+    await waitFor(() => expect(fetchMock.mock.calls.length).toBeGreaterThan(calls));
+  });
+
   it("opens the manual form with the searched ISBN, or with HTML metadata", async () => {
     const query = Object.assign(Promise.resolve({ count: 0, error: null }), {
       select: () => query,
@@ -62,7 +103,9 @@ describe("catalogue states", () => {
           "<title>Dari dalam kubur: sebuah novel - Soe Tjen Marching - Google Buku</title>",
       })),
     );
-    render(<SearchScreen user={{ id: "reader" } as User} client={client} signOut={() => {}} />);
+    renderWithToast(
+      <SearchScreen user={{ id: "reader" } as User} client={client} signOut={() => {}} />,
+    );
     fireEvent.change(screen.getByRole("searchbox"), { target: { value: "9786020788036" } });
     fireEvent.click(screen.getByRole("button", { name: "Search" }));
     fireEvent.click(await screen.findByRole("button", { name: "Enter it manually" }));

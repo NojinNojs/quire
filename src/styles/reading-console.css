@@ -1,0 +1,104 @@
+/* Logging console: amount first, then coarse steps, presets, preview, action. */
+.insights.dashboard-reading .reading-console {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 16px;
+}
+
+.insights.dashboard-reading .reading-console-title {
+  margin: 0;
+  color: var(--ink);
+  font: 700 15px / 1.3 var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+.insights.dashboard-reading .reading-stepper {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.insights.dashboard-reading .reading-stepper-head label {
+  display: block;
+  color: var(--ink);
+  font: 600 13px / 1.3 var(--font-sans);
+}
+
+.insights.dashboard-reading .reading-stepper-hint {
+  margin: 2px 0 0;
+  color: var(--ink-muted);
+  font: 400 12px / 1.4 var(--font-sans);
+}
+
+.insights.dashboard-reading .reading-amount {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.insights.dashboard-reading .reading-amount input {
+  width: 100%;
+  min-height: 48px;
+  padding-right: 58px;
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.insights.dashboard-reading .reading-amount span {
+  position: absolute;
+  right: 12px;
+  color: var(--ink-muted);
+  font: 500 12px / 1.3 var(--font-sans);
+  pointer-events: none;
+}
+
+.insights.dashboard-reading .reading-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.insights.dashboard-reading .reading-presets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.insights.dashboard-reading .reading .reading-presets button {
+  flex: none;
+  padding-inline: 4px;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.insights.dashboard-reading .reading-preview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin: 0;
+  color: var(--ink-muted);
+  font: 400 12.5px / 1.4 var(--font-sans);
+}
+
+.insights.dashboard-reading .reading-preview .reading-number {
+  color: var(--ink);
+  font: 600 15px / 1.4 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.insights.dashboard-reading .reading button.primary {
+  width: 100%;
+}
+
+.insights.dashboard-reading .reading :focus-visible,
+.insights.dashboard-reading .cover-controls label:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

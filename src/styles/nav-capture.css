@@ -1,0 +1,78 @@
+/* The capture pair is one segmented frame: the plus writes a book down, the
+   barcode corners open the camera. Flat rules and the accent mark carry the
+   hierarchy; no fill, no glow, no motion beyond the shared hover ink. The scan
+   half always names itself: "Scan" on phones, "Scan ISBN" from 768px up beside
+   the Search label, with a 44px target at every width. */
+.shell-capture {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.app-shell .shell-capture-add,
+.app-shell .shell-capture-scan {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: var(--rule-width) solid var(--rule);
+  background: none;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.app-shell .shell-capture-add {
+  border-right: 0;
+  border-radius: 8px 0 0 8px;
+  color: var(--accent);
+}
+
+/* The word sits at a fixed 8px from the glyph; the suffix is its own span and
+   keeps its leading text space, so flex gap stays out of the word. */
+.app-shell .shell-capture-scan {
+  width: auto;
+  padding: 0 var(--space-8);
+  gap: 0;
+  border-radius: 0 8px 8px 0;
+  color: var(--ink-muted);
+  font: 600 var(--small-size) / var(--small-leading) var(--font-sans);
+  white-space: nowrap;
+}
+
+.app-shell .shell-capture-add:hover,
+.app-shell .shell-capture-scan:hover {
+  background: var(--surface-subtle);
+  color: var(--ink);
+}
+
+.app-shell .shell-capture-add svg,
+.app-shell .shell-capture-scan svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.shell-capture-scan-label {
+  margin-inline-start: var(--space-8);
+}
+
+.shell-capture-scan-suffix {
+  display: none;
+  white-space: pre;
+}
+
+@media (min-width: 768px) {
+  .app-shell .shell-capture-scan {
+    padding: 0 var(--space-12);
+  }
+
+  .shell-capture-scan-suffix {
+    display: inline;
+  }
+}

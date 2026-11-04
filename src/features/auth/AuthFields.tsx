@@ -1,6 +1,10 @@
+import { useId } from "react";
+import { ActionIcon } from "../../components/button/ActionIcon";
+import { EyeIcon, EyeOffIcon } from "../../components/icons";
 import type { AuthMode } from "./auth-mode";
 
 export function AuthFields({ auth }: { auth: AuthMode }) {
+  const id = useId();
   const {
     mode,
     email,
@@ -17,9 +21,10 @@ export function AuthFields({ auth }: { auth: AuthMode }) {
   } = auth;
   return (
     <>
-      <label className="auth-field">
+      <label className="auth-field" htmlFor={`${id}-email`}>
         <span className="label">Email</span>
         <input
+          id={`${id}-email`}
           type="email"
           name="email"
           autoComplete="email"
@@ -31,10 +36,11 @@ export function AuthFields({ auth }: { auth: AuthMode }) {
         />
       </label>
       <div className="auth-field">
-        <span className="label" aria-hidden="true">
+        <label className="label" htmlFor={`${id}-password`}>
           Password
-        </span>
+        </label>
         <input
+          id={`${id}-password`}
           type={reveal ? "text" : "password"}
           name="password"
           placeholder={mode === "signup" ? "At least 8 characters" : "Your password"}
@@ -43,20 +49,18 @@ export function AuthFields({ auth }: { auth: AuthMode }) {
           minLength={8}
           disabled={busy}
           aria-describedby={mode === "signup" ? "auth-strength" : undefined}
-          aria-label="Password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        <button
-          type="button"
+        <ActionIcon
           className="auth-reveal"
+          label={reveal ? "Hide" : "Show"}
           aria-pressed={reveal}
-          aria-label={reveal ? "Hide" : "Show"}
           disabled={busy}
           onClick={() => setReveal((value) => !value)}
         >
-          {reveal ? "Hide" : "Show"}
-        </button>
+          {reveal ? <EyeOffIcon /> : <EyeIcon />}
+        </ActionIcon>
       </div>
       {mode === "signup" ? (
         <>
@@ -66,9 +70,10 @@ export function AuthFields({ auth }: { auth: AuthMode }) {
               <span />
             </span>
           </div>
-          <label className="auth-field">
+          <label className="auth-field" htmlFor={`${id}-repeat`}>
             <span className="label">Repeat</span>
             <input
+              id={`${id}-repeat`}
               type="password"
               name="repeat"
               autoComplete="new-password"

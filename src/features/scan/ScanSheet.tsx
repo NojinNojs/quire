@@ -1,4 +1,6 @@
-import { useEffect, useId, useRef } from "react";
+import { useCallback, useEffect, useId, useRef } from "react";
+import { ActionIcon } from "../../components/button/ActionIcon";
+import { CloseIcon } from "../../components/icons";
 import "../../styles/scan.css";
 import { ScanFallback } from "./ScanFallback";
 import { type BarcodeScannerOptions, useBarcodeScanner } from "./useBarcodeScanner";
@@ -21,13 +23,28 @@ const messages = {
 };
 
 export function ScanSheet({ onClose, ...options }: ScanSheetProps) {
-  const scanner = useBarcodeScanner(options);
+  const detected = useRef(false);
+  const scanner = useBarcodeScanner({
+    ...options,
+    onDetected: (isbn) => {
+      detected.current = true;
+      options.onDetected(isbn);
+    },
+  });
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const closed = useRef(false);
   const titleId = useId();
   const statusId = useId();
   const showCamera = scanner.cameraActive || scanner.state === "asking-permission";
   const showFallback = !showCamera && scanner.state !== "found";
+
+  const close = useCallback(() => {
+    if (closed.current) return;
+    closed.current = true;
+    scanner.stop();
+    onClose();
+  }, [onClose, scanner.stop]);
 
   useEffect(() => {
     const previous = document.activeElement;
@@ -37,14 +54,23 @@ export function ScanSheet({ onClose, ...options }: ScanSheetProps) {
     closeRef.current?.focus();
     return () => {
       dialog?.close?.();
-      if (previous instanceof HTMLElement) previous.focus();
+      if (!detected.current && previous instanceof HTMLElement) previous.focus();
     };
   }, []);
 
-  const close = () => {
-    scanner.stop();
-    onClose();
-  };
+  useEffect(() => {
+    // The dialog's own cancel handles Escape, but an open tooltip claims the
+    // key first and swallows it (the close button takes focus on open). Own the
+    // key while the sheet is up, so one press always closes the sheet itself.
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      event.stopPropagation();
+      close();
+    };
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => document.removeEventListener("keydown", onKeyDown, true);
+  }, [close]);
 
   return (
     <dialog
@@ -59,9 +85,16 @@ export function ScanSheet({ onClose, ...options }: ScanSheetProps) {
       <div className="scan-layout">
         <header className="scan-header">
           <h1 id={titleId}>Scan a book</h1>
-          <button ref={closeRef} type="button" onClick={close}>
-            Close
-          </button>
+          <ActionIcon
+            ref={closeRef}
+            className="scan-close"
+            label="Close"
+            side="bottom"
+            container={dialogRef}
+            onClick={close}
+          >
+            <CloseIcon />
+          </ActionIcon>
         </header>
         <div className="scan-body">
           <div className="scan-camera" hidden={!showCamera}>

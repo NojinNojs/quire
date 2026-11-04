@@ -1,0 +1,37 @@
+/* Reset only: callers keep their own selector for colour and hover chrome. */
+.quire-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch);
+  margin: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.quire-button:disabled {
+  cursor: default;
+}
+
+.quire-button-quiet {
+  gap: var(--space-8);
+  padding: 0 var(--space-8);
+  border-radius: 8px;
+}
+
+.quire-button-icon {
+  flex: none;
+  width: var(--touch);
+  min-width: var(--touch);
+  padding: 0;
+  border-radius: 8px;
+}
+
+.quire-button-icon > svg,
+.quire-button-icon > span {
+  flex: none;
+}

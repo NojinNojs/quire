@@ -1,0 +1,46 @@
+@media (max-width: 1023px) {
+  .app-shell .shell,
+  .app-shell .integration-screen,
+  .app-shell .reading {
+    width: 100%;
+    max-width: none;
+  }
+  .app-shell .demo-banner {
+    flex-wrap: wrap;
+    gap: 0 12px;
+    margin-inline: 20px;
+  }
+  .app-shell .demo-banner > p:first-child {
+    flex: 1 1 180px;
+    min-width: 0;
+    margin: 0;
+  }
+  .app-shell .demo-banner-actions {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .app-shell .demo-banner .quiet {
+    min-height: 44px;
+  }
+  .app-shell .shelf-heading {
+    margin-bottom: 20px;
+  }
+}
+@media (min-width: 1024px) {
+  .app-shell .catalog {
+    padding-inline: 32px;
+  }
+  .app-shell .integration-screen {
+    padding-inline: 32px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-shell *,
+  .app-shell *::before,
+  .app-shell *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: Reduced motion must override component transitions. */
+    transition: none !important;
+    /* biome-ignore lint/complexity/noImportantStyles: Reduced motion must override component animations. */
+    animation: none !important;
+  }
+}

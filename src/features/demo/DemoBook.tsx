@@ -17,7 +17,7 @@ export function DemoBook({
   book: Book;
   current: number;
   update: (patch: Partial<Book>) => Promise<void>;
-  remove: () => void;
+  remove: () => Promise<void>;
   pending: boolean;
   activeBookId: string | null;
 }) {
@@ -28,9 +28,7 @@ export function DemoBook({
       save={async (patch: BookEdit) => {
         await update(patch);
       }}
-      remove={async () => {
-        remove();
-      }}
+      remove={remove}
     >
       <BookStatusForm
         book={book}

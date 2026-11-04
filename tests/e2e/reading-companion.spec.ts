@@ -28,7 +28,7 @@ test("profile name and goal persist across reload and greet the dashboard", asyn
   await page.getByLabel("Display name").fill("Alice Reader");
   await page.getByLabel("Annual goal").fill("12");
   await page.getByRole("button", { name: "Save profile" }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Profile saved." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Notifications" }).getByText("Profile saved.")).toBeVisible();
 
   await page.reload();
   await expect(page.getByLabel("Display name")).toHaveValue("Alice Reader");
@@ -47,7 +47,7 @@ test("profile name and goal persist across reload and greet the dashboard", asyn
   await page.goto("/#/settings");
   await page.getByLabel("Annual goal").fill("");
   await page.getByRole("button", { name: "Save profile" }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Profile saved." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Notifications" }).getByText("Profile saved.")).toBeVisible();
   await page.goto("/#/today");
   await expect(page.getByText(/of 12 books/)).toHaveCount(0);
 });
@@ -64,7 +64,7 @@ test("private review and reading status survive reload, and finishing records a 
   await page.getByLabel("Private notes and review").fill("A private reading note.");
   await page.getByRole("radio", { name: "4 out of 5" }).check();
   await page.getByRole("button", { name: "Save review" }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Review saved." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Notifications" }).getByText("Review saved.")).toBeVisible();
 
   await page.reload();
   await expect(page.getByLabel("Private notes and review")).toHaveValue("A private reading note.");
@@ -86,7 +86,7 @@ test("private review and reading status survive reload, and finishing records a 
 
   await openBook(page, title);
   await page.getByRole("button", { name: "Mark as finished" }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Book marked as finished." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Notifications" }).getByText("Book marked as finished.")).toBeVisible();
   await expect(page.getByRole("link", { name: "Choose next book" })).toBeVisible();
   await page.reload();
   await expect(page.getByLabel("Private notes and review")).toHaveValue("A private reading note.");
@@ -94,7 +94,7 @@ test("private review and reading status survive reload, and finishing records a 
   await expect(page.getByRole("combobox", { name: "Reading status" })).toHaveValue("finished");
 
   await page.goto("/#/today");
-  await expect(page.getByText("1 books finished")).toBeVisible();
+  await expect(page.getByText("1 book finished")).toBeVisible();
   await expect(page.getByText("0 pages read")).toBeVisible();
   await openBook(page, wish);
   await page.getByRole("combobox", { name: "Reading status" }).selectOption("reading");
@@ -103,7 +103,7 @@ test("private review and reading status survive reload, and finishing records a 
   await page.getByRole("button", { name: "Clear rating" }).click();
   await page.getByLabel("Private notes and review").fill("");
   await page.getByRole("button", { name: "Save review" }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Review saved." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Notifications" }).getByText("Review saved.")).toBeVisible();
   await page.reload();
   await expect(page.getByLabel("Private notes and review")).toHaveValue("");
   await expect(page.getByRole("radio", { name: "4 out of 5" })).not.toBeChecked();

@@ -1,13 +1,14 @@
 import "../shelf/test-dom";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
+import { renderWithToast } from "../../components/toast/test-utils";
 import { shelfBook } from "../shelf/fixtures";
 import { BookDetail } from "./BookDetail";
 
 afterEach(cleanup);
 
 it("gives the shared book detail exactly one main landmark around the book article", () => {
-  render(
+  renderWithToast(
     <BookDetail book={shelfBook()} current={12} save={async () => {}} remove={async () => {}}>
       <p>Reading controls</p>
     </BookDetail>,

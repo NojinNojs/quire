@@ -1,18 +1,12 @@
-import { useState } from "react";
+import { useId, useState } from "react";
+import { Select } from "../../components/select/Select";
 import type { ReaderProfile } from "../../data/profile";
 import type { ReadingLog } from "../../data/readingHistory";
 import type { Book } from "../../data/types";
 import { type LanguageFilter, summarizeReading } from "../../lib/readingStats";
 import { YearControl } from "../reading/YearControl";
+import { ReadingCalendar } from "./ReadingCalendar";
 import "./insights.css";
-
-const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-function monthStartOffset(year: number, month: number): number {
-  const first = new Date(0);
-  first.setFullYear(year, month, 1);
-  return (first.getDay() + 6) % 7;
-}
 
 export function StatsScreen({
   books,
@@ -29,6 +23,7 @@ export function StatsScreen({
   setYear: (year: number) => void;
   currentYear: number;
 }) {
+  const id = useId();
   const [filter, setFilter] = useState<LanguageFilter>({ kind: "all" });
   const all = summarizeReading(books, logs, year, { kind: "all" });
   const options: LanguageFilter[] = [
@@ -43,31 +38,36 @@ export function StatsScreen({
   };
   const summary = selected.kind === "all" ? all : summarizeReading(books, logs, year, selected);
   const goal = year === currentYear && selected.kind === "all" ? profile?.annual_goal : null;
+  const remaining = goal == null ? null : Math.max(goal - summary.finished, 0);
   return (
-    <section className="insights">
-      <a href="#/today">Back to Today</a>
-      <h1>Reading year</h1>
-      <YearControl year={year} setYear={setYear} currentYear={currentYear} />
-      <label>
-        Language{" "}
-        <select
+    <section className="insights" aria-labelledby={`${id}-heading`}>
+      <a className="insights-back" href="#/today">
+        Back to Today
+      </a>
+      <header className="insights-head">
+        <h1 id={`${id}-heading`}>Reading year</h1>
+        <YearControl year={year} setYear={setYear} currentYear={currentYear} />
+      </header>
+      <div className="insights-toolbar">
+        <Select
+          label="Language"
           value={JSON.stringify(selected)}
-          onChange={(event) => {
-            const option = options.find((item) => JSON.stringify(item) === event.target.value);
+          onChange={(value) => {
+            const option = options.find((item) => JSON.stringify(item) === value);
             if (option) setFilter(option);
           }}
-        >
-          {options.map((option) => (
-            <option key={JSON.stringify(option)} value={JSON.stringify(option)}>
-              {option.kind === "all"
+          options={options.map((option) => ({
+            value: JSON.stringify(option),
+            label:
+              option.kind === "all"
                 ? "All languages"
                 : option.kind === "unknown"
                   ? "Unknown"
-                  : option.value}
-            </option>
-          ))}
-        </select>
-      </label>
+                  : option.value,
+          }))}
+        />
+        <p className="insights-toolbar-note">Totals and calendar follow this filter.</p>
+      </div>
       <dl className="insights-totals">
         <div>
           <dt>Books finished</dt>
@@ -83,89 +83,56 @@ export function StatsScreen({
         </div>
       </dl>
       {goal != null && (
-        <section>
-          <h2>Annual goal</h2>
-          <p>
-            {summary.finished} of {goal} books
+        <section className="insights-goal" aria-labelledby={`${id}-goal`}>
+          <div className="insights-goal-head">
+            <h2 id={`${id}-goal`}>Annual goal</h2>
+            <p>
+              {summary.finished} of {goal} books
+            </p>
+          </div>
+          <progress
+            value={Math.min(summary.finished, goal)}
+            max={goal}
+            aria-label="Books finished against annual goal"
+          />
+          <p className="insights-goal-note">
+            {remaining === 0
+              ? "Goal reached."
+              : `${remaining} ${remaining === 1 ? "book" : "books"} to go.`}
           </p>
-          <progress value={Math.min(summary.finished, goal)} max={goal} />
         </section>
       )}
       {books.some((book) => book.status === "finished" && book.finished_at === null) && (
-        <p>Books without a finish date are not counted in yearly totals.</p>
+        <p className="insights-note">
+          Books without a finish date are not counted in yearly totals.
+        </p>
       )}
       {summary.pages === 0 && summary.finished === 0 && (
-        <p>No reading recorded for this selection and year.</p>
+        <p className="insights-empty">No reading recorded for this selection and year.</p>
       )}
-      <h2>Reading calendar</h2>
-      <fieldset className="insights-legend" aria-label="Pages per day">
-        {["0", "1–9", "10–29", "30–59", "60+"].map((label, level) => (
-          <span key={label}>
-            <i className={`insights-swatch level-${level}`} aria-hidden="true" />
-            {label} pages
-          </span>
-        ))}
-      </fieldset>
-      <div className="insights-months">
-        {Array.from({ length: 12 }, (_, month) => {
-          const date = new Date(0);
-          date.setFullYear(year, month, 1);
-          const monthKey = `${String(year).padStart(4, "0")}-${String(month + 1).padStart(2, "0")}`;
-          const days = summary.days
-            .filter((day) => Number(day.day.slice(5, 7)) === month + 1)
-            .sort((left, right) => left.day.localeCompare(right.day));
-          return (
-            <section key={monthKey}>
-              <h3>{date.toLocaleDateString("en", { month: "long" })}</h3>
-              <div className="insights-weekdays" aria-hidden="true">
-                {weekdays.map((label) => (
-                  <span key={label}>{label}</span>
-                ))}
-              </div>
-              <div className="insights-days">
-                {weekdays.slice(0, monthStartOffset(year, month)).map((weekday) => (
-                  <span
-                    key={`${monthKey}-${weekday}`}
-                    className="insights-day-blank"
-                    aria-hidden="true"
-                  />
-                ))}
-                {days.map(({ day, pages }) => (
-                  <details
-                    key={day}
-                    className={`insights-day level-${pages === 0 ? 0 : pages < 10 ? 1 : pages < 30 ? 2 : pages < 60 ? 3 : 4}`}
-                  >
-                    <summary aria-label={`${day}: ${pages} pages`}>{Number(day.slice(8))}</summary>
-                    <p>
-                      {day}: {pages} pages
-                    </p>
-                  </details>
-                ))}
-              </div>
-            </section>
-          );
-        })}
-      </div>
-      <h2>Languages</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Language</th>
-            <th>Pages</th>
-            <th>Books finished</th>
-          </tr>
-        </thead>
-        <tbody>
-          {summary.languages.map((item) => (
-            <tr key={JSON.stringify(item.language)}>
-              <td>{item.language ?? "Unknown"}</td>
-              <td>{item.pages}</td>
-              <td>{item.finished}</td>
+      <ReadingCalendar year={year} days={summary.days} />
+      <section className="insights-languages" aria-labelledby={`${id}-languages`}>
+        <h2 id={`${id}-languages`}>Languages</h2>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Language</th>
+              <th scope="col">Pages</th>
+              <th scope="col">Books finished</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <p>Languages use current book details.</p>
+          </thead>
+          <tbody>
+            {summary.languages.map((item) => (
+              <tr key={JSON.stringify(item.language)}>
+                <td>{item.language ?? "Unknown"}</td>
+                <td>{item.pages}</td>
+                <td>{item.finished}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="insights-note">Languages use current book details.</p>
+      </section>
     </section>
   );
 }

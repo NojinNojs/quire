@@ -1,0 +1,61 @@
+.shelf-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
+  align-items: end;
+  gap: var(--space-12) var(--space-16);
+  margin: 0;
+  padding: var(--space-16) 0;
+  border-block: var(--rule-width) solid var(--rule);
+}
+
+.shelf-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  color: var(--ink-muted);
+  font: 600 var(--small-size) / var(--small-leading) var(--font-sans);
+}
+
+.shelf-filters .quire-select {
+  font: 400 14px / 20px var(--font-sans);
+}
+
+.shelf-summary {
+  padding: var(--space-12) 0;
+  border-bottom: var(--rule-width) solid var(--rule);
+}
+
+.shelf-summary-count {
+  margin: 0;
+  color: var(--ink);
+  font: 600 var(--small-size) / var(--small-leading) var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+.shelf-view {
+  display: flex;
+  gap: var(--space-4);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.shelf-view .secondary {
+  min-width: 56px;
+  padding-inline: var(--space-12);
+  font-size: 12px;
+}
+
+.shelf-filter-count {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-12);
+  margin: var(--space-8) 0 0;
+  color: var(--ink-muted);
+  font-size: 12px;
+  line-height: var(--small-leading);
+}

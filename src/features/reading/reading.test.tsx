@@ -47,13 +47,13 @@ describe("page arithmetic", () => {
     expect(pageAmount(1, 550, 550)).toBe(0);
   });
   it("previews the exact endpoints", () => {
-    expect(previewPages(214, 10)).toBe("214 -> 224");
-    expect(previewPages(214, 0)).toBe("214 -> 214");
+    expect(previewPages(214, 10)).toBe("214 → 224");
+    expect(previewPages(214, 0)).toBe("214 → 214");
     expect(
       renderToStaticMarkup(
         <PageStepper current={214} total={550} disabled={false} onLog={() => {}} />,
       ),
-    ).toContain("214 -&gt; 215");
+    ).toContain("214 → 215");
   });
 });
 

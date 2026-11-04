@@ -31,13 +31,20 @@ async function checkCatalogue(page: Page, state: string) {
             background = getComputedStyle(parent).backgroundColor;
             parent = parent.parentElement;
           }
-          const ink = luminance(getComputedStyle(el).color);
+          const color = getComputedStyle(el).color;
+          const ink = luminance(color);
           const paper = luminance(background);
-          return (Math.max(ink, paper) + 0.05) / (Math.min(ink, paper) + 0.05);
+          return {
+            ratio: (Math.max(ink, paper) + 0.05) / (Math.min(ink, paper) + 0.05),
+            element: `${el.tagName.toLowerCase()}.${el.className} ${el.textContent?.trim()}`,
+            color,
+            background,
+          };
         });
     });
-    for (const ratio of ratios) expect(ratio, `${state} ${theme}`).toBeGreaterThanOrEqual(7);
-    checks.push({ state, theme, minimumTextContrast: Math.min(...ratios) });
+    for (const { ratio, element, color, background } of ratios)
+      expect(ratio, `${state} ${theme}: ${element} (${color} on ${background})`).toBeGreaterThanOrEqual(7);
+    checks.push({ state, theme, minimumTextContrast: Math.min(...ratios.map(({ ratio }) => ratio)) });
   }
   for (const width of [320, 390, 768, 1280]) {
     await page.setViewportSize({ width, height: 844 });

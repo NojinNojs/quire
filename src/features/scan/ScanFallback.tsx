@@ -30,32 +30,40 @@ export function ScanFallback({ onDetected }: ScanFallbackProps) {
         onDetected(isbn);
       }}
     >
-      <label htmlFor={id}>ISBN-13</label>
-      <p id={`${id}-hint`}>Enter the 13 digits printed below the book’s barcode.</p>
-      <input
-        id={id}
-        type="text"
-        inputMode="numeric"
-        pattern="[0-9]{13}"
-        maxLength={13}
-        autoComplete="off"
-        spellCheck={false}
-        value={value}
-        disabled={found}
-        aria-invalid={invalid}
-        aria-describedby={`${id}-hint${invalid ? ` ${id}-error` : ""}`}
-        onChange={(event) => {
-          setValue(event.target.value);
-          setInvalid(false);
-        }}
-      />
-      {invalid && (
-        <p id={`${id}-error`} role="alert">
-          That barcode is not a valid ISBN
+      <div className="field">
+        <label className="label" htmlFor={id}>
+          ISBN-13
+        </label>
+        <p className="control-hint" id={`${id}-hint`}>
+          Enter the 13 digits printed below the book’s barcode.
         </p>
-      )}
+        <input
+          className="control-input"
+          id={id}
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]{13}"
+          maxLength={13}
+          autoComplete="off"
+          spellCheck={false}
+          placeholder="9780140328721"
+          value={value}
+          disabled={found}
+          aria-invalid={invalid}
+          aria-describedby={`${id}-hint${invalid ? ` ${id}-error` : ""}`}
+          onChange={(event) => {
+            setValue(event.target.value);
+            setInvalid(false);
+          }}
+        />
+        {invalid && (
+          <p className="control-error" id={`${id}-error`} role="alert">
+            That barcode is not a valid ISBN
+          </p>
+        )}
+      </div>
       {found && <p role="status">ISBN found: {value}</p>}
-      <button type="submit" disabled={found}>
+      <button className="primary" type="submit" disabled={found}>
         Use ISBN
       </button>
     </form>

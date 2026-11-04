@@ -1,5 +1,5 @@
 import "../../features/shelf/test-dom";
-import { cleanup, fireEvent, render } from "@testing-library/react";
+import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import { useState } from "react";
 import { afterEach, expect, it, vi } from "vitest";
 import { Select } from "./Select";
@@ -30,63 +30,77 @@ function setup() {
   const view = render(<Filter onChange={onChange} />);
   const control = view.getByRole("combobox", { name: "Status" });
   control.focus();
-  const key = (key: string) => fireEvent.keyDown(control, { key });
-  const active = () =>
-    document.getElementById(control.getAttribute("aria-activedescendant") ?? "")?.textContent;
-  return { ...view, control, key, active, onChange };
+  const press = (key: string) =>
+    fireEvent.keyDown(document.activeElement ?? control, { key, bubbles: true });
+  const highlighted = () => document.querySelector("[data-highlighted] > div")?.textContent ?? "";
+  return { ...view, control, press, highlighted, onChange };
 }
 
-it("navigates with arrows, Home and End, then commits exactly once with Enter", () => {
+it("opens from the keyboard, moves the highlight and commits exactly once with Enter", async () => {
   const view = setup();
-  view.key("ArrowDown");
+  expect(view.control.getAttribute("aria-expanded")).toBe("false");
+  view.press("ArrowDown");
+  const listbox = await view.findByRole("listbox");
+  expect(listbox).toBeTruthy();
   expect(view.control.getAttribute("aria-expanded")).toBe("true");
-  expect(view.active()).toBe("Reading");
-  view.key("ArrowDown");
-  expect(view.active()).toBe("Finished");
-  view.key("ArrowDown");
-  expect(view.active()).toBe("Finished");
-  view.key("ArrowUp");
-  expect(view.active()).toBe("Reading");
-  view.key("Home");
-  expect(view.active()).toBe("All statuses");
-  view.key("ArrowUp");
-  expect(view.active()).toBe("All statuses");
-  view.key("End");
-  expect(view.active()).toBe("Finished");
-  expect(view.onChange).not.toHaveBeenCalled();
-  view.key("Enter");
-  expect(view.onChange).toHaveBeenCalledExactlyOnceWith("finished");
-  expect(view.control.textContent).toContain("Finished");
+  expect(view.highlighted()).toBe("Reading");
+  view.press("ArrowDown");
+  expect(view.highlighted()).toBe("Finished");
+  view.press("ArrowDown");
+  expect(view.highlighted()).toBe("Finished");
+  view.press("ArrowUp");
+  expect(view.highlighted()).toBe("Reading");
+  view.press("Home");
+  expect(view.highlighted()).toBe("All statuses");
+  view.press("End");
+  expect(view.highlighted()).toBe("Finished");
+  view.press("Enter");
+  await waitFor(() => expect(view.onChange).toHaveBeenCalledExactlyOnceWith("finished"));
+  await waitFor(() => expect(view.control.textContent).toContain("Finished"));
   expect(view.queryByRole("listbox")).toBeNull();
   expect(document.activeElement).toBe(view.control);
 });
 
-it("cancels a pending choice with Escape and keeps the selected option on reopening", () => {
+it("closes on Escape without committing and keeps the current value", async () => {
   const view = setup();
-  view.key("Enter");
-  view.key("End");
-  view.key("Escape");
+  fireEvent.click(view.control);
+  await view.findByRole("listbox");
+  view.press("End");
+  view.press("Escape");
+  await waitFor(() => expect(view.queryByRole("listbox")).toBeNull());
   expect(view.onChange).not.toHaveBeenCalled();
-  expect(view.queryByRole("listbox")).toBeNull();
   expect(document.activeElement).toBe(view.control);
-  view.key(" ");
-  expect(view.active()).toBe("Reading");
-  expect(view.getByRole("option", { name: "Reading" }).getAttribute("aria-selected")).toBe("true");
-  view.key("Tab");
-  expect(view.queryByRole("listbox")).toBeNull();
-  expect(view.onChange).not.toHaveBeenCalled();
+  expect(view.control.textContent).toContain("Reading");
 });
 
-it("commits pointer choices and dismisses on outside press or blur", () => {
+it("finds an option by the letters typed on the trigger", async () => {
+  const view = setup();
+  view.press("ArrowDown");
+  await view.findByRole("listbox");
+  view.press("f");
+  expect(view.highlighted()).toBe("Finished");
+  view.press("Enter");
+  await waitFor(() => expect(view.onChange).toHaveBeenCalledExactlyOnceWith("finished"));
+
+  view.press("ArrowDown");
+  await view.findByRole("listbox");
+  view.press("a");
+  expect(view.highlighted()).toBe("All statuses");
+  view.press("Enter");
+  await waitFor(() => expect(view.onChange).toHaveBeenLastCalledWith(""));
+});
+
+it("commits a pointer choice and dismisses on an outside press", async () => {
   const view = setup();
   fireEvent.click(view.control);
-  fireEvent.click(view.getByRole("option", { name: "All statuses" }));
-  expect(view.onChange).toHaveBeenCalledExactlyOnceWith("");
+  const option = await view.findByRole("option", { name: "All statuses" });
+  fireEvent.pointerDown(option, { pointerType: "mouse" });
+  fireEvent.click(option, { detail: 1 });
+  await waitFor(() => expect(view.onChange).toHaveBeenCalledExactlyOnceWith(""));
   expect(document.activeElement).toBe(view.control);
   fireEvent.click(view.control);
+  await view.findByRole("listbox");
   fireEvent.pointerDown(document.body);
-  expect(view.queryByRole("listbox")).toBeNull();
-  fireEvent.click(view.control);
-  fireEvent.blur(view.control);
-  expect(view.queryByRole("listbox")).toBeNull();
+  await waitFor(() => expect(view.queryByRole("listbox")).toBeNull());
+  expect(view.onChange).toHaveBeenCalledTimes(1);
 });

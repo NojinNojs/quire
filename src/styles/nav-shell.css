@@ -1,0 +1,81 @@
+:root {
+  --shell-header-height: 56px;
+  --shell-header-inset: var(--gutter);
+  --nav-icon-size: 22px;
+  --shell-rail-motion: 260ms;
+  --shell-dock-gap: 8px;
+  --shell-dock-inset: 12px;
+  --shell-dock-radius: 14px;
+  /* Elevation only: the dock floats above content that scrolls beneath it. */
+  --shell-dock-shadow: 0 12px 24px -20px color-mix(in srgb, var(--ink) 55%, transparent);
+  --shell-active-ring: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+/* The rail's logo cell and the header share one band; it grows with the rail. */
+@media (min-width: 1024px) {
+  :root {
+    --shell-header-height: 64px;
+  }
+}
+
+.app-shell {
+  --ink-muted: var(--shell-secondary-ink);
+  --bookmark-motion: var(--motion);
+  padding-bottom: calc(var(--nav-height) + var(--space-16) + env(safe-area-inset-bottom));
+}
+
+.app-shell :focus-visible:not(:disabled) {
+  outline: var(--focus-width) solid var(--shell-focus-ink);
+  outline-offset: var(--focus-offset);
+}
+
+.app-shell .cover-controls:has(input:focus-visible) label {
+  outline: var(--focus-width) solid var(--shell-focus-ink);
+  outline-offset: var(--focus-offset);
+}
+
+.shell-screen {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: var(--layer-skip);
+  top: var(--space-8);
+  left: var(--space-8);
+  display: flex;
+  align-items: center;
+  min-height: var(--touch);
+  max-width: calc(100% - var(--space-16));
+  padding: var(--space-8) var(--space-16);
+  border: var(--rule-width) solid var(--ink);
+  border-radius: var(--radius-input);
+  background: var(--surface-raised);
+  color: var(--ink);
+  transform: translateY(calc(-100% - var(--space-16)));
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+.shell-placeholder-copy {
+  padding-block: var(--space-48);
+  text-align: center;
+}
+
+.shell-catalogue-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch);
+  margin-top: var(--space-16);
+  color: var(--ink);
+  text-underline-offset: var(--space-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell {
+    transition: none;
+  }
+}

@@ -1,19 +1,41 @@
 .auth-page {
-  --auth-paper: #f8f3e8;
-  --auth-secondary-ink: #50483e;
-  --auth-desk: #d6c9b5;
+  /* Authentication keeps its own palette, drawn from the application's neutral-green roles. */
+  --auth-canvas: #f5f7f6;
+  --auth-paper: #ffffff;
+  --auth-page-edge: #eef3f0;
+  --auth-page-edge-deep: #d5dfd9;
+  --auth-ink: #202a27;
+  --auth-secondary-ink: #414e48;
+  --auth-rule: #d5dfd9;
+  --auth-accent: #205b48;
+  --auth-on-accent: #ffffff;
+  --auth-selected: #e4efe8;
+  --auth-cloth: #205b48;
+  --auth-cloth-deep: #17493a;
+  --auth-cloth-ink: #f5f7f6;
+  --auth-shadow: rgb(16 32 26 / 20%);
   display: grid;
   place-items: center;
   min-height: 100svh;
   padding: 40px 32px;
-  background: var(--auth-desk);
-  color: var(--ink);
+  background: var(--auth-canvas);
+  color: var(--auth-ink);
   font-family: var(--font-sans);
 }
 
 .auth-page ::selection {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--auth-selected);
+  color: var(--auth-ink);
+}
+
+/* Overscroll and browser chrome continue the same canvas beyond the page box. */
+body:has(.auth-page) {
+  background: #f5f7f6;
+}
+
+.auth-cover ::selection {
+  background: var(--auth-cloth-deep);
+  color: var(--auth-cloth-ink);
 }
 
 .auth-book {
@@ -22,10 +44,10 @@
   background: var(--auth-paper);
   border-radius: 4px 8px 8px 4px;
   box-shadow:
-    0 3px 0 #b9aa91,
-    0 7px 0 #e8ddca,
-    0 10px 0 #a99a82,
-    0 22px 35px rgb(58 43 29 / 25%);
+    0 3px 0 var(--auth-page-edge),
+    0 7px 0 var(--auth-paper),
+    0 10px 0 var(--auth-page-edge-deep),
+    0 22px 35px var(--auth-shadow);
 }
 
 .auth-page[data-covered="true"] {
@@ -40,7 +62,7 @@
   left: calc(50% - 32px);
   width: 10px;
   height: 96px;
-  background: var(--accent);
+  background: var(--auth-accent);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 6px), 0 100%);
 }
 
@@ -55,10 +77,10 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgb(83 61 39 / 5%) 30%,
-    rgb(70 49 31 / 19%) 48%,
-    rgb(58 40 25 / 27%) 50%,
-    rgb(89 65 40 / 12%) 54%,
+    rgb(32 42 39 / 5%) 30%,
+    rgb(32 42 39 / 14%) 48%,
+    rgb(16 32 26 / 22%) 50%,
+    rgb(32 42 39 / 10%) 54%,
     transparent
   );
   pointer-events: none;
@@ -69,9 +91,13 @@
   position: absolute;
   inset: 3px -5px -7px;
   z-index: -1;
-  border: 1px solid #ad9d83;
+  border: 1px solid var(--auth-page-edge-deep);
   border-radius: 5px 9px 9px 5px;
-  background: repeating-linear-gradient(to bottom, #e4d9c5 0 2px, #cbbca4 2px 3px);
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--auth-paper) 0 2px,
+    var(--auth-page-edge) 2px 3px
+  );
   pointer-events: none;
 }
 
@@ -93,7 +119,7 @@
   justify-content: space-between;
   gap: 16px;
   padding-bottom: 15px;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--auth-rule);
   font: 400 10px / 16px var(--font-mono);
   letter-spacing: 0.08em;
 }
@@ -128,7 +154,7 @@
   justify-content: center;
   align-items: flex-start;
   padding: 32px clamp(40px, 5vw, 72px);
-  color: var(--ink);
+  color: var(--auth-ink);
 }
 
 .auth-cover-intro p {

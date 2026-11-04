@@ -7,3 +7,4 @@ export {
   type ScanState,
   useBarcodeScanner,
 } from "./useBarcodeScanner";
+export { type ScanRequest, useScanRequest } from "./useScanRequest";

@@ -1,0 +1,75 @@
+/* Recovery reuses the borrower-card paper without the open-book geometry. */
+.auth-recovery-sheet {
+  width: min(460px, 100%);
+  padding: 32px 32px 24px;
+  border-radius: 8px;
+  background: var(--auth-paper);
+  box-shadow:
+    0 3px 0 var(--auth-page-edge),
+    0 7px 0 var(--auth-paper),
+    0 10px 0 var(--auth-page-edge-deep),
+    0 22px 35px var(--auth-shadow);
+  color: var(--auth-ink);
+}
+
+.auth-recovery-kicker {
+  margin: 28px 0 0;
+  color: var(--auth-secondary-ink);
+  font: 400 11px / 16px var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.auth-recovery-sheet .auth-mode-title {
+  margin: 4px 0 12px;
+}
+
+.auth-recovery-lead {
+  margin: 0 0 20px;
+  color: var(--auth-secondary-ink);
+  font: 400 14px / 22px var(--font-sans);
+}
+
+.auth-recovery-error {
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border-left: 2px solid var(--auth-accent);
+  background: var(--auth-selected);
+  color: var(--auth-ink);
+  font: 500 13px / 20px var(--font-sans);
+}
+
+.auth-recovery-message {
+  margin: 0;
+  color: var(--auth-secondary-ink);
+  font: 400 13px / 20px var(--font-sans);
+}
+
+.auth-recovery-sheet .settings-form {
+  max-width: none;
+}
+
+.auth-recovery-foot {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--auth-rule);
+}
+
+.auth-recovery-foot a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--auth-ink);
+  font-size: 13px;
+  text-underline-offset: 4px;
+}
+
+.auth-recovery-foot a:hover {
+  color: var(--auth-accent);
+}
+
+@media (max-width: 359px) {
+  .auth-recovery-sheet {
+    padding-inline: 20px;
+  }
+}

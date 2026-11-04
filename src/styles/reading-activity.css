@@ -1,0 +1,85 @@
+/* Latest activity: one dense dated row per log. */
+.insights.dashboard-reading .reading-activity-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.insights.dashboard-reading .reading-activity-list li {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: baseline;
+  padding: 7px 0;
+  border-top: 1px solid var(--rule);
+  font: 400 12.5px / 1.4 var(--font-sans);
+}
+
+.insights.dashboard-reading .reading-activity-list li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.insights.dashboard-reading .reading-activity-list time {
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.insights.dashboard-reading .reading-activity-book {
+  overflow: hidden;
+  color: var(--ink);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.insights.dashboard-reading .reading-activity-pages {
+  color: var(--accent);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.insights.dashboard-reading .reading-activity-empty,
+.insights.dashboard-reading .dashboard-reading-add {
+  margin: 0;
+  color: var(--ink-muted);
+  font: 400 13px / 1.5 var(--font-sans);
+}
+
+.insights.dashboard-reading .dashboard-reading-add a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 559px) {
+  .insights.dashboard-reading .reading-activity-list li {
+    grid-template-areas:
+      "date pages"
+      "book book";
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px 12px;
+    padding: 10px 0;
+    font-size: 12.5px;
+  }
+
+  .insights.dashboard-reading .reading-activity-list time {
+    grid-area: date;
+  }
+
+  .insights.dashboard-reading .reading-activity-book {
+    grid-area: book;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  .insights.dashboard-reading .reading-activity-pages {
+    grid-area: pages;
+  }
+}

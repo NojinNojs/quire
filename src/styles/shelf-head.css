@@ -1,0 +1,38 @@
+/* The collection is a catalogue: one ruled filter bar, classified shelves,
+   and cover-first rows. Density comes from uniform jackets, not larger art. */
+.shelf {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding: var(--space-24) 20px var(--space-48);
+}
+
+.shelf-heading,
+.shelf-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+}
+
+.shelf-heading {
+  align-items: flex-end;
+  gap: var(--space-16) var(--space-24);
+  margin-bottom: var(--space-24);
+}
+
+.shelf-heading h1 {
+  margin: 0;
+  font: 700 clamp(26px, 2.5vw, 34px) / 1.2 var(--font-sans);
+  letter-spacing: -0.035em;
+}
+
+.shelf-heading p {
+  margin: var(--space-4) 0 0;
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+  line-height: var(--small-leading);
+}
+
+.shelf-heading > .primary {
+  white-space: nowrap;
+}

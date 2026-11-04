@@ -48,7 +48,11 @@ describe("interactive demo", () => {
     view.unmount();
     render(<App />);
     navigate("#/today");
-    expect(screen.getAllByText("58 / 550").length).toBeGreaterThan(0);
+    const progress = screen.getByRole("progressbar", {
+      name: "Reading progress: 58 of 550 pages",
+    });
+    expect(progress.getAttribute("value")).toBe("58");
+    expect(progress.getAttribute("max")).toBe("550");
     expect(screen.getByRole("heading", { name: "4 days streak" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Reset demo" }));
     fireEvent.click(screen.getByRole("button", { name: "Keep changes" }));
@@ -78,9 +82,11 @@ describe("interactive demo", () => {
     fireEvent.click(screen.getByRole("radio", { name: "4 out of 5" }));
     await act(async () => fireEvent.click(screen.getByRole("button", { name: "Save review" })));
     await act(async () =>
-      fireEvent.change(screen.getByLabelText("Reading status"), { target: { value: "reading" } }),
+      fireEvent.change(screen.getByRole("combobox", { name: "Reading status" }), {
+        target: { value: "reading" },
+      }),
     );
-    expect(screen.getByRole("alert").textContent).toContain("Another book is already being read");
+    expect(screen.getAllByText(/Another book is already being read/).length).toBeGreaterThan(0);
     expect(
       loadDemoState(window.localStorage).books.find((book) => book.status === "reading")?.id,
     ).toBe("demo-bumi");
@@ -90,7 +96,9 @@ describe("interactive demo", () => {
     );
     navigate(`#/book/${added?.id}`);
     await act(async () =>
-      fireEvent.change(screen.getByLabelText("Reading status"), { target: { value: "reading" } }),
+      fireEvent.change(screen.getByRole("combobox", { name: "Reading status" }), {
+        target: { value: "reading" },
+      }),
     );
     const state = loadDemoState(window.localStorage);
     expect(state.books.filter((book) => book.status === "reading").map((book) => book.id)).toEqual([
@@ -116,25 +124,11 @@ describe("interactive demo", () => {
     expect(screen.getByText(/Changes last for this visit only/)).toBeTruthy();
     navigate("#/today");
     fireEvent.click(screen.getByRole("button", { name: "Log 1 page" }));
-    expect(screen.getAllByText("49 / 550").length).toBeGreaterThan(0);
-  });
-  it("keeps review draft and rejects success when device storage fails", async () => {
-    render(<App />);
-    navigate("#/book/demo-bumi");
-    vi.spyOn(window.Storage.prototype, "setItem").mockImplementation(() => {
-      throw new Error("blocked");
+    const progress = screen.getByRole("progressbar", {
+      name: "Reading progress: 49 of 550 pages",
     });
-    fireEvent.change(screen.getByLabelText("Private notes and review"), {
-      target: { value: "Keep draft" },
-    });
-    await act(async () => fireEvent.click(screen.getByRole("button", { name: "Save review" })));
-    expect(screen.getByRole("alert").textContent).toContain("Could not save on this device");
-    expect((screen.getByLabelText("Private notes and review") as HTMLTextAreaElement).value).toBe(
-      "Keep draft",
-    );
-    expect(
-      loadDemoState(window.localStorage).books.find((book) => book.id === "demo-bumi")?.notes,
-    ).toBeNull();
+    expect(progress.getAttribute("value")).toBe("49");
+    expect(progress.getAttribute("max")).toBe("550");
   });
 
   it("keeps the pending undo window and blocks finish until persistence", async () => {

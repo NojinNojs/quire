@@ -1,0 +1,32 @@
+/* Success, queued retry, and undo stay in one visible group beside the desk rule. */
+.insights.dashboard-reading .reading-feedback {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 2px 0 2px 12px;
+  border: 0;
+  border-left: 3px solid var(--accent);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 400 13px / 1.45 var(--font-sans);
+}
+
+.insights.dashboard-reading .reading-feedback p {
+  margin: 0;
+}
+
+.insights.dashboard-reading .reading-feedback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.insights.dashboard-reading .reading-feedback-actions:empty {
+  display: none;
+}
+
+.insights.dashboard-reading .reading-feedback [role="alert"] {
+  color: var(--ink);
+  font-weight: 600;
+}

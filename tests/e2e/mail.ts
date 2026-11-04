@@ -1,8 +1,9 @@
 import { setTimeout as sleep } from "node:timers/promises";
 import type { APIRequestContext } from "@playwright/test";
+import { stack } from "./stack";
 
 /** The local Supabase mail catcher runs beside the disposable verification stack. */
-export const MAIL = process.env.MAIL_URL ?? "http://127.0.0.1:55324";
+export const MAIL = process.env.MAIL_URL ?? stack?.MAILPIT_URL ?? stack?.INBUCKET_URL ?? "http://127.0.0.1:54324";
 
 function candidates(value: unknown, found: string[] = []): string[] {
   if (typeof value === "string") found.push(value);

@@ -1,0 +1,199 @@
+/* Buttons: primary, secondary, danger and quiet share one geometry.
+   Colour comes from the theme tokens so account and auth agree. */
+:root {
+  --control-height: 44px;
+  --control-radius: 8px;
+  --control-pad-x: var(--space-16);
+  --control-font: 600 var(--small-size) / 1.2 var(--font-sans);
+}
+
+.primary,
+.secondary,
+.danger,
+.quiet,
+.control-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  min-height: var(--control-height);
+  min-width: var(--control-height);
+  margin: 0;
+  border: var(--rule-width) solid transparent;
+  border-radius: var(--control-radius);
+  font: var(--control-font);
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--motion) var(--ease),
+    border-color var(--motion) var(--ease),
+    color var(--motion) var(--ease);
+}
+
+.primary > svg,
+.secondary > svg,
+.danger > svg,
+.quiet > svg,
+.control-icon > svg {
+  flex: none;
+}
+
+.primary {
+  padding: 0 var(--control-pad-x);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.secondary {
+  padding: 0 var(--control-pad-x);
+  background: var(--surface-raised);
+  border-color: color-mix(in srgb, var(--ink-muted) 60%, var(--rule));
+  color: var(--ink);
+}
+
+.danger {
+  padding: 0 var(--control-pad-x);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.quiet {
+  padding: 0 var(--space-8);
+  background: none;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.control-icon {
+  flex: none;
+  width: var(--control-height);
+  padding: 0;
+  background: none;
+  color: inherit;
+}
+
+.primary:is(:hover, :active):not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 86%, var(--ink));
+  border-color: color-mix(in srgb, var(--accent) 86%, var(--ink));
+}
+
+.danger:is(:hover, :active):not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 80%, var(--ink));
+  border-color: color-mix(in srgb, var(--accent) 80%, var(--ink));
+}
+
+.secondary:is(:hover, :active):not(:disabled) {
+  border-color: var(--ink-muted);
+  background: var(--surface-subtle);
+}
+
+.control-icon:is(:hover, :active):not(:disabled),
+.quiet:is(:hover, :active):not(:disabled) {
+  background: var(--surface-subtle);
+}
+
+.quiet:is(:hover, :active):not(:disabled) {
+  text-decoration-thickness: 2px;
+}
+
+.secondary[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--surface-selected);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.primary:focus-visible,
+.secondary:focus-visible,
+.danger:focus-visible,
+.quiet:focus-visible,
+.control-icon:focus-visible {
+  outline: var(--focus-width) solid var(--accent);
+  outline-offset: var(--focus-offset);
+}
+
+.primary:disabled,
+.secondary:disabled,
+.danger:disabled,
+.quiet:disabled,
+.control-icon:disabled,
+.primary[aria-disabled="true"],
+.secondary[aria-disabled="true"],
+.danger[aria-disabled="true"],
+.quiet[aria-disabled="true"] {
+  border-color: var(--rule);
+  background: var(--surface-subtle);
+  color: var(--ink-muted);
+  text-decoration: none;
+  cursor: not-allowed;
+}
+
+.control-icon:disabled {
+  background: none;
+}
+
+/* A busy control keeps its label and adds one spinner. */
+.primary[aria-busy="true"]::after,
+.secondary[aria-busy="true"]::after,
+.danger[aria-busy="true"]::after {
+  content: "";
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: control-spin 700ms linear infinite;
+}
+
+@keyframes control-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Text link with a real touch target, used for back and sign-out actions. */
+.settings-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: var(--control-height);
+  min-width: var(--control-height);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: 600 var(--small-size) / 1.3 var(--font-sans);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.settings-link:is(:hover, :active):not(:disabled) {
+  text-decoration-thickness: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .primary,
+  .secondary,
+  .danger,
+  .quiet,
+  .control-icon {
+    transition: none;
+  }
+
+  .primary[aria-busy="true"]::after,
+  .secondary[aria-busy="true"]::after,
+  .danger[aria-busy="true"]::after {
+    animation: none;
+    border-right-color: currentColor;
+    opacity: 0.6;
+  }
+}

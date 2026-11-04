@@ -1,20 +1,34 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ScanIcon } from "../../components/icons";
+import { useToast } from "../../components/toast";
 import type { Book } from "../../data/types";
 import type { Candidate } from "../../lib/catalog";
+import { isbnTo13 } from "../../lib/isbn";
 import { ManualForm } from "../catalog/ManualForm";
-import { CoverImage } from "../covers/CoverImage";
+import type { ScanRequest } from "../scan/useScanRequest";
+import { DemoCatalogue } from "./DemoCatalogue";
 import { sampleCatalogue } from "./samples";
 
 export function DemoSearch({
   books,
   addBook,
+  onScan,
+  scanRequest,
+  onScanHandled,
 }: {
   books: Book[];
   addBook: (candidate: Candidate) => Promise<boolean>;
+  onScan?: () => void;
+  scanRequest?: ScanRequest | null;
+  onScanHandled?: (nonce: number) => void;
 }) {
   const [tab, setTab] = useState("search");
   const [query, setQuery] = useState("");
+  const [manualDraft, setManualDraft] = useState<Partial<Candidate>>({});
   const [message, setMessage] = useState("");
+  const [addedToShelf, setAddedToShelf] = useState(false);
+  const handledNonce = useRef(0);
+  const toast = useToast();
   const matches = sampleCatalogue.filter((book) =>
     [book.title, book.author, book.isbn]
       .join(" ")
@@ -22,18 +36,62 @@ export function DemoSearch({
       .includes(query.trim().toLocaleLowerCase()),
   );
 
+  useEffect(() => {
+    if (!scanRequest || scanRequest.nonce <= handledNonce.current) return;
+    handledNonce.current = scanRequest.nonce;
+    setTab("search");
+    setQuery(scanRequest.isbn);
+    const isbn = isbnTo13(scanRequest.isbn);
+    setManualDraft(isbn ? { isbn } : {});
+    setMessage("");
+    setAddedToShelf(false);
+    onScanHandled?.(scanRequest.nonce);
+  }, [scanRequest, onScanHandled]);
+
   async function save(candidate: Candidate) {
-    const added = await addBook(candidate);
-    setMessage(
-      added ? `${candidate.title} added to your shelf.` : "This edition is already on your shelf.",
-    );
-    return added;
+    try {
+      const added = await addBook(candidate);
+      if (!added) {
+        setMessage("This edition is already on your shelf.");
+        return false;
+      }
+      setMessage("");
+      setAddedToShelf(true);
+      toast.success(`${candidate.title} added to your shelf.`);
+      return true;
+    } catch (error) {
+      setMessage("");
+      toast.error(error instanceof Error ? error.message : "Could not save on this device.");
+      return false;
+    }
+  }
+
+  function openManual() {
+    const isbn = isbnTo13(query);
+    setManualDraft(isbn ? { isbn } : {});
+    setTab("manual");
+    setMessage("");
   }
 
   return (
     <main className="shell catalog demo-search">
-      <h1>Search</h1>
-      <p className="muted">Browse the sample catalogue or add your own book.</p>
+      <header className="catalog-head">
+        <div className="catalog-heading">
+          <h1>Add a book</h1>
+          <p className="catalog-lead">
+            Browse the sample catalogue or enter your own edition by hand.
+          </p>
+        </div>
+        <div className="catalog-head-actions">
+          <span className="book-count">Demo catalogue</span>
+          {onScan && (
+            <button className="secondary" type="button" onClick={onScan}>
+              <ScanIcon />
+              Scan ISBN
+            </button>
+          )}
+        </div>
+      </header>
       <div className="entry-tabs" role="tablist" aria-label="Book entry">
         {[
           ["search", "Sample catalogue"],
@@ -72,83 +130,45 @@ export function DemoSearch({
       </div>
       <div id="demo-entry-panel" role="tabpanel" aria-labelledby={`demo-tab-${tab}`}>
         {tab === "manual" ? (
-          <ManualForm save={save} saving={null} setMessage={setMessage} includeCoverUrl={false} />
+          <ManualForm
+            key={JSON.stringify(manualDraft)}
+            manualDraft={manualDraft}
+            save={save}
+            saving={null}
+            setMessage={setMessage}
+            includeCoverUrl={false}
+          />
         ) : (
           <>
-            <label className="catalog-form">
-              <span>Title, author or ISBN</span>
-              <input
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-              />
-            </label>
-            <p className="demo-help">
-              Sample edition details. Search works without a catalogue connection.
-            </p>
-            <p role="status">
-              {matches.length} {matches.length === 1 ? "match" : "matches"}
-            </p>
-            <ul className="catalog-results">
-              {matches.map((book) => {
-                const added = books.some(
-                  (entry) => entry.title === book.title && entry.author === book.author,
-                );
-                return (
-                  <li className="catalog-row" key={book.id}>
-                    <CoverImage
-                      coverUrl={book.cover_url}
-                      title={book.title}
-                      author={book.author}
-                      ddc={book.ddc}
-                      className="demo-search-cover"
-                    />
-                    <div className="catalog-copy">
-                      <h2>{book.title}</h2>
-                      <p>{book.author}</p>
-                      <p className="catalog-numbers">
-                        {book.pages ? `${book.pages} pages` : "Pages unknown"} · {book.language}
-                      </p>
-                      <button
-                        className="quiet"
-                        type="button"
-                        disabled={added}
-                        onClick={() =>
-                          void save({
-                            title: book.title,
-                            author: book.author,
-                            publisher: book.publisher,
-                            year: book.year,
-                            pages: book.pages,
-                            isbn: book.isbn,
-                            language: book.language,
-                            coverUrl: book.cover_url,
-                            source: "Manual",
-                          })
-                        }
-                      >
-                        {added ? "On your shelf" : "Add to shelf"}
-                      </button>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-            {matches.length === 0 && (
-              <div className="empty-state">
-                <p>No sample books match your search.</p>
-                <button type="button" className="quiet" onClick={() => setTab("manual")}>
-                  Enter this book manually
-                </button>
-              </div>
-            )}
+            <div className="catalog-field">
+              <label htmlFor="demo-search-query">
+                <span className="label">Title, author or ISBN</span>
+                <input
+                  className="control-input"
+                  id="demo-search-query"
+                  type="search"
+                  placeholder="Title, author or ISBN"
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                />
+              </label>
+            </div>
+            <DemoCatalogue
+              books={books}
+              matches={matches}
+              query={query}
+              save={save}
+              onManual={openManual}
+            />
           </>
         )}
       </div>
       <p className="demo-message" role="status">
         {message}
       </p>
-      {message.includes("added to your shelf") && (
+      {addedToShelf && (
         <a className="settings-link" href="#/shelf">
           View shelf
         </a>

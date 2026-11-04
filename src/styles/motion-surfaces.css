@@ -1,0 +1,174 @@
+/*
+ * Surface motion: bounded list entrances, expandable panels, dialogs and
+ * progress. Every animation is mount-scoped, so state changes never hide
+ * content that was already on screen.
+ */
+
+/* Result rows, shelf jackets and journal days enter together, capped at eight. */
+:is(.catalog-results > .catalog-row, .shelf-books > .shelf-row, .journal-days > li) {
+  animation: item-enter var(--motion-enter) var(--ease-out) backwards;
+}
+
+:is(.catalog-results, .shelf-books, .journal-days) > :nth-child(2) {
+  animation-delay: calc(var(--motion-stagger) * 1);
+}
+:is(.catalog-results, .shelf-books, .journal-days) > :nth-child(3) {
+  animation-delay: calc(var(--motion-stagger) * 2);
+}
+:is(.catalog-results, .shelf-books, .journal-days) > :nth-child(4) {
+  animation-delay: calc(var(--motion-stagger) * 3);
+}
+:is(.catalog-results, .shelf-books, .journal-days) > :nth-child(5) {
+  animation-delay: calc(var(--motion-stagger) * 4);
+}
+:is(.catalog-results, .shelf-books, .journal-days) > :nth-child(6) {
+  animation-delay: calc(var(--motion-stagger) * 5);
+}
+:is(.catalog-results, .shelf-books, .journal-days) > :nth-child(7) {
+  animation-delay: calc(var(--motion-stagger) * 6);
+}
+:is(.catalog-results, .shelf-books, .journal-days) > :nth-child(8) {
+  animation-delay: calc(var(--motion-stagger) * 7);
+}
+:is(.catalog-results, .shelf-books, .journal-days) > :nth-child(n + 9) {
+  animation: none;
+}
+
+/* Recent activity is a bounded five-row list. */
+.reading-activity-list > li {
+  animation: item-enter var(--motion-enter) var(--ease-out) backwards;
+}
+
+/* Dropdowns, the journal month calendar and book detail sections expand in place. */
+.quire-select-panel {
+  transform-origin: top center;
+  animation: panel-expand var(--motion-ui) var(--ease-out) backwards;
+}
+
+.quire-select-panel [role="option"] {
+  transition:
+    background-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard),
+    text-decoration-color var(--motion-fast) var(--ease-standard);
+}
+
+.reading-calendar-month[open] > .reading-calendar-days {
+  transform-origin: top;
+  animation: panel-expand var(--motion-ui) var(--ease-out) backwards;
+}
+
+.book-detail-entry > section[aria-label="Edit book"],
+.book-detail-entry > section[aria-label="Confirm deletion"],
+.book-detail .demo-book-actions,
+.book-detail [aria-label="Confirm status change"] {
+  transform-origin: top;
+  animation: panel-expand var(--motion-ui) var(--ease-out) backwards;
+}
+
+/* Rating stars are labels; ink, fill and background ease on hover and press. */
+.book-rating-star {
+  transition:
+    background-color var(--motion-fast) var(--ease-standard),
+    transform var(--motion-fast) var(--ease-press);
+}
+
+.book-rating-star svg {
+  transition:
+    fill var(--motion-ui) var(--ease-standard),
+    stroke var(--motion-ui) var(--ease-standard);
+}
+
+.book-rating-star:active {
+  transform: scale(0.985);
+}
+
+.tour-progress button > span {
+  transition:
+    background-color var(--motion-ui) var(--ease-standard),
+    border-color var(--motion-ui) var(--ease-standard);
+}
+
+/* Existing overlays: the tour panel and the scan sheet. */
+.tour-panel {
+  animation: panel-enter var(--motion-enter) var(--ease-out) backwards;
+}
+
+.tour-backdrop {
+  animation: fade-in var(--motion-exit) linear backwards;
+}
+
+.scan-sheet[open] {
+  animation: sheet-enter var(--motion-ui) var(--ease-out) backwards;
+}
+
+.scan-sheet[open]::backdrop {
+  animation: fade-in var(--motion-exit) linear backwards;
+}
+
+/* Progress marks ease toward their new value instead of snapping. */
+.bookmark-fill {
+  transition: height var(--bookmark-motion) var(--ease-standard);
+}
+
+.reading-day {
+  transition: opacity var(--motion-ui) var(--ease-standard);
+}
+
+.reading-day-mark {
+  transition:
+    background-color var(--motion-ui) var(--ease-standard),
+    border-color var(--motion-ui) var(--ease-standard);
+}
+
+@keyframes item-enter {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes panel-expand {
+  from {
+    opacity: 0;
+    transform: translateY(-3px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sheet-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

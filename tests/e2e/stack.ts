@@ -19,7 +19,7 @@ export const stack = (() => {
         stdio: ["ignore", "pipe", "ignore"],
         timeout: 10_000,
       }),
-    ) as { API_URL: string; ANON_KEY: string; SERVICE_ROLE_KEY: string };
+    ) as { API_URL: string; ANON_KEY: string; SERVICE_ROLE_KEY: string; MAILPIT_URL?: string; INBUCKET_URL?: string };
   } catch {
     return null;
   }

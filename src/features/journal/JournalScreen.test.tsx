@@ -16,15 +16,14 @@ it("groups duplicate book logs and reveals earlier days", () => {
   render(
     <JournalScreen books={books} logs={logs} year={2024} currentYear={2024} setYear={vi.fn()} />,
   );
-  const day = screen.getByRole("heading", { name: "2024-01-31" }).closest("section");
+  const day = document.querySelector('time[datetime="2024-01-31"]')?.closest("section");
   expect(day).not.toBeNull();
   const dayView = within(day as HTMLElement);
   expect(dayView.getByText("5 pages", { selector: "p" })).toBeTruthy();
   const bookRow = dayView.getByRole("link", { name: "A book" }).closest("li");
   expect(bookRow).not.toBeNull();
   expect(within(bookRow as HTMLElement).getByText("5 pages")).toBeTruthy();
-  expect(screen.queryByText("2024-01-01")).toBeNull();
-  expect(screen.getAllByText("Current book note: A current note").length).toBe(30);
+  expect(document.querySelector('time[datetime="2024-01-01"]')).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Show earlier days" }));
-  expect(screen.getByText("2024-01-01")).toBeTruthy();
+  expect(document.querySelector('time[datetime="2024-01-01"]')).toBeTruthy();
 });

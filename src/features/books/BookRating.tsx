@@ -37,7 +37,7 @@ export function BookRating({
           </label>
         ))}
         {rating !== null && (
-          <button className="demo-link" type="button" onClick={() => onChange(null)}>
+          <button className="quiet" type="button" onClick={() => onChange(null)}>
             Clear rating
           </button>
         )}

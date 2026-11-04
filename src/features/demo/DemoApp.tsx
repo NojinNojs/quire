@@ -3,6 +3,8 @@ import type { Candidate } from "../../lib/catalog";
 import { readingDay } from "../integration/useReading";
 import { AppShell } from "../nav/AppShell";
 import { parseRoute } from "../nav/routes";
+import { ScanSheet } from "../scan/ScanSheet";
+import { useScanRequest } from "../scan/useScanRequest";
 import { DemoSettings } from "../settings/DemoSettings";
 import { ShelfScreen } from "../shelf/ShelfScreen";
 import { DemoBanner } from "./DemoBanner";
@@ -24,7 +26,8 @@ function leaveDemo() {
 
 export function DemoApp() {
   const [hash, setHash] = useState(window.location.hash);
-  const { state, setState, storageFailed, saveProfile, updateBook } = useDemoState();
+  const { state, setState, persist, storageFailed, saveProfile, updateBook } = useDemoState();
+  const scan = useScanRequest();
   const [resetting, setResetting] = useState(false);
   const [notice, setNotice] = useState("");
   const [generation, setGeneration] = useState(0);
@@ -83,88 +86,107 @@ export function DemoApp() {
     )
       return false;
     const book = candidateBook(candidate);
-    setState((value) => ({ ...value, books: [...value.books, book] }));
+    await persist((value) => ({ ...value, books: [...value.books, book] }));
     return true;
   }
   return (
-    <AppShell route={route} guideScope="demo">
-      <DemoBanner
-        storageFailed={storageFailed}
-        resetting={resetting}
-        setResetting={setResetting}
-        reset={reset}
-        leave={leaveDemo}
-        notice={notice}
-      />
-      <div key={generation}>
-        {detailId ? (
-          detail ? (
-            <DemoBook
-              key={detail.id}
-              book={detail}
-              current={pages[detail.id] ?? 0}
-              pending={state.logs.find((log) => log.id === state.pending?.id)?.bookId === detail.id}
-              activeBookId={active?.id ?? null}
-              remove={() => {
-                setState((value) => {
-                  const logs = value.logs.filter((entry) => entry.bookId !== detail.id);
-                  return {
-                    ...value,
-                    books: value.books.filter((entry) => entry.id !== detail.id),
-                    logs,
-                    pending: logs.some((entry) => entry.id === value.pending?.id)
-                      ? value.pending
-                      : null,
-                  };
-                });
-                window.location.hash = "/shelf";
-              }}
-              update={(patch) => updateBook(detail.id, patch)}
+    <>
+      <AppShell route={route} guideScope="demo" onScan={scan.open}>
+        <DemoBanner
+          storageFailed={storageFailed}
+          resetting={resetting}
+          setResetting={setResetting}
+          reset={reset}
+          leave={leaveDemo}
+          notice={notice}
+        />
+        <div key={generation}>
+          {detailId ? (
+            detail ? (
+              <DemoBook
+                key={detail.id}
+                book={detail}
+                current={pages[detail.id] ?? 0}
+                pending={
+                  state.logs.find((log) => log.id === state.pending?.id)?.bookId === detail.id
+                }
+                activeBookId={active?.id ?? null}
+                remove={async () => {
+                  await persist((value) => {
+                    const logs = value.logs.filter((entry) => entry.bookId !== detail.id);
+                    return {
+                      ...value,
+                      books: value.books.filter((entry) => entry.id !== detail.id),
+                      logs,
+                      pending: logs.some((entry) => entry.id === value.pending?.id)
+                        ? value.pending
+                        : null,
+                    };
+                  });
+                  window.location.hash = "/shelf";
+                }}
+                update={(patch) => updateBook(detail.id, patch)}
+              />
+            ) : (
+              <main className="shell">
+                <h1>Book not found</h1>
+                <p>This book is no longer in the demo library.</p>
+                <a className="settings-link" href="#/shelf">
+                  Back to shelf
+                </a>
+              </main>
+            )
+          ) : route === "settings" ? (
+            <DemoSettings
+              profile={state.profile}
+              saveProfile={saveProfile}
+              storageFailed={storageFailed}
+              leaveDemo={leaveDemo}
             />
-          ) : (
-            <main className="shell">
-              <h1>Book not found</h1>
-              <p>This book is no longer in the demo library.</p>
-              <a className="settings-link" href="#/shelf">
-                Back to shelf
-              </a>
-            </main>
-          )
-        ) : route === "settings" ? (
-          <DemoSettings
-            profile={state.profile}
-            saveProfile={saveProfile}
-            storageFailed={storageFailed}
-            leaveDemo={leaveDemo}
-          />
-        ) : route === "search" ? (
-          <DemoSearch books={state.books} addBook={addBook} />
-        ) : route === "shelf" ? (
-          <main className="integration-screen">
-            <ShelfScreen
+          ) : route === "search" ? (
+            <DemoSearch
               books={state.books}
-              currentPages={pages}
-              onAddBook={() => {
-                window.location.hash = "/search";
-              }}
-              onSelectBook={(book) => {
-                window.location.hash = `/book/${book.id}`;
-              }}
+              addBook={addBook}
+              onScan={scan.open}
+              scanRequest={scan.request}
+              onScanHandled={scan.consume}
             />
-          </main>
-        ) : route === "journal" || route === "stats" ? (
-          <DemoInsights key={route} route={route} state={state} day={day} />
-        ) : (
-          <DemoToday
-            active={active}
-            state={state}
-            setState={setState}
-            day={day}
-            pages={pages}
-            pagesToday={pagesToday}
-          />
-        )}
-      </div>
-    </AppShell>
+          ) : route === "shelf" ? (
+            <main className="integration-screen">
+              <ShelfScreen
+                books={state.books}
+                currentPages={pages}
+                onAddBook={() => {
+                  window.location.hash = "/search";
+                }}
+                onSelectBook={(book) => {
+                  window.location.hash = `/book/${book.id}`;
+                }}
+              />
+            </main>
+          ) : route === "journal" || route === "stats" ? (
+            <DemoInsights key={route} route={route} state={state} day={day} />
+          ) : (
+            <DemoToday
+              active={active}
+              state={state}
+              setState={setState}
+              day={day}
+              pages={pages}
+              pagesToday={pagesToday}
+            />
+          )}
+        </div>
+      </AppShell>
+      {scan.scanning && (
+        <ScanSheet
+          onClose={scan.close}
+          onDetected={(isbn) => {
+            scan.issue(isbn);
+            window.location.hash = "/search";
+          }}
+        />
+      )}
+    </>
   );
 }

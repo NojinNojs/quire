@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import type { SupabaseClient, User } from "@supabase/supabase-js";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithToast } from "../../components/toast/test-utils";
 import { loadProfile, saveProfile } from "../../data/profile";
 import { AccountSettings } from "./AccountSettings";
 import { DemoSettings } from "./DemoSettings";
@@ -29,7 +30,7 @@ describe("AccountSettings", () => {
   it("loads the profile, shows the read-only email and saves through the owner", async () => {
     vi.mocked(loadProfile).mockResolvedValue(profile);
     vi.mocked(saveProfile).mockResolvedValue(profile);
-    render(<AccountSettings user={user} client={client} signOut={vi.fn()} />);
+    renderWithToast(<AccountSettings user={user} client={client} signOut={vi.fn()} />);
     await screen.findByLabelText("Display name");
     expect(inputValue("Display name")).toBe("Alice Reader");
     screen.getByText("alice@example.com");
@@ -37,7 +38,7 @@ describe("AccountSettings", () => {
       target: { value: "30" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Save profile" }));
-    await screen.findByRole("status");
+    await screen.findByText("Profile saved.");
     expect(saveProfile).toHaveBeenCalledWith(client, "reader-1", {
       display_name: "Alice Reader",
       annual_goal: 30,
@@ -46,7 +47,7 @@ describe("AccountSettings", () => {
 
   it("treats a missing profile row as an empty form, not an error", async () => {
     vi.mocked(loadProfile).mockResolvedValue(null);
-    render(<AccountSettings user={user} client={client} signOut={vi.fn()} />);
+    renderWithToast(<AccountSettings user={user} client={client} signOut={vi.fn()} />);
     await screen.findByLabelText("Display name");
     expect(inputValue("Display name")).toBe("");
     expect(inputValue("Annual goal")).toBe("");
@@ -57,7 +58,7 @@ describe("AccountSettings", () => {
     vi.mocked(loadProfile)
       .mockRejectedValueOnce(new Error("Could not load your profile. Try again."))
       .mockResolvedValueOnce(profile);
-    render(<AccountSettings user={user} client={client} signOut={vi.fn()} />);
+    renderWithToast(<AccountSettings user={user} client={client} signOut={vi.fn()} />);
     expect((await screen.findByRole("alert")).textContent).toContain(
       "Could not load your profile.",
     );
@@ -69,7 +70,7 @@ describe("AccountSettings", () => {
   it("signs out through the account action", async () => {
     vi.mocked(loadProfile).mockResolvedValue(profile);
     const signOut = vi.fn().mockResolvedValue(undefined);
-    render(<AccountSettings user={user} client={client} signOut={signOut} />);
+    renderWithToast(<AccountSettings user={user} client={client} signOut={signOut} />);
     await screen.findByLabelText("Display name");
     fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
     expect(signOut).toHaveBeenCalledTimes(1);
@@ -79,7 +80,7 @@ describe("AccountSettings", () => {
 describe("DemoSettings", () => {
   it("saves the profile locally and never fakes an email or password form", async () => {
     const saveProfile = vi.fn().mockResolvedValue(undefined);
-    render(
+    renderWithToast(
       <DemoSettings
         profile={{ display_name: null, annual_goal: null }}
         saveProfile={saveProfile}
@@ -91,13 +92,15 @@ describe("DemoSettings", () => {
     screen.getByText(/runs without an account/);
     fireEvent.change(screen.getByLabelText("Display name"), { target: { value: "Demo Reader" } });
     fireEvent.click(screen.getByRole("button", { name: "Save profile" }));
-    expect((await screen.findByRole("status")).textContent).toBe("Saved on this device.");
+    expect((await screen.findByText("Saved on this device.")).textContent).toBe(
+      "Saved on this device.",
+    );
     expect(saveProfile).toHaveBeenCalledWith({ display_name: "Demo Reader", annual_goal: null });
   });
 
   it("keeps the storage warning visible and leaves the demo on request", () => {
     const leaveDemo = vi.fn();
-    render(
+    renderWithToast(
       <DemoSettings
         profile={{ display_name: null, annual_goal: null }}
         saveProfile={vi.fn()}

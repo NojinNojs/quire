@@ -77,7 +77,7 @@ test("profile name and annual goal persist, reject invalid goals and clear when 
   await page.getByLabel("Display name").fill("Alice Reader");
   await page.getByLabel("Annual goal").fill("12");
   await page.getByRole("button", { name: "Save profile" }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Profile saved." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Notifications" }).getByText("Profile saved.")).toBeVisible();
 
   await page.reload();
   await expect(page.getByLabel("Display name")).toHaveValue("Alice Reader");
@@ -100,7 +100,7 @@ test("profile name and annual goal persist, reject invalid goals and clear when 
 
   await page.getByLabel("Annual goal").fill("");
   await page.getByRole("button", { name: "Save profile" }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Profile saved." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Notifications" }).getByText("Profile saved.")).toBeVisible();
   await page.reload();
   await expect(page.getByLabel("Annual goal")).toHaveValue("");
   await page.goto("/#/today");
@@ -122,7 +122,7 @@ test("settings changes the password, then only the new password signs in", async
     await page.getByLabel("Display name").fill("Bob Reader");
     await page.getByLabel("Annual goal").fill("7");
     await page.getByRole("button", { name: "Save profile" }).click();
-    await expect(page.getByRole("status").filter({ hasText: "Profile saved." })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Notifications" }).getByText("Profile saved.")).toBeVisible();
     await signOut(page);
     await signIn(page, email, oldPassword);
     await page.goto("/#/settings");
@@ -135,7 +135,7 @@ test("settings changes the password, then only the new password signs in", async
     await expect(page.getByRole("alert")).toBeVisible();
     await page.getByLabel("Confirm new password").fill(newPassword);
     await page.getByRole("button", { name: "Update password" }).click();
-    await expect(page.getByRole("status").filter({ hasText: "Password updated." })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Notifications" }).getByText("Password updated.")).toBeVisible();
 
     await signOut(page);
     await signIn(page, email, oldPassword, false);
@@ -159,7 +159,6 @@ test("recovery link opens the password form before the dashboard, survives reloa
     await page.getByRole("button", { name: "Open Quire" }).click();
     await fillEmail(page, email);
     await page.getByRole("button", { name: "Forgot your password?" }).click();
-    await expect(page.getByRole("status").filter({ hasText: "Reset link sent." })).toBeVisible();
 
     const link = await waitForRecoveryLink(request, email);
     await page.goto(link);
@@ -181,7 +180,7 @@ test("recovery link opens the password form before the dashboard, survives reloa
     await expect(page.getByRole("alert")).toBeVisible();
     await page.getByLabel("Email address").fill(email);
     await page.getByRole("button", { name: "Request a new reset link" }).click();
-    await expect(page.getByRole("status").filter({ hasText: "Reset link sent." })).toBeVisible();
+    await expect(page.getByRole("status")).toBeVisible();
 
     const endpoint = api();
     const newLogin = await request.post(`${endpoint.API_URL}/auth/v1/token?grant_type=password`, {

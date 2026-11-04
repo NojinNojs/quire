@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import type { SupabaseClient, User } from "@supabase/supabase-js";
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, screen, waitFor } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
+import { renderWithToast } from "../../components/toast/test-utils";
 import { RecoveryScreen } from "./RecoveryScreen";
 
 const updateUser = vi.fn();
@@ -26,13 +27,13 @@ it("keeps the recovery view open with the error when the new password fails", as
     error: { message: "New password should be different from the old password." },
   });
   const completeRecovery = vi.fn();
-  render(
+  renderWithToast(
     <RecoveryScreen client={client} user={user} error={null} completeRecovery={completeRecovery} />,
   );
   fill("library-42");
   fireEvent.click(screen.getByRole("button", { name: "Update password" }));
   await waitFor(() =>
-    expect(screen.getByRole("alert").textContent).toContain("different from the old password"),
+    expect(screen.getAllByText(/different from the old password/).length).toBeGreaterThan(0),
   );
   expect(completeRecovery).not.toHaveBeenCalled();
 });
@@ -40,7 +41,7 @@ it("keeps the recovery view open with the error when the new password fails", as
 it("completes recovery only after the password is stored", async () => {
   updateUser.mockResolvedValueOnce({ error: null });
   const completeRecovery = vi.fn();
-  render(
+  renderWithToast(
     <RecoveryScreen client={client} user={user} error={null} completeRecovery={completeRecovery} />,
   );
   fill("library-card-42");
@@ -51,7 +52,7 @@ it("completes recovery only after the password is stored", async () => {
 
 it("does not complete recovery for a signed-in reader with an invalid link", () => {
   const completeRecovery = vi.fn();
-  render(
+  renderWithToast(
     <RecoveryScreen
       client={client}
       user={user}
@@ -66,7 +67,7 @@ it("does not complete recovery for a signed-in reader with an invalid link", () 
 
 it("requests a fresh link when the recovery URL is expired", async () => {
   resetPasswordForEmail.mockResolvedValueOnce({ error: null });
-  render(
+  renderWithToast(
     <RecoveryScreen
       client={client}
       user={null}
@@ -89,7 +90,7 @@ it("requests a fresh link when the recovery URL is expired", async () => {
 it("reports a failed link request without completing recovery", async () => {
   resetPasswordForEmail.mockResolvedValueOnce({ error: new Error("offline") });
   const completeRecovery = vi.fn();
-  render(
+  renderWithToast(
     <RecoveryScreen
       client={client}
       user={user}

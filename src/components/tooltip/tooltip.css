@@ -1,0 +1,40 @@
+.quire-tooltip-positioner {
+  /* Tooltips are transient overlays: they sit above the header, the palette
+     backdrop and the palette panel, not in the header's own layer. */
+  z-index: 60;
+}
+
+.quire-tooltip {
+  max-width: 240px;
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-input);
+  background: var(--ink);
+  color: var(--surface-raised);
+  font: 500 var(--label-size) / var(--label-leading) var(--font-sans);
+  letter-spacing: 0.01em;
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity var(--motion-fast, 110ms) var(--ease),
+    transform var(--motion-fast, 110ms) var(--ease);
+}
+
+/* Base UI holds the popup until this transition lands, so the exit is real. */
+.quire-tooltip[data-starting-style],
+.quire-tooltip[data-ending-style] {
+  opacity: 0;
+  transform: translateY(2px);
+}
+
+.quire-tooltip[data-side="bottom"][data-starting-style],
+.quire-tooltip[data-side="bottom"][data-ending-style] {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quire-tooltip,
+  .quire-tooltip[data-starting-style],
+  .quire-tooltip[data-ending-style] {
+    transition: none;
+    transform: none;
+  }
+}

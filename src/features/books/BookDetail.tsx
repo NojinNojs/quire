@@ -1,8 +1,12 @@
 import { useState } from "react";
+import { ArrowLeftIcon, CloseIcon, EditIcon, TrashIcon } from "../../components/icons";
+import { useToast } from "../../components/toast";
 import type { BookEdit } from "../../data/bookDetails";
 import type { Book } from "../../data/types";
 import { ManualForm } from "../catalog/ManualForm";
 import { CoverImage } from "../covers/CoverImage";
+import { BookDeletePrompt } from "./BookDeletePrompt";
+import { BookFacts } from "./BookFacts";
 import "../../styles/demo.css";
 import "../../styles/book-detail.css";
 
@@ -22,70 +26,70 @@ export function BookDetail({
   const [editing, setEditing] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [pending, setPending] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<{ message: string; live: boolean } | null>(null);
   const [edition, setEdition] = useState(book.edition ?? "");
   const [city, setCity] = useState(book.city ?? "");
+  const toast = useToast();
   return (
     <main className="shell demo-book book-detail">
       <article className="book-detail-entry">
         <a className="settings-link" href="#/shelf">
+          <ArrowLeftIcon />
           Back to collection
         </a>
-        <h1>{book.title}</h1>
-        <div className="demo-book-record">
-          <CoverImage
-            coverUrl={book.cover_url}
-            coverPath={book.cover_path}
-            title={book.title}
-            author={book.author}
-            ddc={book.ddc}
-            className="demo-detail-cover"
-          />
-          <div>
-            <p>{book.author ?? "Author unknown"}</p>
-            <p>
-              {[book.publisher, book.year, book.edition].filter(Boolean).join(" · ") ||
-                "Edition details unknown"}
-            </p>
-            {book.city && <p>Publication city: {book.city}</p>}
-            <p>
-              {current}
-              {book.pages ? ` / ${book.pages}` : ""} pages read
-            </p>
-            <p>
-              Status:{" "}
-              {
-                {
-                  want: "Want to read",
-                  reading: "Reading",
-                  finished: "Finished",
-                  wishlist: "Wishlist",
-                }[book.status]
-              }
-            </p>
-            {book.isbn && <p>ISBN {book.isbn}</p>}
-            {book.language && <p>Language: {book.language}</p>}
+        <header className="book-detail-head">
+          <h1>{book.title}</h1>
+          <p className="book-detail-author">{book.author ?? "Author unknown"}</p>
+        </header>
+        <div className="book-detail-record">
+          <div className="book-detail-cover">
+            <CoverImage
+              coverUrl={book.cover_url}
+              coverPath={book.cover_path}
+              title={book.title}
+              author={book.author}
+              ddc={book.ddc}
+              className="demo-detail-cover"
+            />
           </div>
+          <BookFacts book={book} current={current} />
         </div>
+        {!editing && !confirming && children ? (
+          <div className="book-detail-reading">{children}</div>
+        ) : null}
         {editing ? (
-          <section aria-label="Edit book">
-            <h2>Edit book</h2>
-            <label className="book-extra-field">
-              Edition
-              <input value={edition} onChange={(event) => setEdition(event.target.value)} />
-            </label>
-            <label className="book-extra-field">
-              Publication city
-              <input value={city} onChange={(event) => setCity(event.target.value)} />
-            </label>
+          <section className="book-detail-section" aria-labelledby="book-edit-title">
+            <h2 id="book-edit-title">Edit book</h2>
+            <div className="book-extra-fields">
+              <label className="book-extra-field">
+                Edition
+                <input
+                  className="control-input"
+                  placeholder="e.g. First edition"
+                  autoComplete="off"
+                  value={edition}
+                  onChange={(event) => setEdition(event.target.value)}
+                />
+              </label>
+              <label className="book-extra-field">
+                Publication city
+                <input
+                  className="control-input"
+                  placeholder="e.g. London"
+                  autoComplete="off"
+                  value={city}
+                  onChange={(event) => setCity(event.target.value)}
+                />
+              </label>
+            </div>
             <ManualForm
               manualDraft={{ ...book, coverUrl: book.cover_url }}
               includeCoverUrl={false}
               saving={pending ? "saving" : null}
-              setMessage={setError}
+              setMessage={(message) => setError(message ? { message, live: true } : null)}
               save={async (candidate) => {
                 setPending(true);
-                setError("");
+                setError(null);
                 try {
                   await save({
                     title: candidate.title,
@@ -98,10 +102,14 @@ export function BookDetail({
                     edition: edition.trim() || null,
                     city: city.trim() || null,
                   });
+                  toast.success("Book details saved.");
                   setEditing(false);
                   return true;
                 } catch (cause) {
-                  setError(cause instanceof Error ? cause.message : "Could not save this book.");
+                  const message =
+                    cause instanceof Error ? cause.message : "Could not save this book.";
+                  setError({ message, live: false });
+                  toast.error(message);
                   return false;
                 } finally {
                   setPending(false);
@@ -110,80 +118,71 @@ export function BookDetail({
             />
             <button
               type="button"
-              className="demo-button"
+              className="secondary book-detail-cancel"
               disabled={pending}
               onClick={() => {
                 setEditing(false);
                 setEdition(book.edition ?? "");
                 setCity(book.city ?? "");
-                setError("");
+                setError(null);
               }}
             >
+              <CloseIcon />
               Cancel edit
             </button>
           </section>
         ) : (
-          <div className="demo-book-actions">
+          <div className="demo-book-actions book-detail-actions">
             <button
               type="button"
-              className="primary"
+              className="secondary book-detail-edit"
               onClick={() => {
                 setEditing(true);
                 setConfirming(false);
-                setError("");
+                setError(null);
               }}
             >
+              <EditIcon />
               Edit book
             </button>
             <button
               type="button"
-              className="demo-button"
+              className="quiet book-detail-delete"
               onClick={() => {
                 setConfirming(true);
-                setError("");
+                setError(null);
               }}
             >
+              <TrashIcon />
               Delete book
             </button>
           </div>
         )}
         {confirming && !editing && (
-          <section aria-label="Confirm deletion" className="book-delete">
-            <p>
-              Delete “{book.title}” from your collection? Its reading logs will also be deleted.
-            </p>
-            <button
-              type="button"
-              className="primary"
-              disabled={pending}
-              onClick={async () => {
-                setPending(true);
-                setError("");
-                try {
-                  await remove();
-                } catch (cause) {
-                  setError(cause instanceof Error ? cause.message : "Could not delete this book.");
-                  setPending(false);
-                }
-              }}
-            >
-              {pending ? "Deleting" : "Confirm delete"}
-            </button>
-            <button
-              type="button"
-              className="demo-button"
-              disabled={pending}
-              onClick={() => {
-                setConfirming(false);
-                setError("");
-              }}
-            >
-              Cancel delete
-            </button>
-          </section>
+          <BookDeletePrompt
+            book={book}
+            pending={pending}
+            onCancel={() => {
+              setConfirming(false);
+              setError(null);
+            }}
+            onConfirm={async () => {
+              setPending(true);
+              setError(null);
+              try {
+                await remove();
+                toast.success("Book removed from your collection.");
+              } catch (cause) {
+                const message =
+                  cause instanceof Error ? cause.message : "Could not delete this book.";
+                setError({ message, live: false });
+                toast.error(message);
+                setPending(false);
+              }
+            }}
+          />
         )}
-        {error && <p role="alert">{error}</p>}
-        {!editing && !confirming && children}
+        {error && <p role={error.live ? "alert" : undefined}>{error.message}</p>}
       </article>
     </main>
   );

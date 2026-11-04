@@ -1,10 +1,11 @@
 // @vitest-environment jsdom
-import { fireEvent, render, screen } from "@testing-library/react";
+import "../shelf/test-dom";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import type { Book } from "../../data/types";
 import { StatsScreen } from "./StatsScreen";
 
-it("uses all languages after the selected language disappears in another year, without inventing a goal", () => {
+it("uses all languages after the selected language disappears in another year, without inventing a goal", async () => {
   const books = [
     { id: "a", language: "English", status: "reading" },
     { id: "b", language: "French", status: "reading" },
@@ -21,12 +22,15 @@ it("uses all languages after the selected language disappears in another year, w
     currentYear: 2025,
   };
   const { rerender } = render(<StatsScreen {...props} year={2024} />);
-  fireEvent.change(screen.getByLabelText("Language"), {
-    target: { value: JSON.stringify({ kind: "language", value: "English" }) },
-  });
+  fireEvent.click(screen.getByRole("combobox", { name: "Language" }));
+  const option = await screen.findByRole("option", { name: "English" });
+  fireEvent.pointerDown(option, { pointerType: "mouse" });
+  fireEvent.click(option, { detail: 1 });
   rerender(<StatsScreen {...props} year={2025} />);
-  expect((screen.getByLabelText("Language") as HTMLSelectElement).value).toBe(
-    JSON.stringify({ kind: "all" }),
+  await waitFor(() =>
+    expect(screen.getByRole("combobox", { name: "Language" }).textContent).toContain(
+      "All languages",
+    ),
   );
   expect(screen.getByText("Pages read").nextElementSibling?.textContent).toBe("7");
   expect(screen.queryByRole("heading", { name: "Annual goal" })).toBeNull();

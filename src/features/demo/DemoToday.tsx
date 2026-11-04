@@ -85,16 +85,6 @@ export function DemoToday({
             window.location.hash = "/shelf";
           }}
         />
-        {active && (
-          <div className="demo-reading-actions">
-            <a className="settings-link" href={`#/book/${active.id}`}>
-              View book details
-            </a>
-            <a className="settings-link" href="#/shelf">
-              Choose another book
-            </a>
-          </div>
-        )}
       </TodayDashboard>
     </main>
   );

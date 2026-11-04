@@ -1,0 +1,106 @@
+/* Fields: one label, one input, one hint. Auth keeps its own paper rules. */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.label {
+  color: var(--ink-muted);
+  font: 600 var(--small-size) / var(--small-leading) var(--font-sans);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.control-input,
+.control-select,
+.control-textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--control-height);
+  padding: 0 var(--space-12);
+  border: var(--rule-width) solid var(--ink-muted);
+  border-radius: var(--control-radius);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: 400 var(--body-size) / var(--body-leading) var(--font-sans);
+  caret-color: var(--accent);
+  transition:
+    border-color var(--motion) var(--ease),
+    background-color var(--motion) var(--ease);
+}
+
+.control-input::placeholder,
+.control-textarea::placeholder {
+  color: var(--ink-muted);
+  opacity: 1;
+}
+
+/* Search fields inherit a UA box in WebKit; keep the shared height and padding. */
+.control-input[type="search"] {
+  appearance: none;
+}
+
+.control-input:hover:not(:disabled),
+.control-select:hover:not(:disabled),
+.control-textarea:hover:not(:disabled) {
+  border-color: var(--ink);
+}
+
+.control-input:focus-visible,
+.control-select:focus-visible,
+.control-textarea:focus-visible {
+  border-color: var(--accent);
+  outline: var(--focus-width) solid var(--accent);
+  outline-offset: var(--focus-offset);
+}
+
+.control-input:disabled,
+.control-select:disabled,
+.control-textarea:disabled {
+  background: var(--surface-subtle);
+  color: var(--ink-muted);
+  cursor: not-allowed;
+}
+
+.control-input[aria-invalid="true"],
+.control-select[aria-invalid="true"],
+.control-textarea[aria-invalid="true"] {
+  border-color: var(--accent);
+}
+
+/* A textarea sizes to its content; it never inherits the 44px single line. */
+.control-textarea {
+  min-height: 120px;
+  padding: var(--space-12);
+  font: 400 14px / var(--body-leading) var(--font-sans);
+  resize: vertical;
+}
+
+.control-select {
+  padding-right: var(--space-32);
+}
+
+.control-hint {
+  margin: 0;
+  color: var(--ink-muted);
+  font: 400 12px / var(--small-leading) var(--font-sans);
+  overflow-wrap: anywhere;
+}
+
+.control-error {
+  margin: 0;
+  color: var(--accent);
+  font: 600 var(--small-size) / var(--small-leading) var(--font-sans);
+  overflow-wrap: anywhere;
+}
+
+/* 16px keeps iOS from zooming when a field takes focus. */
+@media (max-width: 640px) {
+  .control-input,
+  .control-select,
+  .control-textarea {
+    font-size: 16px;
+  }
+}

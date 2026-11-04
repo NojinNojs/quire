@@ -47,6 +47,7 @@ export function useDemoState() {
   return {
     state,
     setState,
+    persist,
     storageFailed,
     saveProfile: (profile: Pick<ReaderProfile, "display_name" | "annual_goal">) =>
       persist((current) => ({ ...current, profile })),

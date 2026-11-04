@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ToastProvider } from "./components/toast";
 import { AuthForm } from "./features/auth/AuthForm";
 import { RecoveryScreen } from "./features/auth/RecoveryScreen";
 import { DemoApp } from "./features/demo/DemoApp";
@@ -10,6 +11,8 @@ import { StatsRoute } from "./features/integration/StatsRoute";
 import { TodayRoute } from "./features/integration/TodayRoute";
 import { AppShell } from "./features/nav/AppShell";
 import { parseRoute } from "./features/nav/routes";
+import { ScanSheet } from "./features/scan/ScanSheet";
+import { useScanRequest } from "./features/scan/useScanRequest";
 import { AccountSettings } from "./features/settings/AccountSettings";
 import { ErrorPanel } from "./features/states/ErrorPanel";
 import { SkeletonRows } from "./features/states/SkeletonRows";
@@ -19,11 +22,12 @@ import { useSession } from "./lib/useSession";
 import "./styles/integration.css";
 
 export default function App() {
-  return isDemoMode() ? <DemoApp /> : <AccountApp />;
+  return <ToastProvider>{isDemoMode() ? <DemoApp /> : <AccountApp />}</ToastProvider>;
 }
 
 function AccountApp() {
   const [route, setRoute] = useState(() => parseRoute(window.location.hash));
+  const scan = useScanRequest();
   const { user, ready, client, signOut, error, retry, recovery, recoveryError, completeRecovery } =
     useSession();
 
@@ -77,22 +81,41 @@ function AccountApp() {
   if (!user) return <AuthForm client={client} />;
 
   return (
-    <AppShell route={route} guideScope={user.id}>
-      {typeof route === "object" ? (
-        <BookRoute key={route.id} id={route.id} client={client} owner={user.id} />
-      ) : route === "settings" ? (
-        <AccountSettings key={user.id} user={user} client={client} signOut={signOut} />
-      ) : route === "search" ? (
-        <CatalogueRoute key={user.id} user={user} client={client} signOut={signOut} />
-      ) : route === "shelf" ? (
-        <ShelfRoute key={user.id} owner={user.id} client={client} />
-      ) : route === "journal" ? (
-        <JournalRoute key={user.id} owner={user.id} client={client} />
-      ) : route === "stats" ? (
-        <StatsRoute key={user.id} owner={user.id} client={client} />
-      ) : (
-        <TodayRoute key={user.id} owner={user.id} client={client} />
+    <>
+      <AppShell route={route} guideScope={user.id} onScan={scan.open}>
+        {typeof route === "object" ? (
+          <BookRoute key={route.id} id={route.id} client={client} owner={user.id} />
+        ) : route === "settings" ? (
+          <AccountSettings key={user.id} user={user} client={client} signOut={signOut} />
+        ) : route === "search" ? (
+          <CatalogueRoute
+            key={user.id}
+            user={user}
+            client={client}
+            signOut={signOut}
+            onScan={scan.open}
+            scanRequest={scan.request}
+            onScanHandled={scan.consume}
+          />
+        ) : route === "shelf" ? (
+          <ShelfRoute key={user.id} owner={user.id} client={client} />
+        ) : route === "journal" ? (
+          <JournalRoute key={user.id} owner={user.id} client={client} />
+        ) : route === "stats" ? (
+          <StatsRoute key={user.id} owner={user.id} client={client} />
+        ) : (
+          <TodayRoute key={user.id} owner={user.id} client={client} />
+        )}
+      </AppShell>
+      {scan.scanning && (
+        <ScanSheet
+          onClose={scan.close}
+          onDetected={(isbn) => {
+            scan.issue(isbn);
+            window.location.hash = "/search";
+          }}
+        />
       )}
-    </AppShell>
+    </>
   );
 }

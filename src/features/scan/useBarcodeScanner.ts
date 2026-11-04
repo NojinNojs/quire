@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { isbnTo13 } from "../../lib/isbn";
 
 export type ScanState =
@@ -226,6 +226,12 @@ export function useBarcodeScanner({ onDetected, apis, throttleMs = 250 }: Barcod
     };
   }, [apis, throttleMs]);
 
+  // The controls ref is the live implementation; these wrappers keep one
+  // identity for the sheet's close handler and its Escape listener.
+  const stop = useCallback(() => controls.current.stop(), []);
+  const submit = useCallback((value: string) => controls.current.submit(value), []);
+  const toggleTorch = useCallback(() => controls.current.toggleTorch(), []);
+
   return {
     videoRef,
     cameraActive,
@@ -235,8 +241,8 @@ export function useBarcodeScanner({ onDetected, apis, throttleMs = 250 }: Barcod
     torchOn,
     torchBusy,
     torchError,
-    stop: () => controls.current.stop(),
-    submit: (value: string) => controls.current.submit(value),
-    toggleTorch: () => controls.current.toggleTorch(),
+    stop,
+    submit,
+    toggleTorch,
   };
 }
