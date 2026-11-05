@@ -1,10 +1,12 @@
 # Evidence
 
-Committed captures, gate output, and verification notes, one directory per milestone. Open the
-directory's own `README.md` or `NOTES.md` first; it records what was checked and what the
-screenshots show.
+Committed captures, gate output, and verification notes are grouped by milestone. Where present,
+read the directory's `README.md` or `NOTES.md` for what was checked and what the screenshots show.
+These are dated records, not proof of the current revision. Some notes reference temporary files
+that were not committed and may no longer be available.
 
-Generated output stays out of this folder: `test-results/` and `.impeccable/` are ignored by git.
+Generated test output belongs in the git-ignored `test-results/` directory. Keep committed captures
+as historical records; add new evidence here deliberately with notes describing what was checked.
 
 ## Authentication
 
@@ -34,12 +36,13 @@ The sign-in evidence runs in order. Later directories supersede the earlier trea
 ## Reading and demo
 
 - `reading/`: reading loop screenshots and notes.
+- [`reading-companion/`](reading-companion/verification.md): dashboard, shell and account captures with verification notes.
 - `demo/`: interactive demo captures and verification.
 
 ## Shelf and shell
 
 - `shelf/`: shelf screen captures and notes.
-- `shell/`: app shell and icons.
+- `shell/`: historical app shell and icons; its notes reference uncommitted temporary artifacts.
 - `polish2/`: shelf line, Today panes, and shelf filters.
 - `responsive-shelf/`: shelf breakpoints, loading, empty, and error states.
 - `responsive-shell/`: shell breakpoints, issue #46.
@@ -56,9 +59,6 @@ The sign-in evidence runs in order. Later directories supersede the earlier trea
 
 ## Test-owned paths
 
-Two directories are part of the test suite:
-
-- `tests/e2e/auth.spec.ts` writes captures and `contrast.txt` to `auth-cover/`.
-- `tests/e2e/catalogue-resilience.spec.ts` reads `catalogue-resilience/google-html.txt`.
-
-Rename or move either directory only together with those tests.
+The end-to-end tests write auth captures and `contrast.txt` to `test-results/auth-cover/` and read
+the `catalogue-resilience/google-html.txt` fixture from this directory. Move the fixture only together
+with its test.

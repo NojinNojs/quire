@@ -12,17 +12,18 @@ nothing is shared or social.
 
 ## Documents
 
-The product and design are decided before code, in this order:
+Current direction and historical product records are indexed below:
 
 | Document | What it decides |
 |---|---|
 | [PRD](docs/product/PRD.md) | what the product is, and what it refuses to be |
 | [TRD](docs/engineering/TRD.md) | stack, hosting, and the reasons |
 | [App Flow](docs/product/APP_FLOW.md) | the journeys, including the awkward states |
-| [Design Brief](docs/design/DESIGN_BRIEF.md) | the visual direction |
-| [Design System](docs/design/DESIGN_SYSTEM.md) | tokens, theme, component contracts |
+| [DESIGN.md](DESIGN.md) | current visual direction |
+| [Design Brief](docs/design/DESIGN_BRIEF.md) | brief and historical context |
+| [Design System](docs/design/DESIGN_SYSTEM.md) | current direction and styles |
 | [Schema](docs/engineering/SCHEMA.md) | tables, policies, streak rules |
-| [Implementation Plan](docs/engineering/IMPLEMENTATION_PLAN.md) | the thirteen steps, in order |
+| [Implementation Plan](docs/engineering/IMPLEMENTATION_PLAN.md) | historical staged milestones |
 
 The full index, including briefs, decisions, and evidence, is [docs/README.md](docs/README.md).
 

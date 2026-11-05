@@ -2,6 +2,10 @@
 
 Verified 29 October 2026 on `feat/shell-icons`, using local Supabase and system Brave.
 
+This is a historical record of that revision, not verification of the current interface. The
+screenshots, browser script, results, and full gate log named below were temporary local artifacts;
+they were not committed and may no longer be available.
+
 ## Screens
 
 | Hash | Screen |
@@ -53,14 +57,14 @@ also has a scrolled viewport capture showing its footer above the fixed navigati
 
 | Screenshot | View |
 | --- | --- |
-| [today-390.png](/tmp/quire-shell-evidence/today-390.png) | Today placeholder, light theme |
-| [shelf-390.png](/tmp/quire-shell-evidence/shelf-390.png) | Shelf placeholder and active rule |
-| [search-390.png](/tmp/quire-shell-evidence/search-390.png) | Live catalogue, empty account |
-| [settings-390.png](/tmp/quire-shell-evidence/settings-390.png) | Settings, full page |
-| [settings-footer-390.png](/tmp/quire-shell-evidence/settings-footer-390.png) | Settings footer after scrolling |
-| [today-dark-390.png](/tmp/quire-shell-evidence/today-dark-390.png) | Today in Shelf dark |
-| [keyboard-focus-390.png](/tmp/quire-shell-evidence/keyboard-focus-390.png) | Search link keyboard focus |
-| [shelf-reduced-motion-390.png](/tmp/quire-shell-evidence/shelf-reduced-motion-390.png) | Shelf with reduced motion |
+| `today-390.png` | Today placeholder, light theme |
+| `shelf-390.png` | Shelf placeholder and active rule |
+| `search-390.png` | Live catalogue, empty account |
+| `settings-390.png` | Settings, full page |
+| `settings-footer-390.png` | Settings footer after scrolling |
+| `today-dark-390.png` | Today in Shelf dark |
+| `keyboard-focus-390.png` | Search link keyboard focus |
+| `shelf-reduced-motion-390.png` | Shelf with reduced motion |
 
 Browser check script: `/tmp/quire-shell-check.mjs`. Results:
 `/tmp/quire-shell-evidence/checks.json`. The preview used the current local Supabase anon key from

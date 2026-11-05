@@ -4,6 +4,11 @@ Generated from conventional commits by `scripts/changelog.sh`.
 
 ## Unreleased
 
+### Changed
+
+- keep generated authentication captures outside tracked documentation, remove the unused nested shelf package and unused public imagery, and retain the icon master outside the deployment assets
+- align architecture and schema references with the shipped Supabase application and replace obsolete design instructions with portable canonical references
+
 ### Added
 
 - move the sidebar toggle into the content header and align rail, brand and header geometry; add accessible plus/ISBN-scan capture actions with 44px targets on phones and desktops

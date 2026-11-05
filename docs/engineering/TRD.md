@@ -1,95 +1,30 @@
----
-title: Quire — Technical Requirements
-status: review
-started: 2026-10-28
-tags: [project, quire, tech]
----
+# Quire technical requirements
 
-# Quire — Technical Requirements
+## Current architecture
 
-## Batasan yang Menentukan Pilihan
+The application is a Vite, React and TypeScript client. It uses `@supabase/supabase-js` for authentication, Postgres access, RPCs and private cover storage. SQL migrations in [`supabase/migrations/`](../../supabase/migrations/) define the database; there is no Drizzle layer. Base UI supplies accessible interaction primitives, styled with the application's CSS. See [`package.json`](../../package.json) for the installed versions.
 
-- Gratis, **tanpa kartu kredit**.
-- Boleh menerima donasi (Vercel Hobby melarang pemakaian komersial; itu yang mengeluarkan Vercel dari daftar).
-- Harus bisa dipindah ke VPS kalau donasi terkumpul — jadi jangan menulis kode yang hanya hidup di satu penyedia.
-- Mobile-first, dipakai satu tangan, kadang tanpa sinyal.
-- AI tidak boleh memakai kuota pribadi 9Router untuk pengguna lain.
+Reading writes use the Supabase `log_pages` RPC; account data is protected by row-level security. The app also has an interactive demo with separate browser-local data. See [Schema](SCHEMA.md) for database boundaries and [the root README](../../README.md) for setup and routes.
 
-## Susunan
+## Data flows
 
-| Lapisan | Pilihan | Alasan |
-|---|---|---|
-| Aplikasi + API | Cloudflare Workers (Pages Functions) | gratis, tanpa kartu, alamat `*.workers.dev`, boleh donasi |
-| Antarmuka | React `19.3` + Vite `8.3` + TypeScript, PWA | satu bahasa untuk seluruh aplikasi, service worker untuk offline |
-| API | Elysia `1.4` (Bun) | tipe otomatis ujung ke ujung, cepat, dan tetap bisa jalan di Cloudflare |
-| Data | Supabase Postgres + Drizzle ORM `0.45` | satu tempat; SQL standar jadi mudah pindah ke VPS |
-| Akun | Supabase Auth (email + kata sandi) | tidak perlu layanan tambahan |
-| Foto cover | Supabase Storage | gratis 1 GB, cukup untuk ratusan cover |
-| Baca halaman hak cipta | Cloudflare Workers AI (model vision) | kuota gratis harian; **bukan** 9Router |
-| Katalog buku | Google Books + Open Library | gratis, tanpa kunci wajib |
-| Alamat | `quire.workers.dev` | gratis; domain sendiri menyusul kalau perlu |
-
-## Komponen Antarmuka
-
-| Kebutuhan | Pilihan | Catatan |
-|---|---|---|
-| Gaya | CSS custom properties dari design system v1 | tanpa Tailwind: token sudah lengkap, dan radius 0–3 tidak butuh utility |
-| Perilaku + aksesibilitas | Radix UI `1.8.1` | hanya untuk dialog, popover, dan tab |
-| Ikon | set sendiri, 24px grid, stroke 1.75, ujung siku | bukan font ikon, bukan Lucide; 10 simbol di `app.js` |
-| Gerak | CSS transition 120ms | cukup untuk 1px shift dan opacity; Motion hanya kalau nanti butuh choreography |
-
-Catatan: aplikasi memakai satu tema terang `shelf`; token aktif berada di `src/styles/themes.css`.
-
-## Risiko yang Diketahui
-
-- Adapter Cloudflare untuk Elysia masih **eksperimental**. API-nya hanya tiga endpoint, jadi
-  kerusakan di sana tidak menjalar ke aplikasi. Jalan mundur: pindah ke Hono (satu berkas) atau
-  jalankan API di Bun/VPS begitu donasi terkumpul.
-- Supabase proyek gratis tidur setelah lama tidak dipakai; bangunnya beberapa detik.
-
-## Aturan Portabilitas
-
-1. SQL ditulis standar — tidak ada fungsi khusus Cloudflare di dalam query.
-2. Penyimpanan gambar diakses lewat antarmuka S3, walau hari ini Supabase Storage.
-3. Semua panggilan AI lewat satu modul `extract.ts`; ganti penyedia = ubah satu berkas.
-4. Konfigurasi lewat variabel lingkungan, bukan nilai tertanam.
-5. Tidak ada ketergantungan pada bindings Cloudflare di luar lapisan API.
-
-## Alur Data Inti
-
-1. **Masuk buku** → ISBN / kata kunci → katalog → kandidat → konfirmasi → simpan.
-2. **Tanpa ISBN** → foto halaman judul → Workers AI → field yang terbaca saja → simpan dengan kolom kosong.
-3. **Catat halaman** → tulis lokal dulu (IndexedDB) → kirim ke server saat ada sinyal.
-4. **Hitung streak** → dilakukan di server saat halaman pertama hari itu masuk; satu baris per hari per pengguna.
-5. **Kotak tahunan** → agregasi harian dari tabel progres, bukan dihitung ulang tiap muat halaman.
-
-## Model Data Ringkas
-
-`users` · `books` (satu baris per eksemplar, `isbn` boleh kosong, `pages` boleh kosong) · `works` (judul kanonik untuk mengelompokkan edisi) · `progress_log` (tanggal, halaman, buku) · `streaks` (hari terakhir, panjang, sisa pemulihan) · `notes` · `wishlist` · `annual_goals`
-
-## Batas Gratis yang Harus Dipantau
-
-- Supabase: 500 MB basis data, 1 GB penyimpanan, proyek tidur setelah lama tidak dipakai.
-- Cloudflare Workers: 100.000 permintaan/hari.
-- Workers AI: kuota harian; habis = fitur foto berhenti sementara, bukan tagihan.
-- Google Books: batas harian per kunci; tanpa kunci lebih kecil.
-
-## Yang Tidak Dipakai, dan Kenapa
-
-- **Vercel** — paket gratis non-komersial, donasi saja sudah melanggar.
-- **Firebase** — mahal saat tumbuh, dan keluar dari SQL standar.
-- **9Router untuk pengguna umum** — itu kuota pribadi Aqsan.
-- **VPS sekarang** — butuh uang dan perawatan sebelum ada pengguna.
+1. Catalogue search queries Google Books and Open Library; the reader confirms an edition before saving it. The client normalizes ISBNs and checks for duplicates; the database also enforces per-owner ISBN uniqueness.
+2. Reading logs call `log_pages` with a book, positive page count and date. The database adds same-day entries and updates the streak. Pending and undo behavior is local until a write is committed.
+3. Journal and reading-year views use saved progress and book data. The demo uses its own browser-local sample data and does not write to an account.
+4. Private cover uploads use the `covers` bucket and signed URLs. Uploaded storage paths take display priority over external cover URLs.
 
 ## Cover enrichment
 
-When a new edition has no catalogue cover, `src/lib/coverLookup.ts` checks Google Books by ISBN,
-Open Library by ISBN, then Open Library by title and author. It returns the largest available HTTPS
-image URL, or null when all sources are missing or unavailable. Each request has a four second
-bound. It uses no API key and adds no dependency. An existing catalogue URL is preserved.
-Uploaded storage paths keep display priority over external URLs.
+For an edition without a catalogue cover, `src/lib/coverLookup.ts` tries Google Books by ISBN, Open Library by ISBN, then Open Library by title and author. It returns an HTTPS image URL or null; each request has a four-second timeout and lookup failure does not prevent saving. Google image links prefer the largest available size.
 
-`scripts/backfill-covers.mjs` applies the same lookup to existing books with null `cover_url` and
-null `cover_path`. Updates recheck both null conditions atomically so a concurrent upload wins.
-The CLI supports `--dry-run`, paginates by ID, and prints a result for each eligible book. See
-`docs/evidence/cover-enrich/README.md` for configuration and verification.
+`scripts/backfill-covers.mjs` applies the lookup to existing books with null `cover_url` and `cover_path`. Updates recheck both fields so a concurrent upload wins. It supports `--dry-run`, paginates by ID, and reports each eligible book. See [cover enrichment evidence](../evidence/cover-enrich/README.md) for configuration.
+
+## Runtime and portability
+
+Configuration is supplied through environment variables; do not commit credentials. Supabase provides authentication, RLS, SQL functions and private storage, so moving providers requires replacing those integrations rather than assuming a generic S3 interface. The migrations are the database contract and include PostgreSQL and Supabase-specific features.
+
+## Boundaries
+
+The earlier Cloudflare Workers, Elysia API, Workers AI extraction, PWA and Drizzle proposals are not the implemented architecture. There is no documented production deployment endpoint in this repository. Do not assume an AI photo-extraction service, an Elysia catalogue endpoint, or a service worker exists.
+
+The current light theme and design direction are documented in [DESIGN.md](../../DESIGN.md). Environment configuration is described in [Engineering](ENGINEERING.md) and `.env.example`.

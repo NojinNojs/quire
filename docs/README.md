@@ -15,10 +15,10 @@ The product and engineering record. [The root README](../README.md) covers runni
 
 | Document | What it decides |
 |---|---|
-| [Design Brief](design/DESIGN_BRIEF.md) | the visual direction |
-| [Design System](design/DESIGN_SYSTEM.md) | tokens, themes, component contracts |
-| [Shelf Direction](design/DIRECTION_BOOKSHELF.md) | the shelf, bookmark, and stamp treatment |
-| [DESIGN.md](../DESIGN.md) | the implemented system and its local exceptions |
+| [DESIGN.md](../DESIGN.md) | canonical visual direction and current component guidance |
+| [Design Brief](design/DESIGN_BRIEF.md) | brief and historical context |
+| [Design System](design/DESIGN_SYSTEM.md) | pointer to current direction and styles |
+| [Shelf Direction](design/DIRECTION_BOOKSHELF.md) | earlier shelf, bookmark, and stamp treatment |
 
 `PRODUCT.md` and `DESIGN.md` stay at the repository root because the design workflow reads them
 from there. Every other product and design document lives under `docs/`.
@@ -30,7 +30,7 @@ from there. Every other product and design document lives under `docs/`.
 | [Engineering](engineering/ENGINEERING.md) | branches, commits, the gate, and review |
 | [TRD](engineering/TRD.md) | stack, hosting, and the reasons |
 | [Schema](engineering/SCHEMA.md) | tables, policies, streak rules |
-| [Implementation Plan](engineering/IMPLEMENTATION_PLAN.md) | the staged milestones |
+| [Implementation Plan](engineering/IMPLEMENTATION_PLAN.md) | historical staged milestones |
 
 ## Decisions
 
@@ -67,5 +67,5 @@ by milestone.
 - `docs/engineering/SCHEMA.md`
 - `docs/engineering/IMPLEMENTATION_PLAN.md`
 
-Update the gate and every markdown link when one of them moves. Two evidence directories are
-written or read by the end-to-end tests: `evidence/auth-cover` and `evidence/catalogue-resilience`.
+Update the gate and every markdown link when one of them moves. The end-to-end tests read the
+`docs/evidence/catalogue-resilience` fixture and write auth captures to `test-results/auth-cover`.
