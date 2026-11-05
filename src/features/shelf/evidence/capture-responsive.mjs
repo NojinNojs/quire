@@ -4,7 +4,7 @@ import { chromium } from "@playwright/test";
 
 const origin = process.env.SHELF_PREVIEW_ORIGIN ?? "http://127.0.0.1:5197";
 const url = `${origin}/src/features/shelf/evidence/responsive.html`;
-const out = "docs/evidence/responsive-shelf";
+const out = "test-results/responsive-shelf";
 const coverUrl = "https://covers.openlibrary.org/b/id/12645114-L.jpg?default=false";
 const artwork = readFileSync(process.env.SHELF_COVER_FILE ?? "/tmp/quire-responsive-cover.jpg");
 mkdirSync(out, { recursive: true });

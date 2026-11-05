@@ -5,9 +5,10 @@ import { expect, test } from "./fixtures";
 import { stack } from "./stack";
 
 const footnote = "Your shelf is private. One account, one library.";
-const evidence = "docs/evidence/auth-cover";
+const evidence = "test-results/auth-cover";
 
 test.beforeEach(async ({ page }, testInfo) => {
+  mkdirSync(evidence, { recursive: true });
   if (testInfo.tags.includes("@first-visit")) return;
   await page.addInitScript(() => {
     if (localStorage.getItem("quire:cover-seen") === null) {
@@ -441,7 +442,6 @@ test("issuing keeps the book visible and disables the form", async ({ page }) =>
 test("rendered text meets 4.5:1 contrast, including errors and pending states", async ({
   page,
 }) => {
-  mkdirSync(evidence, { recursive: true });
   writeFileSync(
     `${evidence}/contrast.txt`,
     "Rendered text, inputs, and placeholders. Both pages sampled at 1280px; visible verso sampled at 390px.\n",

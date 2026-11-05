@@ -18,11 +18,6 @@ npx vite build >/dev/null || exit 1
 echo "== database smoke (skipped when supabase is down)"
 bash scripts/db-smoke.sh || exit 1
 
-echo "== docs present"
-for f in docs/product/PRD.md docs/engineering/TRD.md docs/product/APP_FLOW.md docs/design/DESIGN_BRIEF.md docs/engineering/SCHEMA.md docs/engineering/IMPLEMENTATION_PLAN.md docs/design/DESIGN_SYSTEM.md; do
-  [ -f "$f" ] || { echo "missing $f"; exit 1; }
-done
-
 echo "== end to end smoke (skipped when supabase or system Chromium is unavailable)"
 if ! supabase status >/dev/null 2>&1; then
   echo "supabase not running, skipping end to end smoke"

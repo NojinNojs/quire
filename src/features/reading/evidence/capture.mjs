@@ -12,10 +12,10 @@ await page.goto("http://127.0.0.1:5195/src/features/reading/evidence/index.html"
 await page.getByRole("heading", { name: "Today", exact: true }).waitFor();
 await page.evaluate(() => document.fonts.ready);
 await page.getByLabel("Pages read", { exact: true }).fill("10");
-await page.screenshot({ path: "src/features/reading/evidence/card-streak.png", fullPage: true });
+await page.screenshot({ path: "test-results/reading/card-streak.png", fullPage: true });
 await page.getByRole("button", { name: "Log 10 pages", exact: true }).click();
 await page.getByRole("button", { name: "Undo", exact: true }).waitFor();
-await page.screenshot({ path: "src/features/reading/evidence/undo.png", fullPage: true });
+await page.screenshot({ path: "test-results/reading/undo.png", fullPage: true });
 await page.getByRole("button", { name: "Undo", exact: true }).click();
 await page.getByText("214 / 550", { exact: true }).waitFor();
 await context.addInitScript(() =>

@@ -1,7 +1,8 @@
 node_modules
 dist
 .env
-.env.local
+.env.*
+!.env.example
 .DS_Store
 *.log
 .wrangler
@@ -10,3 +11,8 @@ coverage
 test-results
 tsconfig.tsbuildinfo
 .impeccable/
+/.local/
+/docs/
+/DESIGN.md
+/PRODUCT.md
+/CHANGELOG.md
