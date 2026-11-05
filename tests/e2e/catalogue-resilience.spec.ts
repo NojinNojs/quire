@@ -2,8 +2,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import type { Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
 
-const evidence = "docs/evidence/catalogue-resilience";
-const recordedHtml = readFileSync(`${evidence}/google-html.txt`, "utf8");
+const recordedHtml = readFileSync("tests/fixtures/google-html.txt", "utf8");
 const html = recordedHtml.slice(recordedHtml.indexOf("<!DOCTYPE"));
 
 async function checkCatalogue(page: Page, state: string) {

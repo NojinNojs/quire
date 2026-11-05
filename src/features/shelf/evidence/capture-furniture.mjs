@@ -10,7 +10,7 @@ const stack = JSON.parse(
     stdio: ["ignore", "pipe", "ignore"],
   }),
 );
-const out = "docs/evidence/design-shelf";
+const out = "test-results/design-shelf";
 mkdirSync(out, { recursive: true });
 const server = spawn(
   "npm",

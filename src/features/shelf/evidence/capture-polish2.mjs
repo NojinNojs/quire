@@ -4,7 +4,7 @@ import { chromium } from "@playwright/test";
 
 const origin = process.env.SHELF_PREVIEW_ORIGIN ?? "http://127.0.0.1:5197";
 const url = `${origin}/src/features/shelf/evidence/polish2.html`;
-const out = "docs/evidence/polish2";
+const out = "test-results/polish2";
 mkdirSync(out, { recursive: true });
 const browser = await chromium.launch({
   executablePath: "/run/current-system/sw/bin/brave",

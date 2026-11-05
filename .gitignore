@@ -11,3 +11,8 @@ coverage
 test-results
 tsconfig.tsbuildinfo
 .impeccable/
+/.local/
+/docs/
+/DESIGN.md
+/PRODUCT.md
+/CHANGELOG.md

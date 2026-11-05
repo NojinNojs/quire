@@ -1,93 +1,41 @@
 # Quire
 
-A personal library that behaves like a catalogue: every edition recorded, classified the way a
-librarian would, and one active book waiting on the first screen each day.
+Quire is a private reading companion for cataloguing books, tracking reading progress, writing reviews, and viewing a reading journal and yearly summary. It is a Vite, React, and TypeScript app backed by Supabase.
 
-## Status
+## Setup
 
-Quire is a working personal reading companion. Readers collect editions, open one active book,
-log pages with a five-second undo, keep a private rating and review per book, and see their
-year in a journal and a yearly summary against an annual goal. Every reader has an account;
-nothing is shared or social.
-
-## Documents
-
-Current direction and historical product records are indexed below:
-
-| Document | What it decides |
-|---|---|
-| [PRD](docs/product/PRD.md) | what the product is, and what it refuses to be |
-| [TRD](docs/engineering/TRD.md) | stack, hosting, and the reasons |
-| [App Flow](docs/product/APP_FLOW.md) | the journeys, including the awkward states |
-| [DESIGN.md](DESIGN.md) | current visual direction |
-| [Design Brief](docs/design/DESIGN_BRIEF.md) | brief and historical context |
-| [Design System](docs/design/DESIGN_SYSTEM.md) | current direction and styles |
-| [Schema](docs/engineering/SCHEMA.md) | tables, policies, streak rules |
-| [Implementation Plan](docs/engineering/IMPLEMENTATION_PLAN.md) | historical staged milestones |
-
-The full index, including briefs, decisions, and evidence, is [docs/README.md](docs/README.md).
-
-## Screens
-
-Hash routes open Today by default, including for an empty or unknown hash:
-`#/today` (dashboard), `#/shelf` (collection), `#/search`/`#catalogue` (add a book),
-`#/book/<id>` (detail, review and reading status), `#/journal` (yearly reading history),
-`#/stats` (reading year), and `#/settings` (profile, annual goal, password, sign out).
-Above 1024px a rail lists every destination; narrower screens use a header and a three-item
-bottom bar. Today, Journal, and Reading year open from the dashboard and return to it.
-
-Settings holds the profile name used in the greeting, an annual goal from 1 to 500 books (or
-blank), a read-only account email, password change, and sign out. Password reset links open a
-new-password screen before the app. Quire has a single light theme.
-
-## Development
+Install Node.js, npm, the Supabase CLI, and a Docker-compatible container runtime. Alternatively, use `nix develop` for the project development environment.
 
 ```bash
-nix develop          # node, biome
-npm install          # bun install hangs on this box: IPv6 resolves but cannot connect
+npm install
+supabase start
+```
+
+Copy `.env.example` to `.env` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` to the local API URL and anon key from `supabase status`, or to those of your Supabase project. Do not commit credentials. For a hosted project, apply the SQL migrations in `supabase/migrations/` in filename order using the Supabase CLI; back up existing data before database changes.
+
+```bash
 npm run dev
-npm run ci           # lint, typecheck, tests, build, docs check
-npm run release 0.2.0   # verify, build, tag, push
-bash scripts/install-hooks.sh   # pre-commit: biome + tests, pre-push: full gate
 ```
 
-If `npm install` stalls, run it as `NODE_OPTIONS=--dns-result-order=ipv4first npm install`.
-The same flag matters for any Node tool that talks to the network on this machine.
+Open the displayed local URL. To explore without an account or Supabase configuration, open `http://localhost:5173/?demo=1#/today` or select **Try the interactive demo**. Demo data stays in browser storage; **Reset demo** restores the sample library.
 
-No GitHub Actions and no hosted runner: CI is the gate, CD is `scripts/release.sh`. Both run on
-this machine, so there is no card on file and no CI mail in the inbox.
-
-## Interactive demo
-
-Run `npm run dev`, then open `http://localhost:5173/?demo=1#/today`.
-The sign-in screen also has a **Try the interactive demo** link. No account or Supabase
-configuration is needed. Demo books and reading activity are illustrative; changes are saved
-under a separate browser storage key and never sent to Supabase.
-
-Try logging pages and Undo, filtering the Shelf, opening a book to save a private review or
-change its reading status, choosing another active book, and adding a sample or manual entry
-from Search. Settings saves a demo profile name and annual goal on this device, and Today,
-Journal, and Reading year run on the same data as the account app. **Reset demo** restores the
-sample library; **Leave demo** returns to the account app. Quire uses a single light theme. See
-[the demo walkthrough](docs/product/DEMO.md).
-
-Use **Guide** in the app header to replay the five-step product tour, or open
-`http://localhost:5173/?demo=1&tour=1#/today` to launch it directly. Sign-in and registration
-also offer a tour link. The tour highlights real controls and supports Back, Next, Skip, and
-Escape. Reading shortcuts and keyboard-accessible star ratings operate on the demo data.
-
-## Tests
-
-Unit tests live next to the code (`src/lib/*.test.ts`) and cover the rules the database cannot:
-streak increment, break and monthly restore; DDC grouping; page progress with an unknown page count;
-edition identity and deterministic jacket colour; reading-status dates and the one-active-book rule;
-pending page logs; yearly pages, finished books, active days, and language breakdown.
+## Checks and contributions
 
 ```bash
-npx vitest run          # run once
-npx vitest             # watch mode
+npm run gate                # lint, typecheck, unit tests, build, database smoke, e2e
+npm test                    # unit tests
+npm run test:e2e            # Playwright suite
+bash scripts/install-hooks.sh
 ```
+
+The gate skips database smoke when local Supabase is unavailable and skips end-to-end tests when Supabase or a system Chromium browser is unavailable. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` if Chromium is not at `/run/current-system/sw/bin/brave`. Review the output for skipped checks. Local captures belong in ignored `test-results/`; attach relevant evidence and gate output to the pull request.
+
+Use conventional commit messages, such as `fix(catalog): handle missing metadata`. `npm run release -- 0.2.0` runs the gate, updates the package version, builds, commits, tags, and pushes; it requires a clean working tree.
+
+## Password recovery
+
+On the sign-in screen, enter your email and select **Forgot your password?**. Open the emailed link to choose a new password. If the link has expired, request a fresh one from the recovery screen. Configure your Supabase Auth redirect URLs to allow the application URL so recovery links can return to it.
 
 ## Licence
 
-MIT
+MIT. See [LICENSE](LICENSE).

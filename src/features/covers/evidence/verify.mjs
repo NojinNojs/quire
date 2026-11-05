@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
+import { mkdirSync } from "node:fs";
 import { chromium } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 
+mkdirSync("test-results/covers", { recursive: true });
 // Run with the local app at [::1]:5175 and an image file as the first argument.
 const stack = JSON.parse(
   execFileSync("supabase", ["status", "-o", "json"], {
@@ -79,13 +81,13 @@ try {
     );
   };
   await checkLayout();
-  await page.screenshot({ path: "docs/evidence/covers/today-390.png", fullPage: true });
+  await page.screenshot({ path: "test-results/covers/today-390.png", fullPage: true });
   await page.reload();
   await page.waitForFunction(() => document.querySelector(".reading-cover img")?.naturalWidth > 0);
   await page.goto("http://[::1]:5175/#/shelf");
   await page.waitForFunction(() => document.querySelector(".shelf-cover img")?.naturalWidth > 0);
   await checkLayout();
-  await page.screenshot({ path: "docs/evidence/covers/shelf-390.png", fullPage: true });
+  await page.screenshot({ path: "test-results/covers/shelf-390.png", fullPage: true });
 
   const forbiddenRead = await outsider.storage.from("covers").createSignedUrl(path, 60);
   assert.ok(forbiddenRead.error, "Another owner must not sign this cover");

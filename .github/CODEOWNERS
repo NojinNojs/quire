@@ -1,8 +1,7 @@
 # Every path is owned by the maintainer; reviews are required on pull requests.
 * @NojinNojs
 
-# Documents and design tokens change rarely and deserve a slower read.
-/docs/ @NojinNojs
+# Design tokens and migrations deserve a slower read.
 /src/styles/tokens.css @NojinNojs
 /src/styles/themes.css @NojinNojs
 /supabase/migrations/ @NojinNojs
