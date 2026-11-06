@@ -4,6 +4,10 @@ import "../../styles/reading-console.css";
 import "../../styles/reading-feedback.css";
 import "../../styles/reading-streak.css";
 import "../../styles/reading-empty.css";
+import "../../styles/reading-bento.css";
+import gsap from "gsap";
+import { useEffect, useRef } from "react";
+import { useReducedMotion } from "../../lib/motion";
 import { ActiveBookCard } from "./BookIdentity";
 import { PageStepper } from "./PageStepper";
 import { ReadingFeedback } from "./ReadingFeedback";
@@ -22,8 +26,35 @@ export function ActiveReadingPanel({
   loadingDay,
   onCatalogue,
 }: TodayScreenProps) {
+  const scope = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const status = pageLog.status;
+  const shownStatus = useRef(status);
+
+  useEffect(() => {
+    const changed = shownStatus.current !== status;
+    shownStatus.current = status;
+    const node = scope.current?.querySelector<HTMLElement>(".reading-feedback");
+    if (!changed || reduced || !node || !scope.current) return;
+    const context = gsap.context(() => {
+      gsap.from(node, { y: 5, duration: 0.24, ease: "power2.out", clearProps: "transform" });
+    }, scope.current);
+    return () => context.revert();
+  }, [status, reduced]);
+
+  const result = pageLog.result;
+  useEffect(() => {
+    const root = scope.current;
+    const mark = root?.querySelector<HTMLElement>(".reading-day-today .reading-day-mark");
+    if (!result || reduced || !root || !mark) return;
+    const context = gsap.context(() => {
+      gsap.from(mark, { scale: 0.6, duration: 0.3, ease: "power2.out", clearProps: "transform" });
+    }, root);
+    return () => context.revert();
+  }, [result, reduced]);
+
   return (
-    <section className="reading reading-today" aria-label="Active reading">
+    <section className="reading reading-today" aria-label="Active reading" ref={scope}>
       {book ? (
         <div className="reading-two-pane">
           <ActiveBookCard book={book} current={pageLog.current} pagesToday={pageLog.pagesToday} />

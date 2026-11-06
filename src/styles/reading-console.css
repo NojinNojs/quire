@@ -3,7 +3,11 @@
   display: grid;
   gap: 12px;
   align-content: start;
+  min-width: 0;
   padding: 16px;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--surface-raised);
 }
 
 .insights.dashboard-reading .reading-console-title {

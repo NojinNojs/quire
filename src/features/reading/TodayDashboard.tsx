@@ -8,6 +8,7 @@ import "../../styles/reading-dashboard.css";
 import "../../styles/reading-activity.css";
 import { RecentActivity, YearSummary } from "./DashboardYear";
 import { formatDay } from "./formatDay";
+import { usePanelReveal } from "./usePanelReveal";
 
 export function TodayDashboard({
   day,
@@ -26,8 +27,9 @@ export function TodayDashboard({
 }) {
   const year = Number(day.slice(0, 4)) || new Date().getFullYear();
   const summary = summarizeReading(books, logs, year, { kind: "all" });
+  const scope = usePanelReveal<HTMLDivElement>();
   return (
-    <div className="insights dashboard-reading">
+    <div className="insights dashboard-reading" ref={scope}>
       <header>
         <h1>{profile?.display_name ? `Hello, ${profile.display_name}` : "Your reading day"}</h1>
         <p className="dashboard-reading-date">

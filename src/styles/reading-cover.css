@@ -37,3 +37,10 @@
   color: var(--ink-muted);
   font: 400 12px / 1.4 var(--font-sans);
 }
+
+@container (max-width: 30rem) {
+  .insights.dashboard-reading .reading-jacket .cover-controls {
+    justify-content: center;
+    text-align: center;
+  }
+}

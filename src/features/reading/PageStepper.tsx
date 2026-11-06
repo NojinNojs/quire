@@ -1,4 +1,5 @@
 import { useId, useState } from "react";
+import { ChangingText } from "../../components/changing-text/ChangingText";
 import { CheckIcon } from "../../components/icons";
 import { plural } from "../../lib/plural";
 import { pageAmount, previewPages, stepPages } from "./stepper";
@@ -79,7 +80,9 @@ export function PageStepper({
       </fieldset>
       <p id={`${id}-preview`} className="reading-preview" aria-live="polite">
         <span>After logging</span>
-        <span className="reading-number">{preview}</span>
+        <span className="reading-number">
+          <ChangingText value={preview} />
+        </span>
       </p>
       <button className="primary" type="submit" disabled={disabled || !valid}>
         <CheckIcon />

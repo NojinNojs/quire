@@ -1,6 +1,8 @@
-/* The reading desk: the book, its log console and the week share one surface,
-   divided by rules instead of three floating cards. */
+/* Today's reading desk: book, log console and streak are separate tiles that
+   stack in reading order and become bento cells on a wide dashboard. */
 .insights.dashboard-reading .reading-today {
+  display: grid;
+  gap: 16px;
   max-width: none;
   margin: 0;
   padding: 0;
@@ -12,43 +14,29 @@
 }
 
 .insights.dashboard-reading .reading-two-pane {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  border: 1px solid var(--rule);
-  border-radius: 12px;
-  background: var(--surface-raised);
+  display: contents;
 }
 
-.insights.dashboard-reading .reading-two-pane > * {
-  min-width: 0;
-}
-
-.insights.dashboard-reading .reading-console,
-.insights.dashboard-reading .reading-streak {
-  border-top: 1px solid var(--rule);
-}
-
-/* The book: jacket and identity on top, progress rule across the cell base. */
+/* The book tile: jacket and identity on top, progress rule across the base. */
 .insights.dashboard-reading .reading-book {
   position: relative;
   display: grid;
-  grid-template-columns: clamp(88px, 18cqw, 124px) minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) auto auto auto;
+  grid-template-columns: clamp(88px, 15cqw, 112px) minmax(0, 1fr);
+  grid-template-rows: auto auto auto auto;
   grid-template-areas:
     "cover copy"
     "progress progress"
     "link link"
     "controls controls";
+  align-content: start;
   align-items: start;
   column-gap: 16px;
   row-gap: 2px;
+  min-width: 0;
   padding: 16px;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--surface-raised);
 }
 
 .insights.dashboard-reading .reading-jacket,
@@ -171,19 +159,22 @@
   text-underline-offset: 3px;
 }
 
-/* Only split when both halves fit; below that the desk stacks by design. */
-@container (min-width: 640px) {
-  .insights.dashboard-reading .reading-two-pane {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: stretch;
+/* Only a fine pointer gets the jacket tilt; touch stays a tap target. */
+@media (hover: hover) and (pointer: fine) {
+  .insights.dashboard-reading .reading-book {
+    perspective: 900px;
   }
 
-  .insights.dashboard-reading .reading-console {
-    border-top: 0;
-    border-left: 1px solid var(--rule);
+  .insights.dashboard-reading .reading-jacket .reading-cover {
+    transform-origin: left center;
+    transition:
+      transform 500ms var(--ease-out),
+      box-shadow 500ms var(--ease-out);
   }
 
-  .insights.dashboard-reading .reading-streak {
-    grid-column: 1 / -1;
+  .insights.dashboard-reading .reading-book:hover .reading-cover,
+  .insights.dashboard-reading .reading-book:focus-within .reading-cover {
+    transform: translateY(-3px) rotateY(3deg);
+    box-shadow: 0 12px 24px -14px rgb(0 0 0 / 0.45);
   }
 }

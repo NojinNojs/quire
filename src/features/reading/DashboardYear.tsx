@@ -1,8 +1,10 @@
+import { ChangingText } from "../../components/changing-text/ChangingText";
 import { CheckIcon, JournalIcon, ReadingYearIcon } from "../../components/icons";
 import type { ReadingLog } from "../../data/readingHistory";
 import type { Book } from "../../data/types";
 import { plural } from "../../lib/plural";
 import { formatActivityDay } from "./formatDay";
+import { ReadingProgress } from "./ReadingProgress";
 
 type ReadingSummary = {
   pages: number;
@@ -35,14 +37,16 @@ export function YearSummary({
         <div className="reading-goal">
           <div className="reading-goal-head">
             <p>
-              {summary.finished} of {hasGoal} books
+              <ChangingText value={summary.finished} /> of {hasGoal} books
             </p>
-            <p className="reading-goal-share">{share}%</p>
+            <p className="reading-goal-share">
+              <ChangingText value={`${share}%`} />
+            </p>
           </div>
-          <progress
+          <ReadingProgress
             value={reached ?? 0}
             max={hasGoal}
-            aria-label={`Annual goal: ${summary.finished} of ${hasGoal} books`}
+            label={`Annual goal: ${summary.finished} of ${hasGoal} books`}
           />
           <p className="reading-goal-note">
             {remaining === 0 ? "Goal reached" : `${plural(remaining ?? 0, "book")} to go`}
@@ -51,7 +55,9 @@ export function YearSummary({
       )}
       <div className="reading-metrics">
         <div className="reading-metric">
-          <span className="reading-metric-value">{summary.finished}</span>
+          <span className="reading-metric-value">
+            <ChangingText value={summary.finished} />
+          </span>
           <CheckIcon className="reading-metric-icon" />
           <span className="reading-metric-label">
             {" "}
@@ -59,12 +65,16 @@ export function YearSummary({
           </span>
         </div>
         <div className="reading-metric">
-          <span className="reading-metric-value">{summary.pages}</span>
+          <span className="reading-metric-value">
+            <ChangingText value={summary.pages} />
+          </span>
           <JournalIcon className="reading-metric-icon" />
           <span className="reading-metric-label"> pages read</span>
         </div>
         <div className="reading-metric">
-          <span className="reading-metric-value">{summary.activeDays}</span>
+          <span className="reading-metric-value">
+            <ChangingText value={summary.activeDays} />
+          </span>
           <ReadingYearIcon className="reading-metric-icon" />
           <span className="reading-metric-label">
             {" "}

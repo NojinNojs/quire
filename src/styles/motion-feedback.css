@@ -26,15 +26,10 @@
   color: var(--accent);
 }
 
-.reading-feedback,
 .shelf-filter-count,
 .insights-empty,
 .demo-reset,
 .app-shell [role="alert"] {
-  animation: feedback-enter var(--motion-ui) var(--ease-out) backwards;
-}
-
-.reading-feedback button {
   animation: feedback-enter var(--motion-ui) var(--ease-out) backwards;
 }
 

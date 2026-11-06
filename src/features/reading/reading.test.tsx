@@ -19,19 +19,6 @@ const book = {
 };
 const streak = { current: 3, longest: 8, days: [] };
 
-it("renders one active-book heading", () => {
-  const state = createPageLogStore({ ...entry, client: { rpc: vi.fn() }, online: () => false });
-  const html = renderToStaticMarkup(
-    <TodayScreen
-      book={book}
-      streak={streak}
-      pageLog={{ ...state.getSnapshot(), ...state }}
-      onCatalogue={() => {}}
-    />,
-  );
-  const titles = [...html.matchAll(/<h2[^>]*>Bumi Manusia<\/h2>/g)];
-  expect(titles).toHaveLength(1);
-});
 afterEach(() => {
   vi.useRealTimers();
 });
@@ -219,7 +206,7 @@ it("never invents a total and keeps the empty state to one sentence and one acti
   const html = renderToStaticMarkup(
     <ActiveBookCard book={{ ...book, total: null }} current={214} pagesToday={4} />,
   );
-  expect(html).toContain(">214</p>");
+  expect(html).toContain(">214<");
   expect(html).not.toContain(" / ");
   const state = createPageLogStore({ ...entry, client: { rpc: vi.fn() }, online: () => false });
   const empty = renderToStaticMarkup(

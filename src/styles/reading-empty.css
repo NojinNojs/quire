@@ -1,9 +1,11 @@
 /* No active book: compact, with one clear action. */
 .insights.dashboard-reading .reading-empty {
+  grid-column: 1 / -1;
   display: grid;
   gap: 12px;
   place-items: center;
   min-height: 0;
+  width: 100%;
   padding: 32px 20px;
   border: 1px solid var(--rule);
   border-radius: 12px;

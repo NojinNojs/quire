@@ -1,0 +1,31 @@
+/* One progress bar: the native element carries the value and the name for
+   assistive tech, the fill only draws it. */
+.reading-progress-track {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 8px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: var(--surface-subtle, #edf2ef);
+  overflow: hidden;
+}
+
+.reading-progress-native {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.reading-progress-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+}

@@ -1,9 +1,11 @@
 import { type CSSProperties, useEffect, useState } from "react";
+import { ChangingText } from "../../components/changing-text/ChangingText";
 import { classify } from "../../lib/ddc";
 import { plural } from "../../lib/plural";
 import { pagesLeft, percent } from "../../lib/progress";
 import { supabase } from "../../lib/supabase";
 import { TodayCover } from "../covers/TodayCover";
+import { ReadingProgress } from "./ReadingProgress";
 import type { ReadingBook } from "./types";
 
 export function ActiveBookCard({
@@ -54,35 +56,51 @@ export function ActiveBookCard({
         />
       </div>
       <div className="reading-book-copy">
-        <h2>{book.title}</h2>
-        <p className="reading-author">{book.author ?? "Author unknown"}</p>
+        <h2>
+          <ChangingText value={book.title} />
+        </h2>
+        <p className="reading-author">
+          <ChangingText value={book.author ?? "Author unknown"} />
+        </p>
         <p className="reading-meta">{book.editionLine}</p>
       </div>
       <div className="reading-progress">
         {book.total === null ? (
           <div className="reading-progress-head reading-progress-head-unknown">
             <span className="reading-position">Page</span>
-            <p className="reading-number">{current}</p>
+            <p className="reading-number">
+              <ChangingText value={current} />
+            </p>
           </div>
         ) : (
           <div className="reading-progress-head">
             <p className="reading-position">
-              Page <strong>{current}</strong> of {book.total}
+              Page{" "}
+              <strong>
+                <ChangingText value={current} />
+              </strong>{" "}
+              of {book.total}
             </p>
-            {value === null ? null : <p className="reading-percent">{value}%</p>}
+            {value === null ? null : (
+              <p className="reading-percent">
+                <ChangingText value={`${value}%`} />
+              </p>
+            )}
           </div>
         )}
         {book.total === null ? null : (
-          <progress
+          <ReadingProgress
             value={current}
             max={book.total}
-            aria-label={`Reading progress: ${current} of ${book.total} pages`}
+            label={`Reading progress: ${current} of ${book.total} pages`}
           />
         )}
         <p className="reading-progress-note">
           {left === null ? "Total pages unknown" : `${plural(left, "page")} left`}
           <span aria-hidden="true"> · </span>
-          {pagesToday > 0 ? `${plural(pagesToday, "page")} today` : "No pages today"}
+          <ChangingText
+            value={pagesToday > 0 ? `${plural(pagesToday, "page")} today` : "No pages today"}
+          />
         </p>
       </div>
       <a className="reading-detail-link" href={`#/book/${book.id}`}>

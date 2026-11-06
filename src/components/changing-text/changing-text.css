@@ -1,0 +1,31 @@
+/* The value is real text in flow; a ghost of the outgoing value overlays it for
+   the length of the swap and is removed afterwards. */
+.changing-text {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+
+.changing-text-value {
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* Only one-line numbers sit in a mask; prose (wrapped titles included) is never
+   clipped, so a longer title keeps every line. */
+.changing-text-number {
+  overflow: hidden;
+}
+
+.changing-text-number :is(.changing-text-value, .changing-text-ghost) {
+  white-space: nowrap;
+}
+
+.changing-text-ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}

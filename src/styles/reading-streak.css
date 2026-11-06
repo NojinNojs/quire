@@ -7,10 +7,12 @@
     "count week best";
   align-items: center;
   column-gap: 24px;
+  min-width: 0;
   margin: 0;
   padding: 16px;
-  border-radius: 0;
-  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--surface-raised);
 }
 
 .insights.dashboard-reading .reading-stamps {

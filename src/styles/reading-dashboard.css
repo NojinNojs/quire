@@ -1,4 +1,6 @@
-/* Today dashboard shell: greeting, reading surface, and year sidebar. */
+@import "./reading-year.css";
+
+/* Today dashboard shell: greeting, reading surface, and the bento canvas. */
 .insights.dashboard-reading {
   max-width: none;
   padding: 16px 20px 48px;
@@ -29,7 +31,7 @@
 
 .insights.dashboard-reading .dashboard-reading-grid {
   display: grid;
-  gap: 20px;
+  gap: 16px;
   align-items: start;
 }
 
@@ -44,170 +46,6 @@
 .insights.dashboard-reading .dashboard-reading-aside {
   display: grid;
   gap: 16px;
-  border-top: 1px solid var(--rule);
-  padding-top: 20px;
-}
-
-/* Annual goal, totals, record links */
-.insights.dashboard-reading .reading-year,
-.insights.dashboard-reading .reading-activity {
-  padding: 16px;
-  border: 1px solid var(--rule);
-  border-radius: 12px;
-  background: var(--surface-raised);
-}
-
-.insights.dashboard-reading .reading-year h2,
-.insights.dashboard-reading .reading-activity h2 {
-  margin: 0 0 12px;
-  color: var(--ink);
-  font: 600 15px / 1.3 var(--font-sans);
-}
-
-.insights.dashboard-reading .reading-goal-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.insights.dashboard-reading .reading-goal-head p {
-  margin: 0;
-  font: 500 14px / 1.4 var(--font-sans);
-}
-
-.insights.dashboard-reading .reading-goal-share {
-  color: var(--accent);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-
-.insights.dashboard-reading .reading-goal progress,
-.insights.dashboard-reading .reading-progress progress {
-  display: block;
-  width: 100%;
-  height: 8px;
-  margin-top: 8px;
-  border: 0;
-  border-radius: 999px;
-  overflow: hidden;
-  appearance: none;
-  background: var(--surface-subtle, #edf2ef);
-  accent-color: var(--accent);
-}
-
-.insights.dashboard-reading progress::-webkit-progress-bar {
-  border-radius: 999px;
-  background: var(--surface-subtle, #edf2ef);
-}
-
-.insights.dashboard-reading progress::-webkit-progress-value {
-  border-radius: 999px;
-  background: var(--accent);
-}
-
-.insights.dashboard-reading progress::-moz-progress-bar {
-  border-radius: 999px;
-  background: var(--accent);
-}
-
-.insights.dashboard-reading .reading-goal-note {
-  margin: 6px 0 0;
-  color: var(--ink-muted);
-  font: 400 12.5px / 1.5 var(--font-sans);
-}
-
-.insights.dashboard-reading .reading-goal-empty p {
-  margin: 0;
-  color: var(--ink-muted);
-  font: 400 12.5px / 1.5 var(--font-sans);
-}
-
-.insights.dashboard-reading .reading-goal-empty a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  margin-top: 8px;
-  padding: 0 14px;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  color: var(--accent);
-  font: 600 13px / 1.3 var(--font-sans);
-  text-decoration: none;
-  text-underline-offset: 3px;
-}
-
-.insights.dashboard-reading .reading-goal-empty a:hover {
-  border-color: var(--accent);
-  background: var(--surface-selected, #e4efe8);
-}
-
-.insights.dashboard-reading .reading-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid var(--rule);
-}
-
-.insights.dashboard-reading .reading-metric {
-  display: grid;
-  grid-template-areas:
-    "value value"
-    "icon label";
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 2px 5px;
-  align-items: start;
-  min-width: 0;
-}
-
-.insights.dashboard-reading .reading-metric-value {
-  grid-area: value;
-  color: var(--ink);
-  font: 600 24px / 1.1 var(--font-mono);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-}
-
-.insights.dashboard-reading .reading-metric-icon {
-  grid-area: icon;
-  width: 14px;
-  height: 14px;
-  color: var(--ink-muted);
-}
-
-.insights.dashboard-reading .reading-metric-label {
-  grid-area: label;
-  color: var(--ink-muted);
-  font: 500 12px / 1.35 var(--font-sans);
-}
-
-.insights.dashboard-reading .reading-links {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.insights.dashboard-reading .reading-links a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0 10px;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  color: var(--accent);
-  font: 600 13px / 1.3 var(--font-sans);
-  text-align: center;
-  text-decoration: none;
-}
-
-.insights.dashboard-reading .reading-links a:hover {
-  border-color: var(--accent);
-  background: var(--surface-selected, #e4efe8);
 }
 
 @media (max-width: 559px) {
@@ -220,14 +58,6 @@
   }
 
   .insights.dashboard-reading > header h1 {
-    font-size: 22px;
-  }
-
-  .insights.dashboard-reading .reading-metrics {
-    gap: 8px;
-  }
-
-  .insights.dashboard-reading .reading-metric-value {
     font-size: 22px;
   }
 }

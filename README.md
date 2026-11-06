@@ -2,6 +2,8 @@
 
 Quire is a private reading companion for cataloguing books, tracking reading progress, writing reviews, and viewing a reading journal and yearly summary. It is a Vite, React, and TypeScript app backed by Supabase.
 
+The Today dashboard uses a bento layout for reading progress, streaks, and yearly activity. Subtle transitions guide attention to updates and respect reduced-motion preferences.
+
 ## Setup
 
 Install Node.js, npm, the Supabase CLI, and a Docker-compatible container runtime. Alternatively, use `nix develop` for the project development environment.

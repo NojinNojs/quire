@@ -1,0 +1,175 @@
+/* Phones: the jacket stands alone and centred, identity and controls below. */
+@container (max-width: 30rem) {
+  .insights.dashboard-reading .reading-book {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "cover"
+      "copy"
+      "progress"
+      "link"
+      "controls";
+    justify-items: center;
+    row-gap: 8px;
+    text-align: center;
+  }
+
+  .insights.dashboard-reading .reading-jacket .reading-cover {
+    justify-self: center;
+    width: clamp(180px, 60cqw, 220px);
+  }
+
+  .insights.dashboard-reading .reading-book-copy {
+    justify-items: center;
+  }
+
+  .insights.dashboard-reading .reading-progress {
+    width: 100%;
+  }
+
+  .insights.dashboard-reading .reading-progress-head {
+    justify-content: center;
+    gap: 0 8px;
+  }
+
+  .insights.dashboard-reading .reading-progress-note {
+    text-align: center;
+  }
+
+  .insights.dashboard-reading .reading-detail-link {
+    justify-self: center;
+  }
+}
+
+/* Tablets and up: book and console share a row, the week spans beneath. */
+@container (min-width: 40rem) {
+  .insights.dashboard-reading .reading-today {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "book console"
+      "streak streak";
+    align-items: stretch;
+  }
+
+  .insights.dashboard-reading .reading-book {
+    grid-area: book;
+  }
+
+  .insights.dashboard-reading .reading-console {
+    grid-area: console;
+  }
+
+  .insights.dashboard-reading .reading-streak {
+    grid-area: streak;
+  }
+
+  .insights.dashboard-reading .reading-empty {
+    grid-row: 1 / -1;
+    grid-column: 1 / -1;
+  }
+}
+
+/* Wide dashboard: one bento grid. Book, console, streak, year and activity
+   leave their wrappers (display: contents) so they can span the cross-section
+   together; DOM order and focus order stay untouched. */
+@container (min-width: 60rem) {
+  .insights.dashboard-reading .dashboard-reading-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-areas:
+      "book book book book book book book console console console console console"
+      "book book book book book book book console console console console console"
+      "streak streak streak streak streak streak streak year year year year year"
+      "activity activity activity activity activity activity activity year year year year year";
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .insights.dashboard-reading .dashboard-reading-main,
+  .insights.dashboard-reading .dashboard-reading-aside,
+  .insights.dashboard-reading .reading-today,
+  .insights.dashboard-reading .reading-two-pane {
+    display: contents;
+  }
+
+  .insights.dashboard-reading .dashboard-reading-main {
+    container-type: normal;
+  }
+
+  .insights.dashboard-reading .dashboard-reading-aside {
+    gap: 0;
+    border: 0;
+    padding: 0;
+  }
+
+  .insights.dashboard-reading .reading-book {
+    grid-area: book;
+  }
+
+  .insights.dashboard-reading .reading-console {
+    grid-area: console;
+  }
+
+  .insights.dashboard-reading .reading-streak {
+    grid-area: streak;
+  }
+
+  .insights.dashboard-reading .reading-year {
+    grid-area: year;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .insights.dashboard-reading .reading-year .reading-links {
+    margin-top: auto;
+  }
+
+  .insights.dashboard-reading .reading-year .reading-metrics {
+    margin-bottom: 14px;
+  }
+
+  .insights.dashboard-reading .reading-activity {
+    grid-area: activity;
+  }
+
+  /* Loading and error cells take the slot of the tile they replace. */
+  .insights.dashboard-reading .dashboard-reading-main > [role="status"],
+  .insights.dashboard-reading .dashboard-reading-main > .error-panel {
+    grid-area: book;
+    margin: 0;
+  }
+
+  .insights.dashboard-reading .dashboard-reading-aside > [role="status"],
+  .insights.dashboard-reading .dashboard-reading-aside > .error-panel {
+    grid-area: year;
+    margin: 0;
+  }
+
+  /* No active book: the empty tile and summary take the wide columns. */
+  .insights.dashboard-reading .dashboard-reading-grid:has(.reading-empty) {
+    grid-template-areas:
+      "empty empty empty empty empty empty empty year year year year year"
+      "empty empty empty empty empty empty empty year year year year year"
+      "activity activity activity activity activity activity activity year year year year year"
+      "add add add add add add add year year year year year";
+  }
+
+  .insights.dashboard-reading .reading-empty {
+    grid-area: empty;
+  }
+
+  .insights.dashboard-reading .dashboard-reading-grid:has(.reading-empty) .dashboard-reading-add {
+    grid-area: add;
+  }
+}
+
+/* Large desktops: a jacket large enough to carry the dominant book cell, and
+   both tall cells spread their rows so neither carries a blank block. */
+@container (min-width: 62.5rem) {
+  .insights.dashboard-reading .reading-book {
+    grid-template-columns: clamp(112px, 14cqw, 160px) minmax(0, 1fr);
+    align-content: space-between;
+  }
+
+  .insights.dashboard-reading .reading-jacket .reading-cover {
+    width: 100%;
+  }
+}
