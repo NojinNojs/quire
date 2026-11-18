@@ -9,11 +9,11 @@ export function pagesLeft({ current, total }: Progress): number | null {
   return Math.max(total - current, 0);
 }
 
-/** Percentage whole number, or null when the total is unknown. */
+/** Rounded reading percentage, reserving 100% for the final page. */
 export function percent({ current, total }: Progress): number | null {
   if (total === null || total <= 0) return null;
-  const value = Math.round((current / total) * 100);
-  return Math.min(Math.max(value, 0), 100);
+  if (current >= total) return 100;
+  return Math.min(99, Math.max(0, Math.round((current / total) * 100)));
 }
 
 /** Pages per day needed to finish by a date, or null when the total is unknown. */

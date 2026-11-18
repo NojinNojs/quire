@@ -1,0 +1,120 @@
+.insights.dashboard-reading .reading-console:has(.reading-complete .completion-stamp) {
+  align-content: center;
+  border-color: #ddc9a6;
+  background: #f8f0df;
+}
+
+.reading-complete {
+  display: grid;
+  min-width: 0;
+  align-content: center;
+  justify-items: start;
+  gap: var(--space-8);
+  padding-block: var(--space-16);
+}
+
+.insights.dashboard-reading .reading-complete:has(.completion-stamp) .reading-console-title {
+  color: #77501e;
+  font: 500 2rem / 1.08 var(--font-serif);
+}
+
+.reading-complete p {
+  max-width: 36ch;
+  margin: 0;
+  color: var(--ink-muted);
+  font: 400 var(--small-size) / var(--small-leading) var(--font-sans);
+}
+
+.completion-stamp {
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  background: var(--surface-subtle);
+  color: var(--accent);
+  vertical-align: middle;
+}
+
+.reading-complete .completion-stamp {
+  width: 44px;
+  height: 44px;
+  margin-bottom: var(--space-4);
+  border-color: #ddc9a6;
+  background: #f3e2bf;
+  color: #77501e;
+}
+
+.completion-stamp svg {
+  width: 18px;
+  height: 18px;
+}
+
+.completion-confetti {
+  position: absolute;
+  z-index: 2;
+  inset: 50% auto auto 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.completion-confetti-piece {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--confetti-size);
+  height: calc(var(--confetti-size) * 1.5);
+  border-radius: 1px;
+  background: var(--confetti-color);
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
+.completion-confetti-piece.is-bookmark {
+  width: 7px;
+  height: 13px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 76%, 0 100%);
+}
+
+.completion-stamp::after {
+  position: absolute;
+  inset: -5px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+}
+
+.completion-stamp:has(.completion-confetti)::after {
+  animation: completion-ripple 0.62s ease-out both;
+}
+
+@keyframes completion-ripple {
+  0% {
+    transform: scale(0.55);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .completion-stamp:has(.completion-confetti)::after {
+    animation: none;
+  }
+}
+
+.reading-complete-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--accent);
+  text-underline-offset: 0.2em;
+}

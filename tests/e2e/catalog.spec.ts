@@ -27,7 +27,12 @@ test("search, save a candidate, and refuse a persisted duplicate", async ({
     await expect(page.getByRole("heading", { name: "E2E catalogue edition" })).toBeVisible();
   };
   await search();
+  const saved = page.waitForResponse(
+    (response) =>
+      response.url().includes("/rest/v1/books") && response.request().method() === "POST",
+  );
   await page.getByRole("button", { name: "Save", exact: true }).click();
+  expect((await saved).status()).toBe(201);
   await expect(
     page.getByText("E2E catalogue edition added to your library.", { exact: true }),
   ).toBeVisible();

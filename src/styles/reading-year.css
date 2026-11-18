@@ -1,5 +1,12 @@
 /* Supporting tiles: annual goal, totals, record links, latest activity. */
-.insights.dashboard-reading .reading-year,
+.insights.dashboard-reading .reading-year {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid #dce4d6;
+  border-radius: 12px;
+  background: #f1f5ed;
+}
+
 .insights.dashboard-reading .reading-activity {
   min-width: 0;
   padding: 16px;

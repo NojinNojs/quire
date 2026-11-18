@@ -1,18 +1,19 @@
 import "../../styles/reading-companion.css";
 import "../../styles/reading-cover.css";
 import "../../styles/reading-console.css";
-import "../../styles/reading-feedback.css";
 import "../../styles/reading-streak.css";
 import "../../styles/reading-empty.css";
 import "../../styles/reading-bento.css";
 import gsap from "gsap";
 import { useEffect, useRef } from "react";
+import { CheckIcon } from "../../components/icons";
 import { useReducedMotion } from "../../lib/motion";
 import { ActiveBookCard } from "./BookIdentity";
 import { PageStepper } from "./PageStepper";
 import { ReadingFeedback } from "./ReadingFeedback";
 import { StreakBlock } from "./StreakBlock";
 import type { TodayScreenProps } from "./types";
+import { useCompletionStamp } from "./useCompletionStamp";
 
 function localDay() {
   const date = new Date();
@@ -28,21 +29,17 @@ export function ActiveReadingPanel({
 }: TodayScreenProps) {
   const scope = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
-  const status = pageLog.status;
-  const shownStatus = useRef(status);
-
-  useEffect(() => {
-    const changed = shownStatus.current !== status;
-    shownStatus.current = status;
-    const node = scope.current?.querySelector<HTMLElement>(".reading-feedback");
-    if (!changed || reduced || !node || !scope.current) return;
-    const context = gsap.context(() => {
-      gsap.from(node, { y: 5, duration: 0.24, ease: "power2.out", clearProps: "transform" });
-    }, scope.current);
-    return () => context.revert();
-  }, [status, reduced]);
-
   const result = pageLog.result;
+  const complete =
+    book !== null && book.total !== null && book.total > 0 && pageLog.current >= book.total;
+  const settling =
+    loadingDay ||
+    pageLog.pending !== null ||
+    pageLog.status === "saving" ||
+    pageLog.status === "error";
+  const confirmed = complete && !settling;
+  const finishMark = useCompletionStamp(confirmed);
+
   useEffect(() => {
     const root = scope.current;
     const mark = root?.querySelector<HTMLElement>(".reading-day-today .reading-day-mark");
@@ -59,13 +56,36 @@ export function ActiveReadingPanel({
         <div className="reading-two-pane">
           <ActiveBookCard book={book} current={pageLog.current} pagesToday={pageLog.pagesToday} />
           <div className="reading-console">
-            <PageStepper
-              key={book.id}
-              current={pageLog.current}
-              total={book.total}
-              disabled={loadingDay || pageLog.pending !== null}
-              onLog={pageLog.log}
-            />
+            {complete ? (
+              <div className="reading-complete" aria-live="polite">
+                {confirmed && (
+                  <span ref={finishMark} className="completion-stamp" aria-hidden="true">
+                    <CheckIcon />
+                  </span>
+                )}
+                <h2 className="reading-console-title">
+                  {confirmed ? "All pages read" : "Last page reached"}
+                </h2>
+                <p>
+                  {confirmed
+                    ? "Mark this book as finished to add it to your reading year."
+                    : "Finish saving the last pages before marking the book as finished."}
+                </p>
+                {confirmed && (
+                  <a className="reading-complete-link" href={`#/book/${book.id}`}>
+                    Go to reading status
+                  </a>
+                )}
+              </div>
+            ) : (
+              <PageStepper
+                key={book.id}
+                current={pageLog.current}
+                total={book.total}
+                disabled={loadingDay || pageLog.pending !== null}
+                onLog={pageLog.log}
+              />
+            )}
             <ReadingFeedback pageLog={pageLog} />
           </div>
           <StreakBlock

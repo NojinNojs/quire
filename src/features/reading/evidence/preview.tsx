@@ -3,6 +3,7 @@ import "../../../styles/fonts.css";
 import "../../../styles/tokens.css";
 import "../../../styles/themes.css";
 import "../../../styles/app.css";
+import { ToastProvider } from "../../../components/toast";
 import { TodayScreen } from "../TodayScreen";
 import { usePageLog } from "../usePageLog";
 
@@ -46,4 +47,9 @@ function Preview() {
 }
 
 const root = document.getElementById("root");
-if (root) createRoot(root).render(<Preview />);
+if (root)
+  createRoot(root).render(
+    <ToastProvider>
+      <Preview />
+    </ToastProvider>,
+  );

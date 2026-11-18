@@ -93,12 +93,6 @@
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-8);
 }
-.reading-feedback:has(p:empty):not(:has(button)) {
-  display: none;
-}
-.reading-feedback {
-  margin-top: var(--space-16);
-}
 .reading-streak {
   margin-top: var(--space-32);
   padding-top: var(--space-24);

@@ -47,16 +47,34 @@ export function ToastApiProvider({ children }: { children: ReactNode }) {
 
 export function ToastList() {
   const { toasts } = Toast.useToastManager();
-  return toasts.map((toast) => (
-    <Toast.Root key={toast.id} toast={toast} className="toast" swipeDirection={["down", "right"]}>
-      <Toast.Content className="toast-content">
-        <Toast.Title className="toast-title" render={<p />} />
-        <Toast.Close className="toast-close" aria-label="Dismiss notification">
-          <span aria-hidden="true">×</span>
-        </Toast.Close>
-      </Toast.Content>
-    </Toast.Root>
-  ));
+  return toasts.map((toast) => {
+    const actionable = Boolean(toast.actionProps);
+    return (
+      <Toast.Root
+        key={toast.id}
+        toast={toast}
+        className="toast"
+        swipeDirection={actionable ? [] : ["down", "right"]}
+        onKeyDown={(event) => {
+          if (actionable && event.key === "Escape") event.preventBaseUIHandler();
+        }}
+      >
+        <Toast.Content className="toast-content">
+          <div className="toast-copy">
+            <Toast.Title className="toast-title" render={<p />} />
+            {toast.description && <Toast.Description className="toast-description" />}
+          </div>
+          {actionable ? (
+            <Toast.Action className="toast-action" />
+          ) : (
+            <Toast.Close className="toast-close" aria-label="Dismiss notification">
+              <span aria-hidden="true">×</span>
+            </Toast.Close>
+          )}
+        </Toast.Content>
+      </Toast.Root>
+    );
+  });
 }
 
 export function useToast(): ToastApi {

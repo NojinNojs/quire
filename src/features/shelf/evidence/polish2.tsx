@@ -5,6 +5,7 @@ import "../../../styles/tokens.css";
 import "../../../styles/themes.css";
 import "../../../styles/app.css";
 import "../../../styles/nav.css";
+import { ToastProvider } from "../../../components/toast";
 import { AppShell } from "../../nav/AppShell";
 import { TodayScreen } from "../../reading/TodayScreen";
 import { usePageLog } from "../../reading/usePageLog";
@@ -94,4 +95,9 @@ function Preview() {
 }
 
 const root = document.getElementById("root");
-if (root) createRoot(root).render(<Preview />);
+if (root)
+  createRoot(root).render(
+    <ToastProvider>
+      <Preview />
+    </ToastProvider>,
+  );

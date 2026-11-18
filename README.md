@@ -2,7 +2,8 @@
 
 Quire is a private reading companion for cataloguing books, tracking reading progress, writing reviews, and viewing a reading journal and yearly summary. It is a Vite, React, and TypeScript app backed by Supabase.
 
-The Today dashboard uses a bento layout for reading progress, streaks, and yearly activity. Subtle transitions guide attention to updates and respect reduced-motion preferences.
+Today pairs a cloth-green book panel with the page logger on wide screens. Logging shows a floating notification with Undo or Retry when available. The reading meter animates on log and undo, and updates instantly with reduced motion enabled.
+The page logger accepts whole pages up to the remaining count. Today celebrates when the last pages are saved, then links to the book's reading status so you can mark it as finished. Celebrations are static with reduced motion enabled.
 
 ## Setup
 

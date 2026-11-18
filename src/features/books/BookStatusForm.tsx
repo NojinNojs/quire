@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CheckIcon } from "../../components/icons";
 import { useToast } from "../../components/toast";
 import type { Book } from "../../data/types";
+import { useCompletionStamp } from "../reading/useCompletionStamp";
 
 export function BookStatusForm({
   book,
@@ -17,6 +18,7 @@ export function BookStatusForm({
   const [confirming, setConfirming] = useState<Book["status"] | null>(null);
   const [error, setError] = useState("");
   const [finished, setFinished] = useState(false);
+  const successMark = useCompletionStamp(finished);
   const toast = useToast();
   async function change(next: Book["status"], confirmed = false) {
     if (next === book.status) return;
@@ -122,6 +124,9 @@ export function BookStatusForm({
       {error && <p>{error}</p>}
       {finished && (
         <p role="status" className="book-status-finished">
+          <span ref={successMark} className="completion-stamp" aria-hidden="true">
+            <CheckIcon />
+          </span>{" "}
           Book marked as finished. <a href="#/shelf">Choose next book</a> or{" "}
           <a href="#/today">Back to Today</a>.
         </p>

@@ -10,6 +10,7 @@
       "controls";
     justify-items: center;
     row-gap: 8px;
+    padding: var(--space-16);
     text-align: center;
   }
 
@@ -24,15 +25,6 @@
 
   .insights.dashboard-reading .reading-progress {
     width: 100%;
-  }
-
-  .insights.dashboard-reading .reading-progress-head {
-    justify-content: center;
-    gap: 0 8px;
-  }
-
-  .insights.dashboard-reading .reading-progress-note {
-    text-align: center;
   }
 
   .insights.dashboard-reading .reading-detail-link {
@@ -161,12 +153,16 @@
   }
 }
 
-/* Large desktops: a jacket large enough to carry the dominant book cell, and
-   both tall cells spread their rows so neither carries a blank block. */
+/* Keep the jacket and its reading record together on wide desks. */
 @container (min-width: 62.5rem) {
   .insights.dashboard-reading .reading-book {
+    align-content: center;
     grid-template-columns: clamp(112px, 14cqw, 160px) minmax(0, 1fr);
-    align-content: space-between;
+    grid-template-areas:
+      "cover copy"
+      "cover progress"
+      "cover link"
+      "controls controls";
   }
 
   .insights.dashboard-reading .reading-jacket .reading-cover {
