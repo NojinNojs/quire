@@ -141,6 +141,7 @@ test("phone, compact rail, wide rail and Today panes in the light theme", async 
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await openReading(page);
   {
     const theme = "shelf-light";
@@ -160,7 +161,7 @@ test("phone, compact rail, wide rail and Today panes in the light theme", async 
             ".brand, .bottom-nav a, .nav-label, .reading-book-copy h2, .reading-book-copy p, .reading-stepper label, .reading button, .reading input, .reading-streak h2, .reading-streak p, .reading-day-letter, .cover-controls label",
           ),
         ]
-          .filter((node) => node.getClientRects().length > 0)
+          .filter((node) => node.checkVisibility({ opacityProperty: true, visibilityProperty: true }))
           .map((node) => {
             const ink = luminance(getComputedStyle(node).color);
             let background: Element | null = node;
@@ -176,7 +177,7 @@ test("phone, compact rail, wide rail and Today panes in the light theme", async 
                 : getComputedStyle(document.body).backgroundColor,
             );
             return {
-              text: node.textContent,
+              text: node.textContent?.trim() || node.getAttribute("aria-label") || node.outerHTML,
               ratio: (Math.max(ink, paper) + 0.05) / (Math.min(ink, paper) + 0.05),
             };
           });
