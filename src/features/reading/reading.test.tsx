@@ -4,8 +4,8 @@ import { Bookmark } from "./Bookmark";
 import type { PageLogClient } from "./log";
 import { createPageLogStore } from "./pageLogStore";
 import { restoredDays } from "./restoredDays";
-import { pageAmount, previewPages, stepPages } from "./stepper";
-import { ActiveBookCard, PageStepper, StreakBlock, TodayScreen } from "./TodayScreen";
+import { pageAmount, stepPages } from "./stepper";
+import { ActiveBookCard, StreakBlock, TodayScreen } from "./TodayScreen";
 
 const result = { data: [{ streak_current: 3, streak_longest: 8, restored: false }], error: null };
 const entry = { bookId: "book-1", current: 214, pagesToday: 4, day: "2026-10-29" };
@@ -32,15 +32,6 @@ describe("page arithmetic", () => {
     expect(pageAmount(3.5, 214, null)).toBe(3);
     expect(stepPages(2, 10, 214, null)).toBe(12);
     expect(pageAmount(1, 550, 550)).toBe(0);
-  });
-  it("previews the exact endpoints", () => {
-    expect(previewPages(214, 10)).toBe("214 → 224");
-    expect(previewPages(214, 0)).toBe("214 → 214");
-    expect(
-      renderToStaticMarkup(
-        <PageStepper current={214} total={550} disabled={false} onLog={() => {}} />,
-      ),
-    ).toContain("214 → 215");
   });
 });
 

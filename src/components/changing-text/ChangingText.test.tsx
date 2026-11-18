@@ -106,6 +106,11 @@ describe("ChangingText", () => {
     fireEvent.click(preset);
 
     expect(document.activeElement).toBe(preset);
-    expect(screen.getByText("214 → 224")).toBeTruthy();
+    expect(
+      screen.getByRole("textbox", {
+        name: "Pages read",
+        description: "After logging 214 → 224",
+      }),
+    ).toBeTruthy();
   });
 });

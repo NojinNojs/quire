@@ -16,6 +16,10 @@ describe("progress with a known page count", () => {
     expect(percent({ current: 900, total: 550 })).toBe(100);
   });
 
+  it("never rounds unfinished reading up to 100%", () => {
+    expect(percent({ current: 549, total: 550 })).toBe(99);
+  });
+
   it("computes a daily pace", () => {
     expect(pacePerDay({ current: 214, total: 550 }, 14)).toBe(24);
   });

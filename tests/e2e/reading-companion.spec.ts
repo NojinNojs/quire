@@ -121,8 +121,9 @@ test("undo discards pages while persisted pages reach the journal and the readin
   await page.goto("/#/today");
   await page.getByLabel("Pages read").fill("10");
   await page.getByRole("button", { name: "Log 10 pages" }).click();
-  await expect(page.getByRole("button", { name: "Undo" })).toBeVisible();
-  await page.getByRole("button", { name: "Undo" }).click();
+  const undo = page.getByRole("button", { name: "Undo", exact: true });
+  await undo.press("Escape");
+  await undo.click({ timeout: 2_000 });
   await page.goto("/#/journal");
   await expect(page.getByText(/10 pages/)).toHaveCount(0);
 
@@ -130,7 +131,7 @@ test("undo discards pages while persisted pages reach the journal and the readin
   await page.getByLabel("Pages read").fill("10");
   await page.getByRole("button", { name: "Log 10 pages" }).click();
   await expect(page.getByRole("button", { name: "Undo" })).toBeHidden({ timeout: 10_000 });
-  await expect(page.getByRole("status").filter({ hasText: "Pages logged." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Notifications" }).getByText("Pages logged.")).toBeVisible();
 
   await page.goto("/#/journal");
   await expect(page.getByRole("heading", { name: "Reading journal" })).toBeVisible();
@@ -159,7 +160,10 @@ test("offline queued pages stay out of history and block finishing until retry s
   await page.context().setOffline(true);
   await page.getByLabel("Pages read").fill("10");
   await page.getByRole("button", { name: "Log 10 pages" }).click();
-  await expect(page.getByRole("button", { name: "Retry" })).toBeVisible({ timeout: 10_000 });
+  const retry = page.getByRole("button", { name: "Retry", exact: true });
+  await expect(retry).toBeVisible({ timeout: 10_000 });
+  await retry.press("Escape");
+  await retry.click({ timeout: 2_000 });
   await page.evaluate(() => { window.location.hash = "/journal"; });
   await expect(page.getByRole("status", { name: "Loading reading journal" })).toBeVisible();
   await page.context().setOffline(false);
@@ -171,7 +175,7 @@ test("offline queued pages stay out of history and block finishing until retry s
   await expect(page.getByRole("heading", { name: "Reading journal" })).toBeVisible();
   await expect(page.getByRole("link", { name: title })).toHaveCount(0);
   await page.evaluate(() => { window.location.hash = "/today"; });
-  await expect(page.getByRole("status").filter({ hasText: "Pages logged." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Notifications" }).getByText("Pages logged.")).toBeVisible();
   await expect(page.getByRole("button", { name: "Retry" })).toBeHidden();
   await page.goto("/#/journal");
   await expect(page.getByRole("link", { name: title })).toBeVisible();

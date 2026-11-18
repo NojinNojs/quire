@@ -65,29 +65,20 @@ export function ActiveBookCard({
         <p className="reading-meta">{book.editionLine}</p>
       </div>
       <div className="reading-progress">
-        {book.total === null ? (
-          <div className="reading-progress-head reading-progress-head-unknown">
-            <span className="reading-position">Page</span>
-            <p className="reading-number">
-              <ChangingText value={current} />
+        <div className="reading-progress-head">
+          <p>{book.total === null ? "Current page" : "Reading progress"}</p>
+          {value === null ? null : (
+            <p className="reading-percent">
+              <ChangingText value={`${value}%`} />
             </p>
-          </div>
-        ) : (
-          <div className="reading-progress-head">
-            <p className="reading-position">
-              Page{" "}
-              <strong>
-                <ChangingText value={current} />
-              </strong>{" "}
-              of {book.total}
-            </p>
-            {value === null ? null : (
-              <p className="reading-percent">
-                <ChangingText value={`${value}%`} />
-              </p>
-            )}
-          </div>
-        )}
+          )}
+        </div>
+        <p className="reading-position">
+          <strong>
+            <ChangingText value={current} />
+          </strong>
+          {book.total === null ? null : <span> of {book.total} pages</span>}
+        </p>
         {book.total === null ? null : (
           <ReadingProgress
             value={current}
@@ -95,13 +86,12 @@ export function ActiveBookCard({
             label={`Reading progress: ${current} of ${book.total} pages`}
           />
         )}
-        <p className="reading-progress-note">
-          {left === null ? "Total pages unknown" : `${plural(left, "page")} left`}
-          <span aria-hidden="true"> · </span>
+        <div className="reading-progress-note">
+          <span>{left === null ? "Total pages unknown" : `${plural(left, "page")} left`}</span>
           <ChangingText
             value={pagesToday > 0 ? `${plural(pagesToday, "page")} today` : "No pages today"}
           />
-        </p>
+        </div>
       </div>
       <a className="reading-detail-link" href={`#/book/${book.id}`}>
         View book details

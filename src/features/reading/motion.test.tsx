@@ -42,8 +42,13 @@ function setReduced(value: boolean) {
   });
 }
 
-const scaleOf = (container: HTMLElement) =>
-  Number(gsap.getProperty(container.querySelector(".reading-progress-fill"), "scaleX"));
+function fillOf(container: HTMLElement) {
+  const fill = container.querySelector<HTMLElement>(".reading-progress-fill");
+  if (!fill) throw new Error("Reading meter fill is missing");
+  return fill;
+}
+
+const fillPercent = (container: HTMLElement) => Number.parseFloat(fillOf(container).style.width);
 
 function Panels() {
   const scope = usePanelReveal<HTMLDivElement>();
@@ -120,7 +125,7 @@ describe("ReadingProgress", () => {
     expect(container.querySelector(".reading-progress-fill")?.getAttribute("aria-hidden")).toBe(
       "true",
     );
-    expect(scaleOf(container)).toBeCloseTo(58 / 550, 4);
+    expect(fillPercent(container)).toBeCloseTo((58 / 550) * 100, 2);
   });
 
   it("reports the new value at once and snaps the fill forward when motion is reduced", () => {
@@ -131,7 +136,7 @@ describe("ReadingProgress", () => {
 
     expect(screen.getByRole("progressbar").getAttribute("value")).toBe("275");
     setReduced(true);
-    expect(scaleOf(container)).toBeCloseTo(0.5, 4);
+    expect(fillPercent(container)).toBe(50);
   });
 
   it("jumps straight to the value when the reader already prefers reduced motion", () => {
@@ -142,6 +147,24 @@ describe("ReadingProgress", () => {
     rerender(<ReadingProgress value={550} max={550} label="Reading progress" />);
 
     expect(screen.getByRole("progressbar").getAttribute("value")).toBe("550");
-    expect(scaleOf(container)).toBeCloseTo(1, 4);
+    expect(fillPercent(container)).toBe(100);
+  });
+
+  it("reverses an in-flight fill on undo without jumping to the abandoned target", () => {
+    const { container, rerender } = render(
+      <ReadingProgress value={20} max={100} label="Reading progress" />,
+    );
+    rerender(<ReadingProgress value={80} max={100} label="Reading progress" />);
+    const fill = fillOf(container);
+    gsap.getTweensOf(fill)[0]?.progress(0.25);
+    const halfway = fillPercent(container);
+    expect(halfway).toBeGreaterThan(20);
+    expect(halfway).toBeLessThan(80);
+
+    rerender(<ReadingProgress value={20} max={100} label="Reading progress" />);
+    expect(screen.getByRole("progressbar").getAttribute("value")).toBe("20");
+    expect(fillPercent(container)).toBeCloseTo(halfway, 1);
+    gsap.getTweensOf(fill)[0]?.progress(1);
+    expect(fillPercent(container)).toBe(20);
   });
 });

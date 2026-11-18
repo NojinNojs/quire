@@ -1,6 +1,6 @@
 import gsap from "gsap";
-import { useEffect, useRef } from "react";
-import { useReducedMotion } from "../../lib/motion";
+import { useRef } from "react";
+import { useMotionEffect, useReducedMotion } from "../../lib/motion";
 import "./reading-progress.css";
 
 export function ReadingProgress({
@@ -13,40 +13,33 @@ export function ReadingProgress({
   label: string;
 }) {
   const fill = useRef<HTMLSpanElement>(null);
-  const started = useRef(false);
   const reduced = useReducedMotion();
-  const ratio = max > 0 ? Math.min(Math.max(value / max, 0), 1) : 0;
+  const width = `${max > 0 ? Math.min(Math.max((value / max) * 100, 0), 100) : 0}%`;
+  const initialWidth = useRef(width);
 
-  useEffect(() => {
+  useMotionEffect(() => {
     const element = fill.current;
     if (!element) return;
-    if (!started.current) {
-      started.current = true;
-      gsap.set(element, { scaleX: ratio });
+    if (element.style.width === width) return;
+    if (reduced) {
+      gsap.set(element, { width });
       return;
     }
-    const from = Number(gsap.getProperty(element, "scaleX")) || 0;
-    if (reduced || from === ratio) {
-      gsap.set(element, { scaleX: ratio });
-      return;
-    }
-    const tween = gsap.fromTo(
-      element,
-      { scaleX: from },
-      { scaleX: ratio, duration: 0.5, ease: "power2.out" },
-    );
-    // Cleanup lands on this render's target, so a preference change mid-tween
-    // snaps forward instead of rewinding to the previous value.
+    const tween = gsap.to(element, { width, duration: 0.45, ease: "power3.out" });
     return () => {
       tween.kill();
-      gsap.set(element, { scaleX: ratio });
     };
-  }, [ratio, reduced]);
+  }, [width, reduced]);
 
   return (
     <span className="reading-progress-track">
       <progress className="reading-progress-native" value={value} max={max} aria-label={label} />
-      <span ref={fill} className="reading-progress-fill" aria-hidden="true" />
+      <span
+        ref={fill}
+        className="reading-progress-fill"
+        style={{ width: initialWidth.current }}
+        aria-hidden="true"
+      />
     </span>
   );
 }

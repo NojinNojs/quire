@@ -300,16 +300,12 @@ test("reading controls keep focus rings and reduced motion removes shell transit
       .locator(".cover-controls label")
       .evaluate((node) => getComputedStyle(node).outlineWidth),
   ).toBe("2px");
-  const pagesRead = page.getByRole("spinbutton", { name: "Pages read" });
+  const pagesRead = page.getByRole("textbox", { name: "Pages read" });
   for (let i = 0; i < 10 && !(await pagesRead.evaluate((node) => node === document.activeElement)); i++) {
     await page.keyboard.press("Tab");
   }
   await expect(pagesRead).toBeFocused();
-  expect(
-    await page
-      .getByRole("spinbutton", { name: "Pages read" })
-      .evaluate((node) => getComputedStyle(node).outlineWidth),
-  ).toBe("2px");
+  expect(await pagesRead.evaluate((node) => getComputedStyle(node).outlineWidth)).toBe("2px");
   await page.setViewportSize({ width: 1024, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   expect(

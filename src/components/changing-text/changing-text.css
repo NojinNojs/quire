@@ -15,6 +15,7 @@
 /* Only one-line numbers sit in a mask; prose (wrapped titles included) is never
    clipped, so a longer title keeps every line. */
 .changing-text-number {
+  display: inline-grid;
   overflow: hidden;
 }
 

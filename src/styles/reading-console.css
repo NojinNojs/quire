@@ -94,7 +94,12 @@
   color: var(--ink);
   font: 600 15px / 1.4 var(--font-mono);
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.insights.dashboard-reading .reading-preview-destination {
+  display: inline-block;
+  min-inline-size: 3ch;
 }
 
 .insights.dashboard-reading .reading button.primary {
