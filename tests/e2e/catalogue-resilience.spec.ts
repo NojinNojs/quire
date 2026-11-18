@@ -60,6 +60,7 @@ test("HTML metadata survives earlier failures and manual recovery preserves the 
   signedInPage: page,
 }) => {
   let htmlAvailable = true;
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.route("https://www.googleapis.com/books/v1/volumes?**", (route) =>
     route.fulfill({ status: 429, json: { error: { message: "Quota exceeded" } } }),
   );
