@@ -4,40 +4,64 @@ import { randomUUID } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import { chromium } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
+import { loadEnv } from "vite";
+import { startEvidenceServer } from "../../../../scripts/evidence-server.mjs";
+import { cleanupCoverEvidence } from "./cleanup.mjs";
 
-mkdirSync("test-results/covers", { recursive: true });
-// Run with the local app at [::1]:5175 and an image file as the first argument.
 const stack = JSON.parse(
   execFileSync("supabase", ["status", "-o", "json"], {
     encoding: "utf8",
     stdio: ["ignore", "pipe", "ignore"],
   }),
 );
+const env = loadEnv("development", process.cwd(), "VITE_");
+assert.ok(
+  ["127.0.0.1", "localhost", "[::1]"].includes(new URL(stack.API_URL).hostname),
+  "Supabase must be local",
+);
+assert.equal(env.VITE_SUPABASE_URL, stack.API_URL, "App URL must match local Supabase");
+assert.equal(env.VITE_SUPABASE_ANON_KEY, stack.ANON_KEY, "App key must match local Supabase");
+mkdirSync("test-results/covers", { recursive: true });
 const admin = createClient(stack.API_URL, stack.SERVICE_ROLE_KEY);
 const email = `covers.${randomUUID()}@quire.local`;
 const password = `Cover-${randomUUID()}`;
-const { data: account, error: accountError } = await admin.auth.admin.createUser({
-  email,
-  password,
-  email_confirm: true,
-});
-assert.ifError(accountError);
-const owner = account.user.id;
-const outsider = createClient(stack.API_URL, stack.ANON_KEY, { auth: { persistSession: false } });
-const { data: other, error: otherError } = await admin.auth.admin.createUser({
-  email: `covers.${randomUUID()}@quire.local`,
-  password,
-  email_confirm: true,
-});
-assert.ifError(otherError);
-await outsider.auth.signInWithPassword({ email: other.user.email, password });
-const browser = await chromium.launch({
-  executablePath: "/run/current-system/sw/bin/brave",
-  headless: true,
-});
-const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
+const users = [];
+let browser;
 let path;
+let server;
+let upload;
+let runError;
 try {
+  server = await startEvidenceServer(5198, stack);
+  const { data: account, error: accountError } = await admin.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+  });
+  if (account?.user?.id) users.push(account.user.id);
+  assert.ifError(accountError);
+  const owner = account.user.id;
+  const outsider = createClient(stack.API_URL, stack.ANON_KEY, { auth: { persistSession: false } });
+  const { data: other, error: otherError } = await admin.auth.admin.createUser({
+    email: `covers.${randomUUID()}@quire.local`,
+    password,
+    email_confirm: true,
+  });
+  if (other?.user?.id) users.push(other.user.id);
+  assert.ifError(otherError);
+  const { error: signInError } = await outsider.auth.signInWithPassword({
+    email: other.user.email,
+    password,
+  });
+  assert.ifError(signInError);
+  browser = await chromium.launch({
+    executablePath: "/run/current-system/sw/bin/brave",
+    headless: true,
+  });
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 1,
+  });
   const { data: book, error } = await admin
     .from("books")
     .insert({
@@ -55,14 +79,30 @@ try {
     .single();
   assert.ifError(error);
   path = `${owner}/${book.id}/cover.webp`;
-  await page.goto("http://[::1]:5175/#/today");
+  await page.goto("http://127.0.0.1:5198/#/today");
   await page.getByLabel("Email").fill(email);
   await page.getByLabel("Password").fill(password);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   const input = page.getByLabel("Upload cover");
   await input.waitFor();
   await page.waitForFunction(() => !document.querySelector('input[type="file"]').disabled);
+  upload = Promise.allSettled([
+    page
+      .waitForResponse(
+        (response) =>
+          response.request().method() === "POST" &&
+          response.url() === `${stack.API_URL}/storage/v1/object/covers/${path}`,
+      )
+      .then(async (response) => {
+        const error = await response.finished();
+        if (error) throw error;
+        return response;
+      }),
+  ]);
   await input.setInputFiles(process.argv[2]);
+  const [uploadResult] = await upload;
+  if (uploadResult.status === "rejected") throw uploadResult.reason;
+  assert.ok(uploadResult.value.ok(), `Cover upload failed: ${uploadResult.value.status()}`);
   await page.getByRole("button", { name: "Remove cover" }).waitFor();
   await page.waitForFunction(() => {
     const img = document.querySelector(".reading-cover img");
@@ -84,7 +124,7 @@ try {
   await page.screenshot({ path: "test-results/covers/today-390.png", fullPage: true });
   await page.reload();
   await page.waitForFunction(() => document.querySelector(".reading-cover img")?.naturalWidth > 0);
-  await page.goto("http://[::1]:5175/#/shelf");
+  await page.goto("http://127.0.0.1:5198/#/shelf");
   await page.waitForFunction(() => document.querySelector(".shelf-cover img")?.naturalWidth > 0);
   await checkLayout();
   await page.screenshot({ path: "test-results/covers/shelf-390.png", fullPage: true });
@@ -108,7 +148,7 @@ try {
   const publicRead = await fetch(`${stack.API_URL}/storage/v1/object/public/covers/${path}`);
   assert.equal(publicRead.ok, false, "The cover bucket must remain private");
 
-  await page.goto("http://[::1]:5175/#/today");
+  await page.goto("http://127.0.0.1:5198/#/today");
   await page.getByRole("button", { name: "Remove cover" }).click();
   await page.getByRole("img", { name: "No cover for Pride and Prejudice" }).waitFor();
   await page.reload();
@@ -135,9 +175,9 @@ try {
       2,
     ),
   );
+} catch (error) {
+  runError = error;
+  throw error;
 } finally {
-  await browser.close();
-  if (path) await admin.storage.from("covers").remove([path]);
-  await admin.auth.admin.deleteUser(owner);
-  await admin.auth.admin.deleteUser(other.user.id);
+  await cleanupCoverEvidence({ upload, browser, path, admin, users, server, runError });
 }

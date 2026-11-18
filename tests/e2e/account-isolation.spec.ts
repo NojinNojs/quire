@@ -3,7 +3,7 @@ import { stack } from "./stack";
 
 const generatedId = globalThis.crypto.randomUUID.bind(globalThis.crypto);
 
-test("RLS isolates profiles, books and direct progress writes while RPC remains available", async ({ signedInPage: page, request }) => {
+test("RLS isolates profiles, books and direct progress writes while RPC remains available", async ({ signedInPage: page, request, accounts }) => {
   const localStack = stack;
   if (!localStack) throw new Error("Local Supabase is required");
   const email = `isolation.${generatedId()}@quire.local`;
@@ -12,12 +12,9 @@ test("RLS isolates profiles, books and direct progress writes while RPC remains 
     headers: { apikey: localStack.SERVICE_ROLE_KEY, Authorization: `Bearer ${localStack.SERVICE_ROLE_KEY}` },
     data: { email, password, email_confirm: true },
   });
+  const userId = accounts.track(await created.json());
   expect(created.ok()).toBeTruthy();
-  const userValue: unknown = await created.json();
-  if (!userValue || typeof userValue !== "object" || !("id" in userValue) || typeof userValue.id !== "string") {
-    throw new Error("Admin create-user response missing ID");
-  }
-  const userId = userValue.id;
+  if (!userId) throw new Error("Admin create-user response missing ID");
   const createdBookIds: string[] = [];
   try {
     const accountA = await page.evaluate(() => {
@@ -44,13 +41,12 @@ test("RLS isolates profiles, books and direct progress writes while RPC remains 
         headers: { ...headers, "Content-Type": "application/json", Prefer: "return=representation" },
         data: { title: `Isolation ${generatedId()}`, owner },
       });
-      expect(response.ok()).toBeTruthy();
       const body: unknown = await response.json();
-      if (!Array.isArray(body) || !body[0] || typeof body[0] !== "object" || !("id" in body[0]) || typeof body[0].id !== "string") {
-        throw new Error("Book create response missing ID");
-      }
-      createdBookIds.push(body[0].id);
-      return body[0].id;
+      const id = Array.isArray(body) && body[0] && typeof body[0] === "object" && "id" in body[0] && typeof body[0].id === "string" ? body[0].id : undefined;
+      if (id) createdBookIds.push(id);
+      expect(response.ok()).toBeTruthy();
+      if (!id) throw new Error("Book create response missing ID");
+      return id;
     };
     const bookA = await createBook(restA, accountA.id);
     const bookB = await createBook(restB, userId);
@@ -135,14 +131,14 @@ test("RLS isolates profiles, books and direct progress writes while RPC remains 
     }
     expect(streak.current).toBeGreaterThanOrEqual(1);
   } finally {
-    for (const id of createdBookIds) {
-      await request.delete(`${localStack.API_URL}/rest/v1/books?id=eq.${id}`, {
+    const results = await Promise.allSettled(createdBookIds.map(async (id) => {
+      const response = await request.delete(`${localStack.API_URL}/rest/v1/books?id=eq.${id}`, {
         headers: { apikey: localStack.SERVICE_ROLE_KEY, Authorization: `Bearer ${localStack.SERVICE_ROLE_KEY}` },
       });
-    }
-    const cleanup = await request.delete(`${localStack.API_URL}/auth/v1/admin/users/${userId}`, {
-      headers: { apikey: localStack.SERVICE_ROLE_KEY, Authorization: `Bearer ${localStack.SERVICE_ROLE_KEY}` },
-    });
-    expect(cleanup.ok()).toBeTruthy();
+      if (!response.ok()) throw new Error(`Failed to remove generated book ${id}: ${response.status()}`);
+    }));
+    const userCleanup = await Promise.allSettled([accounts.cleanup()]);
+    const errors = [...results, ...userCleanup].filter((result): result is PromiseRejectedResult => result.status === "rejected");
+    if (errors.length) throw new AggregateError(errors.map((result) => result.reason), "Isolation cleanup failed");
   }
 });

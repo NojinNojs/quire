@@ -19,10 +19,11 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 
 bash scripts/gate.sh
-npm version "$VERSION" --no-git-tag-version >/dev/null
-npm run build >/dev/null
+bun pm version "$VERSION" --no-git-tag-version >/dev/null
+bun install --lockfile-only --ignore-scripts
+bun run build >/dev/null
 
-git add package.json package-lock.json
+git add package.json bun.lock
 git commit -m "chore: release $VERSION"
 git tag -a "v$VERSION" -m "v$VERSION"
 git push origin HEAD --follow-tags

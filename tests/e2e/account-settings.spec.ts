@@ -1,4 +1,5 @@
 import type { APIRequestContext, Page } from "@playwright/test";
+import { Accounts } from "./accounts";
 import { expect, test } from "./fixtures";
 import { waitForRecoveryLink } from "./mail";
 import { stack } from "./stack";
@@ -10,7 +11,7 @@ function api() {
   return stack;
 }
 
-async function createUser(request: APIRequestContext, email: string, password: string) {
+async function createUser(request: APIRequestContext, accounts: Accounts, email: string, password: string) {
   const endpoint = api();
   const response = await request.post(`${endpoint.API_URL}/auth/v1/admin/users`, {
     headers: {
@@ -19,24 +20,12 @@ async function createUser(request: APIRequestContext, email: string, password: s
     },
     data: { email, password, email_confirm: true },
   });
+  const id = accounts.track(await response.json());
   expect(response.ok()).toBeTruthy();
-  const body: unknown = await response.json();
-  if (!body || typeof body !== "object" || !("id" in body) || typeof body.id !== "string") {
-    throw new Error("Admin create-user response missing ID");
-  }
-  return body.id;
+  if (!id) throw new Error("Admin create-user response missing ID");
+  return id;
 }
 
-async function removeUser(request: APIRequestContext, id: string) {
-  const endpoint = api();
-  const response = await request.delete(`${endpoint.API_URL}/auth/v1/admin/users/${id}`, {
-    headers: {
-      apikey: endpoint.SERVICE_ROLE_KEY,
-      Authorization: `Bearer ${endpoint.SERVICE_ROLE_KEY}`,
-    },
-  });
-  expect(response.ok(), "Remove the generated local account").toBeTruthy();
-}
 
 async function fillEmail(page: Page, email: string) {
   await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeVisible();
@@ -107,12 +96,12 @@ test("profile name and annual goal persist, reject invalid goals and clear when 
   await expect(page.getByText(/of 12 books/)).toHaveCount(0);
 });
 
-test("settings changes the password, then only the new password signs in", async ({ page, request }) => {
+test("settings changes the password, then only the new password signs in", async ({ page, request, accounts }) => {
   const email = `password.${generatedId()}@quire.local`;
   const oldPassword = `E2e-${generatedId()}`;
   const newPassword = `Changed-${generatedId()}`;
-  const id = await createUser(request, email, oldPassword);
   try {
+    await createUser(request, accounts, email, oldPassword);
     await page.goto("/");
     await page.getByRole("button", { name: "Open Quire" }).click();
     await signIn(page, email, oldPassword);
@@ -142,19 +131,20 @@ test("settings changes the password, then only the new password signs in", async
     await expect(page.getByRole("alert")).toBeVisible();
     await signIn(page, email, newPassword);
   } finally {
-    await removeUser(request, id);
+    await accounts.cleanup();
   }
 });
 
 test("recovery link opens the password form before the dashboard, survives reload and replaces the password", async ({
   page,
   request,
+  accounts,
 }) => {
   const email = `recovery.${generatedId()}@quire.local`;
   const oldPassword = `E2e-${generatedId()}`;
   const newPassword = `Changed-${generatedId()}`;
-  const id = await createUser(request, email, oldPassword);
   try {
+    await createUser(request, accounts, email, oldPassword);
     await page.goto("/");
     await page.getByRole("button", { name: "Open Quire" }).click();
     await fillEmail(page, email);
@@ -194,6 +184,6 @@ test("recovery link opens the password form before the dashboard, survives reloa
     });
     expect(oldLogin.ok()).toBeFalsy();
   } finally {
-    await removeUser(request, id);
+    await accounts.cleanup();
   }
 });

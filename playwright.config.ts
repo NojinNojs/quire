@@ -24,7 +24,7 @@ export default defineConfig({
   webServer:
     browserAvailable && stack
       ? {
-          command: "npm run dev -- --host ::1 --port 5174 --strictPort",
+          command: "bun run dev --host ::1 --port 5174 --strictPort",
           url: "http://[::1]:5174",
           reuseExistingServer: false,
           env: {

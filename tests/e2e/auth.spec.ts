@@ -126,7 +126,7 @@ async function settleCard(page: Page) {
 
 test("create an account, take the first-run tour, sign out and sign back in", async ({
   page,
-  request,
+  accounts,
 }) => {
   if (!stack) throw new Error("Local Supabase is required");
   const email = `e2e.${randomUUID()}@quire.local`;
@@ -140,9 +140,10 @@ test("create an account, take the first-run tour, sign out and sign back in", as
   );
   await page.getByRole("button", { name: "Create account", exact: true }).click();
   const response = await signup;
-  expect(response.ok()).toBe(true);
-  const { user } = await response.json();
+  const id = accounts.track(await response.json());
   try {
+    expect(response.ok()).toBe(true);
+    expect(id, "Signup response contains a user ID").toBeTruthy();
     await expect(page.getByRole("dialog", { name: "Find your next read." })).toBeVisible();
     await page.getByRole("button", { name: "Skip tour" }).click();
     await page.goto("/#/search");
@@ -162,13 +163,7 @@ test("create an account, take the first-run tour, sign out and sign back in", as
     await page.keyboard.press("Escape");
     await expect(page.getByRole("dialog", { name: "Find your next read." })).toHaveCount(0);
   } finally {
-    const cleanup = await request.delete(`${stack.API_URL}/auth/v1/admin/users/${user.id}`, {
-      headers: {
-        apikey: stack.SERVICE_ROLE_KEY,
-        Authorization: `Bearer ${stack.SERVICE_ROLE_KEY}`,
-      },
-    });
-    expect(cleanup.ok()).toBe(true);
+    await accounts.cleanup();
   }
 });
 

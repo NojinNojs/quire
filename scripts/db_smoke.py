@@ -10,6 +10,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from db_smoke_resources import cleanup_users, local_credentials
+
 ROOT = Path(__file__).resolve().parent.parent
 failures: list[str] = []
 
@@ -58,7 +60,7 @@ def check(label: str, ok: bool, detail: str = "") -> None:
         failures.append(label)
 
 
-def make_user(base: str, anon: str, service: str, tag: str) -> tuple[str, str]:
+def make_user(base: str, anon: str, service: str, tag: str, created: list[str]) -> tuple[str, str]:
     email = f"{tag}.{secrets.token_hex(3)}@quire.local"
     password = "".join(secrets.choice(string.ascii_letters) for _ in range(20))
     _, user = post(
@@ -66,22 +68,19 @@ def make_user(base: str, anon: str, service: str, tag: str) -> tuple[str, str]:
         {"apikey": service, "Authorization": f"Bearer {service}"},
         {"email": email, "password": password, "email_confirm": True},
     )
+    user_id = user["id"]
+    created.append(user_id)
     _, token = post(
         f"{base}/auth/v1/token?grant_type=password",
         {"apikey": anon},
         {"email": email, "password": password},
     )
-    return user["id"], token["access_token"]
+    return user_id, token["access_token"]
 
 
-def main() -> int:
-    variables = env()
-    base = variables["VITE_SUPABASE_URL"]
-    anon = variables["VITE_SUPABASE_ANON_KEY"]
-    service = status()["SERVICE_ROLE_KEY"]
-
-    owner, jwt = make_user(base, anon, service, "smoke")
-    other, other_jwt = make_user(base, anon, service, "other")
+def run_checks(base: str, anon: str, service: str, created: list[str]) -> int:
+    owner, jwt = make_user(base, anon, service, "smoke", created)
+    other, other_jwt = make_user(base, anon, service, "other", created)
     auth = {"apikey": anon, "Authorization": f"Bearer {jwt}"}
     other_auth = {"apikey": anon, "Authorization": f"Bearer {other_jwt}"}
 
@@ -117,7 +116,7 @@ def main() -> int:
     check("duplicate ISBN refused", code == 409, str(duplicate)[:80])
 
     # the active-book rule is checked with its own account, so the streak run below has a clean shelf
-    active_user, active_jwt = make_user(base, anon, service, "active")
+    active_user, active_jwt = make_user(base, anon, service, "active", created)
     active_auth = {"apikey": anon, "Authorization": f"Bearer {active_jwt}", "Prefer": "return=representation"}
     first_code, _ = post(
         f"{base}/rest/v1/books", active_auth,
@@ -163,6 +162,16 @@ def main() -> int:
         return 1
     print("\nall database checks passed")
     return 0
+
+
+def main() -> int:
+    failures.clear()
+    base, anon, service = local_credentials(env(), status())
+    created: list[str] = []
+    try:
+        return run_checks(base, anon, service, created)
+    finally:
+        cleanup_users(base, service, created)
 
 
 if __name__ == "__main__":

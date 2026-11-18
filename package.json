@@ -3,18 +3,23 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "packageManager": "bun@1.4.4",
+  "engines": {
+    "bun": ">=1.4.4"
+  },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview",
-    "check": "tsc --noEmit",
-    "lint": "biome check .",
-    "format": "biome format --write .",
-    "test": "vitest run src",
+    "dev": "bun --bun vite",
+    "build": "bun --bun tsc --noEmit && bun --bun vite build",
+    "preview": "bun --bun vite preview",
+    "typecheck": "bun --bun tsc --noEmit",
+    "lint": "bun --bun biome check .",
+    "format": "bun --bun biome format --write .",
+    "test": "bun --bun vitest run src",
+    "test:smoke": "python3 -B -m unittest discover -s scripts -p 'test_db_smoke.py' && bun --bun vitest run scripts/evidence-server.test.mjs scripts/cover-cleanup.test.mjs",
     "gate": "bash scripts/gate.sh",
     "ci": "bash scripts/gate.sh",
     "release": "bash scripts/release.sh",
-    "test:e2e": "playwright test"
+    "test:e2e": "bun --bun playwright test"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
